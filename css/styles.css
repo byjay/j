@@ -1,0 +1,194 @@
+/* =========================================
+   1. 기본 설정 및 폰트
+   ========================================= */
+body {
+    font-family: 'Noto Sans KR', 'Noto Sans JP', sans-serif;
+    background-color: #111;
+    /* 데스크탑 배경: 검정 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    overflow: hidden;
+    /* 전체 페이지 스크롤 방지 */
+}
+
+/* =========================================
+   2. 앱 컨테이너 (아이폰 프레임 UI)
+   ========================================= */
+#app-root {
+    width: 100%;
+    height: 100vh;
+    background-color: #f9fafb;
+    position: relative;
+    overflow: hidden;
+}
+
+/* 데스크탑 환경(768px 이상)에서 아이폰 프레임 적용 */
+@media (min-width: 768px) {
+    #app-root {
+        width: 390px;
+        /* iPhone 13/14 기준 너비 */
+        height: 844px;
+        /* iPhone 13/14 기준 높이 */
+        border-radius: 40px;
+        box-shadow: 0 0 50px rgba(255, 255, 255, 0.1);
+        border: 8px solid #222;
+    }
+}
+
+/* =========================================
+   3. 유틸리티 (스크롤바 숨김, 안전 영역)
+   ========================================= */
+.content-scroll::-webkit-scrollbar,
+.no-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+
+.content-scroll,
+.no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+/* 아이폰 하단 홈 바 안전 영역 확보 */
+.pb-safe {
+    padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* 터치 강조 색상 제거 */
+button,
+a,
+div {
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* =========================================
+   4. 애니메이션
+   ========================================= */
+/* 로그인 흔들림 효과 */
+@keyframes shake {
+
+    0%,
+    100% {
+        transform: translateX(0);
+    }
+
+    25% {
+        transform: translateX(-5px);
+    }
+
+    75% {
+        transform: translateX(5px);
+    }
+}
+
+.login-attention {
+    animation: shake 0.4s ease-in-out 2;
+    border: 2px solid #ef4444 !important;
+}
+
+/* 탭 전환 페이드 인 */
+.tab-content {
+    animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* 퀴즈 정답 효과 */
+@keyframes bounceShort {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+.animate-bounce-short {
+    animation: bounceShort 0.4s ease-in-out;
+}
+
+.perspective-1000 {
+    perspective: 1000px;
+}
+
+/* =========================================
+   5. 컴포넌트 스타일
+   ========================================= */
+/* 하단 탭 활성화 효과 */
+.nav-tab.active {
+    color: #dc2626;
+}
+
+.nav-tab.active i {
+    transform: scale(1.1);
+    transition: transform 0.2s;
+}
+
+/* 여행 일정 카드 */
+.itinerary-card {
+    background: white;
+    border-radius: 1rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s;
+}
+
+.itinerary-card:active {
+    transform: scale(0.98);
+}
+
+/* 회화 말풍선 */
+.conversation-bubble {
+    max-width: 80%;
+    margin-bottom: 1rem;
+    padding: 1rem;
+    border-radius: 1.2rem;
+    position: relative;
+    line-height: 1.5;
+    font-size: 0.95rem;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.conversation-bubble.left {
+    background-color: white;
+    color: #374151;
+    margin-right: auto;
+    border-bottom-left-radius: 0.2rem;
+}
+
+.conversation-bubble.right {
+    background-color: #3b82f6;
+    color: white;
+    margin-left: auto;
+    border-bottom-right-radius: 0.2rem;
+}
+
+/* 글자 그리드 */
+#character-grid div {
+    aspect-ratio: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+/* 캔버스 */
+canvas {
+    touch-action: none;
+    cursor: crosshair;
+}
