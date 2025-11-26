@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover">
     
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -37,6 +37,44 @@
             }
         }
     </script>
+
+    <style>
+        /* html, body의 스크롤 잠금을 강제로 해제합니다 */
+        html, body {
+            overflow-y: auto !important; /* 세로 스크롤 허용 */
+            height: auto !important;     /* 높이 제한 해제 */
+            position: static !important; /* 고정 위치 해제 */
+            touch-action: auto !important; /* 터치 동작(줌/스크롤) 허용 */
+            -webkit-overflow-scrolling: touch !important; /* 부드러운 스크롤 */
+            overscroll-behavior-y: auto !important; /* 바운스 효과 허용 */
+        }
+
+        /* 앱 컨테이너가 화면을 꽉 채워 스크롤을 막는 것을 방지 */
+        .app-container {
+            height: auto !important;
+            min-height: 100vh;
+            overflow: visible !important;
+        }
+
+        /* 내부 스크롤 영역의 제한도 해제 */
+        .content-scroll {
+            height: auto !important;
+            overflow: visible !important;
+            flex: none !important; /* Flexbox 높이 제한 해제 */
+        }
+        
+        /* 텍스트 선택 허용 */
+        * {
+            -webkit-user-select: text !important;
+            user-select: text !important;
+        }
+        
+        /* 버튼 등 인터랙션 요소만 선택 방지 유지 (선택사항) */
+        button, .user-card {
+            -webkit-user-select: none !important;
+            user-select: none !important;
+        }
+    </style>
 </head>
 
 <body class="bg-gray-50 text-gray-900">
