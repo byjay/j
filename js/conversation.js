@@ -1,12 +1,16 @@
 /**
- * conversation.js - Ultimate Japanese Conversation System (Scale-Ready Edition)
- * Ver 2.0: Sticky Navigation, Expanded Viewport, Mass Data Structure
+ * conversation.js - Ultimate Japanese Conversation System (Mobile Optimized)
+ * Ver 2.1: Fully Responsive, Sticky Nav, Tall Cards
  */
 
 // ==========================================
 // 0. 시스템 스타일 주입 (Advanced UI/UX)
 // ==========================================
 (function injectStyles() {
+    // 기존 스타일 제거 (중복 방지)
+    const oldStyle = document.getElementById('conversation-styles');
+    if (oldStyle) oldStyle.remove();
+
     const css = `
         /* 3D Flip Core */
         .perspective-1000 { perspective: 1000px; }
@@ -14,7 +18,7 @@
         .backface-hidden { backface-visibility: hidden; -webkit-backface-visibility: hidden; }
         .rotate-y-180 { transform: rotateY(180deg); }
         
-        /* Card Animation & Layout */
+        /* Card Animation */
         .card-inner { transition: transform 0.6s cubic-bezier(0.4, 0.0, 0.2, 1); }
         .card-flipped .card-inner { transform: rotateY(180deg); }
         
@@ -26,26 +30,25 @@
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
             border-bottom: 1px solid #e2e8f0;
-            padding-top: 10px;
-            padding-bottom: 10px;
+            padding: 10px 0;
             margin-bottom: 20px;
+            width: 100%; /* 모바일 대응 */
         }
 
-        /* Hide Scrollbar for Navigation but keep functionality */
+        /* Scrollbars */
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
-        /* Custom Scrollbar for Vocabulary Content */
-        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
         .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
 
-        /* Animation Keyframes */
+        /* Animation */
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         .animate-fade-in { animation: fadeIn 0.4s ease-out forwards; }
     `;
     const style = document.createElement('style');
+    style.id = 'conversation-styles';
     style.textContent = css;
     document.head.appendChild(style);
 })();
@@ -53,8 +56,6 @@
 // ==========================================
 // 1. 대규모 회화 데이터 (Massive Dataset)
 // ==========================================
-// * Note: 성능 최적화를 위해 각 카테고리별 핵심 패턴을 포함했습니다. 
-// * 이 구조를 유지하면 100개, 1000개로 데이터만 추가하면 됩니다.
 const conversationModuleData = {
     'immigration': {
         title: '입국 심사',
@@ -479,7 +480,7 @@ let currentConversationCategory = '';
 let currentConversationIndex = 0;
 
 // ==========================================
-// 3. 렌더링 엔진 (Sticky Navigation & Tall Cards)
+// 3. 렌더링 엔진 (Mobile Responsive)
 // ==========================================
 function initConversation() {
     const keys = Object.keys(conversationModuleData);
@@ -487,10 +488,7 @@ function initConversation() {
         currentConversationCategory = keys[0];
     }
     
-    // 네비게이션 먼저 렌더링
     renderNavigation();
-    
-    // 초기 카테고리 로드
     openConversationLesson(currentConversationCategory);
 }
 
@@ -498,30 +496,27 @@ function renderNavigation() {
     const container = document.getElementById('conversation-content');
     if (!container) return;
 
-    // Sticky Navigation Wrapper 생성
+    // Sticky Navigation Wrapper
     const navWrapper = document.createElement('div');
     navWrapper.className = 'sticky-nav-container';
     
-    // Navigation Inner (Horizontal Scroll)
     navWrapper.innerHTML = `
-        <div class="flex overflow-x-auto no-scrollbar gap-3 px-2 md:justify-center" id="category-scroll-area">
+        <div class="flex overflow-x-auto no-scrollbar gap-2 px-4 md:justify-center w-full" id="category-scroll-area">
             ${Object.entries(conversationModuleData).map(([key, data]) => `
                 <button onclick="openConversationLesson('${key}')" 
                     id="nav-btn-${key}"
-                    class="flex-shrink-0 flex items-center gap-2 px-4 py-2 rounded-full border transition-all duration-300 transform active:scale-95 bg-white border-gray-200 text-gray-500 hover:bg-gray-50 hover:border-gray-300">
+                    class="flex-shrink-0 flex items-center gap-2 px-3 py-2 rounded-full border transition-all duration-300 transform active:scale-95 bg-white border-gray-200 text-gray-500 hover:bg-gray-50 text-sm md:text-base">
                     <i class="${data.icon}"></i>
-                    <span class="text-sm font-bold whitespace-nowrap">${data.title}</span>
+                    <span class="font-bold whitespace-nowrap">${data.title}</span>
                 </button>
             `).join('')}
         </div>
     `;
 
-    // 뷰어 컨테이너 (실제 대화 카드 영역)
     const viewerDiv = document.createElement('div');
     viewerDiv.id = 'conversation-viewer';
-    viewerDiv.className = 'w-full max-w-4xl mx-auto px-2 pb-20'; // 하단 여백 추가
+    viewerDiv.className = 'w-full max-w-full md:max-w-4xl mx-auto px-4 pb-20'; // 모바일 패딩 조정
 
-    // DOM 조립
     container.innerHTML = '';
     container.appendChild(navWrapper);
     container.appendChild(viewerDiv);
@@ -530,8 +525,6 @@ function renderNavigation() {
 function openConversationLesson(categoryKey) {
     currentConversationCategory = categoryKey;
     currentConversationIndex = 0;
-
-    // 네비게이션 버튼 활성화 스타일 업데이트
     updateNavigationStyles(categoryKey);
 
     const viewer = document.getElementById('conversation-viewer');
@@ -541,119 +534,114 @@ function openConversationLesson(categoryKey) {
 }
 
 function updateNavigationStyles(activeKey) {
-    // 모든 버튼 리셋
     Object.keys(conversationModuleData).forEach(key => {
         const btn = document.getElementById(`nav-btn-${key}`);
         if(btn) {
-            btn.className = `flex-shrink-0 flex items-center gap-2 px-4 py-2 rounded-full border transition-all duration-300 transform active:scale-95 bg-white border-gray-200 text-gray-500 hover:bg-gray-50`;
+            btn.className = `flex-shrink-0 flex items-center gap-2 px-3 py-2 rounded-full border transition-all duration-300 transform active:scale-95 bg-white border-gray-200 text-gray-500 hover:bg-gray-50 text-sm md:text-base`;
         }
     });
 
-    // 활성 버튼 하이라이트
     const activeBtn = document.getElementById(`nav-btn-${activeKey}`);
     const color = conversationModuleData[activeKey].color;
     if(activeBtn) {
-        activeBtn.className = `flex-shrink-0 flex items-center gap-2 px-5 py-2 rounded-full border-2 transition-all duration-300 transform scale-105 active:scale-95 bg-${color}-50 border-${color}-500 text-${color}-600 shadow-md`;
-        
-        // 스크롤 위치 자동 조정 (버튼이 화면에 보이게)
+        activeBtn.className = `flex-shrink-0 flex items-center gap-2 px-4 py-2 rounded-full border-2 transition-all duration-300 transform scale-105 active:scale-95 bg-${color}-50 border-${color}-500 text-${color}-600 shadow-md text-sm md:text-base`;
         activeBtn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
     }
 }
 
 // ------------------------------------------
-// 핵심: 초대형 카드 (5x Bigger Layout)
+// 핵심: 반응형 카드 (Mobile: Compact / Desktop: Wide)
 // ------------------------------------------
 function createFlipCardHTML(data, type, index, color) {
     const isQuestion = type === 'question';
     const uniqueId = isQuestion ? 'card-q' : `card-a-${index}`;
 
-    // 단어장 HTML (Back Side) - 높이가 크므로 여유롭게 배치
+    // 단어장 (뒷면)
     const vocabListHTML = data.vocab && data.vocab.length > 0
         ? `<div class="h-full flex flex-col">
-            <div class="text-sm font-black text-gray-400 uppercase tracking-widest mb-4 pb-2 border-b border-gray-200 flex items-center gap-2">
+            <div class="text-xs md:text-sm font-black text-gray-400 uppercase tracking-widest mb-3 pb-2 border-b border-gray-200 flex items-center gap-2">
                 <i class="fas fa-book-open"></i> Essential Vocabulary
             </div>
-            <div class="flex-1 overflow-y-auto custom-scrollbar pr-2 space-y-3">
+            <div class="flex-1 overflow-y-auto custom-scrollbar pr-1 space-y-2">
             ${data.vocab.map(v => `
-                <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center p-3 bg-white rounded-lg border border-gray-100 hover:border-${color}-300 hover:shadow-md transition-all group">
+                <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center p-2 md:p-3 bg-white rounded-lg border border-gray-100 hover:border-${color}-300 hover:shadow-md transition-all">
                     <div class="mb-1 sm:mb-0">
-                        <span class="text-xl font-bold text-${color}-600 mr-2">${v.word}</span>
-                        <span class="text-sm text-gray-400 font-medium bg-gray-50 px-2 py-0.5 rounded">${v.read}</span>
+                        <span class="text-lg md:text-xl font-bold text-${color}-600 mr-2">${v.word}</span>
+                        <span class="text-xs text-gray-400 font-medium bg-gray-50 px-2 py-0.5 rounded">${v.read}</span>
                     </div>
-                    <span class="text-base text-gray-700 font-medium pl-1 border-l-2 border-${color}-100 sm:border-0 sm:pl-0">${v.mean}</span>
+                    <span class="text-sm md:text-base text-gray-700 font-medium pl-1 border-l-2 border-${color}-100 sm:border-0 sm:pl-0">${v.mean}</span>
                 </div>
             `).join('')}
             </div>
            </div>`
         : `<div class="h-full flex flex-col items-center justify-center text-gray-300">
-             <i class="fas fa-layer-group text-5xl mb-4 opacity-30"></i>
-             <span class="text-lg">등록된 단어가 없습니다.</span>
+             <i class="fas fa-layer-group text-4xl mb-3 opacity-30"></i>
+             <span class="text-sm">단어 없음</span>
            </div>`;
 
-    // 카드 앞면 HTML (Front Side) - 폰트 크기 및 레이아웃 확대
+    // 카드 앞면
     const frontHTML = `
         <div class="absolute w-full h-full backface-hidden bg-white rounded-3xl border border-gray-200 shadow-sm flex flex-col justify-between overflow-hidden">
-            <div class="px-8 py-6 bg-gray-50 border-b border-gray-100 flex justify-between items-center">
+            <div class="px-5 py-4 md:px-8 md:py-6 bg-gray-50 border-b border-gray-100 flex justify-between items-center">
                  ${isQuestion ?
-                    `<span class="px-4 py-1.5 rounded-full bg-${color}-100 text-${color}-700 text-xs font-black tracking-widest uppercase">Question</span>` :
-                    `<span class="px-4 py-1.5 rounded-full bg-gray-200 text-gray-600 text-xs font-black tracking-widest uppercase">Answer ${index + 1}</span>`
+                    `<span class="px-3 py-1 rounded-full bg-${color}-100 text-${color}-700 text-[10px] md:text-xs font-black tracking-widest uppercase">Question</span>` :
+                    `<span class="px-3 py-1 rounded-full bg-gray-200 text-gray-600 text-[10px] md:text-xs font-black tracking-widest uppercase">Answer ${index + 1}</span>`
                 }
-                <i class="fas fa-touch-app text-gray-300 animate-pulse"></i>
+                <i class="fas fa-touch-app text-gray-300 animate-pulse text-sm"></i>
             </div>
 
-            <div class="flex-1 flex flex-col justify-center px-8 py-4 space-y-6">
-                <div class="text-3xl md:text-4xl font-black text-gray-800 leading-normal break-keep select-none text-center">
+            <div class="flex-1 flex flex-col justify-center px-4 py-4 md:px-8 space-y-4 md:space-y-6">
+                <div class="text-2xl md:text-4xl font-black text-gray-800 leading-snug break-keep select-none text-center">
                     ${data.jp}
                 </div>
-                <div class="text-sm md:text-base text-gray-400 font-medium text-center break-keep select-none">
+                <div class="text-xs md:text-base text-gray-400 font-medium text-center break-keep select-none">
                     ${data.romaji}
                 </div>
-                <div class="w-16 h-1 bg-${color}-100 mx-auto rounded-full"></div>
-                <div class="text-xl md:text-2xl text-${color}-600 font-bold text-center break-keep select-none">
+                <div class="w-12 h-1 bg-${color}-100 mx-auto rounded-full"></div>
+                <div class="text-lg md:text-2xl text-${color}-600 font-bold text-center break-keep select-none">
                     ${data.kr}
                 </div>
             </div>
 
-            <div class="px-8 py-6 bg-gray-50 border-t border-gray-100 flex justify-center gap-4" onclick="event.stopPropagation();">
+            <div class="px-4 py-4 md:px-8 md:py-6 bg-gray-50 border-t border-gray-100 flex gap-2 justify-center" onclick="event.stopPropagation();">
                 <button onclick="AudioController.playNormal(this.dataset.text)" data-text="${data.jp.replace(/"/g, '&quot;')}" 
-                    class="flex-1 py-3 rounded-xl bg-white border border-gray-200 text-gray-600 font-bold hover:bg-${color}-50 hover:text-${color}-600 hover:border-${color}-200 shadow-sm active:scale-95 transition-all flex flex-col items-center justify-center gap-1">
-                    <i class="fas fa-volume-up text-lg"></i>
-                    <span class="text-xs">듣기</span>
+                    class="flex-1 py-2 md:py-3 rounded-xl bg-white border border-gray-200 text-gray-600 font-bold hover:bg-${color}-50 hover:text-${color}-600 hover:border-${color}-200 shadow-sm active:scale-95 transition-all flex flex-col items-center justify-center gap-1">
+                    <i class="fas fa-volume-up text-base md:text-lg"></i>
+                    <span class="text-[10px] md:text-xs">듣기</span>
                 </button>
                 
                 <button onclick="AudioController.playSlowRepeat(this.dataset.text)" data-text="${data.jp.replace(/"/g, '&quot;')}" 
-                    class="flex-1 py-3 rounded-xl bg-white border border-gray-200 text-gray-600 font-bold hover:bg-${color}-50 hover:text-${color}-600 hover:border-${color}-200 shadow-sm active:scale-95 transition-all flex flex-col items-center justify-center gap-1">
-                    <i class="fas fa-history text-lg"></i>
-                    <span class="text-xs">3회 반복</span>
+                    class="flex-1 py-2 md:py-3 rounded-xl bg-white border border-gray-200 text-gray-600 font-bold hover:bg-${color}-50 hover:text-${color}-600 hover:border-${color}-200 shadow-sm active:scale-95 transition-all flex flex-col items-center justify-center gap-1">
+                    <i class="fas fa-history text-base md:text-lg"></i>
+                    <span class="text-[10px] md:text-xs">3회</span>
                 </button>
 
                 <button onclick="AudioController.playShadowing(this.dataset.text)" data-text="${data.jp.replace(/"/g, '&quot;')}" 
-                    class="flex-1 py-3 rounded-xl bg-white border border-gray-200 text-gray-600 font-bold hover:bg-${color}-50 hover:text-${color}-600 hover:border-${color}-200 shadow-sm active:scale-95 transition-all flex flex-col items-center justify-center gap-1">
-                    <i class="fas fa-microphone-alt text-lg"></i>
-                    <span class="text-xs">쉐도잉</span>
+                    class="flex-1 py-2 md:py-3 rounded-xl bg-white border border-gray-200 text-gray-600 font-bold hover:bg-${color}-50 hover:text-${color}-600 hover:border-${color}-200 shadow-sm active:scale-95 transition-all flex flex-col items-center justify-center gap-1">
+                    <i class="fas fa-microphone-alt text-base md:text-lg"></i>
+                    <span class="text-[10px] md:text-xs">쉐도잉</span>
                 </button>
             </div>
         </div>
     `;
 
-    // 카드 뒷면 (단어장)
     const backHTML = `
         <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-slate-50 rounded-3xl border-2 border-${color}-100 shadow-inner flex flex-col overflow-hidden">
-             <div class="flex-1 p-8 overflow-hidden relative">
+             <div class="flex-1 p-5 md:p-8 overflow-hidden relative">
                 ${vocabListHTML}
              </div>
-             <div class="py-4 bg-white border-t border-gray-200 text-center cursor-pointer hover:bg-gray-50 transition-colors" onclick="event.stopPropagation(); toggleCardFlip('${uniqueId}')">
-                <span class="text-xs font-bold text-gray-500 uppercase tracking-widest flex items-center justify-center gap-2">
-                    <i class="fas fa-undo"></i> Return to Conversation
+             <div class="py-3 md:py-4 bg-white border-t border-gray-200 text-center cursor-pointer hover:bg-gray-50 transition-colors" onclick="event.stopPropagation(); toggleCardFlip('${uniqueId}')">
+                <span class="text-[10px] md:text-xs font-bold text-gray-500 uppercase tracking-widest flex items-center justify-center gap-2">
+                    <i class="fas fa-undo"></i> Return
                 </span>
              </div>
         </div>
     `;
 
-    // 카드 높이 설정 (최소 600px - 기존의 약 5배)
+    // Responsive Height: Mobile 450px / Desktop 600px
     return `
-        <div class="perspective-1000 w-full mb-12 select-none group" onclick="toggleCardFlip('${uniqueId}')">
-            <div id="${uniqueId}" class="card-inner relative w-full min-h-[600px] transform-style-3d shadow-xl rounded-3xl hover:shadow-2xl transition-all duration-500 bg-white">
+        <div class="perspective-1000 w-full mb-8 md:mb-12 select-none group" onclick="toggleCardFlip('${uniqueId}')">
+            <div id="${uniqueId}" class="card-inner relative w-full min-h-[450px] md:min-h-[600px] transform-style-3d shadow-lg rounded-3xl hover:shadow-xl transition-all duration-500 bg-white">
                 ${frontHTML}
                 ${backHTML}
             </div>
@@ -669,26 +657,26 @@ function displayCurrentConversation() {
     const viewer = document.getElementById('conversation-viewer');
 
     viewer.innerHTML = `
-        <div class="flex items-center justify-between mb-6 px-2 animate-fade-in">
-            <h3 class="text-xl font-bold text-gray-800 flex items-center gap-3">
-                <span class="w-2 h-8 bg-${convData.color}-500 rounded-full inline-block"></span>
-                ${convData.title} 
-                <span class="text-base text-gray-400 font-normal ml-2">(${currentConversationIndex + 1} / ${convData.conversations.length})</span>
+        <div class="flex items-center justify-between mb-6 px-1 animate-fade-in">
+            <h3 class="text-lg md:text-xl font-bold text-gray-800 flex items-center gap-2 md:gap-3">
+                <span class="w-1.5 h-6 md:w-2 md:h-8 bg-${convData.color}-500 rounded-full inline-block"></span>
+                <span class="truncate max-w-[150px] md:max-w-none">${convData.title}</span>
+                <span class="text-sm md:text-base text-gray-400 font-normal ml-1">(${currentConversationIndex + 1}/${convData.conversations.length})</span>
             </h3>
-            <div class="flex gap-3">
-                <button id="conv-prev-btn" onclick="previousConversation()" class="w-14 h-14 rounded-full bg-white border border-gray-200 shadow text-gray-400 hover:text-gray-800 hover:border-gray-400 transition-all flex items-center justify-center">
-                    <i class="fas fa-arrow-left text-xl"></i>
+            <div class="flex gap-2 md:gap-3">
+                <button id="conv-prev-btn" onclick="previousConversation()" class="w-10 h-10 md:w-14 md:h-14 rounded-full bg-white border border-gray-200 shadow text-gray-400 hover:text-gray-800 transition-all flex items-center justify-center">
+                    <i class="fas fa-arrow-left text-sm md:text-xl"></i>
                 </button>
-                <button id="conv-next-btn" onclick="nextConversation()" class="w-14 h-14 rounded-full bg-black shadow-lg text-white hover:bg-gray-800 hover:scale-105 active:scale-95 transition-all flex items-center justify-center">
-                    <i class="fas fa-arrow-right text-xl"></i>
+                <button id="conv-next-btn" onclick="nextConversation()" class="w-10 h-10 md:w-14 md:h-14 rounded-full bg-black shadow-lg text-white hover:bg-gray-800 transition-all flex items-center justify-center">
+                    <i class="fas fa-arrow-right text-sm md:text-xl"></i>
                 </button>
             </div>
         </div>
 
-        <div class="space-y-8 animate-fade-in">
+        <div class="space-y-6 md:space-y-8 animate-fade-in">
             ${createFlipCardHTML(currentConv.question, 'question', 0, convData.color)}
 
-            <div class="relative pl-6 md:pl-10 border-l-4 border-dashed border-gray-200 space-y-12">
+            <div class="relative pl-3 md:pl-10 border-l-2 md:border-l-4 border-dashed border-gray-200 space-y-8 md:space-y-12">
                 ${currentConv.answers.map((ans, idx) => createFlipCardHTML(ans, 'answer', idx, convData.color)).join('')}
             </div>
         </div>
@@ -705,42 +693,29 @@ function toggleCardFlip(id) {
 }
 
 // ==========================================
-// 4. 오디오 컨트롤러 (AudioController)
+// 4. 오디오 컨트롤러
 // ==========================================
 const AudioController = {
     speechSynth: window.speechSynthesis,
-
     speak: function (text, rate = 1.0) {
         return new Promise((resolve) => {
-            if (this.speechSynth.speaking) {
-                this.speechSynth.cancel();
-            }
-
+            if (this.speechSynth.speaking) this.speechSynth.cancel();
             const utterance = new SpeechSynthesisUtterance(text);
             utterance.lang = 'ja-JP';
             utterance.rate = rate;
-            
-            // 목소리 선택 (가능한 경우)
             const voices = this.speechSynth.getVoices();
             const jaVoice = voices.find(v => v.lang === 'ja-JP') || voices[0];
             if(jaVoice) utterance.voice = jaVoice;
-
             utterance.onend = () => resolve();
-            utterance.onerror = (e) => { console.error('Audio Error', e); resolve(); };
-
+            utterance.onerror = () => resolve();
             this.speechSynth.speak(utterance);
         });
     },
-
-    wait: function (ms) {
-        return new Promise(resolve => setTimeout(resolve, ms));
-    },
-
+    wait: function (ms) { return new Promise(resolve => setTimeout(resolve, ms)); },
     playNormal: async function (text) {
         this.speechSynth.cancel();
         await this.speak(text, 1.0);
     },
-
     playSlowRepeat: async function (text) {
         this.speechSynth.cancel();
         for (let i = 0; i < 3; i++) {
@@ -748,21 +723,18 @@ const AudioController = {
             await this.wait(800);
         }
     },
-
     playShadowing: async function (text) {
         this.speechSynth.cancel();
-        await this.speak(text, 0.7); // 천천히 듣기
-        await this.wait(2000);       // 따라할 시간
-        await this.speak(text, 1.0); // 정상 속도 확인
+        await this.speak(text, 0.7);
+        await this.wait(2000);
+        await this.speak(text, 1.0);
     }
 };
 
-window.playAudio = function (text) {
-    AudioController.playNormal(text);
-};
+window.playAudio = function (text) { AudioController.playNormal(text); };
 
 // ==========================================
-// 5. 네비게이션 로직 (이전/다음 대화)
+// 5. 네비게이션 제어
 // ==========================================
 function updateConversationNavigation() {
     const conv = conversationModuleData[currentConversationCategory];
@@ -773,16 +745,15 @@ function updateConversationNavigation() {
         const isDisabled = currentConversationIndex === 0;
         prevBtn.disabled = isDisabled;
         prevBtn.style.opacity = isDisabled ? '0.3' : '1';
-        prevBtn.style.cursor = isDisabled ? 'not-allowed' : 'pointer';
     }
 
     if (nextBtn && conv) {
         const isLast = currentConversationIndex === conv.conversations.length - 1;
         nextBtn.disabled = isLast;
-        nextBtn.innerHTML = isLast ? '<i class="fas fa-check"></i>' : '<i class="fas fa-arrow-right text-xl"></i>';
+        nextBtn.innerHTML = isLast ? '<i class="fas fa-check"></i>' : '<i class="fas fa-arrow-right"></i>';
         nextBtn.className = isLast
-            ? 'w-14 h-14 rounded-full bg-gray-200 text-gray-400 flex items-center justify-center cursor-not-allowed'
-            : `w-14 h-14 rounded-full bg-${conv.color}-500 shadow-lg text-white hover:bg-${conv.color}-600 hover:scale-105 active:scale-95 transition-all flex items-center justify-center`;
+            ? 'w-10 h-10 md:w-14 md:h-14 rounded-full bg-gray-200 text-gray-400 flex items-center justify-center cursor-not-allowed'
+            : `w-10 h-10 md:w-14 md:h-14 rounded-full bg-${conv.color}-500 shadow-lg text-white transition-all flex items-center justify-center`;
     }
 }
 
@@ -803,7 +774,6 @@ function nextConversation() {
     }
 }
 
-// Auto-initialize
 document.addEventListener('DOMContentLoaded', () => {
     if (document.getElementById('conversation-content')) {
         initConversation();
