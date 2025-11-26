@@ -642,8 +642,3 @@ document.addEventListener('DOMContentLoaded', () => {
 window.addEventListener('beforeunload', () => {
     AudioController.stopAutoRepeat();
 });
-단어 회화 문장카테고리 모두반영한파일 제공해
-생락햊마
-10개카테고리에 각 100문장 답변300문장
-
-병렬로작업후 파일형식 에러없이 정확히 츼합후 제공해
