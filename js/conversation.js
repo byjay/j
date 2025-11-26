@@ -1,16 +1,17 @@
 /**
- * conversation.js - Final Complete Edition
- * Ver 4.0: Full Vocabulary Mapping with Parts of Speech
+ * conversation.js - Final Ultimate Edition
+ * Ver 5.0: Dynamic Masonry Vocab Layout & Full Data
  */
 
 // ==========================================
-// 0. 스타일 정의 (UI 최적화)
+// 0. 스타일 정의 (Dynamic Layout & UI)
 // ==========================================
 (function injectStyles() {
     const oldStyle = document.getElementById('conversation-styles');
     if (oldStyle) oldStyle.remove();
 
     const css = `
+        /* 3D Flip Core */
         .perspective-1000 { perspective: 1000px; }
         .transform-style-3d { transform-style: preserve-3d; }
         .backface-hidden { backface-visibility: hidden; -webkit-backface-visibility: hidden; }
@@ -28,6 +29,24 @@
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
         }
 
+        /* Vocab Card Dynamic Grid */
+        .vocab-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-content: flex-start;
+        }
+        
+        /* 단어 카드 동적 사이징 핵심 */
+        .vocab-item {
+            flex: 1 1 140px; /* 최소 너비 140px, 공간 남으면 늘어남 */
+            min-width: 140px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: all 0.2s ease;
+        }
+
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .custom-scrollbar::-webkit-scrollbar { width: 4px; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
@@ -41,7 +60,7 @@
 })();
 
 // ==========================================
-// 1. 대규모 데이터 (회화 30 + 품사 포함 완벽 단어장)
+// 1. 대규모 데이터 (30문장 + 품사/원어/읽기 완벽 포함)
 // ==========================================
 const conversationModuleData = {
     'immigration': {
@@ -55,12 +74,12 @@ const conversationModuleData = {
                     jp: 'パスポートを見せてください。', kr: '여권을 보여주세요.', romaji: 'Pasupo-to o misete kudasai', 
                     vocab: [
                         {word:'パスポート', read:'파스포-토', mean:'여권', type:'명사'}, 
-                        {word:'見せる', read:'미세루', mean:'보여주다', type:'동사'}, 
+                        {word:'見せる', read:'미세루', mean:'보여주다', type:'동사'},
                         {word:'ください', read:'쿠다사이', mean:'주세요', type:'표현'}
                     ] 
                 },
                 answers: [
-                    { jp: 'はい、どうぞ。', kr: '네, 여기 있습니다.', romaji: 'Hai, douzo', vocab: [{word:'はい', read:'하이', mean:'네', type:'감탄사'}, {word:'どうぞ', read:'도-조', mean:'여기요', type:'표현'}] },
+                    { jp: 'はい、どうぞ。', kr: '네, 여기 있습니다.', romaji: 'Hai, douzo', vocab: [{word:'はい', read:'하이', mean:'네', type:'대답'}, {word:'どうぞ', read:'도-조', mean:'여기요', type:'표현'}] },
                     { jp: '入国カードもここにあります。', kr: '입국 카드도 여기 있습니다.', romaji: 'Nyuukoku ka-do mo koko ni arimasu', vocab: [{word:'入国カード', read:'뉴-코쿠카-도', mean:'입국카드', type:'명사'}, {word:'ここ', read:'코코', mean:'여기', type:'대명사'}, {word:'ある', read:'아루', mean:'있다', type:'동사'}] }
                 ] 
             },
@@ -112,7 +131,7 @@ const conversationModuleData = {
                 question: { 
                     jp: '帰りのチケットは持っていますか？', kr: '돌아가는 티켓은 가지고 있나요?', romaji: 'Kaeri no chiketto wa motte imasu ka?', 
                     vocab: [
-                        {word:'帰り', read:'카에리', mean:'귀국/돌아감', type:'명사'}, 
+                        {word:'帰り', read:'카에리', mean:'귀국', type:'명사'}, 
                         {word:'チケット', read:'치켓토', mean:'티켓', type:'명사'},
                         {word:'持つ', read:'모츠', mean:'가지다', type:'동사'}
                     ] 
@@ -126,7 +145,7 @@ const conversationModuleData = {
             { 
                 question: { 
                     jp: 'お一人ですか？', kr: '혼자입니까?', romaji: 'Ohitori desu ka?', 
-                    vocab: [{word:'一人', read:'히토리', mean:'한 명/혼자', type:'명사'}] 
+                    vocab: [{word:'一人', read:'히토리', mean:'혼자/한명', type:'명사'}] 
                 },
                 answers: [
                     { jp: 'はい、一人旅です。', kr: '네, 혼자 여행입니다.', romaji: 'Hai, hitoritabi desu', vocab: [{word:'一人旅', read:'히토리타비', mean:'나홀로 여행', type:'명사'}] },
@@ -169,7 +188,7 @@ const conversationModuleData = {
                 },
                 answers: [
                     { jp: '5万円くらいです。', kr: '5만엔 정도입니다.', romaji: 'Gomanen kurai desu', vocab: [{word:'5万円', read:'고만엔', mean:'5만엔', type:'명사'}, {word:'くらい', read:'쿠라이', mean:'정도', type:'조사'}] },
-                    { jp: 'カードを使います。', kr: '카드를 씁니다.', romaji: 'Ka-do o tsukaimasu', vocab: [{word:'使う', read:'츠카우', mean:'쓰다/사용하다', type:'동사'}] }
+                    { jp: 'カードを使います。', kr: '카드를 씁니다.', romaji: 'Ka-do o tsukaimasu', vocab: [{word:'使う', read:'츠카우', mean:'쓰다', type:'동사'}] }
                 ] 
             },
             // [10]
@@ -178,11 +197,11 @@ const conversationModuleData = {
                     jp: 'マスクを外してください。', kr: '마스크를 벗어주세요.', romaji: 'Masuku o hazushite kudasai', 
                     vocab: [
                         {word:'マスク', read:'마스쿠', mean:'마스크', type:'명사'},
-                        {word:'外す', read:'하즈스', mean:'벗다/풀다', type:'동사'}
+                        {word:'外す', read:'하즈스', mean:'벗다', type:'동사'}
                     ] 
                 },
                 answers: [
-                    { jp: 'はい、これでいいですか？', kr: '네, 이러면 되나요?', romaji: 'Hai, kore de ii desu ka?', vocab: [{word:'これ', read:'코레', mean:'이것', type:'대명사'}, {word:'いい', read:'이-', mean:'좋다/괜찮다', type:'형용사'}] },
+                    { jp: 'はい、これでいいですか？', kr: '네, 이러면 되나요?', romaji: 'Hai, kore de ii desu ka?', vocab: [{word:'これ', read:'코레', mean:'이것', type:'대명사'}, {word:'いい', read:'이-', mean:'좋다', type:'형용사'}] },
                     { jp: '眼鏡も外しますか？', kr: '안경도 벗을까요?', romaji: 'Megane mo hazushimasu ka?', vocab: [{word:'眼鏡', read:'메가네', mean:'안경', type:'명사'}] }
                 ] 
             },
@@ -193,12 +212,12 @@ const conversationModuleData = {
                     vocab: [
                         {word:'両手', read:'료-테', mean:'양손', type:'명사'},
                         {word:'人差し指', read:'히토사시유비', mean:'검지', type:'명사'},
-                        {word:'置く', read:'오쿠', mean:'두다/놓다', type:'동사'}
+                        {word:'置く', read:'오쿠', mean:'두다', type:'동사'}
                     ] 
                 },
                 answers: [
                     { jp: 'ここですか？', kr: '여기요?', romaji: 'Koko desu ka?', vocab: [] },
-                    { jp: '強く押したほうがいいですか？', kr: '세게 누르는 게 좋나요?', romaji: 'Tsuyoku oshita hou ga ii desu ka?', vocab: [{word:'強く', read:'츠요쿠', mean:'강하게/세게', type:'부사'}, {word:'押す', read:'오스', mean:'누르다', type:'동사'}] }
+                    { jp: '強く押したほうがいいですか？', kr: '세게 누르는 게 좋나요?', romaji: 'Tsuyoku oshita hou ga ii desu ka?', vocab: [{word:'強く', read:'츠요쿠', mean:'강하게', type:'부사'}, {word:'押す', read:'오스', mean:'누르다', type:'동사'}] }
                 ] 
             },
             // [12]
@@ -226,7 +245,7 @@ const conversationModuleData = {
                 },
                 answers: [
                     { jp: 'いいえ、ありません。', kr: '아뇨, 없습니다.', romaji: 'Iie, arimasen', vocab: [] },
-                    { jp: 'タバコが2カートンあります。', kr: '담배가 2보루 있습니다.', romaji: 'Tabako ga ni-ka-ton arimasu', vocab: [{word:'タバコ', read:'타바코', mean:'담배', type:'명사'}, {word:'カートン', read:'카-톤', mean:'보루/카톤', type:'단위'}] }
+                    { jp: 'タバコが2カートンあります。', kr: '담배가 2보루 있습니다.', romaji: 'Tabako ga ni-ka-ton arimasu', vocab: [{word:'タバコ', read:'타바코', mean:'담배', type:'명사'}, {word:'カートン', read:'카-톤', mean:'보루', type:'단위'}] }
                 ] 
             },
             // [14]
@@ -239,7 +258,7 @@ const conversationModuleData = {
                     ] 
                 },
                 answers: [
-                    { jp: '全て私のものです。', kr: '전부 제 것입니다.', romaji: 'Subete watashi no mono desu', vocab: [{word:'全て', read:'스베테', mean:'전부/모두', type:'명사'}, {word:'私', read:'와타시', mean:'나/저', type:'대명사'}] },
+                    { jp: '全て私のものです。', kr: '전부 제 것입니다.', romaji: 'Subete watashi no mono desu', vocab: [{word:'全て', read:'스베테', mean:'전부', type:'명사'}, {word:'私', read:'와타시', mean:'나', type:'대명사'}] },
                     { jp: '友人から頼まれたものです。', kr: '친구에게 부탁받은 것입니다.', romaji: 'Yuujin kara tanomareta mono desu', vocab: [{word:'頼む', read:'타노무', mean:'부탁하다', type:'동사'}] }
                 ] 
             },
@@ -251,7 +270,7 @@ const conversationModuleData = {
                 },
                 answers: [
                     { jp: '服と洗面用具です。', kr: '옷과 세면도구입니다.', romaji: 'Fuku to senmenyougu desu', vocab: [{word:'服', read:'후쿠', mean:'옷', type:'명사'}, {word:'洗面用具', read:'센멘요-구', mean:'세면도구', type:'명사'}] },
-                    { jp: 'お土産のお菓子です。', kr: '선물용 과자입니다.', romaji: 'Omiyage no okashi desu', vocab: [{word:'お土産', read:'오미야게', mean:'선물/기념품', type:'명사'}, {word:'お菓子', read:'오카시', mean:'과자', type:'명사'}] }
+                    { jp: 'お土産のお菓子です。', kr: '선물용 과자입니다.', romaji: 'Omiyage no okashi desu', vocab: [{word:'お土産', read:'오미야게', mean:'선물', type:'명사'}, {word:'お菓子', read:'오카시', mean:'과자', type:'명사'}] }
                 ] 
             },
             // [16]
@@ -274,12 +293,12 @@ const conversationModuleData = {
                 question: { 
                     jp: 'トランクを開けてください。', kr: '트렁크(가방)를 열어주세요.', romaji: 'Toranku o akete kudasai', 
                     vocab: [
-                        {word:'トランク', read:'토랑쿠', mean:'트렁크/가방', type:'명사'},
+                        {word:'トランク', read:'토랑쿠', mean:'트렁크', type:'명사'},
                         {word:'開ける', read:'아케루', mean:'열다', type:'동사'}
                     ] 
                 },
                 answers: [
-                    { jp: 'はい、鍵を開けます。', kr: '네, 잠금을 풀게요.', romaji: 'Hai, kagi o akemasu', vocab: [{word:'鍵', read:'카기', mean:'열쇠/잠금', type:'명사'}] },
+                    { jp: 'はい、鍵を開けます。', kr: '네, 잠금을 풀게요.', romaji: 'Hai, kagi o akemasu', vocab: [{word:'鍵', read:'카기', mean:'열쇠', type:'명사'}] },
                     { jp: '下着が入っていますが…。', kr: '속옷이 들어있는데요...', romaji: 'Shitagi ga haitte imasuga...', vocab: [{word:'下着', read:'시타기', mean:'속옷', type:'명사'}, {word:'入る', read:'하이루', mean:'들어있다', type:'동사'}] }
                 ] 
             },
@@ -287,7 +306,7 @@ const conversationModuleData = {
             { 
                 question: { 
                     jp: '乗り継ぎですか？', kr: '환승입니까?', romaji: 'Noritsugi desu ka?', 
-                    vocab: [{word:'乗り継ぎ', read:'노리츠기', mean:'환승/경유', type:'명사'}] 
+                    vocab: [{word:'乗り継ぎ', read:'노리츠기', mean:'환승', type:'명사'}] 
                 },
                 answers: [
                     { jp: 'はい、アメリカへ行きます。', kr: '네, 미국으로 갑니다.', romaji: 'Hai, amerika e ikimasu', vocab: [{word:'アメリカ', read:'아메리카', mean:'미국', type:'명사'}, {word:'行く', read:'이쿠', mean:'가다', type:'동사'}] },
@@ -329,7 +348,7 @@ const conversationModuleData = {
                     ] 
                 },
                 answers: [
-                    { jp: '韓国語の様式はありますか？', kr: '한국어 양식은 있나요?', romaji: 'Kankokugo no youshiki wa arimasu ka?', vocab: [{word:'韓国語', read:'칸코쿠고', mean:'한국어', type:'명사'}, {word:'様式', read:'요-시키', mean:'양식/서식', type:'명사'}] },
+                    { jp: '韓国語の様式はありますか？', kr: '한국어 양식은 있나요?', romaji: 'Kankokugo no youshiki wa arimasu ka?', vocab: [{word:'韓国語', read:'칸코쿠고', mean:'한국어', type:'명사'}, {word:'様式', read:'요-시키', mean:'양식', type:'명사'}] },
                     { jp: 'ボールペンを貸してください。', kr: '볼펜 좀 빌려주세요.', romaji: 'Bo-rupen o kashite kudasai', vocab: [{word:'貸す', read:'카스', mean:'빌려주다', type:'동사'}] }
                 ] 
             },
@@ -339,7 +358,7 @@ const conversationModuleData = {
                     jp: '列を間違えましたか？', kr: '(역질문) 줄을 잘못 섰나요?', romaji: 'Retsu o machigaemashita ka?', 
                     vocab: [
                         {word:'列', read:'레츠', mean:'줄/열', type:'명사'},
-                        {word:'間違える', read:'마치가에루', mean:'틀리다/실수하다', type:'동사'}
+                        {word:'間違える', read:'마치가에루', mean:'틀리다', type:'동사'}
                     ] 
                 },
                 answers: [
@@ -366,7 +385,7 @@ const conversationModuleData = {
                 },
                 answers: [
                     { jp: 'あちらです。', kr: '저쪽입니다.', romaji: 'Achira desu', vocab: [{word:'あちら', read:'아치라', mean:'저쪽', type:'대명사'}] },
-                    { jp: '税関を通ってからです。', kr: '세관을 통과한 후입니다.', romaji: 'Zeikan o tootte kara desu', vocab: [{word:'税関', read:'제-칸', mean:'세관', type:'명사'}, {word:'通る', read:'토-루', mean:'통하다/지나다', type:'동사'}] }
+                    { jp: '税関を通ってからです。', kr: '세관을 통과한 후입니다.', romaji: 'Zeikan o tootte kara desu', vocab: [{word:'税関', read:'제-칸', mean:'세관', type:'명사'}, {word:'通る', read:'토-루', mean:'통하다', type:'동사'}] }
                 ] 
             },
             // [25]
@@ -376,7 +395,7 @@ const conversationModuleData = {
                     vocab: [{word:'使える', read:'츠카에루', mean:'쓸 수 있다', type:'동사'}] 
                 },
                 answers: [
-                    { jp: 'フリーWi-Fiがあります。', kr: '무료 와이파이가 있습니다.', romaji: 'Furi- waifai ga arimasu', vocab: [{word:'フリー', read:'후리-', mean:'무료(free)', type:'명사'}] },
+                    { jp: 'フリーWi-Fiがあります。', kr: '무료 와이파이가 있습니다.', romaji: 'Furi- waifai ga arimasu', vocab: [{word:'フリー', read:'후리-', mean:'무료', type:'명사'}] },
                     { jp: 'パスワードは不要です。', kr: '비밀번호는 필요 없습니다.', romaji: 'Pasuwa-do wa fuyou desu', vocab: [{word:'不要', read:'후요-', mean:'불필요', type:'명사'}] }
                 ] 
             },
@@ -402,7 +421,7 @@ const conversationModuleData = {
                 },
                 answers: [
                     { jp: '混んでいるので30分くらいです。', kr: '붐비고 있어서 30분 정도입니다.', romaji: 'Konde iru node sanjuppun kurai desu', vocab: [{word:'混む', read:'코무', mean:'붐비다', type:'동사'}, {word:'30分', read:'산쥽푼', mean:'30분', type:'명사'}] },
-                    { jp: 'すぐ終わります。', kr: '금방 끝납니다.', romaji: 'Sugu owarimasu', vocab: [{word:'すぐ', read:'스구', mean:'곧/바로', type:'부사'}] }
+                    { jp: 'すぐ終わります。', kr: '금방 끝납니다.', romaji: 'Sugu owarimasu', vocab: [{word:'すぐ', read:'스구', mean:'곧', type:'부사'}] }
                 ] 
             },
             // [28]
@@ -503,45 +522,52 @@ function updateNavigationStyles(activeKey) {
 }
 
 // ------------------------------------------
-// 핵심: 렌더링 로직 (품사 태그 추가)
+// 핵심: 동적 Masonry 레이아웃 & 완벽한 데이터 표시
 // ------------------------------------------
 function createFlipCardHTML(data, type, index, color) {
     const isQuestion = type === 'question';
     const uniqueId = isQuestion ? 'card-q' : `card-a-${index}`;
 
-    // 단어장 HTML (품사 배지 포함)
+    // 단어장 HTML (동적 Grid + 모든 정보 표시)
     const vocabListHTML = data.vocab && data.vocab.length > 0
         ? `<div class="h-full flex flex-col">
-            <div class="flex items-center gap-2 border-b border-gray-200 pb-2 mb-2">
+            <div class="flex items-center gap-2 border-b border-gray-200 pb-3 mb-3">
                 <i class="fas fa-book-reader text-${color}-500"></i>
                 <span class="text-xs font-black text-gray-400 uppercase tracking-widest">Vocabulary</span>
             </div>
-            <div class="flex-1 overflow-y-auto custom-scrollbar space-y-2 pr-1">
-            ${data.vocab.map(v => `
-                <div class="bg-white p-2.5 rounded-lg border border-gray-100 shadow-sm flex flex-col sm:flex-row sm:justify-between sm:items-center">
-                    <div class="flex items-center gap-2 mb-1 sm:mb-0">
-                        ${v.type ? `<span class="text-[10px] bg-${color}-50 text-${color}-600 px-1.5 py-0.5 rounded font-bold border border-${color}-100 min-w-[30px] text-center">${v.type}</span>` : ''}
-                        <span class="text-lg font-bold text-gray-800">${v.word}</span>
-                        <span class="text-xs text-gray-400 font-mono">${v.read}</span>
-                    </div>
-                    <span class="text-sm text-gray-700 font-medium pl-1 sm:pl-0">${v.mean}</span>
+            
+            <div class="flex-1 overflow-y-auto custom-scrollbar pr-1">
+                <div class="vocab-grid">
+                    ${data.vocab.map(v => `
+                        <div class="vocab-item bg-white p-3 rounded-xl border border-gray-100 shadow-sm hover:shadow-md hover:border-${color}-200 cursor-default">
+                            <div class="flex justify-between items-start mb-1">
+                                <span class="text-xl font-bold text-gray-800 leading-none">${v.word}</span>
+                                ${v.type ? `<span class="text-[10px] bg-${color}-50 text-${color}-600 px-1.5 py-0.5 rounded font-bold uppercase tracking-wider">${v.type}</span>` : ''}
+                            </div>
+                            <div class="text-xs text-gray-400 font-mono mb-2">${v.read}</div>
+                            <div class="mt-auto pt-2 border-t border-gray-50 text-sm font-bold text-${color}-600">
+                                ${v.mean}
+                            </div>
+                        </div>
+                    `).join('')}
                 </div>
-            `).join('')}
             </div>
            </div>`
         : `<div class="h-full flex flex-col items-center justify-center text-gray-300">
-             <i class="fas fa-comment-slash text-3xl mb-2 opacity-30"></i>
-             <span class="text-xs">추가 단어 없음</span>
+             <i class="fas fa-layer-group text-4xl mb-3 opacity-30"></i>
+             <span class="text-sm font-medium">추가 단어 없음</span>
            </div>`;
 
-    // 카드 앞면
+    // 카드 앞면 (이전과 동일, 깔끔하게 유지)
     const frontHTML = `
         <div class="absolute w-full h-full backface-hidden bg-white rounded-3xl border border-gray-200 shadow-sm flex flex-col justify-between overflow-hidden">
             <div class="px-5 py-4 bg-gray-50 border-b border-gray-100 flex justify-between items-center">
                  <span class="px-3 py-1 rounded-full ${isQuestion ? `bg-${color}-100 text-${color}-700` : 'bg-gray-200 text-gray-600'} text-[10px] font-black tracking-widest uppercase">
                     ${isQuestion ? 'Question' : `Answer ${index + 1}`}
                  </span>
-                <span class="text-[10px] text-gray-400 font-bold"><i class="fas fa-sync-alt mr-1"></i>FLIP</span>
+                <span class="text-[10px] text-gray-400 font-bold flex items-center gap-1">
+                    <i class="fas fa-sync-alt"></i> FLIP
+                </span>
             </div>
             <div class="flex-1 flex flex-col justify-center px-4 space-y-4">
                 <div class="text-2xl md:text-3xl font-black text-gray-800 leading-snug text-center break-keep select-none">${data.jp}</div>
@@ -561,7 +587,9 @@ function createFlipCardHTML(data, type, index, color) {
         <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-slate-50 rounded-3xl border-2 border-${color}-100 shadow-inner flex flex-col overflow-hidden">
              <div class="flex-1 p-4 overflow-hidden relative">${vocabListHTML}</div>
              <div class="py-3 bg-white border-t border-gray-200 text-center cursor-pointer hover:bg-gray-50" onclick="event.stopPropagation(); toggleCardFlip('${uniqueId}')">
-                <span class="text-xs font-bold text-gray-500 uppercase tracking-widest"><i class="fas fa-undo mr-1"></i>Return</span>
+                <span class="text-xs font-bold text-gray-500 uppercase tracking-widest flex items-center justify-center gap-2">
+                    <i class="fas fa-undo"></i> Return to Conversation
+                </span>
              </div>
         </div>`;
 
@@ -580,7 +608,7 @@ function displayCurrentConversation() {
         <div class="flex items-center justify-between mb-6 px-1 animate-fade-in">
             <h3 class="text-lg md:text-xl font-bold text-gray-800 flex items-center gap-2">
                 <span class="w-1.5 h-6 bg-${convData.color}-500 rounded-full inline-block"></span>
-                <span class="truncate max-w-[200px]">${convData.title}</span>
+                <span class="truncate max-w-[200px] md:max-w-none">${convData.title}</span>
                 <span class="text-sm text-gray-400 font-normal ml-1">(${currentConversationIndex + 1}/${convData.conversations.length})</span>
             </h3>
             <div class="flex gap-2">
