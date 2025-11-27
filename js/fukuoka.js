@@ -559,14 +559,11 @@ function renderTabs() {
 
     container.innerHTML = Object.keys(schedule).map(day =>
         `<button onclick="changeFukuokaDay(${day})" 
-                class="day-tab px-5 py-3 rounded-xl border-2 text-sm font-bold transition-all duration-300 ${day == activeDay
-            ? 'bg-gradient-to-r from-red-500 to-pink-500 text-white border-red-600 shadow-lg transform scale-105'
-            : 'bg-white text-gray-600 border-gray-200 hover:bg-gray-50 hover:border-gray-300'
+                class="day-tab flex-shrink-0 px-3 py-2 rounded-lg border-2 text-xs font-bold transition-all duration-300 whitespace-nowrap ${day == activeDay
+            ? 'bg-gradient-to-r from-red-500 to-pink-500 text-white border-red-600 shadow-md scale-105'
+            : 'bg-white text-gray-600 border-gray-200 hover:bg-gray-50'
         }">
-            <div class="flex flex-col items-center gap-1">
-                <span class="text-xs opacity-80">${day}일차</span>
-                <span>${schedule[day].title.split(':')[0]}</span>
-            </div>
+            ${day}일차
         </button>`
     ).join('');
 }
@@ -675,31 +672,31 @@ function renderSchedule(day) {
 
         const div = document.createElement('div');
         div.id = `place-item-${idx}`;
-        div.className = "bg-white rounded-2xl shadow-md border-2 border-gray-100 overflow-hidden transition-all duration-300 hover:shadow-xl hover:border-blue-300 mb-4";
+        div.className = "bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden transition-all duration-300 hover:shadow-md hover:border-blue-300 mb-3";
 
         div.innerHTML = `
-            <div class="click-trigger p-5 cursor-pointer flex items-center justify-between bg-gradient-to-r from-white to-gray-50 hover:from-gray-50 hover:to-blue-50 transition" 
+            <div class="click-trigger p-3 cursor-pointer flex items-center justify-between hover:bg-gray-50 transition" 
                  onclick="toggleDetail(${idx}, ${item.lat}, ${item.lng})">
-                <div class="flex items-center gap-4 overflow-hidden flex-1">
-                    <span class="flex-none w-12 h-12 rounded-full ${bgColor} ${typeColor} flex items-center justify-center font-bold text-xl border-2 border-current shadow-md">
+                <div class="flex items-center gap-2 overflow-hidden flex-1">
+                    <span class="flex-none w-8 h-8 rounded-full ${bgColor} ${typeColor} flex items-center justify-center font-bold text-sm border border-current">
                         ${idx + 1}
                     </span>
                     <div class="flex flex-col min-w-0 flex-1">
-                        <h4 class="font-bold text-gray-800 text-lg truncate">${item.name}</h4>
-                        <div class="flex items-center gap-2 mt-1">
-                            <i class="fas ${iconClass} ${typeColor} text-sm"></i>
-                            <span class="text-sm text-gray-500 truncate">${item.desc}</span>
+                        <h4 class="font-bold text-gray-800 text-sm break-words line-clamp-2">${item.name}</h4>
+                        <div class="flex items-center gap-1.5 mt-0.5">
+                            <i class="fas ${iconClass} ${typeColor} text-xs"></i>
+                            <span class="text-xs text-gray-500 truncate">${item.desc}</span>
                         </div>
                         ${item.rating ? `
-                            <div class="flex items-center gap-2 mt-1">
+                            <div class="flex items-center gap-1.5 mt-0.5">
                                 <span class="text-xs font-bold text-yellow-600">⭐ ${item.rating}</span>
                                 ${item.priceRange ? `<span class="text-xs text-gray-400">| ${item.priceRange}</span>` : ''}
                             </div>
                         ` : ''}
                     </div>
                 </div>
-                <div class="flex-none ml-3 w-10 h-10 flex items-center justify-center rounded-full bg-gradient-to-br from-blue-100 to-purple-100">
-                     <i id="chevron-${idx}" class="fas fa-chevron-down ${typeColor} transition-transform duration-300"></i>
+                <div class="flex-none ml-2 w-6 h-6 flex items-center justify-center rounded-full bg-gray-100">
+                     <i id="chevron-${idx}" class="fas fa-chevron-down ${typeColor} text-xs transition-transform duration-300"></i>
                 </div>
             </div>
             
