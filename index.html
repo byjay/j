@@ -3,8 +3,9 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover">
-    
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover">
+
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="mobile-web-app-capable" content="yes">
@@ -40,13 +41,20 @@
 
     <style>
         /* html, body의 스크롤 잠금을 강제로 해제합니다 */
-        html, body {
-            overflow-y: auto !important; /* 세로 스크롤 허용 */
-            height: auto !important;     /* 높이 제한 해제 */
-            position: static !important; /* 고정 위치 해제 */
-            touch-action: auto !important; /* 터치 동작(줌/스크롤) 허용 */
-            -webkit-overflow-scrolling: touch !important; /* 부드러운 스크롤 */
-            overscroll-behavior-y: auto !important; /* 바운스 효과 허용 */
+        html,
+        body {
+            overflow-y: auto !important;
+            /* 세로 스크롤 허용 */
+            height: auto !important;
+            /* 높이 제한 해제 */
+            position: static !important;
+            /* 고정 위치 해제 */
+            touch-action: auto !important;
+            /* 터치 동작(줌/스크롤) 허용 */
+            -webkit-overflow-scrolling: touch !important;
+            /* 부드러운 스크롤 */
+            overscroll-behavior-y: auto !important;
+            /* 바운스 효과 허용 */
         }
 
         /* 앱 컨테이너가 화면을 꽉 채워 스크롤을 막는 것을 방지 */
@@ -60,17 +68,19 @@
         .content-scroll {
             height: auto !important;
             overflow: visible !important;
-            flex: none !important; /* Flexbox 높이 제한 해제 */
+            flex: none !important;
+            /* Flexbox 높이 제한 해제 */
         }
-        
+
         /* 텍스트 선택 허용 */
         * {
             -webkit-user-select: text !important;
             user-select: text !important;
         }
-        
+
         /* 버튼 등 인터랙션 요소만 선택 방지 유지 (선택사항) */
-        button, .user-card {
+        button,
+        .user-card {
             -webkit-user-select: none !important;
             user-select: none !important;
         }
@@ -214,11 +224,11 @@
                         <h2 class="text-xl font-bold text-gray-900 mb-2">💬 실전 회화</h2>
                         <div id="conversation-category-buttons"
                             class="flex flex-wrap gap-2 text-xs overflow-x-auto pb-1">
-                            </div>
+                        </div>
                     </div>
 
                     <div id="conversation-content" class="mb-3">
-                        </div>
+                    </div>
 
                     <div class="p-3 bg-gray-50 border border-gray-100 rounded-2xl flex justify-between items-center">
                         <button id="conv-prev-btn" onclick="previousConversation()"
@@ -275,12 +285,7 @@
                 </div>
 
                 <div id="characters" class="tab-content hidden">
-                    <div class="flex justify-center space-x-4 mb-6">
-                        <button onclick="showCharacterGrid('hiragana')" id="tab-hiragana" data-type="hiragana"
-                            class="char-type-tab px-6 py-2 rounded-full font-bold text-white bg-red-500 shadow-md transition-transform active:scale-95">히라가나</button>
-                        <button onclick="showCharacterGrid('katakana')" id="tab-katakana" data-type="katakana"
-                            class="char-type-tab px-6 py-2 rounded-full font-bold text-gray-500 bg-white border border-gray-200 shadow-sm transition-transform active:scale-95">가타카나</button>
-                    </div>
+
                     <div id="character-grid-container" class="bg-white rounded-2xl shadow-sm p-4">
                         <div id="character-grid" class="grid grid-cols-5 gap-2 sm:grid-cols-8"></div>
                     </div>

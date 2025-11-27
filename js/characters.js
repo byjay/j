@@ -54,85 +54,75 @@ let isDrawing = false;
 
 function showCharacterGrid(type) {
     currentMode = type;
-    
-    // ★ 핵심 수정: character-grid가 아니라 그 부모 컨테이너를 타겟팅
     const container = document.getElementById('character-grid-container');
-    
-    // 탭 스타일 업데이트
-    const tabHiragana = document.getElementById('tab-hiragana');
-    const tabKatakana = document.getElementById('tab-katakana');
-    
-    if (tabHiragana && tabKatakana) {
-        if (type === 'hiragana') {
-            tabHiragana.classList.add('bg-red-500', 'text-white');
-            tabHiragana.classList.remove('bg-gray-200');
-            tabKatakana.classList.remove('bg-blue-500', 'text-white');
-            tabKatakana.classList.add('bg-gray-200');
-        } else {
-            tabHiragana.classList.remove('bg-red-500', 'text-white');
-            tabHiragana.classList.add('bg-gray-200');
-            tabKatakana.classList.add('bg-blue-500', 'text-white');
-            tabKatakana.classList.remove('bg-gray-200');
-        }
-    }
 
     if (!container) {
         console.error("character-grid-container ID를 찾을 수 없습니다.");
         return;
     }
 
-    // 1. 상단 버튼 영역 (그리드 밖으로 분리)
+    // 1. 상단 고정 헤더 (탭 + 퀴즈/통계 버튼) - 컴팩트 디자인
+    const isHiragana = type === 'hiragana';
     const topHTML = `
-        <div class="w-full mb-6 px-2">
-            <div class="flex gap-2 mb-3">
-                <button onclick="startQuiz('hiragana')" class="flex-1 bg-red-50 text-red-600 border border-red-200 py-3 rounded-xl text-xs font-bold hover:bg-red-100 transition shadow-sm">
-                    <i class="fas fa-question-circle mr-1"></i>히라가나 퀴즈
+        <div class="sticky top-14 z-30 bg-gray-50/95 backdrop-blur-sm -mx-4 px-4 py-2 border-b border-gray-200 mb-2">
+            <div class="flex gap-1 mb-2">
+                <button onclick="showCharacterGrid('hiragana')" 
+                    class="flex-1 py-2 rounded-lg font-bold text-xs transition-colors ${isHiragana ? 'bg-red-500 text-white shadow-sm' : 'bg-white text-gray-500 border border-gray-200'}">
+                    히라가나
                 </button>
-                <button onclick="startQuiz('katakana')" class="flex-1 bg-blue-50 text-blue-600 border border-blue-200 py-3 rounded-xl text-xs font-bold hover:bg-blue-100 transition shadow-sm">
-                    <i class="fas fa-question-circle mr-1"></i>가타카나 퀴즈
-                </button>
-                <button onclick="startQuiz('mix')" class="flex-1 bg-purple-50 text-purple-600 border border-purple-200 py-3 rounded-xl text-xs font-bold hover:bg-purple-100 transition shadow-sm">
-                    <i class="fas fa-random mr-1"></i>섞어서
+                <button onclick="showCharacterGrid('katakana')" 
+                    class="flex-1 py-2 rounded-lg font-bold text-xs transition-colors ${!isHiragana ? 'bg-blue-500 text-white shadow-sm' : 'bg-white text-gray-500 border border-gray-200'}">
+                    가타카나
                 </button>
             </div>
-            <button onclick="showHistory()" class="w-full bg-gray-800 text-white py-3 rounded-xl text-sm font-bold hover:bg-gray-900 shadow-md flex items-center justify-center">
-                <i class="fas fa-chart-bar mr-2 text-yellow-400"></i>나의 학습 통계 보기
-            </button>
+            <div class="flex gap-1">
+                <button onclick="startQuiz('hiragana')" class="flex-1 bg-white text-gray-600 border border-gray-200 py-1.5 rounded-lg text-[10px] font-bold hover:bg-gray-50">
+                    <i class="fas fa-question-circle text-red-400 mr-1"></i>히라가나
+                </button>
+                <button onclick="startQuiz('katakana')" class="flex-1 bg-white text-gray-600 border border-gray-200 py-1.5 rounded-lg text-[10px] font-bold hover:bg-gray-50">
+                    <i class="fas fa-question-circle text-blue-400 mr-1"></i>가타카나
+                </button>
+                <button onclick="startQuiz('mix')" class="flex-1 bg-white text-gray-600 border border-gray-200 py-1.5 rounded-lg text-[10px] font-bold hover:bg-gray-50">
+                    <i class="fas fa-random text-purple-400 mr-1"></i>섞어서
+                </button>
+                <button onclick="showHistory()" class="px-3 bg-gray-800 text-white py-1.5 rounded-lg text-[10px] font-bold hover:bg-gray-900">
+                    <i class="fas fa-chart-bar text-yellow-400"></i>
+                </button>
+            </div>
         </div>
     `;
 
-    // 2. 그리드 내용 (순수 글자 카드만 포함)
+    // 2. 그리드 내용 (컴팩트)
     const list = charData[type];
     const cellsHTML = list.map((item, idx) => {
         if (!item.char) {
-            return `<div class="aspect-square"></div>`; // 빈 공간 유지
+            return `<div class="aspect-square"></div>`;
         }
-        
+
         const history = getStudyHistory();
         const isMastered = history.masteredChars.includes(item.char);
-        const badge = isMastered ? '<span class="absolute top-1 right-1 text-[10px]">⭐</span>' : '';
-        
+        const badge = isMastered ? '<span class="absolute top-0.5 right-0.5 text-[8px]">⭐</span>' : '';
+
         return `
             <button onclick="selectCharacter(${idx})" 
-                class="relative aspect-square flex flex-col items-center justify-center bg-white rounded-xl border border-gray-200 shadow-sm active:scale-95 transition-transform hover:border-red-300 hover:shadow-md ${isMastered ? 'bg-yellow-50 border-yellow-300' : ''}">
+                class="relative aspect-square flex flex-col items-center justify-center bg-white rounded-lg border border-gray-200 shadow-sm active:scale-95 transition-transform hover:border-red-300 ${isMastered ? 'bg-yellow-50 border-yellow-300' : ''}">
                 ${badge}
-                <span class="text-xl font-bold text-gray-800">${item.char}</span>
-                <span class="text-[10px] text-gray-400">${item.pron}</span>
+                <span class="text-lg font-bold text-gray-800 leading-none mb-0.5">${item.char}</span>
+                <span class="text-[8px] text-gray-400 leading-none">${item.pron}</span>
             </button>
         `;
     }).join('');
 
-    // 3. 컨테이너에 HTML 주입 (상단 버튼 + 그리드 분리)
     container.innerHTML = `
         ${topHTML}
-        <div id="character-grid" class="grid grid-cols-5 gap-2 pb-24">
+        <div id="character-grid" class="grid grid-cols-5 gap-1 pb-20 px-1">
             ${cellsHTML}
         </div>
     `;
 }
 
 // ==========================================
-// 3. 글자 학습 (쓰기 연습) 모달
+// 3. 글자 학습 (쓰기 연습) 모달 - 컴팩트 최적화
 // ==========================================
 
 function selectCharacter(idx) {
@@ -141,90 +131,85 @@ function selectCharacter(idx) {
     if (!item || !item.char) return;
 
     const container = document.getElementById('character-study-container');
-    const strokeUrl = `https://upload.wikimedia.org/wikipedia/commons/6/6f/BW_Hiragana_${item.romaji}_2021.svg`;
 
-    // ★ 기능 추가: 같은 행 5글자 추출 및 내비게이션 바 생성
+    // 같은 행 내비게이션
     const list = charData[currentMode];
-    const rowStart = Math.floor(idx / 5) * 5; 
+    const rowStart = Math.floor(idx / 5) * 5;
     const rowItems = list.slice(rowStart, rowStart + 5);
 
     const rowNavHTML = rowItems.map((rowItem, i) => {
         const currentItemIdx = rowStart + i;
-        if (!rowItem.char) return `<div class="w-10 h-10"></div>`; // 빈 칸
+        if (!rowItem.char) return `<div class="w-8 h-8"></div>`;
 
-        // 현재 글자 하이라이트 처리
         const isCurrent = (currentItemIdx === idx);
-        const activeClass = isCurrent 
-            ? "bg-red-600 text-white border-red-600 ring-2 ring-red-200 transform scale-110 z-10 shadow-lg" 
+        const activeClass = isCurrent
+            ? "bg-red-600 text-white border-red-600 ring-1 ring-red-200 transform scale-105 z-10 shadow"
             : "bg-white text-gray-600 border-gray-200 hover:bg-gray-50";
 
         return `
             <button onclick="selectCharacter(${currentItemIdx})" 
-                class="w-10 h-10 rounded-lg border flex items-center justify-center font-bold text-lg transition-all duration-200 ${activeClass}">
+                class="w-8 h-8 rounded-md border flex items-center justify-center font-bold text-sm transition-all duration-200 ${activeClass}">
                 ${rowItem.char}
             </button>
         `;
     }).join('');
 
     container.innerHTML = `
-        <div class="fixed inset-0 z-50 bg-black/90 flex flex-col items-center justify-center p-4 animate-fade-in">
-            <!-- 상단 닫기 버튼 -->
-            <div class="w-full max-w-md flex justify-end mb-2">
-                <button onclick="closeModal()" class="bg-white/20 p-2 rounded-full text-white hover:bg-white/30 transition">
-                    <i class="fas fa-times text-xl"></i>
+        <div class="fixed inset-0 z-50 bg-black/90 flex flex-col items-center justify-center p-3 animate-fade-in">
+            <!-- 상단 컨트롤: 닫기 & 행 내비게이션 -->
+            <div class="w-full max-w-sm flex justify-between items-center mb-3">
+                <div class="flex gap-1 bg-gray-800/50 p-1 rounded-lg border border-white/10">
+                    ${rowNavHTML}
+                </div>
+                <button onclick="closeModal()" class="bg-white/20 w-8 h-8 flex items-center justify-center rounded-full text-white hover:bg-white/30 transition ml-2">
+                    <i class="fas fa-times text-sm"></i>
                 </button>
             </div>
 
-            <!-- ★ 같은 행 내비게이션 바 -->
-            <div class="w-full max-w-md bg-gray-800/50 backdrop-blur-md p-3 rounded-2xl mb-6 flex justify-center gap-3 border border-white/10">
-                ${rowNavHTML}
-            </div>
-
             <!-- 메인 학습 카드 -->
-            <div class="w-full max-w-md bg-white rounded-3xl p-6 shadow-2xl relative">
-                <div class="flex justify-between items-start mb-6">
-                    <div>
-                        <h1 class="text-7xl font-black text-gray-800 mb-1 leading-none">${item.char}</h1>
-                        <div class="flex items-center gap-2 mt-2">
-                            <span class="text-2xl font-bold text-red-500">${item.pron}</span>
-                            <span class="text-lg text-gray-400 font-medium uppercase">[${item.romaji}]</span>
+            <div class="w-full max-w-sm bg-white rounded-2xl p-4 shadow-2xl relative flex flex-col gap-3">
+                
+                <!-- 글자 정보 & 오디오 -->
+                <div class="flex justify-between items-center">
+                    <div class="flex items-end gap-3">
+                        <h1 class="text-5xl font-black text-gray-800 leading-none">${item.char}</h1>
+                        <div class="flex flex-col">
+                            <span class="text-xl font-bold text-red-500 leading-none">${item.pron}</span>
+                            <span class="text-xs text-gray-400 font-medium uppercase tracking-wider">[${item.romaji}]</span>
                         </div>
                     </div>
-                    <div class="flex flex-col gap-3">
-                        <button onclick="playAudio('${item.char}')" class="w-14 h-14 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center hover:bg-blue-100 transition shadow-sm border border-blue-100">
-                            <i class="fas fa-volume-up text-2xl"></i>
+                    <div class="flex gap-2">
+                        <button onclick="playAudio('${item.char}')" class="w-10 h-10 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center hover:bg-blue-100 transition shadow-sm border border-blue-100">
+                            <i class="fas fa-volume-up text-sm"></i>
                         </button>
-                        <button onclick="clearCanvas()" class="w-14 h-14 rounded-full bg-gray-50 text-gray-600 flex items-center justify-center hover:bg-gray-100 transition shadow-sm border border-gray-100">
-                            <i class="fas fa-eraser text-2xl"></i>
+                        <button onclick="clearCanvas()" class="w-10 h-10 rounded-full bg-gray-50 text-gray-600 flex items-center justify-center hover:bg-gray-100 transition shadow-sm border border-gray-100">
+                            <i class="fas fa-eraser text-sm"></i>
                         </button>
                     </div>
                 </div>
 
-                <!-- 쓰기 캔버스 영역 -->
-                <div class="relative w-full aspect-square bg-gray-50 rounded-2xl border-2 border-gray-200 overflow-hidden cursor-crosshair touch-none shadow-inner">
-                    <!-- 배경 가이드 -->
+                <!-- 쓰기 캔버스 영역 (비율 조정) -->
+                <div class="relative w-full aspect-square bg-gray-50 rounded-xl border-2 border-gray-200 overflow-hidden cursor-crosshair touch-none shadow-inner">
                     <div class="absolute inset-0 flex items-center justify-center pointer-events-none opacity-[0.08]">
-                        <span class="text-[250px]" style="font-family: 'Noto Sans JP', sans-serif;">${item.char}</span>
+                        <span class="text-[180px]" style="font-family: 'Noto Sans JP', sans-serif;">${item.char}</span>
                     </div>
-                    <!-- 십자선 -->
                     <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
                         <div class="w-full h-px bg-red-300/30 border-t border-dashed border-red-300"></div>
                     </div>
                     <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
                         <div class="h-full w-px bg-red-300/30 border-l border-dashed border-red-300"></div>
                     </div>
-                    
                     <canvas id="writing-canvas" class="absolute inset-0 w-full h-full"></canvas>
                 </div>
 
                 <!-- 하단 내비게이션 -->
-                <div class="mt-6 flex justify-between items-center">
-                    <button onclick="prevChar()" class="text-gray-400 hover:text-gray-800 p-3 transition ${currentIndex === 0 ? 'invisible' : ''}">
-                        <i class="fas fa-chevron-left text-2xl"></i>
+                <div class="flex justify-between items-center">
+                    <button onclick="prevChar()" class="text-gray-400 hover:text-gray-800 p-2 transition ${currentIndex === 0 ? 'invisible' : ''}">
+                        <i class="fas fa-chevron-left text-xl"></i>
                     </button>
-                    <span class="text-xs text-gray-400 font-medium bg-gray-100 px-3 py-1 rounded-full">따라 써보세요 ✍️</span>
-                    <button onclick="nextChar()" class="bg-red-500 text-white pl-6 pr-5 py-3 rounded-xl font-bold shadow-lg hover:bg-red-600 active:scale-95 transition flex items-center gap-2">
-                        다음 <i class="fas fa-chevron-right text-sm"></i>
+                    <span class="text-[10px] text-gray-400 font-medium bg-gray-100 px-2 py-0.5 rounded-full">따라 써보세요 ✍️</span>
+                    <button onclick="nextChar()" class="bg-red-500 text-white px-4 py-2 rounded-lg font-bold shadow hover:bg-red-600 active:scale-95 transition flex items-center gap-1 text-sm">
+                        다음 <i class="fas fa-chevron-right text-xs"></i>
                     </button>
                 </div>
             </div>
@@ -232,7 +217,7 @@ function selectCharacter(idx) {
     `;
 
     container.classList.remove('hidden');
-    setTimeout(initCanvas, 50); // DOM 렌더링 후 캔버스 초기화
+    setTimeout(initCanvas, 50);
     playAudio(item.char);
     saveStudyLog('view', item.char);
 }
@@ -245,7 +230,7 @@ function closeModal() {
 
 function nextChar() {
     const item = charData[currentMode][currentIndex];
-    if(item.char) saveStudyLog('master', item.char);
+    if (item.char) saveStudyLog('master', item.char);
 
     let nextIdx = currentIndex + 1;
     while (nextIdx < charData[currentMode].length && !charData[currentMode][nextIdx].char) {
