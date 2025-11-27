@@ -220,25 +220,46 @@
                 </div>
 
                 <div id="conversation" class="tab-content hidden">
-                    <div class="mb-3">
-                        <h2 class="text-xl font-bold text-gray-900 mb-2">💬 실전 회화</h2>
-                        <div id="conversation-category-buttons"
-                            class="flex flex-wrap gap-2 text-xs overflow-x-auto pb-1">
+                    <!-- Mode Selector -->
+                    <div
+                        class="mb-4 flex gap-2 justify-center sticky top-14 z-30 bg-gray-50 py-3 -mx-4 px-4 border-b border-gray-200">
+                        <button id="mode-situational-btn" onclick="showConversationMode('situational')"
+                            class="flex-1 py-3 px-6 rounded-xl font-bold text-lg transition-all duration-300 bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-lg">
+                            📖 상황별 대화
+                        </button>
+                        <button id="mode-practical-btn" onclick="showConversationMode('practical')"
+                            class="flex-1 py-3 px-6 rounded-xl font-bold text-lg transition-all duration-300 bg-white text-gray-600 border-2 border-gray-200">
+                            💬 실전 회화
+                        </button>
+                    </div>
+
+                    <!-- Situational Conversation Content -->
+                    <div id="situational-conversation-container" class="conversation-mode-content">
+                        <div class="mb-3">
+                            <h2 class="text-xl font-bold text-gray-900 mb-2">💬 상황별 대화</h2>
+                            <div id="conversation-category-buttons"
+                                class="flex flex-wrap gap-2 text-xs overflow-x-auto pb-1">
+                            </div>
+                        </div>
+
+                        <div id="conversation-content" class="mb-3"></div>
+
+                        <div
+                            class="p-3 bg-gray-50 border border-gray-100 rounded-2xl flex justify-between items-center">
+                            <button id="conv-prev-btn" onclick="previousConversation()"
+                                class="w-11 h-11 rounded-full bg-white shadow text-gray-600 flex items-center justify-center active:bg-gray-100 text-sm">
+                                <i class="fas fa-chevron-left"></i>
+                            </button>
+                            <button id="conv-next-btn" onclick="nextConversation()"
+                                class="w-11 h-11 rounded-full bg-red-500 shadow text-white flex items-center justify-center active:bg-red-600 text-sm">
+                                <i class="fas fa-chevron-right"></i>
+                            </button>
                         </div>
                     </div>
 
-                    <div id="conversation-content" class="mb-3">
-                    </div>
-
-                    <div class="p-3 bg-gray-50 border border-gray-100 rounded-2xl flex justify-between items-center">
-                        <button id="conv-prev-btn" onclick="previousConversation()"
-                            class="w-11 h-11 rounded-full bg-white shadow text-gray-600 flex items-center justify-center active:bg-gray-100 text-sm">
-                            <i class="fas fa-chevron-left"></i>
-                        </button>
-                        <button id="conv-next-btn" onclick="nextConversation()"
-                            class="w-11 h-11 rounded-full bg-red-500 shadow text-white flex items-center justify-center active:bg-red-600 text-sm">
-                            <i class="fas fa-chevron-right"></i>
-                        </button>
+                    <!-- Practical Conversation Content -->
+                    <div id="practical-conversation-container" class="conversation-mode-content hidden">
+                        <div id="practical-conversation-content" class="mb-3"></div>
                     </div>
                 </div>
 
@@ -339,6 +360,7 @@
     <script src="js/fukuoka.js"></script>
     <script src="js/conversation_data.js"></script>
     <script src="js/conversation.js"></script>
+    <script src="js/conversation_practical.js"></script>
     <script src="js/vocabulary.js"></script>
     <script src="js/characters.js"></script>
     <script src="js/word_study.js"></script>
@@ -346,6 +368,35 @@
     <script src="js/progress.js"></script>
 
     <script>
+        function showConversationMode(mode) {
+            // Hide all conversation mode containers
+            document.getElementById('situational-conversation-container').classList.add('hidden');
+            document.getElementById('practical-conversation-container').classList.add('hidden');
+
+            // Update button styles
+            const situationalBtn = document.getElementById('mode-situational-btn');
+            const practicalBtn = document.getElementById('mode-practical-btn');
+
+            situationalBtn.className = 'flex-1 py-3 px-6 rounded-xl font-bold text-lg transition-all duration-300 bg-white text-gray-600 border-2 border-gray-200';
+            practicalBtn.className = 'flex-1 py-3 px-6 rounded-xl font-bold text-lg transition-all duration-300 bg-white text-gray-600 border-2 border-gray-200';
+
+            if (mode === 'situational') {
+                document.getElementById('situational-conversation-container').classList.remove('hidden');
+                situationalBtn.className = 'flex-1 py-3 px-6 rounded-xl font-bold text-lg transition-all duration-300 bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-lg';
+                // Initialize situational conversation if needed
+                if (typeof initConversation === 'function') {
+                    initConversation();
+                }
+            } else if (mode === 'practical') {
+                document.getElementById('practical-conversation-container').classList.remove('hidden');
+                practicalBtn.className = 'flex-1 py-3 px-6 rounded-xl font-bold text-lg transition-all duration-300 bg-gradient-to-r from-purple-500 to-purple-600 text-white shadow-lg';
+                // Initialize practical conversation if needed
+                if (typeof initPractical === 'function') {
+                    initPractical();
+                }
+            }
+        }
+
         window.addEventListener('DOMContentLoaded', () => {
             // 1. 로그인 상태 확인 (자동 로그인은 하지 않고 모달만 처리하는 용도로 유지)
             if (typeof checkAutoLogin === 'function') {
@@ -369,6 +420,9 @@
             if (typeof initWordStudy === 'function') {
                 initWordStudy();
             }
+
+            // 4. Default to situational conversation mode
+            showConversationMode('situational');
         });
     </script>
 
