@@ -155,7 +155,7 @@ function selectCharacter(idx) {
     }).join('');
 
     container.innerHTML = `
-        <div class="fixed inset-0 z-50 bg-black/90 flex flex-col items-center justify-center p-3 animate-fade-in">
+        <div class="fixed top-14 bottom-0 left-0 right-0 z-50 bg-black/90 flex flex-col items-center justify-center p-3 animate-fade-in">
             <!-- 상단 컨트롤: 닫기 & 행 내비게이션 -->
             <div class="w-full max-w-sm flex justify-between items-center mb-3">
                 <div class="flex gap-1 bg-gray-800/50 p-1 rounded-lg border border-white/10">
@@ -314,7 +314,7 @@ function showQuizModal() {
     const q = quizQuestions[currentQuestionIdx];
     const container = document.getElementById('character-study-container');
     container.innerHTML = `
-        <div class="fixed inset-0 z-50 bg-white flex flex-col items-center justify-center p-4">
+        <div class="fixed top-14 bottom-0 left-0 right-0 z-50 bg-white flex flex-col items-center justify-center p-4">
             <div class="w-full max-w-sm mb-8">
                 <div class="flex justify-between items-center mb-2 text-gray-500 font-bold">
                     <span>문제 ${currentQuestionIdx + 1} / 10</span>
@@ -353,7 +353,7 @@ function showQuizResult() {
     const container = document.getElementById('character-study-container');
     const message = quizScore === 10 ? "만점입니다! 🎉" : "수고하셨어요! 👍";
     container.innerHTML = `
-        <div class="fixed inset-0 z-50 bg-white flex flex-col items-center justify-center p-4 animate-fade-in">
+        <div class="fixed top-14 bottom-0 left-0 right-0 z-50 bg-white flex flex-col items-center justify-center p-4 animate-fade-in">
             <div class="text-6xl mb-4">🏆</div>
             <h2 class="text-3xl font-black text-gray-800 mb-2">퀴즈 종료!</h2>
             <p class="text-gray-500 mb-8">${message}</p>
@@ -383,12 +383,35 @@ function saveStudyLog(type, val) {
     if (type === 'master' && !history.masteredChars.includes(val)) history.masteredChars.push(val);
     localStorage.setItem(STORAGE_KEY, JSON.stringify(history));
 }
+
+// 관리자 데이터 초기화
+function resetAllData() {
+    const pw = prompt("관리자 비밀번호를 입력하세요 (데이터가 모두 삭제됩니다)");
+    if (pw === '1435') {
+        localStorage.removeItem(STORAGE_KEY);
+        localStorage.removeItem('fukuoka_unlock_count');
+        alert('모든 학습 데이터가 초기화되었습니다.');
+        location.reload();
+    } else {
+        if (pw !== null) alert('비밀번호가 틀렸습니다.');
+    }
+}
+
 function showHistory() {
     const history = getStudyHistory();
     const container = document.getElementById('character-study-container');
     const masteredCount = history.masteredChars.length;
+
+    // 아빠 계정일 때만 초기화 버튼 표시
+    const isAdmin = window.currentUser && window.currentUser.id === 'dad';
+    const adminBtn = isAdmin ? `
+        <button onclick="resetAllData()" class="mt-4 text-xs text-red-400 hover:text-red-300 underline">
+            <i class="fas fa-trash-alt mr-1"></i>데이터 초기화 (관리자)
+        </button>
+    ` : '';
+
     container.innerHTML = `
-        <div class="fixed inset-0 z-50 bg-gray-900/95 flex flex-col items-center justify-center p-4 text-white animate-fade-in">
+        <div class="fixed top-14 bottom-0 left-0 right-0 z-50 bg-gray-900/95 flex flex-col items-center justify-center p-4 text-white animate-fade-in">
             <div class="w-full max-w-md bg-gray-800 rounded-2xl overflow-hidden border border-gray-700 shadow-2xl p-6 text-center">
                 <h2 class="text-xl font-bold mb-4">📊 학습 리포트</h2>
                 <div class="mb-6">
@@ -396,6 +419,7 @@ function showHistory() {
                     <p class="text-4xl font-bold text-green-400">${masteredCount} <span class="text-lg text-gray-500">/ 104</span></p>
                 </div>
                 <button onclick="closeModal()" class="bg-gray-700 hover:bg-gray-600 px-6 py-2 rounded-lg font-bold">닫기</button>
+                ${adminBtn}
             </div>
         </div>
     `;
@@ -422,5 +446,6 @@ window.playAudio = playAudio;
 window.startQuiz = startQuiz;
 window.submitAnswer = submitAnswer;
 window.showHistory = showHistory;
+window.resetAllData = resetAllData;
 
 console.log("characters.js loaded (Fixed Layout)");
