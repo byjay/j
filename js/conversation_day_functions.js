@@ -133,9 +133,9 @@ function displayCurrentDay() {
     const currentConv = convData.conversations[currentDayIndex];
     const viewer = document.getElementById('day-conversation-viewer');
 
-    const autoPlayBtn State = DayAudioController.isAutoPlaying ?
+    const autoPlayBtnState = DayAudioController.isAutoPlaying ?
         `<button id="day-auto-play-btn" onclick="DayAudioController.stopAutoRepeat()" class="btn-auto-active px-4 py-2 rounded-full font-bold text-sm shadow-md flex items-center gap-2 transition-all"><i class="fas fa-stop"></i>정지</button>` :
-        `<button id="day-auto-play-btn" onclick="startDayAutoPlay()" class="bg-white border border-gray-200 text-gray-600 hover:text-${convData.color}-600 hover:border-${convData.color}-200 px-4 py-2 rounded-full font-bold text-sm shadow-sm flex items-center gap-2 transition-all active:scale-95"><i class="fas fa-play-circle"></i>전체 자동재생</button>`;
+        `<button id="day-auto-play-btn" onclick="startDayAutoPlay()" class="bg-white border border-gray-200 text-gray-600 hover:text-${convData.color}-600 hover:border-${convData.color}-200 px-4 py-2 rounded-full font-bold text-sm shadow-sm flex items-center gap-2 transition-all active:scale-95"><i class=" fas fa-play-circle"></i>전체 자동재생</button>`;
 
     viewer.innerHTML = `
         <div class="flex items-center justify-between mb-6 px-1">
@@ -208,6 +208,12 @@ const DayAudioController = {
     stopAutoRepeat: function () {
         this.isAutoPlaying = false;
         this.speechSynth.cancel();
+        // 화면 꺼짐 방지 해제
+        if (this.wakeLock) {
+            this.wakeLock.release().then(() => {
+                this.wakeLock = null;
+            });
+        }
         const btn = document.getElementById('day-auto-play-btn');
         if (btn) {
             btn.className = "bg-white border border-gray-200 text-gray-600 hover:text-blue-600 px-4 py-2 rounded-full font-bold text-sm shadow-sm flex items-center gap-2 transition-all active:scale-95";
@@ -221,6 +227,16 @@ const DayAudioController = {
 async function startDayAutoPlay() {
     if (DayAudioController.isAutoPlaying) return;
     DayAudioController.isAutoPlaying = true;
+
+    // 화면 꺼짐 방지 (Wake Lock)
+    try {
+        if ('wakeLock' in navigator) {
+            DayAudioController.wakeLock = await navigator.wakeLock.request('screen');
+        }
+    } catch (err) {
+        console.log('Wake Lock 실패:', err);
+    }
+
     const btn = document.getElementById('day-auto-play-btn');
     if (btn) {
         btn.className = "btn-auto-active px-4 py-2 rounded-full font-bold text-sm shadow-md flex items-center gap-2 transition-all";
@@ -285,7 +301,7 @@ function previousDay() {
 
 function nextDay() {
     DayAudioController.stopAutoRepeat();
-    if (currentDayIndex < dayConversationData[current DayCategory].conversations.length - 1) {
+    if (currentDayIndex < dayConversationData[currentDayCategory].conversations.length - 1) {
         currentDayIndex++;
         displayCurrentDay();
         window.scrollTo({ top: 0, behavior: 'smooth' });
