@@ -172,6 +172,7 @@ function toggleDayCardFlip(id) {
 const DayAudioController = {
     speechSynth: window.speechSynthesis,
     isAutoPlaying: false,
+    wakeLock: null,
     speak: function (text, lang = 'ja-JP', rate = 1.0) {
         return new Promise((resolve) => {
             if (this.speechSynth.speaking) this.speechSynth.cancel();

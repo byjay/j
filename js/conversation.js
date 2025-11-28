@@ -178,7 +178,7 @@ function renderNavigation() {
     const navWrapper = document.createElement('div');
     navWrapper.className = 'sticky-nav-container';
     navWrapper.innerHTML = `
-        <div class="flex items-center justify-between px-4 mb-2 w-full max-w-4xl mx-auto">
+        < div class="flex items-center justify-between px-4 mb-2 w-full max-w-4xl mx-auto" >
             <div class="flex-1 overflow-x-auto no-scrollbar flex gap-2" id="category-scroll-area">
                 ${Object.entries(conversationModuleData).map(([key, data]) => `
                     <button onclick="openConversationLesson('${key}')" id="nav-btn-${key}"
@@ -187,7 +187,7 @@ function renderNavigation() {
                     </button>
                 `).join('')}
             </div>
-        </div>`;
+        </div > `;
 
     const viewerDiv = document.createElement('div');
     viewerDiv.id = 'conversation-viewer';
@@ -208,13 +208,13 @@ function openConversationLesson(key) {
 
 function updateNavigationStyles(activeKey) {
     Object.keys(conversationModuleData).forEach(key => {
-        const btn = document.getElementById(`nav-btn-${key}`);
-        if(btn) btn.className = `flex-shrink-0 flex items-center gap-2 px-3 py-2 rounded-full border transition-all duration-300 bg-white border-gray-200 text-gray-500 hover:bg-gray-50 text-sm shadow-sm`;
+        const btn = document.getElementById(`nav - btn - ${ key } `);
+        if(btn) btn.className = `flex - shrink - 0 flex items - center gap - 2 px - 3 py - 2 rounded - full border transition - all duration - 300 bg - white border - gray - 200 text - gray - 500 hover: bg - gray - 50 text - sm shadow - sm`;
     });
-    const activeBtn = document.getElementById(`nav-btn-${activeKey}`);
+    const activeBtn = document.getElementById(`nav - btn - ${ activeKey } `);
     const color = conversationModuleData[activeKey].color;
     if(activeBtn) {
-        activeBtn.className = `flex-shrink-0 flex items-center gap-2 px-4 py-2 rounded-full border-2 transition-all duration-300 scale-105 bg-${color}-50 border-${color}-500 text-${color}-600 shadow-md text-sm font-bold`;
+        activeBtn.className = `flex - shrink - 0 flex items - center gap - 2 px - 4 py - 2 rounded - full border - 2 transition - all duration - 300 scale - 105 bg - ${ color } -50 border - ${ color } -500 text - ${ color } -600 shadow - md text - sm font - bold`;
         activeBtn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
     }
 }
@@ -224,11 +224,11 @@ function updateNavigationStyles(activeKey) {
 // ==========================================
 function createFlipCardHTML(data, type, index, color) {
     const isQuestion = type === 'question';
-    const uniqueId = isQuestion? 'card-q' : `card-a-${index}`;
+    const uniqueId = isQuestion? 'card-q' : `card - a - ${ index } `;
 
     // 단어장 HTML
     const vocabListHTML = data.vocab && data.vocab.length > 0
-       ? `<div class="h-full flex flex-col">
+       ? `< div class="h-full flex flex-col" >
             <div class="flex items-center gap-2 border-b border-gray-200 pb-3 mb-3">
                 <i class="fas fa-book-reader text-${color}-500"></i>
                 <span class="text-xs font-black text-gray-400 uppercase tracking-widest">Vocabulary</span>
@@ -247,15 +247,15 @@ function createFlipCardHTML(data, type, index, color) {
                     `).join('')}
                 </div>
             </div>
-           </div>`
-        : `<div class="h-full flex flex-col items-center justify-center text-gray-300">
+           </div > `
+        : `< div class="h-full flex flex-col items-center justify-center text-gray-300" >
              <i class="fas fa-layer-group text-4xl mb-3 opacity-30"></i>
              <span class="text-sm font-medium">추가 단어 없음</span>
-           </div>`;
+           </div > `;
 
     // 앞면 HTML (자동재생 버튼 제거됨)
     const frontHTML = `
-        <div class="absolute w-full h-full backface-hidden bg-white rounded-3xl border border-gray-200 shadow-sm flex flex-col justify-between overflow-hidden" id="card-front-${uniqueId}">
+        < div class="absolute w-full h-full backface-hidden bg-white rounded-3xl border border-gray-200 shadow-sm flex flex-col justify-between overflow-hidden" id = "card-front-${uniqueId}" >
             <div class="px-5 py-4 bg-gray-50 border-b border-gray-100 flex justify-between items-center">
                  <span class="px-3 py-1 rounded-full ${isQuestion? `bg-${color}-100 text-${color}-700` : 'bg-gray-200 text-gray-600'} text-[10px] font-black tracking-widest uppercase">
                     ${isQuestion? 'Question' : `Answer ${index + 1}`}
@@ -272,22 +272,23 @@ function createFlipCardHTML(data, type, index, color) {
             </div>
             <div class="px-4 py-3 bg-gray-50 border-t border-gray-100 flex gap-2 justify-center" onclick="event.stopPropagation()">
                 <button onclick="AudioController.playNormal(this.dataset.text)" data-text="${data.jp.replace(/"/g, '&quot;')}" class="flex-1 py-2 rounded-xl bg-white border border-gray-200 text-gray-600 font-bold hover:bg-${color}-50 hover:text-${color}-600 text-xs flex flex-col items-center justify-center gap-1 active:scale-95 transition-transform"><i class="fas fa-volume-up"></i>듣기</button>
-                <button onclick="AudioController.playSlowRepeat(this.dataset.text)" data-text="${data.jp.replace(/"/g, '&quot;')}" class="flex-1 py-2 rounded-xl bg-white border border-gray-200 text-gray-600 font-bold hover:bg-${color}-50 hover:text-${color}-600 text-xs flex flex-col items-center justify-center gap-1 active:scale-95 transition-transform"><i class="fas fa-history"></i>3회</button>
-                <button onclick="AudioController.playShadowing(this.dataset.text)" data-text="${data.jp.replace(/"/g, '&quot;')}" class="flex-1 py-2 rounded-xl bg-white border border-gray-200 text-gray-600 font-bold hover:bg-${color}-50 hover:text-${color}-600 text-xs flex flex-col items-center justify-center gap-1 active:scale-95 transition-transform"><i class="fas fa-microphone-alt"></i>쉐도잉</button>
-            </div>
-        </div>`;
+                <button onclick="AudioController.playSlowRepeat(this.dataset.text)" data-text="${data.jp.replace(/"/g, '&quot;')
+}" class="flex - 1 py - 2 rounded - xl bg - white border border - gray - 200 text - gray - 600 font - bold hover: bg - ${ color } -50 hover: text - ${ color } -600 text - xs flex flex - col items - center justify - center gap - 1 active: scale - 95 transition - transform"><i class="fas fa - history"></i>3회</button>
+    < button onclick = "AudioController.playShadowing(this.dataset.text)" data - text="${data.jp.replace(/" / g, '&quot;')}" class="flex - 1 py - 2 rounded - xl bg - white border border - gray - 200 text - gray - 600 font - bold hover: bg - ${ color } -50 hover: text - ${ color } -600 text - xs flex flex - col items - center justify - center gap - 1 active: scale - 95 transition - transform"><i class="fas fa - microphone - alt"></i>쉐도잉</button>
+            </div >
+        </div > `;
 
     const backHTML = `
-        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-slate-50 rounded-3xl border-2 border-${color}-100 shadow-inner flex flex-col overflow-hidden">
+    < div class="absolute w-full h-full backface-hidden rotate-y-180 bg-slate-50 rounded-3xl border-2 border-${color}-100 shadow-inner flex flex-col overflow-hidden" >
              <div class="flex-1 p-4 overflow-hidden relative">${vocabListHTML}</div>
              <div class="py-3 bg-white border-t border-gray-200 text-center cursor-pointer hover:bg-gray-50" onclick="event.stopPropagation(); toggleCardFlip('${uniqueId}')">
                 <span class="text-xs font-bold text-gray-500 uppercase tracking-widest flex items-center justify-center gap-2"><i class="fas fa-undo"></i> Return</span>
              </div>
-        </div>`;
+        </div > `;
 
-    return `<div class="perspective-1000 w-full mb-8 select-none group" onclick="toggleCardFlip('${uniqueId}')">
-        <div id="${uniqueId}" class="card-inner relative w-full min-h-[450px] md:min-h-[500px] transform-style-3d shadow-lg rounded-3xl hover:shadow-xl transition-all duration-500 bg-white">${frontHTML}${backHTML}</div>
-    </div>`;
+    return `< div class="perspective-1000 w-full mb-8 select-none group" onclick = "toggleCardFlip('${uniqueId}')" >
+    <div id="${uniqueId}" class="card-inner relative w-full min-h-[450px] md:min-h-[500px] transform-style-3d shadow-lg rounded-3xl hover:shadow-xl transition-all duration-500 bg-white">${frontHTML}${backHTML}</div>
+    </div > `;
 }
 
 function displayCurrentConversation() {
@@ -298,11 +299,11 @@ function displayCurrentConversation() {
 
     // 자동재생 버튼 상태 확인
     const autoPlayBtnState = AudioController.isAutoPlaying? 
-        `<button id="global-auto-play-btn" onclick="AudioController.stopAutoRepeat()" class="btn-auto-active px-4 py-2 rounded-full font-bold text-sm shadow-md flex items-center gap-2 transition-all"><i class="fas fa-stop"></i>정지</button>` :
-        `<button id="global-auto-play-btn" onclick="startCategoryAutoPlay()" class="bg-white border border-gray-200 text-gray-600 hover:text-${convData.color}-600 hover:border-${convData.color}-200 px-4 py-2 rounded-full font-bold text-sm shadow-sm flex items-center gap-2 transition-all active:scale-95"><i class="fas fa-play-circle"></i>전체 자동재생</button>`;
+        `< button id = "global-auto-play-btn" onclick = "AudioController.stopAutoRepeat()" class="btn-auto-active px-4 py-2 rounded-full font-bold text-sm shadow-md flex items-center gap-2 transition-all" > <i class="fas fa-stop"></i>정지</button > ` :
+        `< button id = "global-auto-play-btn" onclick = "startCategoryAutoPlay()" class="bg-white border border-gray-200 text-gray-600 hover:text-${convData.color}-600 hover:border-${convData.color}-200 px-4 py-2 rounded-full font-bold text-sm shadow-sm flex items-center gap-2 transition-all active:scale-95" > <i class="fas fa-play-circle"></i>전체 자동재생</button > `;
 
     viewer.innerHTML = `
-        <div class="flex items-center justify-between mb-6 px-1">
+    < div class="flex items-center justify-between mb-6 px-1" >
             <h3 class="text-lg md:text-xl font-bold text-gray-800 flex items-center gap-2">
                 <span class="w-1.5 h-6 bg-${convData.color}-500 rounded-full inline-block"></span>
                 <span class="truncate max-w-[150px] md:max-w-none">${convData.title}</span>
@@ -311,7 +312,7 @@ function displayCurrentConversation() {
             <div class="flex gap-2 items-center">
                 ${autoPlayBtnState}
             </div>
-        </div>
+        </div >
         
         <div class="flex justify-between items-center mb-4 px-2">
              <button id="conv-prev-btn" onclick="previousConversation()" class="w-10 h-10 rounded-full bg-white border border-gray-200 shadow text-gray-400 hover:text-gray-800 flex items-center justify-center active:scale-90 transition-transform"><i class="fas fa-arrow-left"></i></button>
@@ -339,6 +340,7 @@ function toggleCardFlip(id) {
 const AudioController = {
     speechSynth: window.speechSynthesis,
     isAutoPlaying: false,
+    wakeLock: null,
 
     speak: function (text, lang = 'ja-JP', rate = 1.0) {
         return new Promise((resolve) => {
@@ -391,6 +393,12 @@ const AudioController = {
     stopAutoRepeat: function() {
         this.isAutoPlaying = false;
         this.speechSynth.cancel();
+        // 화면 꺼짐 방지 해제
+        if (this.wakeLock) {
+            this.wakeLock.release().then(() => {
+                this.wakeLock = null;
+            });
+        }
         const btn = document.getElementById('global-auto-play-btn');
         if(btn) {
             btn.className = "bg-white border border-gray-200 text-gray-600 hover:text-blue-600 px-4 py-2 rounded-full font-bold text-sm shadow-sm flex items-center gap-2 transition-all active:scale-95";
@@ -406,6 +414,15 @@ const AudioController = {
 async function startCategoryAutoPlay() {
     if (AudioController.isAutoPlaying) return;
     AudioController.isAutoPlaying = true;
+
+    // 화면 꺼짐 방지 (Wake Lock)
+    try {
+        if ('wakeLock' in navigator) {
+            AudioController.wakeLock = await navigator.wakeLock.request('screen');
+        }
+    } catch (err) {
+        console.log('Wake Lock 실패:', err);
+    }
 
     // 버튼 상태 변경
     const btn = document.getElementById('global-auto-play-btn');
@@ -449,7 +466,7 @@ async function startCategoryAutoPlay() {
             if (!AudioController.isAutoPlaying) break;
             
             // 답변 카드로 스크롤
-            const aCard = document.getElementById(`card-front-card-a-${j}`);
+            const aCard = document.getElementById(`card - front - card - a - ${ j } `);
             if(aCard) {
                 aCard.scrollIntoView({ behavior: "smooth", block: "center" });
                 aCard.classList.add('playing-highlight');
