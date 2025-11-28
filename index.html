@@ -380,6 +380,7 @@
 
     <script>
         function showConversationMode(mode) {
+            console.log('showConversationMode called with:', mode);
             // Hide all conversation mode containers
             document.getElementById('situational-conversation-container').classList.add('hidden');
             document.getElementById('practical-conversation-container').classList.add('hidden');
@@ -394,16 +395,26 @@
             if (mode === 'situational') {
                 document.getElementById('situational-conversation-container').classList.remove('hidden');
                 situationalBtn.className = 'flex-1 py-2 px-4 rounded-xl font-bold text-base transition-all duration-300 bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-lg';
-                // Initialize situational conversation (conversation.js - 상황별 대화: 입국심사, 교통, 호텔 등)
-                if (typeof initConversation === 'function') {
+                // Initialize situational conversation
+                console.log('Initializing situational conversation...');
+                if (typeof window.initConversation === 'function') {
+                    window.initConversation();
+                } else if (typeof initConversation === 'function') {
                     initConversation();
+                } else {
+                    console.error('initConversation function not found!');
                 }
             } else if (mode === 'practical') {
                 document.getElementById('practical-conversation-container').classList.remove('hidden');
                 practicalBtn.className = 'flex-1 py-2 px-4 rounded-xl font-bold text-base transition-all duration-300 bg-gradient-to-r from-purple-500 to-purple-600 text-white shadow-lg';
-                // Initialize practical conversation (conversation_day.js - 일상 대화: 가족, 음식 등)
-                if (typeof initDayConversation === 'function') {
+                // Initialize practical conversation
+                console.log('Initializing practical conversation (Day)...');
+                if (typeof window.initDayConversation === 'function') {
+                    window.initDayConversation();
+                } else if (typeof initDayConversation === 'function') {
                     initDayConversation();
+                } else {
+                    console.error('initDayConversation function not found!');
                 }
             }
         }
