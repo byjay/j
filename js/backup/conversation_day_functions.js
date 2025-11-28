@@ -95,7 +95,7 @@ function createDayCardHTML(data, type, index, color) {
         <div class="absolute w-full h-full backface-hidden bg-white rounded-3xl border border-gray-200 shadow-sm flex flex-col justify-between overflow-hidden" id="day-card-front-${uniqueId}">
             <div class="px-5 py-4 bg-gray-50 border-b border-gray-100 flex justify-between items-center">
                  <span class="px-3 py-1 rounded-full ${isQuestion ? `bg-${color}-100 text-${color}-700` : 'bg-gray-200 text-gray-600'} text-[10px] font-black tracking-widest uppercase">
-                    ${isQuestion ? 'Question' : `Answer ${index + 1}`}
+                    ${isQuestion ? 'A' : 'B'}
                  </span>
                 <span class="text-[10px] text-gray-400 font-bold flex items-center gap-1 cursor-pointer" onclick="event.stopPropagation(); toggleDayCardFlip('${uniqueId}')">
                     <i class="fas fa-sync-alt"></i> FLIP
