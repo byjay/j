@@ -325,3 +325,6 @@ function goToWordStudy(word) {
 document.addEventListener('DOMContentLoaded', () => {
     if (document.getElementById('practical-conversation-content')) initDayConversation();
 });
+
+// 전역 노출
+window.initDayConversation = initDayConversation;
