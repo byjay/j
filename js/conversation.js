@@ -508,11 +508,205 @@ function nextConversation() {
     AudioController.stopAutoRepeat(); 
     if(currentConversationIndex < conversationModuleData[currentConversationCategory].conversations.length - 1) { 
         currentConversationIndex++; 
-        displayCurrentConversation(); 
-        window.scrollTo({top: 0, behavior: 'smooth'}); 
-    } 
+        
+        <div class="flex justify-between items-center mb-4 px-2">
+             <button id="conv-prev-btn" onclick="previousConversation()" class="w-10 h-10 rounded-full bg-white border border-gray-200 shadow text-gray-400 hover:text-gray-800 flex items-center justify-center active:scale-90 transition-transform"><i class="fas fa-arrow-left"></i></button>
+             <div class="text-xs text-gray-300 font-medium tracking-widest">SWIPE OR CLICK</div>
+             <button id="conv-next-btn" onclick="nextConversation()" class="w-10 h-10 rounded-full bg-black shadow-lg text-white hover:bg-gray-800 flex items-center justify-center active:scale-90 transition-transform"><i class="fas fa-arrow-right"></i></button>
+        </div>
+
+        <div class="space-y-6 animate-fade-in pb-20">
+            ${createFlipCardHTML(currentConv.question, 'question', 0, convData.color)}
+            <div class="relative pl-4 border-l-2 border-dashed border-gray-200 space-y-8">
+                ${currentConv.answers.map((ans, idx) => createFlipCardHTML(ans, 'answer', idx, convData.color)).join('')}
+            </div>
+        </div>`;
+updateNavigationButtons();
 }
 
-document.addEventListener('DOMContentLoaded', () => { 
-    if(document.getElementById('conversation-content')) initConversation(); 
+function toggleCardFlip(id) {
+    const card = document.getElementById(id);
+    if (card) card.parentElement.classList.toggle('card-flipped');
+}
+
+// ==========================================
+// 4. 고급 오디오 컨트롤러 (자동재생 로직 수정됨)
+// ==========================================
+const AudioController = {
+    speechSynth: window.speechSynthesis,
+    isAutoPlaying: false,
+    wakeLock: null,
+
+    speak: function (text, lang = 'ja-JP', rate = 1.0) {
+        return new Promise((resolve) => {
+            if (this.speechSynth.speaking) this.speechSynth.cancel();
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = lang;
+            utterance.rate = rate;
+            const voices = this.speechSynth.getVoices();
+            let voice;
+            if (lang === 'ja-JP') voice = voices.find(v => v.lang === 'ja-JP') || voices.find(v => v.lang.includes('ja'));
+            if (lang === 'ko-KR') voice = voices.find(v => v.lang === 'ko-KR') || voices.find(v => v.lang.includes('ko'));
+            if (voice) utterance.voice = voice;
+
+            utterance.onend = resolve;
+            utterance.onerror = resolve;
+            this.speechSynth.speak(utterance);
+        });
+    },
+
+    wait: ms => new Promise(r => setTimeout(r, ms)),
+
+    playNormal: async function (t) { this.speechSynth.cancel(); await this.speak(t, 'ja-JP', 1.0); },
+    playSlowRepeat: async function (t) { this.speechSynth.cancel(); for (let i = 0; i < 3; i++) { await this.speak(t, 'ja-JP', 0.7); await this.wait(600); } },
+    playShadowing: async function (t) { this.speechSynth.cancel(); await this.speak(t, 'ja-JP', 0.7); await this.wait(1500); await this.speak(t, 'ja-JP', 1.0); },
+
+    // [핵심] 자동재생 로직: (JP 1회 -> KR 1.2배속 1회 -> 대기) x 3회 반복
+    playSentenceLoop: async function (jpText, krText) {
+        for (let i = 0; i < 3; i++) {
+            if (!this.isAutoPlaying) return false;
+
+            // 1. 일본어 1회
+            await this.speak(jpText, 'ja-JP', 1.0);
+            if (!this.isAutoPlaying) return false;
+            await this.wait(300);
+
+            // 2. 한국어 빠르게 1회
+            await this.speak(krText, 'ko-KR', 1.2);
+            if (!this.isAutoPlaying) return false;
+
+            // 3. 따라할 시간 (쉐도잉 타임)
+            await this.wait(1500);
+        }
+        return true;
+    },
+
+    stopAutoRepeat: function () {
+        this.isAutoPlaying = false;
+        this.speechSynth.cancel();
+        // 화면 꺼짐 방지 해제
+        if (this.wakeLock) {
+            this.wakeLock.release().then(() => {
+                this.wakeLock = null;
+            });
+        }
+        const btn = document.getElementById('global-auto-play-btn');
+        if (btn) {
+            btn.className = "bg-white border border-gray-200 text-gray-600 hover:text-blue-600 px-4 py-2 rounded-full font-bold text-sm shadow-sm flex items-center gap-2 transition-all active:scale-95";
+            btn.innerHTML = '<i class="fas fa-play-circle"></i>전체 자동재생';
+            btn.onclick = startCategoryAutoPlay;
+        }
+        // 하이라이트 제거
+        document.querySelectorAll('.playing-highlight').forEach(el => el.classList.remove('playing-highlight'));
+    }
+};
+
+// 전체 카테고리 자동재생 시작 함수
+async function startCategoryAutoPlay() {
+    if (AudioController.isAutoPlaying) return;
+    AudioController.isAutoPlaying = true;
+
+    // 화면 꺼짐 방지 (Wake Lock)
+    try {
+        if ('wakeLock' in navigator) {
+            AudioController.wakeLock = await navigator.wakeLock.request('screen');
+        }
+    } catch (err) {
+        console.log('Wake Lock 실패:', err);
+    }
+
+    // 버튼 상태 변경
+    const btn = document.getElementById('global-auto-play-btn');
+    if (btn) {
+        btn.className = "btn-auto-active px-4 py-2 rounded-full font-bold text-sm shadow-md flex items-center gap-2 transition-all";
+        btn.innerHTML = '<i class="fas fa-stop"></i>정지';
+        btn.onclick = AudioController.stopAutoRepeat;
+    }
+
+    const convData = conversationModuleData[currentConversationCategory];
+
+    // 현재 인덱스부터 시작
+    for (let i = currentConversationIndex; i < convData.conversations.length; i++) {
+        if (!AudioController.isAutoPlaying) break;
+
+        // 화면 이동 (스크롤)
+        if (i !== currentConversationIndex) {
+            currentConversationIndex = i;
+            displayCurrentConversation();
+            // 버튼 상태 재적용 (화면 갱신되므로)
+            const newBtn = document.getElementById('global-auto-play-btn');
+            if (newBtn) {
+                newBtn.className = "btn-auto-active px-4 py-2 rounded-full font-bold text-sm shadow-md flex items-center gap-2 transition-all";
+                newBtn.innerHTML = '<i class="fas fa-stop"></i>정지';
+                newBtn.onclick = AudioController.stopAutoRepeat;
+            }
+        }
+
+        const conv = convData.conversations[i];
+
+        // 1. 질문 재생
+        const qCard = document.getElementById('card-front-card-q');
+        if (qCard) qCard.classList.add('playing-highlight');
+
+        const qContinued = await AudioController.playSentenceLoop(conv.question.jp, conv.question.kr);
+        if (qCard) qCard.classList.remove('playing-highlight');
+        if (!qContinued) break;
+
+        // 2. 답변들 순차 재생
+        for (let j = 0; j < conv.answers.length; j++) {
+            if (!AudioController.isAutoPlaying) break;
+
+            // 답변 카드로 스크롤
+            const aCard = document.getElementById(`card - front - card - a - ${j} `);
+            if (aCard) {
+                aCard.scrollIntoView({ behavior: "smooth", block: "center" });
+                aCard.classList.add('playing-highlight');
+            }
+
+            const aContinued = await AudioController.playSentenceLoop(conv.answers[j].jp, conv.answers[j].kr);
+            if (aCard) aCard.classList.remove('playing-highlight');
+            if (!aContinued) break;
+        }
+
+        await AudioController.wait(1000); // 다음 대화로 넘어가기 전 대기
+    }
+
+    AudioController.stopAutoRepeat();
+}
+
+function updateNavigationButtons() {
+    const conv = conversationModuleData[currentConversationCategory];
+    const prev = document.getElementById('conv-prev-btn');
+    const next = document.getElementById('conv-next-btn');
+    if (prev) { prev.disabled = currentConversationIndex === 0; prev.style.opacity = currentConversationIndex === 0 ? '0.3' : '1'; }
+    if (next) {
+        const isLast = currentConversationIndex === conv.conversations.length - 1;
+        next.disabled = isLast;
+        next.style.opacity = isLast ? '0.3' : '1';
+    }
+}
+
+function previousConversation() {
+    AudioController.stopAutoRepeat();
+    if (currentConversationIndex > 0) {
+        currentConversationIndex--;
+        displayCurrentConversation();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+}
+
+function nextConversation() {
+    AudioController.stopAutoRepeat();
+    if (currentConversationIndex < conversationModuleData[currentConversationCategory].conversations.length - 1) {
+        currentConversationIndex++;
+        displayCurrentConversation();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    if (document.getElementById('conversation-content')) initConversation();
 });
+
+// 전역 노출
+window.initConversation = initConversation;
