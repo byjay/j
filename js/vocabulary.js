@@ -286,11 +286,22 @@ async function startVocabularyAutoPlay() {
 
     // 루프 시작
     while (isVocabAutoPlaying && currentWordIndex < currentWords.length) {
-        // 1. 발음 듣기
-        playVocabularyAudio();
+        const word = currentWords[currentWordIndex];
 
-        // 2. 대기 (발음 길이 + 여유 시간)
-        await new Promise(r => setTimeout(r, 2500));
+        // 3회 반복
+        for (let i = 0; i < 3; i++) {
+            if (!isVocabAutoPlaying) break;
+
+            // 1. 일본어
+            await speakText(word.word, 'ja-JP');
+            if (!isVocabAutoPlaying) break;
+            await new Promise(r => setTimeout(r, 500));
+
+            // 2. 한국어
+            await speakText(word.translation, 'ko-KR');
+            if (!isVocabAutoPlaying) break;
+            await new Promise(r => setTimeout(r, 1000));
+        }
 
         if (!isVocabAutoPlaying) break;
 
@@ -304,6 +315,18 @@ async function startVocabularyAutoPlay() {
             break;
         }
     }
+}
+
+function speakText(text, lang) {
+    return new Promise((resolve) => {
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = lang;
+        utterance.rate = lang === 'ko-KR' ? 1.2 : 1.0; // 한국어는 조금 빠르게
+        utterance.onend = resolve;
+        utterance.onerror = resolve;
+        window.speechSynthesis.cancel();
+        window.speechSynthesis.speak(utterance);
+    });
 }
 
 function stopVocabularyAutoPlay() {
