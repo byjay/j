@@ -74,7 +74,7 @@ function createDayCardHTML(data, type, index, color) {
             <div class="flex-1 overflow-y-auto custom-scrollbar pr-1">
                 <div class="vocab-grid">
                     ${data.vocab.map(v => `
-                        <div class="vocab-item bg-white p-3 rounded-xl border border-gray-100 shadow-sm hover:shadow-md hover:border-${color}-200 cursor-default">
+                        <div class="vocab-item bg-white p-3 rounded-xl border border-gray-100 shadow-sm hover:shadow-md hover:border-${color}-200 cursor-pointer hover:bg-${color}-50 transition-colors" onclick="goToWordStudy('${v.word}')">
                             <div class="flex justify-between items-start mb-1">
                                 <span class="text-lg font-bold text-gray-800 leading-tight">${v.word}</span>
                                 ${v.type ? `<span class="text-[10px] bg-${color}-50 text-${color}-600 px-1.5 py-0.5 rounded font-bold uppercase tracking-wider ml-1 whitespace-nowrap">${v.type}</span>` : ''}
@@ -305,6 +305,20 @@ function nextDay() {
         currentDayIndex++;
         displayCurrentDay();
         window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+}
+
+function goToWordStudy(word) {
+    if (typeof wordList === 'undefined') {
+        console.error('wordList not loaded');
+        return;
+    }
+    const found = wordList.find(w => w.japanese_word === word);
+    if (found) {
+        if (typeof showTab === 'function') showTab('vocabulary');
+        if (typeof selectVocabularyCategory === 'function') selectVocabularyCategory(found.category);
+    } else {
+        console.warn('Word not found:', word);
     }
 }
 
