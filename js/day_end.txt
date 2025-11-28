@@ -1,0 +1,50 @@
+﻿        btn.className = "btn-auto-active px-4 py-2 rounded-full font-bold text-sm shadow-md flex items-center gap-2 transition-all";
+        btn.innerHTML = '<i class="fas fa-stop"></i>?뺤?';
+        btn.onclick = AudioController.stopAutoRepeat;
+    }
+    const convData = conversationModuleData[currentConversationCategory];
+    for (let i = currentConversationIndex; i < convData.conversations.length; i++) {
+        if (!AudioController.isAutoPlaying) break;
+        if (i !== currentConversationIndex) {
+            currentConversationIndex = i;
+            displayCurrentConversation();
+            const newBtn = document.getElementById('global-auto-play-btn');
+            if (newBtn) {
+                newBtn.className = "btn-auto-active px-4 py-2 rounded-full font-bold text-sm shadow-md flex items-center gap-2 transition-all";
+                newBtn.innerHTML = '<i class="fas fa-stop"></i>?뺤?';
+                newBtn.onclick = AudioController.stopAutoRepeat;
+            }
+        }
+        const conv = convData.conversations[i];
+        const qCard = document.getElementById('card-front-card-q');
+        if (qCard) qCard.classList.add('playing-highlight');
+        const qContinued = await AudioController.playSentenceLoop(conv.question.jp, conv.question.kr);
+        if (qCard) qCard.classList.remove('playing-highlight');
+        if (!qContinued) break;
+        for (let j = 0; j < conv.answers.length; j++) {
+            if (!AudioController.isAutoPlaying) break;
+            const aCard = document.getElementById(`card-front-card-a-${j}`);
+            if (aCard) {
+                aCard.scrollIntoView({ behavior: "smooth", block: "center" });
+                aCard.classList.add('playing-highlight');
+            }
+            const aContinued = await AudioController.playSentenceLoop(conv.answers[j].jp, conv.answers[j].kr);
+            if (aCard) aCard.classList.remove('playing-highlight');
+            if (!aContinued) break;
+        }
+        await AudioController.wait(1000);
+    }
+    AudioController.stopAutoRepeat();
+}
+
+function updateNavigationButtons() {
+    const conv = conversationModuleData[currentConversationCategory];
+    const prev = document.getElementById('conv-prev-btn');
+    const next = document.getElementById('conv-next-btn');
+    if (prev) { prev.disabled = currentConversationIndex === 0; prev.style.opacity = currentConversationIndex === 0 ? '0.3' : '1'; }
+    if (next) { const isLast = currentConversationIndex === conv.conversations.length - 1; next.disabled = isLast; next.style.opacity = isLast ? '0.3' : '1'; }
+}
+function previousConversation() { AudioController.stopAutoRepeat(); if (currentConversationIndex > 0) { currentConversationIndex--; displayCurrentConversation(); window.scrollTo({ top: 0, behavior: 'smooth' }); } }
+function nextConversation() { AudioController.stopAutoRepeat(); if (currentConversationIndex < conversationModuleData[currentConversationCategory].conversations.length - 1) { currentConversationIndex++; displayCurrentConversation(); window.scrollTo({ top: 0, behavior: 'smooth' }); } }
+
+document.addEventListener('DOMContentLoaded', () => { if (document.getElementById('conversation-content')) initConversation(); });

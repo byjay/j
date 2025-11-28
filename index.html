@@ -225,11 +225,11 @@
                         class="mb-4 flex gap-2 justify-center sticky top-14 z-30 bg-gray-50 py-3 -mx-4 px-4 border-b border-gray-200">
                         <button id="mode-situational-btn" onclick="showConversationMode('situational')"
                             class="flex-1 py-2 px-4 rounded-xl font-bold text-base transition-all duration-300 bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-lg">
-                            📖 상황별 대화
+                            📚 상황별 대화
                         </button>
                         <button id="mode-practical-btn" onclick="showConversationMode('practical')"
                             class="flex-1 py-2 px-4 rounded-xl font-bold text-base transition-all duration-300 bg-white text-gray-600 border-2 border-gray-200">
-                            💬 일상 회화
+                            💬 일상 대화
                         </button>
                     </div>
 
@@ -394,15 +394,17 @@
             if (mode === 'situational') {
                 document.getElementById('situational-conversation-container').classList.remove('hidden');
                 situationalBtn.className = 'flex-1 py-2 px-4 rounded-xl font-bold text-base transition-all duration-300 bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-lg';
-                // Initialize situational conversation (conversation.js)
+                // Initialize situational conversation (conversation.js - 상황별 대화: 입국심사, 교통, 호텔 등)
                 if (typeof initConversation === 'function') {
                     initConversation();
                 }
             } else if (mode === 'practical') {
                 document.getElementById('practical-conversation-container').classList.remove('hidden');
                 practicalBtn.className = 'flex-1 py-2 px-4 rounded-xl font-bold text-base transition-all duration-300 bg-gradient-to-r from-purple-500 to-purple-600 text-white shadow-lg';
-                // TODO: conversation_day.js needs separate rendering to practical-conversation-content div
-                console.log('Practical conversation selected - conversation_day.js');
+                // Initialize practical conversation (conversation_day.js - 일상 대화: 가족, 음식 등)
+                if (typeof initDayConversation === 'function') {
+                    initDayConversation();
+                }
             }
         }
 
