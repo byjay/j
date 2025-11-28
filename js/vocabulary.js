@@ -51,7 +51,9 @@ function injectVocabularyHTML() {
                     <i class="fas fa-arrow-left mr-2"></i>목록으로
                 </button>
                 <h3 id="current-category-title" class="text-xl font-bold text-gray-800"></h3>
-                <div style="width: 80px;"></div> <!-- Spacer -->
+                <button id="vocab-autoplay-btn" onclick="startVocabularyAutoPlay()" class="px-4 py-2 bg-green-500 text-white rounded-lg shadow-md hover:bg-green-600 transition-colors font-bold text-sm">
+                    <i class="fas fa-play mr-2"></i>자동 재생
+                </button>
             </div>
 
             <div class="bg-white rounded-2xl shadow-xl p-8 text-center border border-gray-100">
@@ -254,9 +256,87 @@ function playVocabularyAudio() {
 }
 
 // loadVocabularyData 함수는 더 이상 필요 없지만 호환성을 위해 남겨두거나 빈 함수로 대체
+// loadVocabularyData 함수는 더 이상 필요 없지만 호환성을 위해 남겨두거나 빈 함수로 대체
 async function loadVocabularyData() {
     console.log('Using local wordList data instead of fetch');
     return Promise.resolve({});
 }
+
+// ==========================================
+// 자동 재생 기능 (Auto Play)
+// ==========================================
+let isVocabAutoPlaying = false;
+let vocabWakeLock = null;
+
+async function startVocabularyAutoPlay() {
+    if (isVocabAutoPlaying) return;
+    isVocabAutoPlaying = true;
+
+    // 화면 꺼짐 방지
+    try {
+        if ('wakeLock' in navigator) {
+            vocabWakeLock = await navigator.wakeLock.request('screen');
+        }
+    } catch (err) {
+        console.log('Wake Lock Error:', err);
+    }
+
+    // 버튼 상태 변경
+    updateAutoPlayButton(true);
+
+    // 루프 시작
+    while (isVocabAutoPlaying && currentWordIndex < currentWords.length) {
+        // 1. 발음 듣기
+        playVocabularyAudio();
+
+        // 2. 대기 (발음 길이 + 여유 시간)
+        await new Promise(r => setTimeout(r, 2500));
+
+        if (!isVocabAutoPlaying) break;
+
+        // 3. 다음 단어로 이동
+        if (currentWordIndex < currentWords.length - 1) {
+            nextVocabulary();
+            await new Promise(r => setTimeout(r, 1000)); // 이동 후 잠시 대기
+        } else {
+            // 마지막 단어면 종료
+            stopVocabularyAutoPlay();
+            break;
+        }
+    }
+}
+
+function stopVocabularyAutoPlay() {
+    isVocabAutoPlaying = false;
+
+    // Wake Lock 해제
+    if (vocabWakeLock) {
+        vocabWakeLock.release().then(() => {
+            vocabWakeLock = null;
+        });
+    }
+
+    updateAutoPlayButton(false);
+}
+
+function updateAutoPlayButton(isPlaying) {
+    const btn = document.getElementById('vocab-autoplay-btn');
+    if (btn) {
+        if (isPlaying) {
+            btn.innerHTML = '<i class="fas fa-stop mr-2"></i>정지';
+            btn.className = 'px-4 py-2 bg-red-500 text-white rounded-lg shadow-md hover:bg-red-600 transition-colors font-bold text-sm animate-pulse';
+            btn.onclick = stopVocabularyAutoPlay;
+        } else {
+            btn.innerHTML = '<i class="fas fa-play mr-2"></i>자동 재생';
+            btn.className = 'px-4 py-2 bg-green-500 text-white rounded-lg shadow-md hover:bg-green-600 transition-colors font-bold text-sm';
+            btn.onclick = startVocabularyAutoPlay;
+        }
+    }
+}
+
+// 전역 노출
+window.selectVocabularyCategory = selectVocabularyCategory;
+window.startVocabularyAutoPlay = startVocabularyAutoPlay;
+window.stopVocabularyAutoPlay = stopVocabularyAutoPlay;
 
 console.log('vocabulary.js loaded');
