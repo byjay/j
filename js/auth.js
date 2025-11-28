@@ -102,4 +102,14 @@ function checkAutoLogin() {
     }
 }
 
+// 아빠 비밀번호 입력
+function showPasswordPrompt() {
+    const password = prompt('아빠 비밀번호를 입력하세요:');
+    if (password === '1435') {
+        login('dad');
+    } else if (password !== null) {
+        alert('비밀번호가 틀렸습니다!');
+    }
+}
+
 console.log('auth.js loaded');
