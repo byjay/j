@@ -143,6 +143,12 @@ function showQuizResult() {
         }
 
         saveUserProgress(currentUser.id, progress);
+
+        // 학습 활동 추적
+        if (typeof LearningTracker !== 'undefined') {
+            const quizType = currentQuizType === 'characters' ? 'characterQuiz' : 'vocabularyQuiz';
+            LearningTracker.recordActivity(quizType, 1, correctCount, totalCount);
+        }
     }
 }
 

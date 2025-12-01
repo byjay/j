@@ -15413,6 +15413,11 @@ function displayCurrentConversation() {
 
     viewer.innerHTML = `<div class="flex items-center justify-between mb-6 px-1"><h3 class="text-lg md:text-xl font-bold text-gray-800 flex items-center gap-2"><span class="w-1.5 h-6 bg-${convData.color}-500 rounded-full inline-block"></span><span class="truncate max-w-[150px] md:max-w-none">${convData.title}</span><span class="text-sm text-gray-400 font-normal ml-1">(${currentConversationIndex + 1}/${convData.conversations.length})</span></h3><div class="flex gap-2 items-center">${autoPlayBtnState}</div></div><div class="flex justify-between items-center mb-4 px-2"><button id="conv-prev-btn" onclick="previousConversation()" class="w-10 h-10 rounded-full bg-white border border-gray-200 shadow text-gray-400 hover:text-gray-800 flex items-center justify-center active:scale-90 transition-transform"><i class="fas fa-arrow-left"></i></button><div class="text-xs text-gray-300 font-medium tracking-widest">SWIPE OR CLICK</div><button id="conv-next-btn" onclick="nextConversation()" class="w-10 h-10 rounded-full bg-black shadow-lg text-white hover:bg-gray-800 flex items-center justify-center active:scale-90 transition-transform"><i class="fas fa-arrow-right"></i></button></div><div class="space-y-6 animate-fade-in pb-20">${createFlipCardHTML(currentConv.question, 'question', 0, convData.color)}<div class="relative pl-4 border-l-2 border-dashed border-gray-200 space-y-8">${currentConv.answers.map((ans, idx) => createFlipCardHTML(ans, 'answer', idx, convData.color)).join('')}</div></div>`;
     updateNavigationButtons();
+
+    // 학습 활동 추적
+    if (typeof LearningTracker !== 'undefined') {
+        LearningTracker.recordActivity('conversation');
+    }
 }
 
 function toggleCardFlip(id) { const card = document.getElementById(id); if (card) card.parentElement.classList.toggle('card-flipped'); }

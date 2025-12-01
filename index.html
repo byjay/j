@@ -22,6 +22,7 @@
     <script
         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDkmhTzFKcxxfQIrYlkcFjXAgIDdTZMdvU&callback=initFukuokaTrip&libraries=places,directions,geometry&v=weekly"
         defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 
     <script>
         tailwind.config = {
@@ -340,11 +341,62 @@
                     <div id="character-study-container" class="hidden fixed inset-0 z-50 bg-white flex flex-col"></div>
                 </div>
 
+                <!-- 학습현황 탭 -->
+                <div id="progress" class="tab-content hidden">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-4">📊 학습 현황</h2>
+
+                    <!-- 아빠 전용: 사용자 선택 -->
+                    <div id="admin-user-selector" style="display:none;"
+                        class="mb-4 p-4 bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl border-2 border-blue-200">
+                        <label class="block text-sm font-bold text-gray-700 mb-2">
+                            <i class="fas fa-users mr-2"></i>회원 선택
+                        </label>
+                        <select id="progress-user-select" onchange="changeProgressUser()"
+                            class="w-full px-4 py-2 border-2 border-gray-300 rounded-xl font-bold focus:border-blue-500 focus:outline-none">
+                            <option value="dad">아빠</option>
+                            <option value="mom">엄마</option>
+                            <option value="sieun">시으니</option>
+                            <option value="harong">하롱이</option>
+                        </select>
+                    </div>
+
+                    <!-- 요약 통계 -->
+                    <div id="progress-summary" class="mb-6"></div>
+
+                    <!-- 그래프 섹션 -->
+                    <div class="space-y-6">
+                        <div class="bg-white rounded-xl shadow-sm p-4" style="height: 250px;">
+                            <canvas id="conversation-chart"></canvas>
+                        </div>
+                        <div class="bg-white rounded-xl shadow-sm p-4" style="height: 250px;">
+                            <canvas id="vocabulary-chart"></canvas>
+                        </div>
+                        <div class="bg-white rounded-xl shadow-sm p-4" style="height: 250px;">
+                            <canvas id="character-chart"></canvas>
+                        </div>
+                        <div class="bg-white rounded-xl shadow-sm p-4" style="height: 250px;">
+                            <canvas id="character-quiz-chart"></canvas>
+                        </div>
+                        <div class="bg-white rounded-xl shadow-sm p-4" style="height: 250px;">
+                            <canvas id="vocabulary-quiz-chart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- 아빠 전용: 개별 리셋 -->
+                    <div id="admin-reset-user" style="display:none;"
+                        class="mt-6 p-4 bg-red-50 rounded-xl border-2 border-red-200">
+                        <button onclick="resetUserProgress()"
+                            class="w-full py-3 bg-red-600 text-white font-bold rounded-xl hover:bg-red-700 active:scale-95 transition-all shadow-md">
+                            <i class="fas fa-trash-alt mr-2"></i>선택한 사용자 진도 리셋
+                        </button>
+                    </div>
+                </div>
+
             </div>
         </main>
 
         <nav class="bg-white border-t border-gray-200 fixed bottom-0 left-0 right-0 z-50 h-16 pb-safe">
-            <div class="grid grid-cols-6 h-full">
+            <div class="grid grid-cols-7 h-full">
                 <button onclick="showTab('home')"
                     class="nav-tab flex flex-col items-center justify-center text-gray-400 hover:text-red-500 active:text-red-600 transition-colors">
                     <i class="fas fa-home mb-1 text-lg"></i>
@@ -370,6 +422,11 @@
                     <i class="fas fa-plane mb-1 text-lg"></i>
                     <span class="text-[10px] font-medium">후쿠오카</span>
                 </button>
+                <button onclick="showTab('progress')"
+                    class="nav-tab flex flex-col items-center justify-center text-gray-400 hover:text-red-500 active:text-red-600 transition-colors">
+                    <i class="fas fa-chart-bar mb-1 text-lg"></i>
+                    <span class="text-[10px] font-medium">학습현황</span>
+                </button>
                 <button onclick="window.close()"
                     class="nav-tab flex flex-col items-center justify-center text-gray-400 hover:text-gray-600 active:text-gray-800 transition-colors border-l border-gray-100">
                     <i class="fas fa-times mb-1 text-lg"></i>
@@ -391,6 +448,7 @@
     <script src="js/characters.js"></script>
     <script src="js/word_study.js"></script>
     <script src="js/study.js"></script>
+    <script src="js/learning_tracker.js"></script>
     <script src="js/progress.js"></script>
 
     <script>

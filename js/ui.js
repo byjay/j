@@ -64,8 +64,8 @@ function showTab(tabName) {
             initFukuokaTrip();
         }
     } else if (tabName === 'progress') {
-        if (typeof updateProgressStats === 'function') {
-            updateProgressStats();
+        if (typeof showProgressDashboard === 'function') {
+            showProgressDashboard();
         }
     }
 }
