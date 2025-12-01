@@ -59,8 +59,10 @@ function showTab(tabName) {
         if (typeof initConversation === 'function') {
             initConversation();
         }
-    } else if (tabName === 'fukuoka') {
-        if (typeof initFukuokaTrip === 'function') {
+    } else if (tabName === 'fukuoka' || tabName === 'japan_travel') {
+        if (typeof initJapanTravel === 'function') {
+            initJapanTravel();
+        } else if (typeof initFukuokaTrip === 'function') {
             initFukuokaTrip();
         }
     } else if (tabName === 'progress') {

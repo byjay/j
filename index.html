@@ -95,10 +95,16 @@
         style="background-image: url('images/BACK.png'); background-size: contain; background-repeat: no-repeat; background-position: center; background-color: #000;">
 
         <div class="bg-white/80 backdrop-blur-sm p-8 rounded-3xl shadow-2xl w-full max-w-md border border-white/50">
-            <div class="text-center mb-10">
-                <h1 class="text-5xl font-black text-red-600 mb-2 tracking-tighter drop-shadow-sm"
-                    style="font-family: 'Noto Sans JP', sans-serif;">JAP-BONG 일본어</h1>
-                <p class="text-lg text-gray-600 font-medium">아빠가 만든 우리 가족 일본어 앱 🍌</p>
+            <div class="flex items-center justify-between">
+                <h1 onclick="showTab('home')"
+                    class="text-xl font-black tracking-tighter text-red-600 flex items-center gap-2 cursor-pointer hover:opacity-80 transition-opacity">
+                    <span
+                        class="bg-red-600 text-white w-8 h-8 rounded-lg flex items-center justify-center text-lg shadow-sm">JP</span>
+                    JAP-BONG 일본어
+                </h1>
+                <div class="flex items-center gap-3">
+                    <p class="text-lg text-gray-600 font-medium">아빠가 만든 우리 가족 일본어 앱 🍌</p>
+                </div>
             </div>
 
             <div class="grid grid-cols-2 gap-6">
@@ -165,13 +171,13 @@
 
                 <div id="home" class="tab-content active">
                     <div id="main-menu" class="grid grid-cols-2 gap-6 mb-10 pt-6">
-                        <button onclick="openSection('fukuoka')"
+                        <button onclick="openSection('japan_travel')"
                             class="user-card group bg-white p-7 rounded-3xl shadow-md hover:shadow-xl border-2 border-transparent hover:border-red-400 flex flex-col items-center cursor-pointer transition-all duration-200 transform hover:-translate-y-1">
                             <div
                                 class="w-24 h-24 mb-4 rounded-full overflow-hidden border-4 border-gray-100 group-hover:border-red-100 transition-colors bg-red-50 flex items-center justify-center">
                                 <i class="fas fa-plane text-red-500 text-3xl"></i>
                             </div>
-                            <h3 class="text-lg font-bold text-gray-800 group-hover:text-red-600">후쿠오카 여행</h3>
+                            <h3 class="text-lg font-bold text-gray-800 group-hover:text-red-600">일본 여행</h3>
                         </button>
 
                         <button onclick="openSection('conversation')"
@@ -218,18 +224,28 @@
                     </div>
                 </div>
 
-                <div id="fukuoka" class="tab-content hidden">
-                    <!-- 일차 버튼을 상단 고정 -->
-                    <div class="sticky top-14 z-30 bg-gray-50 pt-3 pb-2 -mx-4 px-4 border-b border-gray-200">
-                        <div class="flex gap-2 overflow-x-auto no-scrollbar pb-1" id="day-tabs"></div>
+                <div id="japan_travel" class="tab-content hidden">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-4">✈️ 일본 여행</h2>
+
+                    <!-- 지역 선택 그리드 -->
+                    <div id="region-selection" class="grid grid-cols-2 gap-4 mb-6">
+                        <!-- 지역 카드들이 동적으로 추가됨 -->
                     </div>
 
-                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-4 px-4">
-                        <div id="itinerary-content" class="space-y-4"></div>
+                    <!-- 선택된 지역 상세 정보 -->
+                    <div id="region-detail" style="display:none;">
+                        <!-- 일차 버튼을 상단 고정 -->
+                        <div class="sticky top-14 z-30 bg-gray-50 pt-3 pb-2 -mx-4 px-4 border-b border-gray-200">
+                            <div class="flex gap-2 overflow-x-auto no-scrollbar pb-1" id="day-tabs"></div>
+                        </div>
 
-                        <div class="sticky top-20 h-fit">
-                            <div class="bg-white rounded-xl shadow p-4 h-96">
-                                <div id="map" class="w-full h-full rounded-lg bg-gray-200"></div>
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-4 px-4">
+                            <div id="itinerary-content" class="space-y-4"></div>
+
+                            <div class="sticky top-20 h-fit">
+                                <div class="bg-white rounded-xl shadow p-4 h-96">
+                                    <div id="map" class="w-full h-full rounded-lg bg-gray-200"></div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -417,10 +433,10 @@
                     <i class="fas fa-book mb-1 text-lg"></i>
                     <span class="text-[10px] font-medium">단어</span>
                 </button>
-                <button onclick="showTab('fukuoka')"
+                <button onclick="showTab('japan_travel')"
                     class="nav-tab flex flex-col items-center justify-center text-gray-400 hover:text-red-500 active:text-red-600 transition-colors">
                     <i class="fas fa-plane mb-1 text-lg"></i>
-                    <span class="text-[10px] font-medium">후쿠오카</span>
+                    <span class="text-[10px] font-medium">일본여행</span>
                 </button>
                 <button onclick="showTab('progress')"
                     class="nav-tab flex flex-col items-center justify-center text-gray-400 hover:text-red-500 active:text-red-600 transition-colors">
@@ -442,6 +458,7 @@
     <script src="js/templates.js"></script>
     <script src="js/words_data.js"></script>
     <script src="js/fukuoka.js"></script>
+    <script src="js/japan_travel.js"></script>
     <script src="js/conversation.js"></script>
     <script src="js/conversation_day.js"></script>
     <script src="js/vocabulary.js"></script>
