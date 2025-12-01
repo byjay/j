@@ -55,6 +55,12 @@ function login(userId) {
         tab.classList.remove('active');
     });
 
+    // 아빠 계정이면 관리자 메뉴 표시
+    const adminSection = document.getElementById('admin-reset-section');
+    if (adminSection) {
+        adminSection.style.display = userId === 'dad' ? 'block' : 'none';
+    }
+
     if (loginCallback) {
         loginCallback();
         loginCallback = null;
@@ -93,13 +99,8 @@ function logout() {
 }
 
 function checkAutoLogin() {
-    const savedUser = localStorage.getItem('currentUser');
-    if (savedUser && users[savedUser]) {
-        console.log('Auto login:', savedUser);
-        login(savedUser);
-    } else {
-        showLoginModal();
-    }
+    // 자동 로그인 비활성화 - 항상 로그인 화면 표시
+    showLoginModal();
 }
 
 // 아빠 비밀번호 입력
@@ -109,6 +110,25 @@ function showPasswordPrompt() {
         login('dad');
     } else if (password !== null) {
         alert('비밀번호가 틀렸습니다!');
+    }
+}
+// 전체 학습진도 리셋 (아빠 계정 전용)
+function resetAllProgress() {
+    if (confirm('⚠️ 정말로 모든 학습 진도를 리셋하시겠습니까?\n\n모든 사용자의 학습 기록이 삭제됩니다!')) {
+        const password = prompt('확인을 위해 비밀번호(1435)를 입력하세요:');
+        if (password === '1435') {
+            // 모든 사용자의 진도 데이터 삭제
+            ['dad', 'mom', 'sieun', 'harong'].forEach(userId => {
+                localStorage.removeItem(`progress_${userId}`);
+                localStorage.removeItem(`jap_bong_history_v1_${userId}`);
+                localStorage.removeItem(`fukuoka_unlock_count_${userId}`);
+            });
+
+            alert('✅ 모든 학습 진도가 리셋되었습니다!');
+            location.reload(); // 페이지 새로고침
+        } else if (password !== null) {
+            alert('❌ 비밀번호가 틀렸습니다!');
+        }
     }
 }
 
