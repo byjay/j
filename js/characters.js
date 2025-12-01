@@ -265,7 +265,7 @@ function initCanvas() {
     ctx.lineWidth = 12;
     ctx.lineCap = 'round';
     ctx.lineJoin = 'round';
-    ctx.strokeStyle = '#1f2937'; // 진한 회색
+    ctx.strokeStyle = '#ffffff'; // 흰색
     isDrawing = false;
 
     canvas.addEventListener('mousedown', startDraw);

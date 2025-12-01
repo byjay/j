@@ -170,131 +170,114 @@ const placesDB = {
         ]
     },
 
-    // ================= [ 2일차: 규슈 버스 투어 ] =================
+    // ================= [ 2일차: 유후인 & 벳푸 버스 투어 (라이카 사진 촬영) ] =================
     'tour_meet': {
-        name: '🚩 투어 미팅 포인트',
+        name: '🚩 투어 집결 - 하카타역',
         lat: 33.5902, lng: 130.4225,
         type: 'transport',
         rating: 5.0,
-        desc: '오리엔탈 호텔 앞 집결! 늦으면 버스는 떠납니다 😱',
-        openHours: '미팅 시간: 08:00 (7:50까지 도착 필수)',
-        tips: '💡 꿀팁: 하카타역 "치쿠시구치(筑紫口)" 출구로 나와야 가까워요! 로손 편의점 옆에서 가이드가 깃발 들고 대기 중.',
+        desc: '[라이카 사진 촬영] 유후인·벳푸 일일 버스투어 출발!',
+        openHours: '미팅 시간: 08:10 하카타역 치쿠시구치 출구',
+        tips: '💡 꿀팁: 투어 바우처 필수 지참! 하카타역 치쿠시구치(筑紫口) 출구에서 가이드 미팅. 점심은 유후인에서 자유식 (약 1시간 30분 자유시간)',
         info: [
-            { label: '준비물', val: '여권, 투어 바우처, 편한 신발' },
-            { label: '소요시간', val: '약 10시간 (18:00 하카타역 복귀)' },
-            { label: '식사', val: '점심 미포함 (유후인 자유식)' }
+            { label: '출발', val: '08:10 하카타역 / 08:30 텐진역' },
+            { label: '투어시간', val: '약 9시간 (17:00~17:30 복귀)' },
+            { label: '포함사항', val: '전문 사진작가 동행, 라이카 카메라로 촬영한 고화질 사진 제공' },
+            { label: '준비물', val: '투어 바우처, 점심 식대, 편한 신발' }
         ],
         links: [
-            { name: 'KKday 투어 예약', url: 'https://www.kkday.com/ko/product/11903' },
-            { name: 'Klook 투어 예약', url: 'https://www.klook.com/activity/1785-beppu-yufuin-day-tour/' }
+            { name: '네이버 스마트스토어 예약', url: 'https://smartstore.naver.com/1gn1t3/products/10325675995' },
+            { name: '투어 상세정보', url: 'https://smartstore.naver.com/1gn1t3' }
+        ],
+        recommend: [
+            { name: '라이카 촬영 서비스', type: '특별', desc: '전문 작가가 라이카 카메라로 여행 순간을 담아드립니다', icon: '📸' },
+            { name: '고화질 사진 제공', type: '특별', desc: '투어 후 편집된 고화질 사진을 온라인으로 전달', icon: '🎨' }
         ],
         photos: [
             'https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?w=600',
-            'https://images.unsplash.com/photo-1570125909232-eb263c188f7e?w=600'
-        ]
-    },
-
-    'dazaifu': {
-        name: '다자이후 텐만구',
-        lat: 33.5215, lng: 130.5348,
-        type: 'tour',
-        rating: 4.7,
-        desc: '학문의 신을 모시는 신사! 수험생 필수 코스 🙏',
-        openHours: '06:00~19:00 (참배 무료)',
-        tips: '💡 꿀팁: 입구 소 동상의 머리를 만지면 머리가 좋아진대요! 스타벅스 컨셉스토어 앞 사진 필수. 우메가에모치는 따끈할 때 먹어야 맛있어요!',
-        info: [
-            { label: '입장료', val: '무료 (보물관 500엔)' },
-            { label: '소요시간', val: '약 1시간 (관람 + 간식)' },
-            { label: '주차', val: '버스 주차장 완비' }
-        ],
-        menus: [
-            { name: '우메가에모치', price: '130엔', desc: '따끈한 매화 찹쌀떡, 팥소가 꽉! 카사노야/테라다야 추천', photo: '🍡' },
-            { name: '스타벅스 음료', price: '500엔~', desc: '나무 건축이 예술! 인스타 필수 인증샷', photo: '☕' },
-            { name: '다자이후 한정 사이다', price: '200엔', desc: '매실맛 사이다, 여름에 시원함', photo: '🥤' }
-        ],
-        links: [
-            { name: '다자이후 공식 홈페이지', url: 'https://www.dazaifutenmangu.or.jp/kr' },
-            { name: '가는 법 (니시테츠)', url: 'https://www.nishitetsu.jp/ko/' }
-        ],
-        recommend: [
-            { name: '카사노야', type: '카페', desc: '80년 전통 우메가에모치 맛집, 정원이 예쁨', icon: '🍵' },
-            { name: '이치란 다자이후점', type: '라멘', desc: '합격 기원 5각형 그릇! 여기만의 특별 메뉴', icon: '🍜' },
-            { name: '스타벅스 컨셉스토어', type: '카페', desc: '쿠마 켄고 건축, 나무 빨대 사용', icon: '☕' }
-        ],
-        photos: [
-            'https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=600',
-            'https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=600',
-            'https://images.unsplash.com/photo-1580477667995-2b94f01c9516?w=600'
+            'https://images.unsplash.com/photo-1570125909232-eb263c188f7e?w=600',
+            'https://images.unsplash.com/photo-1464037866556-6812c9d1c72e?w=600'
         ]
     },
 
     'yufuin': {
-        name: '유후인 (긴린코 호수)',
+        name: '유후인 - 긴린코 호수 & 상점가',
         lat: 33.2655, lng: 131.3600,
         type: 'tour',
         rating: 4.9,
-        desc: '동화 속 온천마을! 아침 물안개가 장관 ✨',
-        openHours: '상점가 10:00~17:00',
-        tips: '💡 꿀팁: 긴린코 호수는 아침에 물안개가 가장 예쁨! 금상고로케 2호점이 본점보다 줄이 짧아요. 미르히 치즈케이크는 따뜻할 때 먹어야 제맛!',
+        desc: '규슈의 보석! 동화 같은 온천마을과 신비로운 긴린코 호수 ✨📸',
+        openHours: '자유시간 약 1시간 30분',
+        tips: '💡 꿀팁: 긴린코 호수는 물안개가 신비로운 포토존! 유노츠보거리에서 금상고로케, B-speak 롤케이크 필수. 점심시간 포함되어 있으니 맛집 리스트 미리 체크하세요!',
         info: [
-            { label: '상점가', val: '유노츠보거리 (도보 15분)' },
-            { label: '소요시간', val: '2시간 (점심 + 관광)' },
-            { label: '주차', val: '유후인역 공영 주차장' }
+            { label: '관광코스', val: '긴린코 호수 → 유노츠보 상점가 → 점심 자유식' },
+            { label: '자유시간', val: '약 1시간 30분 (점심 포함)' },
+            { label: '추천활동', val: '긴린코 호수 산책, 상점가 쇼핑, 먹거리 투어' },
+            { label: '사진촬영', val: '전문 작가가 라이카로 인생샷 촬영' }
         ],
         menus: [
-            { name: '금상고로케', price: '200엔', desc: '겉바속촉! 감자+고기 고로케, 맥주와 찰떡궁합', photo: '🥔' },
-            { name: '미르히 치즈케이크', price: '350엔', desc: '따뜻한 컵 치즈케이크, 부들부들 식감', photo: '🧀' },
-            { name: 'B-speak 롤케이크', price: '1,500엔', desc: '예약 필수! 현지인도 줄서는 명품 롤케이크', photo: '🍰' },
-            { name: '유후인 버거', price: '800엔', desc: '와규 패티 버거, 길거리 음식 최고봉', photo: '🍔' }
+            { name: '금상고로케', price: '200엔', desc: '겉바속촉 감자+고기 고로케, SNS 핫플 맛집!', photo: '🥔' },
+            { name: 'B-speak 롤케이크', price: '1,500엔', desc: '유후인 3대 명물! 부드러운 생크림 롤케이크', photo: '🍰' },
+            { name: '유후인 버거', price: '800엔', desc: '와규 패티 수제 버거, 든든한 점심 메뉴', photo: '🍔' },
+            { name: '미르히 치즈케이크', price: '350엔', desc: '따뜻한 컵 치즈케이크, 겨울에 최고', photo: '🧀' },
+            { name: '긴린코 호수 족욕', price: '무료', desc: '무료 족욕 카페에서 여유 즐기기', photo: '♨️' }
         ],
         links: [
-            { name: '유후인 관광 가이드', url: 'https://www.yufuin.gr.jp/' },
-            { name: 'B-speak 온라인 예약', url: 'http://www.b-speak.net/' }
+            { name: '유후인 관광협회', url: 'https://www.yufuin.gr.jp/' },
+            { name: 'B-speak 예약', url: 'http://www.b-speak.net/' },
+            { name: '긴린코 호수 정보', url: 'https://www.visit-oita.jp/spots/detail/4729' }
         ],
         recommend: [
-            { name: '플로랄 빌리지', type: '포토존', desc: '해리포터 느낌 나는 유럽풍 마을, 인형 가게', icon: '🏰' },
-            { name: '스누피 찻집', type: '카페', desc: '스누피 굿즈 천국! 귀여운 디저트', icon: '🐕' },
-            { name: '긴린코 호수', type: '산책', desc: '한바퀴 20분, 물안개 명소', icon: '🌫️' },
-            { name: '유후다케 케이블카', type: '액티비티', desc: '왕복 1,600엔, 산 정상 전망대', icon: '🚡' }
+            { name: '긴린코 호수', type: '필수코스', desc: '물안개 피어오르는 신비로운 호수, 한 바퀴 산책 20분', icon: '🌫️' },
+            { name: '유노츠보거리', type: '쇼핑', desc: '기념품 가게, 카페, 먹거리 천국! 1시간은 기본', icon: '🛍️' },
+            { name: '플로랄 빌리지', type: '포토존', desc: '해리포터 느낌 나는 유럽풍 마을, 인형 박물관', icon: '🏰' },
+            { name: 'B-speak', type: '디저트', desc: '유후인 3대 명물 롤케이크, 오픈런 추천', icon: '🍰' },
+            { name: '금상고로케', type: '간식', desc: 'SNS 핫플! 바삭한 고로케 먹방 필수', icon: '🥔' }
         ],
         photos: [
             'https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=600',
             'https://images.unsplash.com/photo-1576487503401-173fea862428?w=600',
-            'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=600'
+            'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=600',
+            'https://images.unsplash.com/photo-1580477667995-2b94f01c9516?w=600'
         ]
     },
 
     'beppu': {
-        name: '벳푸 가마도 지옥',
+        name: '벳푸 지옥온천 순례',
         lat: 33.3150, lng: 131.4750,
         type: 'tour',
-        rating: 4.4,
-        desc: '땅에서 김이 모락모락! 신기한 지옥 온천 체험',
-        openHours: '08:00~17:00 (입장 마감 16:30)',
-        tips: '💡 꿀팁: 족욕장 무료! 수건도 무료 대여해줘요. 온천 달걀 꼭 드셔보세요(유황향 쌉니다). 담배쇼 아저씨 공연이 재밌어요!',
+        rating: 4.8,
+        desc: '세계적 온천 도시 벳푸! 7가지 색다른 지옥온천 체험 🔥♨️',
+        openHours: '투어 시간 약 1시간~1시간 30분',
+        tips: '💡 꿀팁: 바다지옥(우미지고쿠)의 코발트블루 온천수가 압권! 온천 달걀은 꼭 먹어보세요. 족욕장 무료이니 수건 챙겨가면 좋아요. 지옥 푸딩은 여기서만!',
         info: [
-            { label: '입장료', val: '성인 450엔 (5개 지옥 공통권 2,000엔)' },
-            { label: '소요시간', val: '1~1.5시간' },
-            { label: '무료 체험', val: '족욕장, 음용 온천수' }
+            { label: '관람지옥', val: '바다지옥, 혈지옥, 용권지옥, 가마도지옥 등' },
+            { label: '입장료', val: '투어 포함 (개별 450엔~)' },
+            { label: '체험', val: '족욕, 온천 달걀 시식, 지옥 푸딩' },
+            { label: '사진촬영', val: '전문 작가의 라이카 촬영 서비스' }
         ],
         menus: [
-            { name: '온천 달걀', price: '80엔', desc: '유황 온천수로 삶은 달걀, 특유의 향', photo: '🥚' },
-            { name: '지옥 푸딩', price: '350엔', desc: '온천 증기로 찐 부드러운 푸딩', photo: '🍮' },
-            { name: '라무네 사이다', price: '200엔', desc: '구슬 넣는 재미! 여름에 시원함', photo: '🥤' }
+            { name: '온천 달걀', price: '80엔', desc: '지옥 온천수로 삶은 명물 달걀, 고소하고 부드러워요', photo: '🥚' },
+            { name: '지옥 푸딩', price: '350엔', desc: '온천 증기로 찐 부드러운 푸딩, 벳푸 한정!', photo: '🍮' },
+            { name: '온천 만쥬', price: '120엔', desc: '온천 증기로 찐 팥빵, 따뜻할 때 먹어야 맛있어요', photo: '🍡' },
+            { name: '족욕 체험', price: '무료', desc: '따뜻한 온천수에 발 담그며 힐링', photo: '♨️' }
         ],
         links: [
-            { name: '벳푸 지옥온천 공식', url: 'http://www.beppu-jigoku.com/' },
-            { name: '입장권 할인 (Klook)', url: 'https://www.klook.com/activity/1785/' }
+            { name: '벳푸 지옥온천 공식 홈페이지', url: 'http://www.beppu-jigoku.com/' },
+            { name: '벳푸 관광협회', url: 'https://www.visit-oita.jp/beppu/' },
+            { name: '지옥온천 할인권', url: 'https://www.klook.com/activity/1785/' }
         ],
         recommend: [
-            { name: '바다지옥 (우미지고쿠)', type: '온천', desc: '코발트블루 색깔이 신기함! 1번 지옥', icon: '💙' },
-            { name: '혈지옥 (치노이케지고쿠)', type: '온천', desc: '빨간 온천수가 실제로 존재! 포토존', icon: '❤️' },
-            { name: '악어 지옥', type: '구경', desc: '온천에서 악어 키움ㅋㅋ 신기함', icon: '🐊' }
+            { name: '바다지옥 (우미지고쿠)', type: '필수', desc: '코발트블루 온천수가 신비로움! 가장 유명한 지옥', icon: '💙' },
+            { name: '혈지옥 (치노이케지고쿠)', type: '포토존', desc: '빨간 온천수의 비주얼 쇼크! SNS 인증샷 명소', icon: '❤️' },
+            { name: '용권지옥 (류묘인지고쿠)', type: '체험', desc: '온천 증기가 간헐적으로 분출! 박력 만점', icon: '🐉' },
+            { name: '가마도지옥', type: '먹거리', desc: '온천 달걀, 지옥 푸딩 판매. 족욕장도 있어요', icon: '🍮' },
+            { name: '악어지옥', type: '구경', desc: '온천 열기로 악어를 키워요! 특이한 볼거리', icon: '🐊' }
         ],
         photos: [
             'https://images.unsplash.com/photo-1591824438708-ce405f36ba3d?w=600',
             'https://images.unsplash.com/photo-1583083527882-4bee9aba2eea?w=600',
-            'https://images.unsplash.com/photo-1540206395-68808572332f?w=600'
+            'https://images.unsplash.com/photo-1540206395-68808572332f?w=600',
+            'https://images.unsplash.com/photo-1580477667995-2b94f01c9516?w=600'
         ]
     },
 
@@ -475,9 +458,9 @@ const schedule = {
         summary: '공항 도착 → 호텔 체크인 → 하카타 우동 → 캐널시티 쇼핑 → 곱창전골'
     },
     2: {
-        title: '2일차: 규슈 버스 투어 (다자이후·유후인·벳푸) 🚌',
-        items: ['tour_meet', 'dazaifu', 'yufuin', 'beppu'],
-        summary: '버스 미팅 → 다자이후 신사 → 유후인 온천마을 → 벳푸 지옥온천'
+        title: '2일차: 유후인·벳푸 버스투어 (라이카 사진 촬영) 📸',
+        items: ['tour_meet', 'yufuin', 'beppu'],
+        summary: '하카타역 집결 → 유후인 긴린코호수 & 상점가 → 벳푸 지옥온천 순례 (전문 작가 라이카 촬영)'
     },
     3: {
         title: '3일차: 후쿠오카 시내 관광 🏙️',
