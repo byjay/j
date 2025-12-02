@@ -265,7 +265,7 @@ function initCanvas() {
     ctx.lineWidth = 12;
     ctx.lineCap = 'round';
     ctx.lineJoin = 'round';
-    ctx.strokeStyle = '#ffffff'; // 흰색
+    ctx.strokeStyle = '#2563eb'; // 파란색 (Tailwind blue-600)
     isDrawing = false;
 
     canvas.addEventListener('mousedown', startDraw);

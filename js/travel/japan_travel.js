@@ -12,7 +12,7 @@ const japanRegions = {
         color: 'red',
         unlockCondition: 'default', // 기본 오픈
         description: '규슈 최대 도시',
-        scriptFile: 'js/fukuoka.js'
+        scriptFile: 'js/travel/fukuoka.js'
     },
     tokyo: {
         id: 'tokyo',
@@ -22,7 +22,7 @@ const japanRegions = {
         color: 'blue',
         unlockCondition: 'characterQuiz100x3',
         description: '일본의 수도',
-        scriptFile: 'js/tokyo.js',
+        scriptFile: 'js/travel/tokyo.js',
         mission: '글자 퀴즈 100점 3회 달성'
     },
     kyoto: {
@@ -33,7 +33,7 @@ const japanRegions = {
         color: 'purple',
         unlockCondition: 'conversation10min7days',
         description: '전통과 문화의 도시',
-        scriptFile: 'js/kyoto.js',
+        scriptFile: 'js/travel/kyoto.js',
         mission: '회화 학습 10분 이상 7일 달성'
     },
     osaka: {
@@ -44,7 +44,7 @@ const japanRegions = {
         color: 'orange',
         unlockCondition: 'vocabularyQuiz100x3',
         description: '맛의 도시',
-        scriptFile: 'js/osaka.js',
+        scriptFile: 'js/travel/osaka.js',
         mission: '단어 퀴즈 100점 3회 달성'
     },
     sapporo: {
@@ -55,7 +55,7 @@ const japanRegions = {
         color: 'cyan',
         unlockCondition: 'conversation10min14days',
         description: '설경과 자연',
-        scriptFile: 'js/sapporo.js',
+        scriptFile: 'js/travel/sapporo.js',
         mission: '회화 학습 10분 이상 14일 달성'
     },
     okinawa: {
@@ -66,7 +66,7 @@ const japanRegions = {
         color: 'teal',
         unlockCondition: 'quizAverage90',
         description: '아열대 해변 리조트',
-        scriptFile: 'js/okinawa.js',
+        scriptFile: 'js/travel/okinawa.js',
         mission: '모든 퀴즈 평균 90점 이상'
     }
 };

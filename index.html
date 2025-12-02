@@ -227,7 +227,13 @@
                 </div>
 
                 <div id="japan_travel" class="tab-content hidden">
-                    <h2 class="text-2xl font-bold text-gray-900 mb-4">✈️ 일본 여행</h2>
+                    <div class="flex items-center justify-between mb-4">
+                        <h2 class="text-2xl font-bold text-gray-900">✈️ 일본 여행</h2>
+                        <button onclick="showEssentialApps()"
+                            class="flex items-center gap-2 px-3 py-1.5 bg-blue-600 text-white rounded-full font-bold shadow-md hover:bg-blue-700 transition-all active:scale-95 text-xs">
+                            <i class="fas fa-mobile-alt"></i> 필수 어플
+                        </button>
+                    </div>
 
                     <!-- 지역 선택 그리드 -->
                     <div id="region-selection" class="grid grid-cols-2 gap-4 mb-6">
@@ -429,17 +435,17 @@
     <script src="js/auth.js"></script>
     <script src="js/ui.js"></script>
     <script src="js/templates.js"></script>
-    <script src="js/words_data.js"></script>
+    <script src="js/learning/words_data.js"></script>
 
-    <script src="js/japan_travel.js"></script>
-    <script src="js/conversation.js"></script>
-    <script src="js/conversation_day.js"></script>
-    <script src="js/vocabulary.js"></script>
-    <script src="js/characters.js"></script>
-    <script src="js/word_study.js"></script>
-    <script src="js/study.js"></script>
-    <script src="js/learning_tracker.js"></script>
-    <script src="js/progress.js"></script>
+    <script src="js/travel/japan_travel.js"></script>
+    <script src="js/learning/conversation.js"></script>
+    <script src="js/learning/conversation_day.js"></script>
+    <script src="js/learning/vocabulary.js"></script>
+    <script src="js/learning/characters.js"></script>
+    <script src="js/learning/word_study.js"></script>
+    <script src="js/learning/study.js"></script>
+    <script src="js/learning/learning_tracker.js"></script>
+    <script src="js/learning/progress.js"></script>
 
     <script>
         function showConversationMode(mode) {
