@@ -15289,7 +15289,7 @@ function loadConversationCategory(categoryId) {
 
     const categoryContainer = document.getElementById('conversation-categories');
     const listContainer = document.getElementById('conversation-list');
-    const cardsContainer = document.getElementById('conversation-cards-container');
+    const cardsContainer = document.getElementById('conversation-viewer');
 
     // 카테고리 숨기고 리스트 보이기
     categoryContainer.classList.add('hidden');
@@ -15307,74 +15307,88 @@ function loadConversationCategory(categoryId) {
 }
 
 function createFlipCardHTML(item, index) {
-    // 단어 목록이 없으면 빈 배열로 처리
     const vocabList = item.question.vocab || [];
+    const color = conversationModuleData[currentConversationCategory].color || 'blue';
 
-    // 단어 리스트 HTML 생성 (테이블 형태)
-    const vocabTableRows = vocabList.map(v => `
-        <tr class="border-b border-gray-100 last:border-0">
-            <td class="py-2 text-lg font-bold text-indigo-600">${v.word}</td>
-            <td class="py-2 text-sm text-gray-500">${v.read || ''}</td>
-            <td class="py-2 text-sm text-gray-700">${v.mean}</td>
-        </tr>
-    `).join('');
+    // Vocab HTML generation
+    const vocabListHTML = vocabList.length > 0
+        ? `<div class="mt-4 border-t border-gray-100 pt-3">
+             <div class="flex items-center gap-2 mb-2">
+                 <i class="fas fa-book-open text-${color}-500 text-xs"></i>
+                 <span class="text-xs font-bold text-gray-500 uppercase">Key Vocabulary</span>
+             </div>
+             <div class="space-y-2">
+                 ${vocabList.map(v => `
+                     <div class="bg-white p-2 rounded-lg border border-gray-100 shadow-sm flex justify-between items-center hover:bg-${color}-50 transition-colors cursor-pointer" onclick="event.stopPropagation(); AudioController.playNormal('${v.word}')">
+                         <div>
+                             <span class="text-sm font-bold text-gray-800">${v.word}</span>
+                             <span class="text-xs text-gray-400 ml-1">${v.read || ''}</span>
+                         </div>
+                         <span class="text-xs text-${color}-600 font-medium">${v.mean}</span>
+                     </div>
+                 `).join('')}
+             </div>
+           </div>`
+        : '';
 
     return `
-    <div class="flip-card h-96 w-full cursor-pointer perspective-1000" onclick="this.classList.toggle('flipped')">
-        <div class="flip-card-inner relative w-full h-full text-center transition-transform duration-700 transform-style-3d shadow-xl rounded-2xl">
+    <div class="flip-card w-full mb-6 cursor-pointer perspective-1000 group" onclick="this.classList.toggle('flipped')">
+        <div class="flip-card-inner relative w-full min-h-[400px] transition-transform duration-700 transform-style-3d shadow-lg rounded-3xl bg-white">
             
-            <!-- 앞면 (질문) -->
-            <div class="flip-card-front absolute w-full h-full backface-hidden bg-white rounded-2xl p-6 flex flex-col justify-between border-2 border-indigo-50">
-                <div class="flex justify-between items-start">
-                    <span class="bg-indigo-100 text-indigo-600 px-3 py-1 rounded-full text-xs font-bold">Question ${index + 1}</span>
-                    <i class="fas fa-sync-alt text-gray-300"></i>
+            <!-- Front (Question) -->
+            <div class="flip-card-front absolute w-full h-full backface-hidden bg-white rounded-3xl border border-gray-200 flex flex-col overflow-hidden">
+                <div class="bg-${color}-50 px-5 py-4 border-b border-${color}-100 flex justify-between items-center">
+                    <span class="text-${color}-700 font-black text-xs uppercase tracking-wider">Question ${index + 1}</span>
+                    <i class="fas fa-sync-alt text-${color}-300 group-hover:text-${color}-500 transition-colors"></i>
                 </div>
                 
-                <div class="flex-grow flex flex-col justify-center items-center space-y-4">
-                    <h3 class="text-2xl font-bold text-gray-800 leading-relaxed">${item.question.jp}</h3>
-                    <p class="text-sm text-gray-400">${item.question.romaji}</p>
+                <div class="flex-1 flex flex-col justify-center items-center p-6 text-center space-y-4">
+                    <h3 class="text-2xl md:text-3xl font-black text-gray-800 leading-snug break-keep">${item.question.jp}</h3>
+                    <p class="text-sm text-gray-400 font-mono">${item.question.romaji}</p>
+                    <div class="w-10 h-1 bg-${color}-100 rounded-full my-2"></div>
+                    <p class="text-lg text-${color}-600 font-bold break-keep">${item.question.kr}</p>
                 </div>
 
-                <div class="text-center">
-                    <button class="text-indigo-400 text-sm hover:text-indigo-600 transition-colors">
-                        <i class="fas fa-hand-point-up animate-bounce mr-2"></i>카드를 터치해서 정답 확인
+                <!-- Audio Controls -->
+                <div class="bg-gray-50 px-4 py-3 border-t border-gray-100 flex gap-2" onclick="event.stopPropagation()">
+                    <button onclick="AudioController.playNormal('${item.question.jp}')" class="flex-1 py-2 rounded-xl bg-white border border-gray-200 text-gray-600 font-bold hover:bg-${color}-50 hover:text-${color}-600 text-xs flex flex-col items-center gap-1 transition-all active:scale-95">
+                        <i class="fas fa-volume-up text-sm"></i>듣기
+                    </button>
+                    <button onclick="AudioController.playSlowRepeat('${item.question.jp}')" class="flex-1 py-2 rounded-xl bg-white border border-gray-200 text-gray-600 font-bold hover:bg-${color}-50 hover:text-${color}-600 text-xs flex flex-col items-center gap-1 transition-all active:scale-95">
+                        <i class="fas fa-history text-sm"></i>3회 반복
+                    </button>
+                    <button onclick="AudioController.playShadowing('${item.question.jp}')" class="flex-1 py-2 rounded-xl bg-white border border-gray-200 text-gray-600 font-bold hover:bg-${color}-50 hover:text-${color}-600 text-xs flex flex-col items-center gap-1 transition-all active:scale-95">
+                        <i class="fas fa-microphone-alt text-sm"></i>쉐도잉
                     </button>
                 </div>
             </div>
 
-            <!-- 뒷면 (정답 및 해설) -->
-            <div class="flip-card-back absolute w-full h-full backface-hidden bg-indigo-600 text-white rounded-2xl p-6 rotate-y-180 overflow-y-auto custom-scrollbar">
-                <div class="h-full flex flex-col">
-                    <!-- 정답 문장 -->
-                    <div class="mb-6 text-center border-b border-indigo-400 pb-4">
-                        <h3 class="text-xl font-bold mb-2 text-white">${item.answers[0].jp}</h3>
-                        <p class="text-indigo-200 text-sm mb-1">${item.answers[0].romaji}</p>
-                        <p class="text-white font-medium">${item.answers[0].kr}</p>
+            <!-- Back (Answer & Vocab) -->
+            <div class="flip-card-back absolute w-full h-full backface-hidden bg-slate-50 rounded-3xl border-2 border-${color}-100 rotate-y-180 flex flex-col overflow-hidden">
+                <div class="flex-1 p-5 overflow-y-auto custom-scrollbar">
+                    <div class="bg-white rounded-2xl p-4 shadow-sm border border-gray-100 mb-4">
+                        <div class="flex items-center gap-2 mb-3 pb-2 border-b border-gray-50">
+                            <span class="text-xs font-black text-gray-400 uppercase">Answer</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-800 mb-1">${item.answers[0].jp}</h3>
+                        <p class="text-sm text-gray-400 font-mono mb-2">${item.answers[0].romaji}</p>
+                        <p class="text-lg text-${color}-600 font-bold">${item.answers[0].kr}</p>
                     </div>
-
-                    <!-- 단어 분석 테이블 -->
-                    <div class="flex-grow bg-white rounded-xl p-3 text-left">
-                        <h4 class="text-xs font-bold text-gray-400 mb-2 uppercase tracking-wider">Word Breakdown</h4>
-                        ${vocabList.length > 0 ? `
-                            <table class="w-full text-left border-collapse">
-                                <thead>
-                                    <tr class="text-xs text-gray-400 border-b border-gray-200">
-                                        <th class="py-1 font-medium">단어</th>
-                                        <th class="py-1 font-medium">발음</th>
-                                        <th class="py-1 font-medium">의미</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    ${vocabTableRows}
-                                </tbody>
-                            </table>
-                        ` : '<p class="text-gray-400 text-center text-sm py-4">단어 상세 정보가 없습니다.</p>'}
-                    </div>
+                    
+                    ${vocabListHTML}
+                </div>
+                
+                <div class="bg-white px-4 py-3 border-t border-gray-100 text-center cursor-pointer hover:bg-gray-50 transition-colors" onclick="event.stopPropagation(); this.parentElement.parentElement.classList.toggle('flipped')">
+                    <span class="text-xs font-bold text-gray-400 uppercase flex items-center justify-center gap-2">
+                        <i class="fas fa-undo"></i> Return to Question
+                    </span>
                 </div>
             </div>
         </div>
-    </div>`;
+    </div>
+    `;
 }
+
 
 function toggleCardFlip(element) {
     element.classList.toggle('flipped');
@@ -15455,7 +15469,7 @@ async function startCategoryAutoPlay() {
         if (!qContinued) break;
         for (let j = 0; j < conv.answers.length; j++) {
             if (!AudioController.isAutoPlaying) break;
-            const aCard = document.getElementById(`card-front-card-a-${j}`);
+            const aCard = document.getElementById(`card - front - card - a - ${j} `);
             if (aCard) {
                 aCard.scrollIntoView({ behavior: "smooth", block: "center" });
                 aCard.classList.add('playing-highlight');
@@ -15481,241 +15495,6 @@ function nextConversation() { AudioController.stopAutoRepeat(); if (currentConve
 
 document.addEventListener('DOMContentLoaded', () => { if (document.getElementById('conversation-content')) initConversation(); });
 
-let currentConversationCategory = '';
-let currentConversationIndex = 0;
-
-// 초기화 함수
-function initConversation() {
-    console.log('Initializing Conversation...');
-    const categoryContainer = document.getElementById('conversation-categories');
-    const listContainer = document.getElementById('conversation-list');
-
-    if (!categoryContainer || !listContainer) return;
-
-    // 리스트 숨기고 카테고리 보이기
-    listContainer.classList.add('hidden');
-    categoryContainer.classList.remove('hidden');
-
-    // 카테고리 렌더링
-    renderConversationCategories();
-}
-
-function renderConversationCategories() {
-    const container = document.getElementById('conversation-categories');
-    if (!container) return;
-
-    container.innerHTML = Object.entries(conversationModuleData).map(([key, category]) => `
-        <div onclick="loadConversationCategory('${key}')" 
-             class="bg-${category.color}-50 p-4 rounded-xl cursor-pointer hover:bg-${category.color}-100 transition border border-${category.color}-100">
-            <div class="text-3xl mb-2 text-${category.color}-500">
-                <i class="${category.icon}"></i>
-            </div>
-            <h3 class="font-bold text-gray-800">${category.title}</h3>
-            <p class="text-xs text-gray-500 mt-1">${category.conversations.length}개 대화</p>
-        </div>
-    `).join('');
-}
-
-function loadConversationCategory(categoryId) {
-    const category = conversationModuleData[categoryId];
-    if (!category) return;
-
-    const categoryContainer = document.getElementById('conversation-categories');
-    const listContainer = document.getElementById('conversation-list');
-    const cardsContainer = document.getElementById('conversation-cards-container');
-
-    // 카테고리 숨기고 리스트 보이기
-    categoryContainer.classList.add('hidden');
-    listContainer.classList.remove('hidden');
-
-    // 카드 렌더링
-    cardsContainer.innerHTML = category.conversations.map((conv, index) =>
-        createFlipCardHTML(conv, index)
-    ).join('');
-
-    // 학습 기록 (카테고리 진입 시 1회)
-    if (typeof LearningTracker !== 'undefined') {
-        LearningTracker.recordActivity('conversation', 1);
-    }
-}
-
-function renderNavigation() {
-    const container = document.getElementById('conversation-content');
-    if (!container) return;
-    const navWrapper = document.createElement('div');
-    navWrapper.className = 'sticky-nav-container';
-    navWrapper.innerHTML = `
-        <div class="flex items-center justify-between px-4 mb-2 w-full max-w-4xl mx-auto">
-            <div class="flex-1 overflow-x-auto no-scrollbar flex gap-2" id="category-scroll-area">
-                ${Object.entries(conversationModuleData).map(([key, data]) => `
-                    <button onclick="openConversationLesson('${key}')" id="nav-btn-${key}"
-                        class="flex-shrink-0 flex items-center gap-2 px-3 py-2 rounded-full border transition-all duration-300 active:scale-95 bg-white border-gray-200 text-gray-500 hover:bg-gray-50 text-sm shadow-sm">
-                        <i class="${data.icon}"></i><span class="font-bold whitespace-nowrap">${data.title}</span>
-                    </button>
-                `).join('')}
-            </div>
-        </div>`;
-    const viewerDiv = document.createElement('div');
-    viewerDiv.id = 'conversation-viewer';
-    viewerDiv.className = 'w-full max-w-4xl mx-auto px-4 pb-24';
-    container.innerHTML = '';
-    container.appendChild(navWrapper);
-    container.appendChild(viewerDiv);
-}
-
-function openConversationLesson(key) {
-    currentConversationCategory = key;
-    currentConversationIndex = 0;
-    AudioController.stopAutoRepeat();
-    updateNavigationStyles(key);
-    displayCurrentConversation();
-}
-
-function updateNavigationStyles(activeKey) {
-    Object.keys(conversationModuleData).forEach(key => {
-        const btn = document.getElementById(`nav-btn-${key}`);
-        if (btn) btn.className = `flex-shrink-0 flex items-center gap-2 px-3 py-2 rounded-full border transition-all duration-300 bg-white border-gray-200 text-gray-500 hover:bg-gray-50 text-sm shadow-sm`;
-    });
-    const activeBtn = document.getElementById(`nav-btn-${activeKey}`);
-    if (activeBtn) {
-        const color = conversationModuleData[activeKey].color;
-        activeBtn.className = `flex-shrink-0 flex items-center gap-2 px-4 py-2 rounded-full border-2 transition-all duration-300 scale-105 bg-${color}-50 border-${color}-500 text-${color}-600 shadow-md text-sm font-bold`;
-        activeBtn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
-    }
-}
-
-
-function createFlipCardHTML(data, type, index, color) {
-    const isQuestion = type === 'question';
-    const uniqueId = isQuestion ? 'card-q' : `card-a-${index}`;
-    const vocabListHTML = data.vocab && data.vocab.length > 0
-        ? `<div class="flex items-center gap-2 border-b border-gray-200 pb-3 mb-3"><i class="fas fa-book-reader text-${color}-500"></i><span class="text-xs font-black text-gray-400 uppercase tracking-widest">Vocabulary</span></div><div class="flex-1 overflow-y-auto custom-scrollbar pr-1"><div class="vocab-grid">${data.vocab.map(v => `<div class="vocab-item bg-white p-3 rounded-xl border border-gray-100 shadow-sm hover:shadow-md hover:border-${color}-200 cursor-default"><div class="flex justify-between items-start mb-1"><span class="text-lg font-bold text-gray-800 leading-tight">${v.word}</span>${v.type ? `<span class="text-[10px] bg-${color}-50 text-${color}-600 px-1.5 py-0.5 rounded font-bold uppercase tracking-wider ml-1 whitespace-nowrap">${v.type}</span>` : ''}</div><div class="text-xs text-gray-400 font-mono mb-2 truncate">${v.read}</div><div class="mt-auto pt-2 border-t border-gray-50 text-sm font-bold text-${color}-600 leading-snug">${v.mean}</div></div>`).join('')}</div></div>`
-        : '';
-
-    const frontHTML = `<div class="absolute w-full h-full backface-hidden bg-white rounded-3xl border border-gray-200 shadow-sm flex flex-col justify-between overflow-hidden" id="card-front-${uniqueId}"><div class="px-5 py-4 bg-gray-50 border-b border-gray-100 flex justify-between items-center"><span class="px-3 py-1 rounded-full ${isQuestion ? `bg-${color}-100 text-${color}-700` : 'bg-gray-200 text-gray-600'} text-[10px] font-black tracking-widest uppercase">${isQuestion ? 'Example Sentence' : `Word Card`}</span><span class="text-[10px] text-gray-400 font-bold flex items-center gap-1 cursor-pointer" onclick="event.stopPropagation(); toggleCardFlip('${uniqueId}')"><i class="fas fa-sync-alt"></i> FLIP</span></div><div class="flex-1 flex flex-col justify-center px-5 space-y-4"><div class="text-2xl md:text-3xl font-black text-gray-800 leading-snug text-center break-keep select-none">${data.jp}</div><div class="text-xs md:text-sm text-gray-400 font-medium text-center font-mono select-none">${data.romaji}</div><div class="w-8 h-1 bg-${color}-100 mx-auto rounded-full"></div><div class="text-lg md:text-xl text-${color}-600 font-bold text-center break-keep select-none">${data.kr}</div></div><div class="px-4 py-3 bg-gray-50 border-t border-gray-100 flex gap-2 justify-center" onclick="event.stopPropagation()"><button onclick="AudioController.playNormal(this.dataset.text)" data-text="${data.jp.replace(/"/g, '&quot;')}" class="flex-1 py-2 rounded-xl bg-white border border-gray-200 text-gray-600 font-bold hover:bg-${color}-50 hover:text-${color}-600 text-xs flex flex-col items-center justify-center gap-1 active:scale-95 transition-transform"><i class="fas fa-volume-up"></i>듣기</button><button onclick="AudioController.playSlowRepeat(this.dataset.text)" data-text="${data.jp.replace(/"/g, '&quot;')}" class="flex-1 py-2 rounded-xl bg-white border border-gray-200 text-gray-600 font-bold hover:bg-${color}-50 hover:text-${color}-600 text-xs flex flex-col items-center justify-center gap-1 active:scale-95 transition-transform"><i class="fas fa-history"></i>3회</button><button onclick="AudioController.playShadowing(this.dataset.text)" data-text="${data.jp.replace(/"/g, '&quot;')}" class="flex-1 py-2 rounded-xl bg-white border border-gray-200 text-gray-600 font-bold hover:bg-${color}-50 hover:text-${color}-600 text-xs flex flex-col items-center justify-center gap-1 active:scale-95 transition-transform"><i class="fas fa-microphone-alt"></i>쉐도잉</button></div></div>`;
-
-    const backHTML = `<div class="absolute w-full h-full backface-hidden rotate-y-180 bg-slate-50 rounded-3xl border-2 border-${color}-100 shadow-inner flex flex-col overflow-hidden"><div class="flex-1 p-4 overflow-y-auto custom-scrollbar"><div class="bg-white rounded-2xl p-4 mb-4 shadow-sm border border-gray-100"><div class="flex items-center gap-2 mb-3 pb-2 border-b border-gray-100"><i class="fas fa-language text-${color}-500"></i><span class="text-xs font-black text-gray-400 uppercase tracking-widest">Main Content</span></div><div class="space-y-3"><div class="flex items-start gap-3"><span class="text-[10px] font-bold text-gray-400 uppercase min-w-[50px]">일본어</span><span class="text-xl font-bold text-gray-800 leading-tight">${data.jp}</span></div><div class="flex items-start gap-3"><span class="text-[10px] font-bold text-gray-400 uppercase min-w-[50px]">읽기</span><span class="text-sm text-gray-600 font-mono">${data.romaji}</span></div><div class="flex items-start gap-3"><span class="text-[10px] font-bold text-gray-400 uppercase min-w-[50px]">한국어</span><span class="text-lg font-bold text-${color}-600">${data.kr}</span></div></div></div>${vocabListHTML}</div><div class="py-3 bg-white border-t border-gray-200 text-center cursor-pointer hover:bg-gray-50" onclick="event.stopPropagation(); toggleCardFlip('${uniqueId}')"><span class="text-xs font-bold text-gray-500 uppercase tracking-widest flex items-center justify-center gap-2"><i class="fas fa-undo"></i> Return</span></div></div>`;
-    return `<div class="perspective-1000 w-full mb-8 select-none group" onclick="toggleCardFlip('${uniqueId}')"><div id="${uniqueId}" class="card-inner relative w-full min-h-[450px] md:min-h-[500px] transform-style-3d shadow-lg rounded-3xl hover:shadow-xl transition-all duration-500 bg-white">${frontHTML}${backHTML}</div></div>`;
-}
-
-function displayCurrentConversation() {
-    const convData = conversationModuleData[currentConversationCategory];
-    if (!convData) return;
-    const currentConv = convData.conversations[currentConversationIndex];
-    const viewer = document.getElementById('conversation-viewer');
-    const autoPlayBtnState = AudioController.isAutoPlaying ?
-        `<button id="global-auto-play-btn" onclick="AudioController.stopAutoRepeat()" class="btn-auto-active px-4 py-2 rounded-full font-bold text-sm shadow-md flex items-center gap-2 transition-all"><i class="fas fa-stop"></i>정지</button>` :
-        `<button id="global-auto-play-btn" onclick="startCategoryAutoPlay()" class="bg-white border border-gray-200 text-gray-600 hover:text-${convData.color}-600 hover:border-${convData.color}-200 px-4 py-2 rounded-full font-bold text-sm shadow-sm flex items-center gap-2 transition-all active:scale-95"><i class="fas fa-play-circle"></i>전체 자동재생</button>`;
-
-    viewer.innerHTML = `<div class="flex items-center justify-between mb-6 px-1"><h3 class="text-lg md:text-xl font-bold text-gray-800 flex items-center gap-2"><span class="w-1.5 h-6 bg-${convData.color}-500 rounded-full inline-block"></span><span class="truncate max-w-[150px] md:max-w-none">${convData.title}</span><span class="text-sm text-gray-400 font-normal ml-1">(${currentConversationIndex + 1}/${convData.conversations.length})</span></h3><div class="flex gap-2 items-center">${autoPlayBtnState}</div></div><div class="flex justify-between items-center mb-4 px-2"><button id="conv-prev-btn" onclick="previousConversation()" class="w-10 h-10 rounded-full bg-white border border-gray-200 shadow text-gray-400 hover:text-gray-800 flex items-center justify-center active:scale-90 transition-transform"><i class="fas fa-arrow-left"></i></button><div class="text-xs text-gray-300 font-medium tracking-widest">SWIPE OR CLICK</div><button id="conv-next-btn" onclick="nextConversation()" class="w-10 h-10 rounded-full bg-black shadow-lg text-white hover:bg-gray-800 flex items-center justify-center active:scale-90 transition-transform"><i class="fas fa-arrow-right"></i></button></div><div class="space-y-6 animate-fade-in pb-20">${createFlipCardHTML(currentConv.question, 'question', 0, convData.color)}<div class="relative pl-4 border-l-2 border-dashed border-gray-200 space-y-8">${currentConv.answers.map((ans, idx) => createFlipCardHTML(ans, 'answer', idx, convData.color)).join('')}</div></div>`;
-    updateNavigationButtons();
-
-    // 학습 활동 추적
-    if (typeof LearningTracker !== 'undefined') {
-        LearningTracker.recordActivity('conversation');
-    }
-}
-
-function toggleCardFlip(id) { const card = document.getElementById(id); if (card) card.parentElement.classList.toggle('card-flipped'); }
-
-const AudioController = {
-    speechSynth: window.speechSynthesis, isAutoPlaying: false,
-    speak: function (text, lang = 'ja-JP', rate = 1.0) {
-        return new Promise((resolve) => {
-            if (this.speechSynth.speaking) this.speechSynth.cancel();
-            const utterance = new SpeechSynthesisUtterance(text);
-            utterance.lang = lang; utterance.rate = rate;
-            const voices = this.speechSynth.getVoices();
-            let voice;
-            if (lang === 'ja-JP') voice = voices.find(v => v.lang === 'ja-JP') || voices.find(v => v.lang.includes('ja'));
-            if (lang === 'ko-KR') voice = voices.find(v => v.lang === 'ko-KR') || voices.find(v => v.lang.includes('ko'));
-            if (voice) utterance.voice = voice;
-            utterance.onend = resolve; utterance.onerror = resolve;
-            this.speechSynth.speak(utterance);
-        });
-    },
-    wait: ms => new Promise(r => setTimeout(r, ms)),
-    playNormal: async function (t) { this.speechSynth.cancel(); await this.speak(t, 'ja-JP', 1.0); },
-    playSlowRepeat: async function (t) { this.speechSynth.cancel(); for (let i = 0; i < 3; i++) { await this.speak(t, 'ja-JP', 0.7); await this.wait(600); } },
-    playShadowing: async function (t) { this.speechSynth.cancel(); await this.speak(t, 'ja-JP', 0.7); await this.wait(1500); await this.speak(t, 'ja-JP', 1.0); },
-    playSentenceLoop: async function (jpText, krText) {
-        for (let i = 0; i < 3; i++) {
-            if (!this.isAutoPlaying) return false;
-            await this.speak(jpText, 'ja-JP', 1.0);
-            if (!this.isAutoPlaying) return false;
-            await this.wait(300);
-            await this.speak(krText, 'ko-KR', 1.2);
-            if (!this.isAutoPlaying) return false;
-            await this.wait(1500);
-        }
-        return true;
-    },
-    stopAutoRepeat: function () {
-        this.isAutoPlaying = false;
-        this.speechSynth.cancel();
-        const btn = document.getElementById('global-auto-play-btn');
-        if (btn) {
-            btn.className = "bg-white border border-gray-200 text-gray-600 hover:text-blue-600 px-4 py-2 rounded-full font-bold text-sm shadow-sm flex items-center gap-2 transition-all active:scale-95";
-            btn.innerHTML = '<i class="fas fa-play-circle"></i>전체 자동재생';
-            btn.onclick = startCategoryAutoPlay;
-        }
-        document.querySelectorAll('.playing-highlight').forEach(el => el.classList.remove('playing-highlight'));
-    }
-};
-
-async function startCategoryAutoPlay() {
-    if (AudioController.isAutoPlaying) return;
-    AudioController.isAutoPlaying = true;
-    const btn = document.getElementById('global-auto-play-btn');
-    if (btn) {
-        btn.className = "btn-auto-active px-4 py-2 rounded-full font-bold text-sm shadow-md flex items-center gap-2 transition-all";
-        btn.innerHTML = '<i class="fas fa-stop"></i>정지';
-        btn.onclick = AudioController.stopAutoRepeat;
-    }
-    const convData = conversationModuleData[currentConversationCategory];
-    for (let i = currentConversationIndex; i < convData.conversations.length; i++) {
-        if (!AudioController.isAutoPlaying) break;
-        if (i !== currentConversationIndex) {
-            currentConversationIndex = i;
-            displayCurrentConversation();
-            const newBtn = document.getElementById('global-auto-play-btn');
-            if (newBtn) {
-                newBtn.className = "btn-auto-active px-4 py-2 rounded-full font-bold text-sm shadow-md flex items-center gap-2 transition-all";
-                newBtn.innerHTML = '<i class="fas fa-stop"></i>정지';
-                newBtn.onclick = AudioController.stopAutoRepeat;
-            }
-        }
-        const conv = convData.conversations[i];
-        const qCard = document.getElementById('card-front-card-q');
-        if (qCard) qCard.classList.add('playing-highlight');
-        const qContinued = await AudioController.playSentenceLoop(conv.question.jp, conv.question.kr);
-        if (qCard) qCard.classList.remove('playing-highlight');
-        if (!qContinued) break;
-        for (let j = 0; j < conv.answers.length; j++) {
-            if (!AudioController.isAutoPlaying) break;
-            const aCard = document.getElementById(`card-front-card-a-${j}`);
-            if (aCard) {
-                aCard.scrollIntoView({ behavior: "smooth", block: "center" });
-                aCard.classList.add('playing-highlight');
-            }
-            const aContinued = await AudioController.playSentenceLoop(conv.answers[j].jp, conv.answers[j].kr);
-            if (aCard) aCard.classList.remove('playing-highlight');
-            if (!aContinued) break;
-        }
-        await AudioController.wait(1000);
-    }
-    AudioController.stopAutoRepeat();
-}
-
-function updateNavigationButtons() {
-    const conv = conversationModuleData[currentConversationCategory];
-    const prev = document.getElementById('conv-prev-btn');
-    const next = document.getElementById('conv-next-btn');
-    if (prev) { prev.disabled = currentConversationIndex === 0; prev.style.opacity = currentConversationIndex === 0 ? '0.3' : '1'; }
-    if (next) { const isLast = currentConversationIndex === conv.conversations.length - 1; next.disabled = isLast; next.style.opacity = isLast ? '0.3' : '1'; }
-}
-function previousConversation() { AudioController.stopAutoRepeat(); if (currentConversationIndex > 0) { currentConversationIndex--; displayCurrentConversation(); window.scrollTo({ top: 0, behavior: 'smooth' }); } }
-function nextConversation() { AudioController.stopAutoRepeat(); if (currentConversationIndex < conversationModuleData[currentConversationCategory].conversations.length - 1) { currentConversationIndex++; displayCurrentConversation(); window.scrollTo({ top: 0, behavior: 'smooth' }); } }
 
 
 // ==========================================
@@ -15751,52 +15530,6 @@ const practicalConversationData = {
 };
 
 // 2. Situational Conversation Initialization
-function initConversation() {
-    console.log('Initializing Situational Conversation...');
-    const container = document.getElementById('conversation-categories');
-    if (!container) {
-        console.error('conversation-categories container not found');
-        return;
-    }
-
-    container.innerHTML = Object.keys(conversationModuleData).map(key => {
-        const cat = conversationModuleData[key];
-        return `
-            <div onclick="openConversationCategory('${key}')" 
-                 class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 cursor-pointer hover:shadow-md hover:border-${cat.color}-200 transition-all group">
-                <div class="w-12 h-12 rounded-full bg-${cat.color}-50 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
-                    <i class="${cat.icon} text-${cat.color}-500 text-xl"></i>
-                </div>
-                <h3 class="font-bold text-gray-800">${cat.title}</h3>
-                <p class="text-xs text-gray-400 mt-1">${cat.conversations.length}개 대화</p>
-            </div>
-        `;
-    }).join('');
-
-    // Ensure list is hidden and categories are shown
-    document.getElementById('conversation-list').classList.add('hidden');
-    document.getElementById('conversation-categories').classList.remove('hidden');
-}
-
-let currentConversationCategory = '';
-let currentConversationIndex = 0;
-
-function openConversationCategory(key) {
-    currentConversationCategory = key;
-    currentConversationIndex = 0;
-
-    document.getElementById('conversation-categories').classList.add('hidden');
-    document.getElementById('conversation-list').classList.remove('hidden');
-
-    displayCurrentConversation();
-}
-
-function backToCategories() {
-    if (typeof AudioController !== 'undefined') AudioController.stopAutoRepeat();
-    document.getElementById('conversation-list').classList.add('hidden');
-    document.getElementById('conversation-categories').classList.remove('hidden');
-}
-
 // 3. Practical Conversation Initialization
 function initDayConversation() {
     console.log('Initializing Practical Conversation...');
@@ -15809,7 +15542,7 @@ function initDayConversation() {
     container.innerHTML = Object.keys(practicalConversationData).map(dayKey => {
         const day = practicalConversationData[dayKey];
         return `
-            <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
                 <div class="bg-gray-50 px-4 py-3 border-b border-gray-100 flex justify-between items-center cursor-pointer" onclick="togglePracticalDay('${dayKey}')">
                     <h3 class="font-bold text-gray-800">${day.title}</h3>
                     <i id="icon-${dayKey}" class="fas fa-chevron-down text-gray-400 transition-transform"></i>
@@ -15827,14 +15560,14 @@ function initDayConversation() {
                         </div>
                     `).join('')}
                 </div>
-            </div>
-        `;
+            </div >
+    `;
     }).join('');
 }
 
 function togglePracticalDay(dayKey) {
-    const content = document.getElementById(`content-${dayKey}`);
-    const icon = document.getElementById(`icon-${dayKey}`);
+    const content = document.getElementById(`content - ${dayKey} `);
+    const icon = document.getElementById(`icon - ${dayKey} `);
     if (content.classList.contains('hidden')) {
         content.classList.remove('hidden');
         icon.classList.add('rotate-180');
@@ -15844,6 +15577,18 @@ function togglePracticalDay(dayKey) {
     }
 }
 
+
+// Restore missing functions
+function backToCategories() {
+    if (typeof AudioController !== 'undefined') AudioController.stopAutoRepeat();
+    const listContainer = document.getElementById('conversation-list');
+    const categoryContainer = document.getElementById('conversation-categories');
+    if (listContainer) listContainer.classList.add('hidden');
+    if (categoryContainer) categoryContainer.classList.remove('hidden');
+}
+
+// Alias for compatibility
+const openConversationCategory = loadConversationCategory;
 
 // 전역 노출
 window.initConversation = initConversation;

@@ -115,10 +115,10 @@
                     class="text-xl font-black tracking-tighter text-red-600 flex items-center gap-2 cursor-pointer hover:opacity-80 transition-opacity">
                     <span
                         class="bg-red-600 text-white w-8 h-8 rounded-lg flex items-center justify-center text-lg shadow-sm">JP</span>
-                    JAP-BONG 일본어
+                    JAP-BONG
                 </h1>
                 <div class="flex items-center gap-3">
-                    <p class="text-lg text-gray-600 font-medium">아빠가 만든 우리 가족 일본어 앱 🍌</p>
+                    <p class="text-lg text-gray-600 font-medium">아빠가 만든 가족 일본어 앱 🍌</p>
                 </div>
             </div>
 
@@ -282,7 +282,7 @@
 
                         <!-- Mode Switch Buttons -->
                         <!-- Mode Switch Buttons Removed -->
-                        <div class="hidden gap-4 mb-8 bg-gray-100 p-1.5 rounded-2xl">
+                        <div class="flex gap-4 mb-8 bg-gray-100 p-1.5 rounded-2xl">
                             <button id="mode-situational-btn" onclick="showConversationMode('situational')"
                                 class="flex-1 py-2 px-4 rounded-xl font-bold text-base transition-all duration-300 bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-lg">상황별
                                 회화</button>
@@ -470,7 +470,7 @@
 
     <script src="js/travel/japan_travel.js"></script>
     <script src="js/learning/conversation.js"></script>
-    <script src="js/learning/conversation_day.js"></script>
+    <!-- conversation_day.js removed -->
     <script src="js/learning/vocabulary.js"></script>
     <script src="js/learning/characters.js"></script>
     <script src="js/learning/word_study.js"></script>
@@ -516,6 +516,15 @@
                 } else {
                     console.error('initDayConversation function not found!');
                 }
+            }
+        }
+
+        function showPasswordPrompt() {
+            const password = prompt("비밀번호를 입력하세요:");
+            if (password === '1435') {
+                login('dad');
+            } else if (password !== null) {
+                alert("비밀번호가 틀렸습니다.");
             }
         }
 

@@ -105,10 +105,10 @@ function showCharacterGrid(type) {
 
         return `
             <button onclick="selectCharacter(${idx})" 
-                class="relative aspect-square flex flex-col items-center justify-center bg-white rounded-lg border border-gray-200 shadow-sm active:scale-95 transition-transform hover:border-red-300 ${isMastered ? 'bg-yellow-50 border-yellow-300' : ''}">
+                class="relative h-20 flex flex-col items-center justify-center bg-white rounded-lg border border-gray-200 shadow-sm active:scale-95 transition-transform hover:border-red-300 ${isMastered ? 'bg-yellow-50 border-yellow-300' : ''}">
                 ${badge}
-                <span class="text-lg font-bold text-gray-800 leading-none mb-0.5">${item.char}</span>
-                <span class="text-[8px] text-gray-400 leading-none">${item.pron}</span>
+                <span class="text-xl font-bold text-gray-800 leading-none mb-1">${item.char}</span>
+                <span class="text-[11px] text-gray-500 font-bold leading-none">${item.pron}</span>
             </button>
         `;
     }).join('');
@@ -482,9 +482,20 @@ function showHistory() {
         <div class="fixed top-14 bottom-0 left-0 right-0 z-50 bg-gray-900/95 flex flex-col items-center justify-center p-4 text-white animate-fade-in">
             <div class="w-full max-w-md bg-gray-800 rounded-2xl overflow-hidden border border-gray-700 shadow-2xl p-6 text-center">
                 <h2 class="text-xl font-bold mb-4">📊 학습 리포트</h2>
-                <div class="mb-6">
+                <!-- 마스터 현황 -->
+                <div class="mb-6 border-b border-gray-700 pb-4">
                     <p class="text-gray-400 text-sm mb-1">마스터한 글자</p>
                     <p class="text-4xl font-bold text-green-400">${masteredCount} <span class="text-lg text-gray-500">/ 104</span></p>
+                </div>
+
+                <!-- 주간 학습 현황 (최근 7일) -->
+                <div class="mb-6 text-left">
+                    <h3 class="text-sm font-bold text-gray-300 mb-3 flex items-center gap-2">
+                        <i class="far fa-calendar-alt"></i> 최근 7일 학습 활동
+                    </h3>
+                    <div class="space-y-2">
+                        ${getWeeklyActivityHTML(history.logs)}
+                    </div>
                 </div>
                 <button onclick="closeModal()" class="bg-gray-700 hover:bg-gray-600 px-6 py-2 rounded-lg font-bold">닫기</button>
                 ${adminBtn}
@@ -516,4 +527,40 @@ window.submitAnswer = submitAnswer;
 window.showHistory = showHistory;
 window.resetAllData = resetAllData;
 
-console.log("characters.js loaded (Fixed Layout)");
+// 주간 활동 HTML 생성 헬퍼
+function getWeeklyActivityHTML(logs) {
+    const today = new Date();
+    const days = [];
+    for (let i = 6; i >= 0; i--) {
+        const d = new Date(today);
+        d.setDate(today.getDate() - i);
+        days.push(d.toISOString().split('T')[0]);
+    }
+
+    // 날짜별 활동 수 집계
+    const counts = {};
+    logs.forEach(log => {
+        if (counts[log.date]) counts[log.date]++;
+        else counts[log.date] = 1;
+    });
+
+    return days.map(date => {
+        const count = counts[date] || 0;
+        // 활동량에 따른 색상/길이 (최대 50개 기준)
+        const percentage = Math.min(count * 2, 100);
+        const barColor = count > 0 ? 'bg-blue-500' : 'bg-gray-700';
+        const dateLabel = date.slice(5).replace('-', '/'); // MM/DD
+
+        return `
+            <div class="flex items-center text-xs">
+                <span class="w-10 text-gray-400 font-mono">${dateLabel}</span>
+                <div class="flex-1 h-2 bg-gray-700 rounded-full mx-2 overflow-hidden">
+                    <div class="h-full ${barColor} transition-all duration-500" style="width: ${percentage}%"></div>
+                </div>
+                <span class="w-8 text-right text-gray-300">${count}회</span>
+            </div>
+        `;
+    }).join('');
+}
+
+console.log("characters.js loaded (Fixed Layout & Weekly Report)");

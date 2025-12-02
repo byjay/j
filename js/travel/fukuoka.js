@@ -10,13 +10,17 @@ function initFukuokaTrip() {
         {
             id: 'fuk_airport', name: '후쿠오카 공항 (FUK)', lat: 33.5859, lng: 130.4501, type: 'transport', region: 'airport', rating: 4.6,
             desc: '세계에서 도심과 가장 가까운 공항. 하카타역까지 지하철 5분.',
-            photos: ['https://images.unsplash.com/photo-1542349385-52e971371b13?w=800'],
+            photos: [
+                'https://images.unsplash.com/photo-1542349385-52e971371b13?w=800',
+                'https://images.unsplash.com/photo-1569668106296-5ac694709d7d?w=800'
+            ],
             details: {
-                info: "공항이 시내와 너무 가까워 택시를 타도 부담이 없습니다. 국제선 터미널에서 셔틀버스를 타고 국내선으로 이동해야 지하철을 탈 수 있습니다.",
+                info: "공항이 시내와 너무 가까워 택시를 타도 부담이 없습니다. 국제선 터미널에서 셔틀버스를 타고 국내선으로 이동해야 지하철을 탈 수 있습니다. 3층 라멘 활주로에서 식사 가능합니다.",
                 transport: `
                     <div class="space-y-2">
                         <p class="text-xs text-gray-600">🚌 산큐패스 (버스 무제한) 추천</p>
                         <p class="text-xs text-gray-600">🚆 JR 규슈 레일패스 (유후인 이동시 추천)</p>
+                        <p class="text-xs text-gray-600">🚇 지하철 공항선: 하카타역까지 260엔</p>
                     </div>`
             },
             learning: { situation: "택시", phrase: "하카타역까지 부탁합니다.", pronunciation: "하카타에키마데 오네가이시마스.", meaning: "기본요금 수준입니다." }
@@ -26,136 +30,246 @@ function initFukuokaTrip() {
         {
             id: 'hakata_station', name: 'JR 하카타역', lat: 33.5897, lng: 130.4207, type: 'spot', region: 'hakata', rating: 4.5,
             desc: '후쿠오카의 중심. 백화점과 맛집의 집결지.',
-            photos: ['https://images.unsplash.com/photo-1575443207716-419b48997232?w=800'],
+            photos: [
+                'https://images.unsplash.com/photo-1575443207716-419b48997232?w=800',
+                'https://images.unsplash.com/photo-1517260739337-6799d239ce83?w=800'
+            ],
             shop_keyword: '손수건',
-            details: { info: "아뮤플라자, 한큐백화점, 데이토스가 모두 연결되어 있습니다. 옥상 정원에서는 비행기 이착륙을 볼 수 있습니다." }
+            details: {
+                info: "아뮤플라자, 한큐백화점, 데이토스가 모두 연결되어 있습니다. 옥상 정원(츠바메노모리 히로바)에서는 비행기 이착륙을 볼 수 있으며, 철도 신사도 있습니다.",
+                transport: `<p class="text-xs text-gray-600">🚆 규슈 모든 열차의 중심지</p>`
+            },
+            learning: { situation: "쇼핑", phrase: "이거 얼마인가요?", pronunciation: "코레 이쿠라데스카?", meaning: "쇼핑 필수 표현" }
         },
         {
             id: 'canal_city', name: '캐널시티 하카타', lat: 33.5892, lng: 130.4107, type: 'spot', region: 'hakata', rating: 4.4,
             desc: '운하가 흐르는 복합 쇼핑몰. 분수쇼.',
-            photos: ['https://images.unsplash.com/photo-1565578768782-b78904df9764?w=800'],
+            photos: [
+                'https://images.unsplash.com/photo-1565578768782-b78904df9764?w=800',
+                'https://images.unsplash.com/photo-1580225598739-44585c5d0459?w=800'
+            ],
             shop_keyword: '캐릭터 굿즈',
-            details: { info: "정각마다 열리는 분수쇼는 필수 관람입니다. 프랑프랑, 디즈니 스토어 등 쇼핑할 곳이 많습니다." }
+            details: {
+                info: "정각마다 열리는 분수쇼는 필수 관람입니다. 5층 라멘 스타디움에서 전국의 라멘을 맛볼 수 있습니다. 프랑프랑, 디즈니 스토어 등 쇼핑할 곳이 많습니다.",
+                transport: `<p class="text-xs text-gray-600">🚌 하카타역에서 100엔 버스 이용</p>`
+            }
         },
         {
             id: 'nakasu_yatai', name: '나카스 포장마차 거리', lat: 33.5924, lng: 130.4037, type: 'food', region: 'hakata', rating: 4.2,
             desc: '강변의 낭만. 하카타 돈코츠 라멘과 오뎅.',
-            photos: ['https://images.unsplash.com/photo-1624253321171-1be53e12f5f4?w=800'],
-            details: { info: "관광지 물가가 적용되어 조금 비쌀 수 있습니다. 분위기를 즐기러 가세요. 화장실 이용이 불편하니 미리 다녀오세요." }
+            photos: [
+                'https://images.unsplash.com/photo-1624253321171-1be53e12f5f4?w=800',
+                'https://images.unsplash.com/photo-1578469645742-46cae010e5d4?w=800'
+            ],
+            details: {
+                info: "저녁 6시 이후 오픈합니다. 현금 결제가 대부분이니 현금을 준비하세요. 화장실 이용이 불편하니 미리 다녀오는 것이 좋습니다. 라멘, 오뎅, 꼬치구이가 주 메뉴입니다.",
+                transport: `<p class="text-xs text-gray-600">🚶 캐널시티에서 도보 5분</p>`
+            },
+            learning: { situation: "주문", phrase: "추천 메뉴는 무엇인가요?", pronunciation: "오스스메와 난데스카?", meaning: "실패 없는 주문을 위해" }
         },
         {
             id: 'kushida', name: '구시다 신사', lat: 33.5930, lng: 130.4105, type: 'spot', region: 'hakata', rating: 4.3,
             desc: '하카타 기온 야마카사의 출발점.',
-            photos: ['https://images.unsplash.com/photo-1590559899731-a382839e5549?w=800'],
-            details: { info: "명성황후를 시해한 칼이 보관된 곳이라 한국인에게는 역사적 의미가 깊은 곳입니다. (일반 공개는 하지 않음)" }
+            photos: [
+                'https://images.unsplash.com/photo-1590559899731-a382839e5549?w=800',
+                'https://images.unsplash.com/photo-1589539120894-35d9472e3995?w=800'
+            ],
+            details: {
+                info: "명성황후를 시해한 칼이 보관된 곳이라 한국인에게는 역사적 의미가 깊은 곳입니다. (일반 공개는 하지 않음). 축제 기간에는 거대한 가마(야마카사)를 볼 수 있습니다.",
+                transport: `<p class="text-xs text-gray-600">🚇 기온역에서 도보 5분</p>`
+            }
         },
 
         // --- 텐진/다이묘 (Tenjin) ---
         {
             id: 'tenjin_under', name: '텐진 지하상가', lat: 33.5916, lng: 130.4017, type: 'spot', region: 'tenjin', rating: 4.5,
             desc: '규슈 최대의 지하 쇼핑몰. 유럽풍 인테리어.',
-            photos: ['https://images.unsplash.com/photo-1588821949320-e222f771746c?w=800'],
+            photos: [
+                'https://images.unsplash.com/photo-1588821949320-e222f771746c?w=800',
+                'https://images.unsplash.com/photo-1555400038-63f5ba517a47?w=800'
+            ],
             shop_keyword: '양말',
-            details: { info: "비 오는 날 쇼핑하기 최적입니다. 백화점들과 모두 연결되어 있어 길 잃기 쉽습니다. '링고' 애플파이가 유명합니다." }
+            details: {
+                info: "비 오는 날 쇼핑하기 최적입니다. 다이마루, 파르코, 미츠코시 백화점들과 모두 연결되어 있어 길 잃기 쉽습니다. '링고' 애플파이가 유명합니다.",
+                transport: `<p class="text-xs text-gray-600">🚇 텐진역 직결</p>`
+            }
         },
         {
             id: 'daimyo', name: '다이묘 거리', lat: 33.5876, lng: 130.3970, type: 'spot', region: 'tenjin', rating: 4.4,
             desc: '후쿠오카의 가로수길. 힙한 카페와 편집샵.',
-            photos: ['https://images.unsplash.com/photo-1579202673506-ca3ce28f8ef3?w=800'],
-            details: { info: "슈프림, 스투시 등 스트릿 브랜드와 빈티지 샵이 많습니다. '앨리스' 샵은 입구가 작아 찾기 힘드니 주의." }
+            photos: [
+                'https://images.unsplash.com/photo-1579202673506-ca3ce28f8ef3?w=800',
+                'https://images.unsplash.com/photo-1590073242678-70ee3fc28e8e?w=800'
+            ],
+            details: {
+                info: "슈프림, 스투시 등 스트릿 브랜드와 빈티지 샵이 많습니다. '앨리스' 샵은 입구가 작아 찾기 힘드니 주의하세요. 예쁜 카페가 많아 쉬어가기 좋습니다.",
+                transport: `<p class="text-xs text-gray-600">🚶 텐진역에서 도보 10분</p>`
+            }
         },
         {
             id: 'ohori', name: '오호리 공원', lat: 33.5855, lng: 130.3769, type: 'spot', region: 'tenjin', rating: 4.7,
             desc: '도심 속 거대한 호수 공원. 스타벅스.',
-            photos: ['https://images.unsplash.com/photo-1596394516093-501ba68a0ba6?w=800'],
+            photos: [
+                'https://images.unsplash.com/photo-1596394516093-501ba68a0ba6?w=800',
+                'https://images.unsplash.com/photo-1576788235839-55668b577366?w=800'
+            ],
             shop_keyword: '돗자리',
-            details: { info: "호수를 바라보는 스타벅스 컨셉 스토어가 인기입니다. 오리배를 탈 수 있습니다." }
+            details: {
+                info: "호수를 바라보는 스타벅스 컨셉 스토어가 인기입니다. 오리배를 탈 수 있으며, 현지인들의 조깅 코스로도 유명합니다. 미술관도 인접해 있습니다.",
+                transport: `<p class="text-xs text-gray-600">🚇 오호리코엔역 하차</p>`
+            }
         },
 
         // --- 모모치/타워 (Seaside) ---
         {
             id: 'fukuoka_tower', name: '후쿠오카 타워', lat: 33.5933, lng: 130.3515, type: 'spot', region: 'seaside', rating: 4.5,
             desc: '해변에 우뚝 솟은 거울 타워. 야경 명소.',
-            photos: ['https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=800'],
+            photos: [
+                'https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=800',
+                'https://images.unsplash.com/photo-1536098561742-ca998e48cbcc?w=800'
+            ],
             details: {
-                info: "외관이 8000장의 반투명 거울로 덮여 있습니다. 모모치 해변이 한눈에 내려다보입니다.",
+                info: "외관이 8000장의 반투명 거울로 덮여 있습니다. 모모치 해변이 한눈에 내려다보입니다. 외국인 여권 제시 시 입장료 할인이 있습니다.",
                 transport: `<p class="text-xs text-gray-600">🎫 타워 입장권 할인 예매 추천</p>`
             }
         },
         {
             id: 'momochi', name: '모모치 해변', lat: 33.5954, lng: 130.3523, type: 'spot', region: 'seaside', rating: 4.4,
             desc: '인공 해변과 이국적인 결혼식장 건물.',
-            photos: ['https://images.unsplash.com/photo-1621847466023-40c354031175?w=800'],
-            details: { info: "마리존(결혼식장) 앞에서 사진 찍으면 유럽에 온 듯한 느낌을 줍니다. 선셋 타임 추천." }
+            photos: [
+                'https://images.unsplash.com/photo-1621847466023-40c354031175?w=800',
+                'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800'
+            ],
+            details: {
+                info: "마리존(결혼식장) 앞에서 사진 찍으면 유럽에 온 듯한 느낌을 줍니다. 선셋 타임 추천. 해변가에 맥주를 파는 노점들이 있습니다.",
+                transport: `<p class="text-xs text-gray-600">🚌 하카타역/텐진에서 버스 이동</p>`
+            }
         },
         {
             id: 'teamlab_fuk', name: '팀랩 포레스트 후쿠오카', lat: 33.5900, lng: 130.3550, type: 'spot', region: 'seaside', rating: 4.6,
             desc: '빛과 숲의 디지털 아트 전시.',
-            photos: ['https://images.unsplash.com/photo-1569668106296-5ac694709d7d?w=800'],
-            details: { info: "스마트폰 앱을 이용해 동물을 잡는 체험이 아이들에게 인기입니다. 타워 바로 옆 E-ZO 건물에 있습니다.", transport: `<p class="text-xs text-gray-600">🎫 팀랩 포레스트 예매 추천</p>` }
+            photos: [
+                'https://images.unsplash.com/photo-1569668106296-5ac694709d7d?w=800',
+                'https://images.unsplash.com/photo-1550684848-fac1c5b4e853?w=800'
+            ],
+            details: {
+                info: "스마트폰 앱을 이용해 동물을 잡는 체험이 아이들에게 인기입니다. 타워 바로 옆 E-ZO 건물에 있습니다. 예매 필수입니다.",
+                transport: `<p class="text-xs text-gray-600">🎫 팀랩 포레스트 예매 추천</p>`
+            }
         },
 
         // --- 근교 투어 (Nearby) ---
         {
             id: 'dazaifu', name: '다자이푸 텐만구', lat: 33.5215, lng: 130.5349, type: 'spot', region: 'nearby', rating: 4.6,
             desc: '학문의 신을 모시는 신사. 매화가지떡.',
-            photos: ['https://images.unsplash.com/photo-1528360983277-13d9b152c6d1?w=800'],
-            details: { info: "참배길(오모테산도)에 있는 '우메가에모치(매화가지떡)'는 꼭 드세요. 스타벅스 컨셉 스토어도 유명합니다." }
+            photos: [
+                'https://images.unsplash.com/photo-1528360983277-13d9b152c6d1?w=800',
+                'https://images.unsplash.com/photo-1590559899731-a382839e5549?w=800'
+            ],
+            details: {
+                info: "참배길(오모테산도)에 있는 '우메가에모치(매화가지떡)'는 꼭 드세요. 스타벅스 컨셉 스토어도 유명합니다. 소 동상의 뿔을 만지면 머리가 좋아진다는 전설이 있습니다.",
+                transport: `<p class="text-xs text-gray-600">🚌 하카타 버스터미널에서 '다자이푸 라이너' 탑승 (40분)</p>`
+            }
         },
         {
             id: 'yufuin', name: '유후인 온천 마을', lat: 33.2655, lng: 131.3556, type: 'spot', region: 'nearby', rating: 4.8,
             desc: '긴린코 호수와 아기자기한 상점가.',
-            photos: ['https://images.unsplash.com/photo-1524413840807-0c3cb6fa808d?w=800'],
+            photos: [
+                'https://images.unsplash.com/photo-1524413840807-0c3cb6fa808d?w=800',
+                'https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=800'
+            ],
             details: {
-                info: "후쿠오카에서 버스로 2시간. 금상 고로케, 비스픽 롤케이크 등 먹거리가 넘칩니다.",
-                transport: `<p class="text-xs text-gray-600">🚌 유후인/다자이푸 일일 투어 추천</p>`
+                info: "후쿠오카에서 버스로 2시간. 금상 고로케, 비스픽 롤케이크 등 먹거리가 넘칩니다. 긴린코 호수의 물안개는 아침 일찍 볼 수 있습니다.",
+                transport: `<p class="text-xs text-gray-600">🚆 특급 '유후인노모리' 예약 필수 / 🚌 고속버스</p>`
             }
         },
         {
             id: 'beppu', name: '벳푸 지옥 온천', lat: 33.3155, lng: 131.4727, type: 'spot', region: 'nearby', rating: 4.5,
             desc: '가마솥 지옥 등 7개의 지옥 순례.',
-            photos: ['https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=800'],
-            details: { info: "온천 증기로 찐 계란과 라무네 사이다를 먹는 것이 하이라이트입니다." }
+            photos: [
+                'https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=800',
+                'https://images.unsplash.com/photo-1605806616949-1e87b487bc2a?w=800'
+            ],
+            details: {
+                info: "온천 증기로 찐 계란과 라무네 사이다를 먹는 것이 하이라이트입니다. 가마솥 지옥(Kamado Jigoku)이 가장 인기가 많습니다.",
+                transport: `<p class="text-xs text-gray-600">🚆 특급 '소닉' 이용 (2시간)</p>`
+            }
         },
 
         // --- 맛집 (Food) ---
         {
             id: 'ichiran_hq', name: '이치란 라멘 본점', lat: 33.5930, lng: 130.4045, type: 'food', region: 'hakata', rating: 4.6,
             desc: '건물 전체가 라멘집. 본점 한정 메뉴.',
-            photos: ['https://images.unsplash.com/photo-1552611052-33e04de081de?w=800'],
-            details: { info: "본점 1층에서는 '카마다레(가마 솥)' 돈코츠 라멘을 맛볼 수 있습니다. 24시간 영업." }
+            photos: [
+                'https://images.unsplash.com/photo-1552611052-33e04de081de?w=800',
+                'https://images.unsplash.com/photo-1569937756447-e19164275f30?w=800'
+            ],
+            details: {
+                info: "본점 1층에서는 '카마다레(가마 솥)' 돈코츠 라멘을 맛볼 수 있습니다. 24시간 영업하며, 식사 시간에는 대기가 깁니다.",
+                transport: `<p class="text-xs text-gray-600">🚶 나카스카와바타역 도보 2분</p>`
+            }
         },
         {
             id: 'motsunabe', name: '모츠나베 오오야마', lat: 33.5898, lng: 130.4208, type: 'food', region: 'hakata', rating: 4.5,
             desc: '후쿠오카 명물 대창 전골. 진한 된장 육수.',
-            photos: ['https://images.unsplash.com/photo-1541544744-5e3a01994119?w=800'],
-            details: { info: "하카타역 내에 있어 접근성이 좋습니다. 런치 세트가 가성비가 좋습니다. 짬뽕면 추가 필수." }
+            photos: [
+                'https://images.unsplash.com/photo-1541544744-5e3a01994119?w=800',
+                'https://images.unsplash.com/photo-1580651315530-69c8e0026377?w=800'
+            ],
+            details: {
+                info: "하카타역 내에 있어 접근성이 좋습니다. 런치 세트가 가성비가 좋습니다. 짬뽕면 추가는 필수입니다. 된장(미소) 맛이 가장 인기입니다.",
+                transport: `<p class="text-xs text-gray-600">🏢 하카타역 데이토스 1층</p>`
+            }
         },
         {
             id: 'shinshin', name: '신신 라멘', lat: 33.5915, lng: 130.3958, type: 'food', region: 'tenjin', rating: 4.7,
             desc: '현지인들이 더 좋아하는 얇은 면발 라멘.',
-            photos: ['https://images.unsplash.com/photo-1599354607478-6f363c473167?w=800'],
-            details: { info: "동방신기 등 연예인들이 많이 방문한 곳. 국물이 담백해서 한국인 입맛에 잘 맞습니다." }
+            photos: [
+                'https://images.unsplash.com/photo-1599354607478-6f363c473167?w=800',
+                'https://images.unsplash.com/photo-1569937728357-407146375f19?w=800'
+            ],
+            details: {
+                info: "동방신기 등 연예인들이 많이 방문한 곳. 국물이 담백해서 한국인 입맛에 잘 맞습니다. 텐진 본점은 줄이 깁니다.",
+                transport: `<p class="text-xs text-gray-600">🚶 텐진역 도보 5분</p>`
+            }
         },
         {
             id: 'kiwamiya', name: '키와미야 함바그', lat: 33.5888, lng: 130.4005, type: 'food', region: 'tenjin', rating: 4.5,
             desc: '직접 구워 먹는 돌판 함박 스테이크.',
-            photos: ['https://images.unsplash.com/photo-1559339352-11d035aa65de?w=800'],
-            details: { info: "웨이팅이 기본 1시간 이상입니다. 오픈런을 추천합니다. 기름이 많이 튀니 앞치마 필수." }
+            photos: [
+                'https://images.unsplash.com/photo-1559339352-11d035aa65de?w=800',
+                'https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=800'
+            ],
+            details: {
+                info: "웨이팅이 기본 1시간 이상입니다. 오픈런을 추천합니다. 기름이 많이 튀니 앞치마 필수. 소스는 달콤한 소스를 추천합니다.",
+                transport: `<p class="text-xs text-gray-600">🏢 파르코 백화점 지하 1층</p>`
+            }
         },
 
         // --- 호텔 (Hotel) ---
         {
             id: 'miyako', name: '미야코 호텔 하카타', lat: 33.5900, lng: 130.4215, type: 'hotel', region: 'hakata', rating: 4.8,
             desc: '하카타역 직결 럭셔리 호텔. 옥상 수영장.',
-            photos: ['https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800'],
-            details: { info: "루프탑 온천 수영장이 유명합니다. 역과 지하로 연결되어 이동이 매우 편리합니다." }
+            photos: [
+                'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800',
+                'https://images.unsplash.com/photo-1582719508461-905c673771fd?w=800'
+            ],
+            details: {
+                info: "루프탑 온천 수영장이 유명합니다. 역과 지하로 연결되어 이동이 매우 편리합니다. 객실이 넓고 쾌적합니다.",
+                transport: `<p class="text-xs text-gray-600">🚶 하카타역 치쿠시 출구 직결</p>`
+            }
         },
         {
             id: 'candeo', name: '칸데오 호텔 텐진', lat: 33.5880, lng: 130.4020, type: 'hotel', region: 'tenjin', rating: 4.6,
             desc: '스카이 스파(대욕장)가 있는 가성비 호텔.',
-            photos: ['https://images.unsplash.com/photo-1582719508461-905c673771fd?w=800'],
-            details: { info: "쇼핑과 맛집 탐방에 최적화된 위치입니다. 사우나가 훌륭합니다." }
+            photos: [
+                'https://images.unsplash.com/photo-1582719508461-905c673771fd?w=800',
+                'https://images.unsplash.com/photo-1596394516093-501ba68a0ba6?w=800'
+            ],
+            details: {
+                info: "쇼핑과 맛집 탐방에 최적화된 위치입니다. 사우나가 훌륭합니다. 조식도 맛있기로 소문나 있습니다.",
+                transport: `<p class="text-xs text-gray-600">🚶 텐진미나미역 도보 3분</p>`
+            }
         }
     ];
 
@@ -419,72 +533,147 @@ function initFukuokaTrip() {
 
         const content = document.getElementById('modal-content');
 
-        content.innerHTML = `
-            <div class="relative h-72 bg-gray-900 group">
-                <img src="${item.photos[0]}" class="w-full h-full object-cover opacity-90 transition group-hover:opacity-100 duration-700">
-                <button onclick="closeModal()" class="absolute top-4 right-4 bg-black/50 text-white w-9 h-9 rounded-full flex items-center justify-center backdrop-blur hover:bg-black/70 transition z-20">✕</button>
-                <div class="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/90 via-black/50 to-transparent p-6 pt-20">
-                    <span class="bg-orange-600 text-white text-[10px] px-2 py-1 rounded-full font-bold mb-2 inline-block">${item.region.toUpperCase()}</span>
-                    <h2 class="text-3xl font-black text-white leading-tight mb-1">${item.name}</h2>
-                    <div class="flex items-center gap-2 text-white/90 text-sm">
-                        <span class="text-yellow-400">★ ${item.rating}</span>
-                        <span>•</span>
-                        <span>${item.type.toUpperCase()}</span>
+        // 탭 상태 관리
+        window.currentDetailTab = 'overview';
+
+        function renderModalContent() {
+            const overviewClass = window.currentDetailTab === 'overview' ? 'text-orange-600 border-b-2 border-orange-600' : 'text-gray-400 hover:text-gray-600';
+            const reviewsClass = window.currentDetailTab === 'reviews' ? 'text-orange-600 border-b-2 border-orange-600' : 'text-gray-400 hover:text-gray-600';
+            const photosClass = window.currentDetailTab === 'photos' ? 'text-orange-600 border-b-2 border-orange-600' : 'text-gray-400 hover:text-gray-600';
+
+            let tabContent = '';
+
+            if (window.currentDetailTab === 'overview') {
+                tabContent = `
+                    <div class="space-y-8 animate-fade-in">
+                        <div>
+                            <p class="text-gray-600 leading-relaxed text-lg">${item.desc}</p>
+                        </div>
+
+                        <div class="bg-gray-50 p-5 rounded-2xl border border-gray-100">
+                            <h3 class="font-bold text-gray-800 text-sm mb-3 flex items-center gap-2">
+                                <i class="fas fa-info-circle text-orange-500"></i> 상세 정보
+                            </h3>
+                            <div class="prose text-sm text-gray-600 leading-relaxed">${item.details?.info || '정보 업데이트 중...'}</div>
+                        </div>
+
+                        ${item.learning ? `
+                        <div class="bg-yellow-50 p-5 rounded-2xl border border-yellow-200 relative overflow-hidden">
+                            <div class="absolute top-0 right-0 p-4 opacity-10 text-6xl">🇯🇵</div>
+                            <h3 class="font-bold text-yellow-800 text-sm mb-3">실전 일본어 (${item.learning.situation})</h3>
+                            <p class="text-xl font-black text-gray-800 mb-1">"${item.learning.phrase}"</p>
+                            <p class="text-sm text-gray-500 font-mono bg-white/50 inline-block px-2 rounded mb-2">${item.learning.pronunciation}</p>
+                            <p class="text-sm text-gray-600">${item.learning.meaning}</p>
+                        </div>` : ''}
+
+                        ${item.details?.transport ? `
+                        <div class="space-y-3">
+                            <h3 class="font-bold text-gray-800 text-sm flex items-center gap-2">
+                                <i class="fas fa-ticket-alt text-purple-500"></i> 티켓 & 교통
+                            </h3>
+                            <div class="bg-purple-50 p-4 rounded-xl border border-purple-100">
+                                ${item.details.transport}
+                            </div>
+                        </div>` : ''}
+                        
+                        <div class="flex gap-3">
+                            <button onclick="addToPlan('${item.id}'); closeModal();" class="flex-1 bg-orange-500 text-white py-4 rounded-xl font-bold hover:bg-orange-600 transition shadow-lg flex items-center justify-center gap-2">
+                                <i class="fas fa-plus-circle"></i> 일정에 담기
+                            </button>
+                            <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(item.name)}" target="_blank" class="flex-1 bg-blue-600 text-white text-center py-4 rounded-xl font-bold hover:bg-blue-700 transition shadow-lg flex items-center justify-center gap-2">
+                                <i class="fas fa-map-marked-alt"></i> 구글맵
+                            </a>
+                        </div>
+                    </div>
+                `;
+            } else if (window.currentDetailTab === 'reviews') {
+                tabContent = `
+                    <div class="space-y-4 animate-fade-in">
+                        <div class="flex items-center gap-4 mb-6 bg-orange-50 p-4 rounded-xl">
+                            <div class="text-4xl font-black text-orange-500">${item.rating}</div>
+                            <div>
+                                <div class="flex text-yellow-400 text-sm mb-1">
+                                    ${'★'.repeat(Math.floor(item.rating))}${item.rating % 1 >= 0.5 ? '½' : ''}
+                                </div>
+                                <p class="text-xs text-gray-500">방문자 리뷰 128개</p>
+                            </div>
+                        </div>
+                        
+                        <!-- Mock Reviews -->
+                        <div class="border-b border-gray-100 pb-4">
+                            <div class="flex justify-between mb-2">
+                                <span class="font-bold text-sm">김*수</span>
+                                <span class="text-xs text-gray-400">2주 전</span>
+                            </div>
+                            <div class="text-yellow-400 text-xs mb-2">★★★★★</div>
+                            <p class="text-sm text-gray-600">아이들과 함께 가기 정말 좋은 곳입니다. 추천해요!</p>
+                        </div>
+                        <div class="border-b border-gray-100 pb-4">
+                            <div class="flex justify-between mb-2">
+                                <span class="font-bold text-sm">Lee Ji-eun</span>
+                                <span class="text-xs text-gray-400">1개월 전</span>
+                            </div>
+                            <div class="text-yellow-400 text-xs mb-2">★★★★☆</div>
+                            <p class="text-sm text-gray-600">사람이 좀 많았지만 볼거리가 풍성해서 좋았습니다. 사진 찍기 좋아요.</p>
+                        </div>
+                        <div class="border-b border-gray-100 pb-4">
+                            <div class="flex justify-between mb-2">
+                                <span class="font-bold text-sm">Park S.H.</span>
+                                <span class="text-xs text-gray-400">2개월 전</span>
+                            </div>
+                            <div class="text-yellow-400 text-xs mb-2">★★★★★</div>
+                            <p class="text-sm text-gray-600">후쿠오카 여행 중 가장 기억에 남는 장소입니다. 꼭 가보세요.</p>
+                        </div>
+                    </div>
+                `;
+            } else if (window.currentDetailTab === 'photos') {
+                tabContent = `
+                    <div class="grid grid-cols-2 gap-2 animate-fade-in">
+                        ${item.photos.map(photo => `
+                            <div class="aspect-square rounded-lg overflow-hidden bg-gray-100 cursor-pointer hover:opacity-90 transition">
+                                <img src="${photo}" class="w-full h-full object-cover" onclick="window.open('${photo}', '_blank')">
+                            </div>
+                        `).join('')}
+                        <!-- Placeholder for more photos -->
+                        <div class="aspect-square rounded-lg overflow-hidden bg-gray-100 flex items-center justify-center text-gray-400">
+                            <i class="fas fa-camera text-2xl"></i>
+                        </div>
+                    </div>
+                `;
+            }
+
+            content.innerHTML = `
+                <div class="relative h-72 bg-gray-900 group">
+                    <img src="${item.photos[0]}" class="w-full h-full object-cover opacity-90 transition group-hover:opacity-100 duration-700">
+                    <button onclick="closeModal()" class="absolute top-4 right-4 bg-black/50 text-white w-9 h-9 rounded-full flex items-center justify-center backdrop-blur hover:bg-black/70 transition z-20">✕</button>
+                    <div class="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/90 via-black/50 to-transparent p-6 pt-20">
+                        <span class="bg-orange-600 text-white text-[10px] px-2 py-1 rounded-full font-bold mb-2 inline-block">${item.region.toUpperCase()}</span>
+                        <h2 class="text-3xl font-black text-white leading-tight mb-1">${item.name}</h2>
+                        <div class="flex items-center gap-2 text-white/90 text-sm">
+                            <span class="text-yellow-400">★ ${item.rating}</span>
+                            <span>•</span>
+                            <span>${item.type.toUpperCase()}</span>
+                        </div>
                     </div>
                 </div>
-            </div>
-            
-            <div class="sticky top-0 bg-white z-10 flex border-b shadow-sm">
-                <button class="flex-1 py-4 text-sm font-bold text-orange-600 border-b-2 border-orange-600 transition">개요</button>
-                <button class="flex-1 py-4 text-sm font-bold text-gray-400 hover:text-gray-600 transition" onclick="alert('준비중입니다.')">리뷰 (128)</button>
-                <button class="flex-1 py-4 text-sm font-bold text-gray-400 hover:text-gray-600 transition" onclick="alert('준비중입니다.')">사진</button>
-            </div>
-
-            <div class="p-6 pb-24 space-y-8">
-                <!-- 설명 -->
-                <div>
-                    <p class="text-gray-600 leading-relaxed text-lg">${item.desc}</p>
-                </div>
-
-                <!-- 정보 카드 -->
-                <div class="bg-gray-50 p-5 rounded-2xl border border-gray-100">
-                    <h3 class="font-bold text-gray-800 text-sm mb-3 flex items-center gap-2">
-                        <i class="fas fa-info-circle text-orange-500"></i> 상세 정보
-                    </h3>
-                    <div class="prose text-sm text-gray-600 leading-relaxed">${item.details?.info || '정보 업데이트 중...'}</div>
-                </div>
-
-                <!-- 일본어 학습 카드 -->
-                ${item.learning ? `
-                <div class="bg-yellow-50 p-5 rounded-2xl border border-yellow-200 relative overflow-hidden">
-                    <div class="absolute top-0 right-0 p-4 opacity-10 text-6xl">🇯🇵</div>
-                    <h3 class="font-bold text-yellow-800 text-sm mb-3">실전 일본어 (${item.learning.situation})</h3>
-                    <p class="text-xl font-black text-gray-800 mb-1">"${item.learning.phrase}"</p>
-                    <p class="text-sm text-gray-500 font-mono bg-white/50 inline-block px-2 rounded mb-2">${item.learning.pronunciation}</p>
-                    <p class="text-sm text-gray-600">${item.learning.meaning}</p>
-                </div>` : ''}
-
-                <!-- 교통/티켓 정보 -->
-                ${item.details?.transport ? `
-                <div class="space-y-3">
-                    <h3 class="font-bold text-gray-800 text-sm flex items-center gap-2">
-                        <i class="fas fa-ticket-alt text-purple-500"></i> 티켓 & 교통
-                    </h3>
-                    <div class="bg-purple-50 p-4 rounded-xl border border-purple-100">
-                        ${item.details.transport}
-                    </div>
-                </div>` : ''}
                 
-                <!-- 하단 액션 버튼 그룹 -->
-                <div class="flex gap-3">
-                    <button onclick="addToPlan('${item.id}'); closeModal();" class="flex-1 bg-orange-500 text-white py-4 rounded-xl font-bold hover:bg-orange-600 transition shadow-lg flex items-center justify-center gap-2">
-                        <i class="fas fa-plus-circle"></i> 일정에 담기
-                    </button>
-                    <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(item.name)}" target="_blank" class="flex-1 bg-blue-600 text-white text-center py-4 rounded-xl font-bold hover:bg-blue-700 transition shadow-lg flex items-center justify-center gap-2">
-                        <i class="fas fa-map-marked-alt"></i> 구글맵
-                    </a>
+                <div class="sticky top-0 bg-white z-10 flex border-b shadow-sm">
+                    <button class="flex-1 py-4 text-sm font-bold transition ${overviewClass}" onclick="window.switchDetailTab('overview')">개요</button>
+                    <button class="flex-1 py-4 text-sm font-bold transition ${reviewsClass}" onclick="window.switchDetailTab('reviews')">리뷰 (128)</button>
+                    <button class="flex-1 py-4 text-sm font-bold transition ${photosClass}" onclick="window.switchDetailTab('photos')">사진</button>
                 </div>
-            </div>`;
+
+                <div class="p-6 pb-24">
+                    ${tabContent}
+                </div>`;
+        }
+
+        window.switchDetailTab = function (tab) {
+            window.currentDetailTab = tab;
+            renderModalContent();
+        };
+
+        renderModalContent();
     }
 
     // --- Helpers ---
@@ -505,7 +694,7 @@ function initFukuokaTrip() {
 
     function injectCSS() {
         const s = document.createElement('style');
-        s.textContent = `.scrollbar-hide::-webkit-scrollbar { display: none; } .line-clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; } .line-clamp-1 { display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden; }`;
+        s.textContent = `.scrollbar-hide::-webkit-scrollbar { display: none; } .line-clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; } .line-clamp-1 { display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden; } .animate-fade-in { animation: fadeIn 0.3s ease-in-out; } @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }`;
         document.head.appendChild(s);
     }
 
