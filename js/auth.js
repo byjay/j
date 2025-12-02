@@ -121,7 +121,7 @@ function showPasswordPrompt() {
 // 전체 학습진도 리셋 (아빠 계정 전용)
 function resetAllProgress() {
     if (confirm('⚠️ 정말로 모든 학습 진도를 리셋하시겠습니까?\n\n모든 사용자의 학습 기록이 삭제됩니다!')) {
-        const password = prompt('확인을 위해 비밀번호(1435)를 입력하세요:');
+        const password = prompt('확인을 위해 비밀번호를 입력하세요:');
         if (password === '1435') {
             // 모든 사용자의 진도 데이터 삭제
             ['dad', 'mom', 'sieun', 'harong'].forEach(userId => {

@@ -141,6 +141,12 @@ const essentialApps = [
         icon: "https://play-lh.googleusercontent.com/M6yE-Wq-7Wq_pZ6-gqU_gqU_gqU_gqU_gqU_gqU_gqU_gqU_gqU_gqU=w240-h480-rw", // Placeholder
         desc: "입국 수속을 빠르게! 일본 입국 시 필요한 검역, 입국 심사, 세관 신고를 미리 웹으로 등록하고 QR코드만 보여주면 됩니다. 공항에서의 대기 시간을 획기적으로 줄여줍니다.",
         link: "https://vjw-lp.digital.go.jp/en/"
+    },
+    {
+        name: "Payke (페이크)",
+        icon: "https://play-lh.googleusercontent.com/fJJ8m5_o5j5j5j5j5j5j5j5j5j5j5j5j5j5j5j5j5j5j5j5j5j5j5j5j5j5j5j5j=w240-h480-rw",
+        desc: "상품의 바코드를 스캔하면 한국어로 상품 정보를 보여줍니다. 쇼핑할 때 아주 유용합니다.",
+        link: "https://play.google.com/store/apps/details?id=jp.co.payke.payke"
     }
 ];
 
