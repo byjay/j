@@ -56,8 +56,10 @@ function showTab(tabName) {
             initWordStudy();
         }
     } else if (tabName === 'conversation') {
-        if (typeof initConversation === 'function') {
-            initConversation();
+        if (typeof showConversationMode === 'function') {
+            showConversationMode('practical');
+        } else if (typeof initDayConversation === 'function') {
+            initDayConversation();
         }
     } else if (tabName === 'fukuoka' || tabName === 'japan_travel') {
         if (typeof initJapanTravel === 'function') {

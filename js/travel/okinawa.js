@@ -1,756 +1,455 @@
 
-(function () {
-    // ==================== 데이터베이스 ====================
-    const placesDB = {
-        // ================= [ 1일차: 오키나와 도착 & 국제거리 ] =================
-        'airport_in': {
-            name: '나하 공항 (도착)',
+function initOkinawaTrip() {
+    console.log('🏝️ Okinawa App V4.0 Loaded [FAMILY MODE - ULTRA UI]');
+
+    // ==========================================================================
+    //  🏝️ MASSIVE DATABASE: OKINAWA (30+ Spots)
+    // ==========================================================================
+    const POI_DATABASE = [
+        // --- 교통 & 공항 ---
+        {
+            id: 'naha_airport',
+            name: '나하 공항 (도착/출발)',
             lat: 26.2048, lng: 127.6458,
             type: 'transport',
+            region: 'naha',
             rating: 4.2,
-            desc: '동양의 하와이, 오키나와 여행의 시작 🌴',
-            openHours: '국제선 07:00~22:00',
-            tips: '💡 꿀팁: 렌트카 수령은 공항 밖 셔틀 타고 이동해야 해서 시간 넉넉히 잡으세요(1시간 이상). 모노레일(유이레일) 타면 시내까지 15분.',
-            info: [
-                { label: '유이레일', val: '시내까지 15분, 270~300엔' },
-                { label: '리무진버스', val: '호텔 직행 (리조트행)' },
-                { label: '택시', val: '나하 시내 약 1,500엔 (20분)' }
-            ],
-            links: [
-                { name: '유이레일 정보', url: 'https://www.yui-rail.co.jp/kr/' }
-            ],
-            recommend: [
-                {
-                    name: '블루씰 아이스크림',
-                    type: '간식',
-                    desc: '오키나와 필수, 자색고구마맛 추천',
-                    icon: '🍦',
-                    menus: [{ name: '자색고구마', price: '350엔', desc: '베스트셀러', photo: '🍠' }]
-                },
-                {
-                    name: '수족관 티켓',
-                    type: '티켓',
-                    desc: '공항 관광안내소에서 츄라우미 할인 티켓 구매 가능',
-                    icon: '🎫',
-                    menus: [{ name: '할인티켓', price: '1,850엔', desc: '정가보다 저렴', photo: '🎫' }]
-                }
-            ],
-            photos: [
-                'https://images.unsplash.com/photo-1542051841857-5f90071e7989?w=600',
-                'https://images.unsplash.com/photo-1590559899731-a382839e5549?w=600'
-            ]
+            desc: '오키나와 여행의 시작. 렌트카 셔틀과 모노레일의 기점.',
+            photos: ['https://images.unsplash.com/photo-1590559899731-a382839e5549?w=800'],
+            details: {
+                info: "국제선과 국내선이 연결되어 있습니다. 편의점, 식당, 기념품샵은 국내선 터미널이 훨씬 큽니다.",
+                transport: `
+                    <div class="space-y-2">
+                        <div class="p-2 bg-blue-50 rounded border border-blue-200">
+                            <strong>🚝 유이레일(모노레일):</strong> 공항 2층에서 연결. 시내까지 15분.
+                        </div>
+                        <div class="p-2 bg-orange-50 rounded border border-orange-200">
+                            <strong>🚌 공항 리무진:</strong> 북부/중부 리조트 직행. 1층 12번 승강장.
+                        </div>
+                        <div class="p-2 bg-green-50 rounded border border-green-200">
+                            <strong>🚗 렌트카:</strong> 1층 밖 셔틀 승강장 이동 필수. (이동시간 20분 소요)
+                        </div>
+                    </div>`
+            }
         },
 
-        'hotel_checkin': {
-            name: '하얏트 리젠시 나하 (숙소)',
-            lat: 26.2144, lng: 127.6867,
-            type: 'hotel',
-            rating: 4.6,
-            desc: '국제거리 도보 3분, 럭셔리한 시티 호텔',
-            openHours: '체크인 15:00 / 체크아웃 11:00',
-            tips: '💡 꿀팁: 국제거리와 가까우면서도 살짝 안쪽이라 조용해요. 야외 수영장(3층)은 작지만 분위기 굿.',
-            info: [
-                { label: '위치', val: '마키시역 도보 7분' },
-                { label: '주차', val: '타워 주차장 (1박 1,500엔)' },
-                { label: '조식', val: '사쿠라자카 (뷔페 맛집)' }
-            ],
-            links: [
-                { name: '호텔 공식 홈페이지', url: 'https://www.hyatt.com/' }
-            ],
-            recommend: [
-                {
-                    name: '츠보야 야치문 거리',
-                    type: '산책',
-                    desc: '도보 5분, 도자기 공방 거리',
-                    icon: '🏺',
-                    menus: [{ name: '도자기', price: '다양', desc: '기념품', photo: '🏺' }]
-                }
-            ],
-            photos: [
-                'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=600',
-                'https://images.unsplash.com/photo-1582719508461-905c673771fd?w=600'
-            ]
+        // --- 나하 시내 (Naha) ---
+        {
+            id: 'kokusai', name: '국제거리', lat: 26.2150, lng: 127.6850, type: 'spot', region: 'naha', rating: 4.5,
+            desc: '기적의 1마일. 밤늦게까지 쇼핑과 식사가 가능한 중심가.',
+            photos: ['https://images.unsplash.com/photo-1589463349208-95817c97fdb6?w=800'],
+            shop_keyword: '오키나와 기념품',
+            details: { info: "일요일 낮(12:00~18:00)은 보행자 천국으로 차가 다니지 않습니다." }
+        },
+        {
+            id: 'makishi', name: '마키시 공설시장', lat: 26.2145, lng: 127.6885, type: 'food', region: 'naha', rating: 4.3,
+            desc: '오키나와의 부엌. 알록달록한 생선을 직접 골라 회로 먹기.',
+            photos: ['https://images.unsplash.com/photo-1554797589-7241bb691973?w=800'],
+            shop_keyword: '여행용 장바구니',
+            details: { info: "1층에서 생선을 사고 2층 식당가에서 조리비(500엔)를 내고 먹는 시스템입니다." }
+        },
+        {
+            id: 'shurijo', name: '슈리성 공원', lat: 26.2183, lng: 127.7153, type: 'spot', region: 'naha', rating: 4.4,
+            desc: '류큐 왕국의 영광. 붉은색 정전이 아름다운 유네스코 유산.',
+            photos: ['https://images.unsplash.com/photo-1622345562723-4556223455?w=800'],
+            shop_keyword: '양산',
+            details: { info: "화재로 정전이 소실되었으나 복원 과정을 공개하고 있어 교육적 가치가 높습니다. 꽤 많이 걸어야 합니다." }
+        },
+        {
+            id: 'steak88', name: '스테이크 하우스 88', lat: 26.2155, lng: 127.6840, type: 'food', region: 'naha', rating: 4.2,
+            desc: '미군 문화의 영향. 가성비 좋은 오키나와식 스테이크.',
+            photos: ['https://images.unsplash.com/photo-1600891964092-4316c288032e?w=800'],
+            details: { info: "스프와 샐러드가 무한리필 됩니다. '텐더로인' 부위가 가장 부드럽습니다." }
+        },
+        {
+            id: 'hyatt_naha', name: '하얏트 리젠시 나하', lat: 26.2144, lng: 127.6867, type: 'hotel', region: 'naha', rating: 4.7,
+            desc: '국제거리 도보 3분. 시내 관광 최적의 럭셔리 호텔.',
+            photos: ['https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800'],
+            details: { info: "수영장이 작지만 알찹니다. 조식 뷔페 '사쿠라자카'가 매우 유명합니다." }
         },
 
-        'kokusai_dori': {
-            name: '국제거리 (고쿠사이 도리)',
-            lat: 26.2150, lng: 127.6850,
-            type: 'tour',
-            rating: 4.3,
-            desc: '나하의 메인 스트리트, 쇼핑과 맛집의 천국 🛍️',
-            openHours: '상점별 상이 (보통 22:00까지)',
-            tips: '💡 꿀팁: 일요일 낮(12:00~18:00)은 "보행자 천국"이라 차가 안 다녀요. 포장마차 거리(야타이무라)에서 한잔 추천.',
-            info: [
-                { label: '쇼핑', val: '자색고구마 타르트, 시사 인형' },
-                { label: '맛집', val: '스테이크 88, 샘스 스테이크' }
-            ],
-            menus: [
-                { name: '철판 스테이크', price: '2,500엔~', desc: '미국 문화 영향으로 스테이크가 저렴', photo: '🥩' },
-                { name: '타코라이스', price: '800엔', desc: '오키나와 소울푸드', photo: '🍛' },
-                { name: '오리온 맥주', price: '500엔', desc: '오키나와 로컬 맥주', photo: '🍺' }
-            ],
-            links: [
-                { name: '국제거리 가이드', url: 'https://naha-kokusaidori.okinawa/' }
-            ],
-            recommend: [
-                {
-                    name: '야타이무라',
-                    type: '술집',
-                    desc: '20여 개 포장마차가 모인 핫플레이스',
-                    icon: '🏮',
-                    menus: [{ name: '오뎅', price: '500엔', desc: '일본식 오뎅', photo: '🍢' }]
-                },
-                {
-                    name: '마키시 공설시장',
-                    type: '시장',
-                    desc: '알록달록한 생선 구경, 회 떠먹기 가능',
-                    icon: '🐟',
-                    menus: [{ name: '회', price: '1,000엔~', desc: '신선한 회', photo: '🍣' }]
-                }
-            ],
-            photos: [
-                'https://images.unsplash.com/photo-1589463349208-95817c97fdb6?w=600',
-                'https://images.unsplash.com/photo-1554797589-7241bb691973?w=600'
-            ]
+        // --- 중부 (Middle) ---
+        {
+            id: 'american', name: '아메리칸 빌리지', lat: 26.3165, lng: 127.7577, type: 'spot', region: 'middle', rating: 4.6,
+            desc: '미국 서부 해안 분위기. 관람차(철거됨) 터와 선셋 비치.',
+            photos: ['https://images.unsplash.com/photo-1599577742099-0b73461461a6?w=800'],
+            shop_keyword: '선글라스',
+            details: { info: "낮보다 밤이 훨씬 예쁩니다. 포켓몬 벽화가 곳곳에 숨어있으니 찾아보세요." }
+        },
+        {
+            id: 'manzamo', name: '만좌모', lat: 26.5049, lng: 127.8502, type: 'spot', region: 'middle', rating: 4.4,
+            desc: '코끼리 모양 절벽. 만 명이 앉을 수 있는 넓은 들판.',
+            photos: ['https://images.unsplash.com/photo-1605806616949-1e87b487bc2a?w=800'],
+            shop_keyword: '바람막이',
+            details: { info: "드라마 '괜찮아 사랑이야' 촬영지. 바람이 매우 강하게 부니 모자가 날아가지 않게 주의하세요." }
+        },
+        {
+            id: 'rycom', name: '이온몰 라이카무', lat: 26.3144, lng: 127.7958, type: 'spot', region: 'middle', rating: 4.5,
+            desc: '오키나와 최대 규모 쇼핑몰. 하루 종일 있어도 모자람.',
+            photos: ['https://images.unsplash.com/photo-1519567241046-7f570eee3c9e?w=800'],
+            shop_keyword: '일본 쇼핑 리스트',
+            details: { info: "메인 로비의 거대 수조가 포토존입니다. 1층 면세 카운터 위치를 미리 파악하세요." }
+        },
+        {
+            id: 'blue_seal', name: '블루씰 아이스크림 본점', lat: 26.2737, lng: 127.7317, type: 'food', region: 'middle', rating: 4.4,
+            desc: '미국에서 태어나 오키나와에서 자란 아이스크림.',
+            photos: ['https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=800'],
+            details: { info: "자색고구마(베니이모) 맛과 소금우유(친스코) 맛이 가장 인기 있습니다." }
         },
 
-        // ================= [ 2일차: 북부 투어 & 츄라우미 ] =================
-        'churaumi': {
-            name: '츄라우미 수족관',
-            lat: 26.6943, lng: 127.8779,
-            type: 'tour',
-            rating: 4.8,
-            desc: '세계 최대급 수조, 고래상어의 유영 🐋',
-            openHours: '08:30~18:30 (성수기 20:00)',
-            tips: '💡 꿀팁: 오후 4시 이후 입장하면 티켓이 저렴해져요(4시 티켓). 고래상어 먹이주기 쇼(15:00 / 17:00) 시간 체크 필수.',
-            info: [
-                { label: '입장료', val: '성인 2,180엔 (4시 이후 1,510엔)' },
-                { label: '돌고래쇼', val: '무료 (오키짱 극장)' }
-            ],
-            menus: [
-                { name: '오션블루 카페', price: '600엔~', desc: '수조 바로 옆 지정석은 예약/대기 필수', photo: '☕' }
-            ],
-            links: [
-                { name: '공식 홈페이지', url: 'https://churaumi.okinawa/kr/' }
-            ],
-            recommend: [
-                {
-                    name: '비세 후쿠기 가로수길',
-                    type: '산책',
-                    desc: '차로 5분, 자전거 타고 힐링하기 좋음',
-                    icon: '🚲',
-                    menus: [{ name: '자전거 대여', price: '500엔', desc: '1시간', photo: '🚲' }]
-                },
-                {
-                    name: '에메랄드 비치',
-                    type: '해변',
-                    desc: '수족관 바로 앞, 물색깔 예술',
-                    icon: '🏖️',
-                    menus: [{ name: '수영', price: '무료', desc: '여름 시즌', photo: '🏊' }]
-                }
-            ],
-            photos: [
-                'https://images.unsplash.com/photo-1585672660340-966e33004946?w=600',
-                'https://images.unsplash.com/photo-1540206395-e8f80bb341cc?w=600'
-            ]
+        // --- 북부 (North) ---
+        {
+            id: 'churaumi', name: '츄라우미 수족관', lat: 26.6943, lng: 127.8779, type: 'spot', region: 'north', rating: 4.8,
+            desc: '거대 고래상어의 유영. 오키나와 필수 코스.',
+            photos: ['https://images.unsplash.com/photo-1585672660340-966e33004946?w=800'],
+            shop_keyword: '카메라 삼각대',
+            details: {
+                info: "세계 최대급 수조 '쿠로시오의 바다' 앞 카페 자리는 오픈런 필수입니다.",
+                ticket: `<p class="text-xs text-gray-600">🎫 입장권 최저가 예매 추천</p>`
+            }
+        },
+        {
+            id: 'kouri', name: '코우리 대교 & 해변', lat: 26.6978, lng: 128.0267, type: 'spot', region: 'north', rating: 4.7,
+            desc: '바다 위를 달리는 듯한 2km의 다리. 쉬림프 웨건.',
+            photos: ['https://images.unsplash.com/photo-1596394516093-501ba68a0ba6?w=800'],
+            shop_keyword: '아쿠아슈즈',
+            details: { info: "다리 건너기 전 주차장에서 다리를 배경으로 사진을 찍으세요. 코우리 슈림프 웨건은 대기가 깁니다." }
+        },
+        {
+            id: 'bise', name: '비세 후쿠기 가로수길', lat: 26.7042, lng: 127.8797, type: 'spot', region: 'north', rating: 4.5,
+            desc: '방풍림이 만든 초록 터널. 자전거 타고 힐링.',
+            photos: ['https://images.unsplash.com/photo-1540206395-e8f80bb341cc?w=800'],
+            shop_keyword: '모기기피제',
+            details: { info: "모기가 많으니 기피제 필수. 자전거 대여료는 보통 500엔입니다." }
+        },
+        {
+            id: 'pineapple', name: '나고 파인애플 파크', lat: 26.6163, lng: 127.9692, type: 'spot', region: 'north', rating: 4.2,
+            desc: '자동 카트 타고 파인애플 밭 탐험. 가족 여행 강추.',
+            photos: ['https://images.unsplash.com/photo-1589539120894-35d9472e3995?w=800'],
+            shop_keyword: '아이 간식',
+            details: { info: "파인애플 송이째로 파는 것보다 컷팅된 과일이나 빵이 선물용으로 좋습니다." }
+        },
+        {
+            id: 'kishimoto', name: '키시모토 식당', lat: 26.6552, lng: 127.8897, type: 'food', region: 'north', rating: 4.3,
+            desc: '100년 전통 오키나와 소바. 담백한 국물.',
+            photos: ['https://images.unsplash.com/photo-1552611052-33e04de081de?w=800'],
+            details: { info: "메뉴는 소바와 영양밥(쥬시) 뿐입니다. 재료 소진 시 일찍 문 닫습니다." }
         },
 
-        'manzamo': {
-            name: '만좌모',
-            lat: 26.5049, lng: 127.8502,
-            type: 'tour',
-            rating: 4.4,
-            desc: '만 명이 앉을 수 있는 들판, 코끼리 바위 🐘',
-            openHours: '08:00~19:00',
-            tips: '💡 꿀팁: "괜찮아 사랑이야" 촬영지. 바람이 엄청 많이 부니까 모자 조심하세요. 해 질 녘 노을이 정말 아름답습니다.',
-            info: [
-                { label: '입장료', val: '100엔 (시설 관리비)' },
-                { label: '주차', val: '무료 (넓음)' }
-            ],
-            menus: [
-                { name: '사타안다기', price: '100엔', desc: '오키나와식 튀김 도넛', photo: '🍩' }
-            ],
-            links: [
-                { name: '관광 정보', url: 'https://www.vill.onna.okinawa.jp/' }
-            ],
-            recommend: [
-                {
-                    name: '나카무라 소바',
-                    type: '식당',
-                    desc: '차로 5분, 아사(해조류) 소바 맛집',
-                    icon: '🍜',
-                    menus: [{ name: '아사 소바', price: '800엔', desc: '바다향 가득', photo: '🍜' }]
-                }
-            ],
-            photos: [
-                'https://images.unsplash.com/photo-1605806616949-1e87b487bc2a?w=600',
-                'https://images.unsplash.com/photo-1596394516093-501ba68a0ba6?w=600'
-            ]
+        // --- 남부 (South) ---
+        {
+            id: 'umikaji', name: '우미카지 테라스', lat: 26.1754, lng: 127.6445, type: 'spot', region: 'south', rating: 4.5,
+            desc: '오키나와의 산토리니. 비행기 이착륙 뷰.',
+            photos: ['https://images.unsplash.com/photo-1621847466023-40c354031175?w=800'],
+            shop_keyword: '셀카봉',
+            details: { info: "그늘이 거의 없어 낮에는 덥습니다. 선셋 타임에 팬케이크 먹는 것을 추천합니다." }
         },
-
-        // ================= [ 3일차: 중부 아메리칸 빌리지 ] =================
-        'american_village': {
-            name: '아메리칸 빌리지',
-            lat: 26.3165, lng: 127.7577,
-            type: 'tour',
-            rating: 4.6,
-            desc: '미국 서부 느낌 물씬, 관람차와 선셋 비치 🎡',
-            openHours: '10:00~22:00',
-            tips: '💡 꿀팁: 낮보다 밤이 훨씬 예뻐요. "선셋 비치"에서 노을 보고 야경 구경하세요. 포켓몬 벽화가 곳곳에 숨어있으니 찾아보세요.',
-            info: [
-                { label: '주차', val: '무료 (공영 주차장 이용)' },
-                { label: '분위기', val: '이국적, 힙함, 사진 맛집' }
-            ],
-            menus: [
-                { name: '포크타마고 오니기리', price: '350엔~', desc: '스팸+계란 주먹밥', photo: '🍙' },
-                { name: 'A&W 버거', price: '800엔~', desc: '미국맛 햄버거, 루트비어 도전?', photo: '🍔' },
-                { name: '타코스', price: '700엔', desc: '키지무나 타코라이스 추천', photo: '🌮' }
-            ],
-            links: [
-                { name: '공식 홈페이지', url: 'https://www.okinawa-americanvillage.com/' }
-            ],
-            recommend: [
-                {
-                    name: '이온몰 라이카무',
-                    type: '쇼핑',
-                    desc: '차로 10분, 오키나와 최대 쇼핑몰',
-                    icon: '🏢',
-                    menus: [{ name: '쇼핑', price: '다양', desc: '수족관 있음', photo: '🐠' }]
-                },
-                {
-                    name: '선셋 비치',
-                    type: '해변',
-                    desc: '빌리지 바로 앞, 일몰 명소',
-                    icon: '🌅',
-                    menus: [{ name: '일몰', price: '무료', desc: '인생샷', photo: '🌅' }]
-                }
-            ],
-            photos: [
-                'https://images.unsplash.com/photo-1599577742099-0b73461461a6?w=600',
-                'https://images.unsplash.com/photo-1570649237648-512c58902521?w=600'
-            ]
+        {
+            id: 'okinawa_world', name: '오키나와 월드', lat: 26.1397, lng: 127.7504, type: 'spot', region: 'south', rating: 4.3,
+            desc: '거대 종유석 동굴과 류큐 유리 공예 체험.',
+            photos: ['https://images.unsplash.com/photo-1574347784033-b9356499876e?w=800'],
+            details: { info: "동굴 안은 습하고 미끄러우니 편한 신발을 신으세요. 에이사 공연 시간 맞춰 가세요." }
         },
-
-        // ================= [ 4일차: 남부 감성 & 귀국 ] =================
-        'umikaji_terrace': {
-            name: '우미카지 테라스',
-            lat: 26.1754, lng: 127.6445,
-            type: 'tour',
-            rating: 4.5,
-            desc: '오키나와의 산토리니, 하얀 건물과 바다 🌊',
-            openHours: '10:00~21:00',
-            tips: '💡 꿀팁: 공항이랑 엄청 가까워요(차로 15분). 마지막 날 공항 가기 전에 들르기 딱 좋음. 비행기 이착륙하는 게 머리 위로 보여서 사진 찍기 좋아요.',
-            info: [
-                { label: '주차', val: '무료 (자리 부족할 수 있음)' },
-                { label: '셔틀', val: '아카미네역에서 무료 셔틀 운행' }
-            ],
-            menus: [
-                { name: '시아와세 팬케이크', price: '1,100엔~', desc: '폭신폭신 수플레 팬케이크, 예약 필수', photo: '🥞' },
-                { name: '망고 빙수', price: '1,000엔', desc: '더위 식히기에 최고', photo: '🥭' }
-            ],
-            links: [
-                { name: '공식 홈페이지', url: 'https://www.umikajiterrace.com/' }
-            ],
-            recommend: [
-                {
-                    name: '세나가섬 온천',
-                    type: '온천',
-                    desc: '호텔 내 온천, 바다 보며 노천탕 가능',
-                    icon: '♨️',
-                    menus: [{ name: '입욕료', price: '1,500엔', desc: '수건 포함', photo: '♨️' }]
-                }
-            ],
-            photos: [
-                'https://images.unsplash.com/photo-1621847466023-40c354031175?w=600',
-                'https://images.unsplash.com/photo-1596120236172-231999844c20?w=600'
-            ]
+        {
+            id: 'cafe_kurukuma', name: '카페 쿠루쿠마', lat: 26.1664, lng: 127.8136, type: 'food', region: 'south', rating: 4.6,
+            desc: '절벽 위 오션뷰 태국 음식점. 뷰가 다했다.',
+            photos: ['https://images.unsplash.com/photo-1544563124-7eb3a492931e?w=800'],
+            details: { info: "카레가 꽤 맵습니다. 야외석은 식사 불가하고 사진 촬영만 가능할 수 있습니다." }
+        },
+        {
+            id: 'mibaru', name: '미바루 비치', lat: 26.1283, lng: 127.7853, type: 'spot', region: 'south', rating: 4.2,
+            desc: '숨겨진 천연 해변. 글라스 보트 체험 가능.',
+            photos: ['https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800'],
+            shop_keyword: '방수팩',
+            details: { info: "상업화가 덜 되어 조용합니다. 글라스 보트로 니모를 볼 수 있습니다." }
+        },
+        {
+            id: 'ryukyu_onsen', name: '류큐 온천 세나가지마', lat: 26.1764, lng: 127.6417, type: 'hotel', region: 'south', rating: 4.6,
+            desc: '우미카지 테라스 위, 바다와 비행기를 보며 온천.',
+            photos: ['https://images.unsplash.com/photo-1571216962909-467439369680?w=800'],
+            details: { info: "투숙객이 아니어도 온천만 이용 가능합니다(유료). 선셋 타임 노천탕이 최고입니다." }
         }
-    };
+    ];
 
-    // 일정표
-    const schedule = {
-        1: {
-            title: '1일차: 오키나와 도착 & 국제거리 🌴',
-            items: ['airport_in', 'hotel_checkin', 'kokusai_dori'],
-            summary: '공항 도착 → 렌트카 수령 → 국제거리 스테이크'
-        },
-        2: {
-            title: '2일차: 츄라우미와 북부 드라이브 🐋',
-            items: ['manzamo', 'churaumi'],
-            summary: '만좌모 절경 → 츄라우미 수족관 → 가로수길'
-        },
-        3: {
-            title: '3일차: 아메리칸 빌리지의 밤 🎡',
-            items: ['american_village'],
-            summary: '호텔 수영장 → 아메리칸 빌리지 쇼핑 & 선셋'
-        },
-        4: {
-            title: '4일차: 우미카지 테라스 & 귀국 ✈️',
-            items: ['umikaji_terrace', 'airport_in'],
-            summary: '우미카지 브런치 → 렌트카 반납 → 공항 이동'
-        }
+    // ==========================================================================
+    //  🚀 CORE ENGINE (STATE MANAGEMENT & UI)
+    // ==========================================================================
+    let userItinerary = {
+        1: ['naha_airport', 'kokusai', 'steak88', 'hyatt_naha'],
+        2: [], 3: [], 4: []
     };
-
     let activeDay = 1;
     let map, markers = [];
-    let directionsService, directionsRenderer;
 
-    // ==================== 초기화 ====================
     function initOkinawaTrip() {
-        try {
-            console.log('🏖️ 오키나와 여행 가이드 시작!');
-            renderTabs();
-            renderSchedule(activeDay);
-            loadFlightInfo();
-            loadAccommodation();
-            initHotelSearch();
-            createModal();
-
-            if (typeof google !== 'undefined' && typeof google.maps !== 'undefined') {
-                try {
-                    initMap();
-                    directionsService = new google.maps.DirectionsService();
-                    directionsRenderer = new google.maps.DirectionsRenderer({
-                        map: map,
-                        suppressMarkers: true,
-                        polylineOptions: { strokeColor: '#008080', strokeWeight: 5 } // 오키나와는 청록색/바다 테마
-                    });
-                } catch (mapErr) {
-                    console.warn('Google Maps Init Failed:', mapErr);
-                }
-            } else {
-                const mapEl = document.getElementById('map');
-                if (mapEl) mapEl.innerHTML = '<div class="flex items-center justify-center h-full bg-gray-100 text-gray-400">지도 로딩 중...</div>';
-            }
-        } catch (error) {
-            console.error('Okinawa Module Init Error:', error);
-        }
+        console.log('🏝️ Okinawa App V4.0 Loaded [FAMILY MODE - ULTRA UI]');
+        injectCSS();
+        renderHeader();
+        renderBuilderUI();
+        setTimeout(initMap, 500);
     }
 
     function initMap() {
-        const mapElement = document.getElementById('map');
-        if (!mapElement) return;
-
-        map = new google.maps.Map(mapElement, {
-            center: { lat: 26.2124, lng: 127.6809 }, // 나하 중심
-            zoom: 11,
-            mapTypeControl: false,
-            streetViewControl: false,
-            fullscreenControl: true
+        const mapEl = document.getElementById('map');
+        if (!mapEl) return;
+        map = new google.maps.Map(mapEl, {
+            center: { lat: 26.2124, lng: 127.6809 },
+            zoom: 10,
+            mapTypeControl: false, streetViewControl: false, fullscreenControl: true
         });
-
-        updateMarkers(activeDay);
+        updateMapMarkers();
     }
 
-    // ==================== UI 렌더링 ====================
-    function renderTabs() {
+    function renderHeader() {
         const container = document.getElementById('day-tabs');
         if (!container) return;
-
-        container.innerHTML = Object.keys(schedule).map(day =>
-            `<button onclick="changeOkinawaDay(${day})" 
-                    class="day-tab flex-shrink-0 px-3 py-2 rounded-lg border-2 text-xs font-bold transition-all duration-300 whitespace-nowrap ${day == activeDay
-                ? 'bg-gradient-to-r from-teal-400 to-blue-500 text-white border-teal-600 shadow-md scale-105'
-                : 'bg-white text-gray-600 border-gray-200 hover:bg-gray-50'
+        container.innerHTML = Object.keys(userItinerary).map(day =>
+            `<button onclick="switchDay(${day})" 
+                class="px-4 py-2 rounded-full text-sm font-bold transition-all border shadow-sm ${day == activeDay
+                ? 'bg-teal-500 text-white scale-105 border-teal-600'
+                : 'bg-white text-gray-500 hover:bg-gray-100'
             }">
-                ${day}일차
+                Day ${day}
             </button>`
         ).join('');
     }
 
-    function changeOkinawaDay(day) {
-        activeDay = day;
-        renderTabs();
-        renderSchedule(day);
-        if (map) updateMarkers(day);
-        if (directionsRenderer) directionsRenderer.setDirections({ routes: [] });
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+    function renderBuilderUI() {
+        const container = document.getElementById('itinerary-content');
+        if (!container) return;
+
+        const planList = userItinerary[activeDay].map((id, idx) => {
+            const item = POI_DATABASE.find(p => p.id === id);
+            return `
+                <div class="flex items-center bg-white p-3 rounded-lg shadow-sm border border-gray-200 transition hover:shadow-md">
+                    <div class="w-6 h-6 rounded-full bg-teal-500 text-white flex items-center justify-center text-xs font-bold mr-3 flex-shrink-0">
+                        ${idx + 1}
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <div class="font-bold text-gray-700 text-sm cursor-pointer hover:text-teal-600 truncate" onclick="showDetail('${item.id}')">
+                            ${item.name}
+                        </div>
+                        <div class="text-[10px] text-gray-400">
+                            ${item.region.toUpperCase()} • ${item.type}
+                        </div>
+                    </div>
+                    <button onclick="removeFromPlan('${item.id}')" class="text-red-400 hover:text-red-600 p-2 rounded-full hover:bg-red-50 transition">
+                        ⛔
+                    </button>
+                </div>`;
+        }).join('');
+
+        container.innerHTML = `
+            <!-- 1. 내 일정 -->
+            <div class="bg-teal-50 p-4 rounded-xl mb-6 border border-teal-100 shadow-inner">
+                <div class="flex justify-between items-center mb-3">
+                    <h3 class="font-bold text-teal-800 flex items-center gap-2">📅 Day ${activeDay} 일정</h3>
+                    <span class="text-xs text-teal-600 bg-white px-2 py-1 rounded border border-teal-200 font-bold">${userItinerary[activeDay].length}곳 선택됨</span>
+                </div>
+                <div id="my-plan-list" class="space-y-2 min-h-[50px]">
+                    ${userItinerary[activeDay].length === 0 ? '<p class="text-center text-gray-400 text-xs py-6 border-2 border-dashed border-teal-200 rounded-lg">아래 목록에서 [+] 버튼을 눌러<br>장소를 추가해보세요.</p>' : planList}
+                </div>
+            </div>
+
+            <!-- 2. 필터 버튼 -->
+            <div class="mb-3 flex gap-2 overflow-x-auto pb-2 scrollbar-hide filters">
+                <button onclick="filterSpots('all')" class="filter-btn active bg-gray-800 text-white px-3 py-1.5 rounded-full text-xs font-bold shadow-sm whitespace-nowrap transition">전체</button>
+                <button onclick="filterSpots('naha')" class="filter-btn bg-white text-gray-600 border border-gray-300 px-3 py-1.5 rounded-full text-xs font-bold shadow-sm whitespace-nowrap transition hover:bg-gray-50">나하 시내</button>
+                <button onclick="filterSpots('north')" class="filter-btn bg-white text-gray-600 border border-gray-300 px-3 py-1.5 rounded-full text-xs font-bold shadow-sm whitespace-nowrap transition hover:bg-gray-50">북부 (츄라우미)</button>
+                <button onclick="filterSpots('middle')" class="filter-btn bg-white text-gray-600 border border-gray-300 px-3 py-1.5 rounded-full text-xs font-bold shadow-sm whitespace-nowrap transition hover:bg-gray-50">중부 (아메리칸)</button>
+                <button onclick="filterSpots('south')" class="filter-btn bg-white text-gray-600 border border-gray-300 px-3 py-1.5 rounded-full text-xs font-bold shadow-sm whitespace-nowrap transition hover:bg-gray-50">남부 (카페)</button>
+            </div>
+
+            <!-- 3. 장소 리스트 -->
+            <div id="spot-pool" class="grid grid-cols-1 gap-4 pb-24"></div>`;
+
+        renderSpotPool('all');
     }
 
-    function updateMarkers(day) {
-        if (!map || typeof google === 'undefined') return;
+    window.renderSpotPool = function (region) {
+        const pool = document.getElementById('spot-pool');
+        const filtered = region === 'all' ? POI_DATABASE : POI_DATABASE.filter(p => p.region === region);
 
+        let htmlContent = filtered.map(place => `
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition">
+                <div class="flex p-4 gap-4">
+                    <!-- Image Section -->
+                    <div class="w-24 h-24 flex-shrink-0 relative rounded-lg overflow-hidden cursor-pointer group" onclick="showDetail('${place.id}')">
+                        <img src="${place.photos[0]}" class="w-full h-full object-cover transition group-hover:scale-110">
+                        <div class="absolute bottom-0 w-full bg-black/60 text-white text-[10px] text-center py-1">상세보기</div>
+                    </div>
+                    
+                    <!-- Content Section -->
+                    <div class="flex-1 min-w-0 flex flex-col justify-between">
+                        <div>
+                            <div class="flex justify-between items-start">
+                                <h4 class="font-bold text-gray-900 text-lg truncate cursor-pointer hover:text-teal-600" onclick="showDetail('${place.id}')">${place.name}</h4>
+                                <span class="text-[10px] font-bold px-2 py-0.5 rounded ${place.type === 'food' ? 'bg-orange-50 text-orange-600' : 'bg-blue-50 text-blue-600'}">${place.type.toUpperCase()}</span>
+                            </div>
+                            <p class="text-sm text-gray-500 mt-1 line-clamp-2">${place.desc}</p>
+                            <div class="flex items-center gap-1 mt-2">
+                                <span class="text-yellow-400 text-xs">★</span>
+                                <span class="text-xs font-bold text-gray-700">${place.rating}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Action Button -->
+                <div class="px-4 pb-4">
+                    <button onclick="addToPlan('${place.id}')" class="w-full bg-gray-50 hover:bg-gray-100 text-gray-700 font-bold py-3 rounded-lg flex items-center justify-center gap-2 transition">
+                        <i class="fas fa-plus"></i> 일정에 담기
+                    </button>
+                </div>
+            </div>`).join('');
+
+        pool.innerHTML = htmlContent;
+    }
+
+    // --- 인터랙션 로직 ---
+    window.filterSpots = (region) => {
+        document.querySelectorAll('.filter-btn').forEach(b => {
+            b.classList.remove('bg-gray-800', 'text-white');
+            b.classList.add('bg-white', 'text-gray-600');
+        });
+        event.target.classList.add('bg-gray-800', 'text-white');
+        event.target.classList.remove('bg-white', 'text-gray-600');
+        renderSpotPool(region);
+    }
+
+    window.addToPlan = (id) => {
+        if (userItinerary[activeDay].includes(id)) return alert('이미 일정에 있습니다.');
+        userItinerary[activeDay].push(id);
+        renderBuilderUI();
+        updateMapMarkers();
+    }
+
+    window.removeFromPlan = (id) => {
+        userItinerary[activeDay] = userItinerary[activeDay].filter(itemId => itemId !== id);
+        renderBuilderUI();
+        updateMapMarkers();
+    }
+
+    window.switchDay = (day) => {
+        activeDay = day;
+        renderHeader();
+        renderBuilderUI();
+        updateMapMarkers();
+    }
+
+    function updateMapMarkers() {
+        if (!map) return;
         markers.forEach(m => m.setMap(null));
         markers = [];
         const bounds = new google.maps.LatLngBounds();
 
-        schedule[day].items.forEach((key, idx) => {
-            const item = getPlace(key);
-            if (!item) return;
-
-            const marker = new google.maps.Marker({
-                position: { lat: item.lat, lng: item.lng },
-                map: map,
-                label: { text: (idx + 1).toString(), color: "white", fontWeight: "bold" },
-                title: item.name,
-                animation: google.maps.Animation.DROP
-            });
-
-            marker.addListener('click', () => {
-                const listElement = document.getElementById(`place-item-${idx}`);
-                if (listElement) {
-                    listElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                    const panel = document.getElementById(`detail-${idx}`);
-                    if (panel && panel.classList.contains('hidden')) toggleDetail(idx, item.lat, item.lng);
-                }
-            });
-
-            markers.push(marker);
-            bounds.extend(marker.getPosition());
+        userItinerary[activeDay].forEach((id, idx) => {
+            const item = POI_DATABASE.find(p => p.id === id);
+            if (item) {
+                const marker = new google.maps.Marker({
+                    position: { lat: item.lat, lng: item.lng },
+                    map: map,
+                    label: { text: (idx + 1).toString(), color: "white", fontWeight: 'bold' },
+                    animation: google.maps.Animation.DROP
+                });
+                marker.addListener('click', () => showDetail(id));
+                markers.push(marker);
+                bounds.extend(marker.getPosition());
+            }
         });
 
-        if (markers.length > 0) {
-            map.fitBounds(bounds);
-        }
+        if (markers.length > 0) map.fitBounds(bounds);
     }
 
-    function renderSchedule(day) {
-        const container = document.getElementById('itinerary-content');
-        if (!container) return;
+    // --- 상세 모달 (구글맵 스타일 시뮬레이션) ---
+    window.showDetail = function (id) {
+        const item = POI_DATABASE.find(p => p.id === id);
+        if (!createModal()) return;
 
-        const summaryDiv = document.createElement('div');
-        summaryDiv.className = "bg-gradient-to-r from-teal-50 to-blue-50 rounded-2xl p-4 mb-6 border-l-4 border-teal-500";
-        summaryDiv.innerHTML = `
-            <div class="flex justify-between items-start">
-                <div>
-                    <h3 class="font-bold text-lg text-gray-800 mb-2">📍 ${schedule[day].title}</h3>
-                    <p class="text-sm text-gray-600">${schedule[day].summary}</p>
-                </div>
-                <button onclick="editItinerary()" class="text-xs bg-white border border-gray-300 px-2 py-1 rounded hover:bg-gray-50 text-gray-600">
-                    <i class="fas fa-edit"></i> 일정 편집
-                </button>
-            </div>
-        `;
-        container.innerHTML = '';
-        container.appendChild(summaryDiv);
-
-        schedule[day].items.forEach((key, idx) => {
-            const item = getPlace(key);
-            if (!item) return;
-
-            let iconClass = 'fa-map-marker-alt';
-            let typeColor = 'text-gray-400';
-            let bgColor = 'bg-gray-50';
-
-            if (item.type === 'food') { iconClass = 'fa-utensils'; typeColor = 'text-orange-500'; bgColor = 'bg-orange-50'; }
-            if (item.type === 'hotel') { iconClass = 'fa-bed'; typeColor = 'text-blue-500'; bgColor = 'bg-blue-50'; }
-            if (item.type === 'transport') { iconClass = 'fa-plane'; typeColor = 'text-purple-500'; bgColor = 'bg-purple-50'; }
-            if (item.type === 'tour') { iconClass = 'fa-camera'; typeColor = 'text-teal-600'; bgColor = 'bg-teal-50'; }
-
-            const div = document.createElement('div');
-            div.id = `place-item-${idx}`;
-            div.className = "bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden transition-all duration-300 hover:shadow-md hover:border-teal-300 mb-3";
-            div.innerHTML = `
-                <div class="click-trigger p-3 cursor-pointer flex items-center justify-between hover:bg-gray-50 transition" onclick="toggleDetail(${idx}, ${item.lat}, ${item.lng})">
-                    <div class="flex items-center gap-2 overflow-hidden flex-1">
-                        <span class="flex-none w-8 h-8 rounded-full ${bgColor} ${typeColor} flex items-center justify-center font-bold text-sm border border-current">${idx + 1}</span>
-                        <div class="flex flex-col min-w-0 flex-1">
-                            <h4 class="font-bold text-gray-800 text-sm break-words line-clamp-2">${item.name}</h4>
-                            <div class="flex items-center gap-1.5 mt-0.5">
-                                <i class="fas ${iconClass} ${typeColor} text-xs"></i>
-                                <span class="text-xs text-gray-500 truncate">${item.desc}</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="flex-none ml-2 w-6 h-6 flex items-center justify-center rounded-full bg-gray-100">
-                         <i id="chevron-${idx}" class="fas fa-chevron-down ${typeColor} text-xs transition-transform duration-300"></i>
-                    </div>
-                </div>
-                <div id="detail-${idx}" class="hidden border-t-2 border-gray-100 bg-gradient-to-b from-gray-50 to-white">
-                    ${generateDetailHTML(item, idx)}
-                </div>
-            `;
-            container.appendChild(div);
-        });
-    }
-
-    function generateDetailHTML(item, idx) {
-        const photosHTML = item.photos ? `<div class="grid grid-cols-2 gap-2 p-4">${item.photos.slice(0, 2).map(url => `<div class="aspect-video rounded-xl overflow-hidden shadow-md"><img src="${url}" class="w-full h-full object-cover"></div>`).join('')}</div>` : '';
-
-        const menusHTML = item.menus ? `
-            <div class="px-4 mb-4">
-                <h5 class="font-bold text-gray-700 text-sm mb-2">🍽️ 추천 메뉴</h5>
-                <div class="space-y-2">
-                    ${item.menus.map(menu => `
-                        <div class="flex items-center justify-between bg-white p-2 rounded-lg border border-gray-100 shadow-sm">
-                            <div class="flex items-center gap-2">
-                                <span class="text-lg">${menu.photo || '🍽️'}</span>
-                                <div>
-                                    <div class="text-sm font-bold text-gray-800">${menu.name}</div>
-                                    <div class="text-xs text-gray-500">${menu.desc}</div>
-                                </div>
-                            </div>
-                            <div class="text-sm font-bold text-orange-500">${menu.price}</div>
-                        </div>
-                    `).join('')}
-                </div>
-            </div>
-        ` : '';
-
-        const infoHTML = item.info ? `
-            <div class="px-4 mb-4 grid grid-cols-2 gap-2">
-                ${item.info.map(inf => `
-                    <div class="bg-gray-50 p-2 rounded-lg">
-                        <div class="text-xs text-gray-400 font-bold">${inf.label}</div>
-                        <div class="text-xs text-gray-700 font-medium">${inf.val}</div>
-                    </div>
-                `).join('')}
-            </div>
-        ` : '';
-
-        const recommendHTML = item.recommend && item.recommend.length > 0 ? `
-            <div class="px-4 mb-4">
-                <h5 class="font-bold text-gray-700 text-sm mb-2">👍 주변 추천 (클릭하여 상세 보기)</h5>
-                <div class="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
-                    ${item.recommend.map((rec, i) => `
-                        <div onclick="showPlaceDetailModal('p_${idx}_r_${i}')" 
-                             class="flex-none w-32 bg-white p-2 rounded-lg border border-gray-100 shadow-sm text-center cursor-pointer hover:border-teal-300 hover:bg-teal-50 transition">
-                            <div class="text-xl mb-1">${rec.icon}</div>
-                            <div class="text-xs font-bold text-gray-800 truncate">${rec.name}</div>
-                            <div class="text-[10px] text-gray-500 truncate">${rec.desc}</div>
-                        </div>
-                    `).join('')}
-                </div>
-            </div>
-        ` : '';
-
-        if (item.recommend) {
-            item.recommend.forEach((rec, i) => {
-                const recKey = `p_${idx}_r_${i}`;
-                window.placeRecommendations = window.placeRecommendations || {};
-                window.placeRecommendations[recKey] = rec;
-            });
+        // 지도 이동 시뮬레이션
+        if (map) {
+            map.panTo({ lat: item.lat, lng: item.lng });
+            map.setZoom(16);
         }
 
-        return `
-            ${photosHTML}
-            ${infoHTML}
-            ${menusHTML}
-            <div class="px-4 mb-4">
-                <div class="bg-yellow-50 p-3 rounded-xl border border-yellow-100">
-                    <p class="text-sm text-gray-700 leading-relaxed">${item.tips || ''}</p>
-                </div>
-            </div>
-            ${recommendHTML}
-            <div class="px-4 pb-6">
-                 <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(item.name)}" target="_blank" class="block w-full bg-gray-800 text-white text-center py-3 rounded-xl font-bold hover:bg-gray-700 transition shadow-lg">구글맵 보기</a>
-            </div>
-        `;
-    }
-
-    function keyToSafeId(str) {
-        return str.replace(/[^a-zA-Z0-9]/g, '_');
-    }
-
-    // ==================== 모달 관련 ====================
-    function createModal() {
-        if (document.getElementById('place-detail-modal')) return;
-
-        const modal = document.createElement('div');
-        modal.id = 'place-detail-modal';
-        modal.className = 'fixed inset-0 z-[100] hidden';
-        modal.innerHTML = `
-            <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" onclick="closePlaceDetailModal()"></div>
-            <div class="absolute bottom-0 left-0 right-0 bg-white rounded-t-3xl max-h-[85vh] overflow-y-auto animate-slide-up">
-                <div class="sticky top-0 bg-white z-10 px-4 py-3 border-b border-gray-100 flex justify-between items-center">
-                    <h3 id="modal-title" class="font-bold text-lg text-gray-800">상세 정보</h3>
-                    <button onclick="closePlaceDetailModal()" class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 hover:bg-gray-200">
-                        <i class="fas fa-times"></i>
-                    </button>
-                </div>
-                <div id="modal-content" class="pb-8"></div>
-            </div>
-        `;
-        document.body.appendChild(modal);
-    }
-
-    window.showPlaceDetailModal = function (recKey) {
-        const rec = window.placeRecommendations[recKey];
-        if (!rec) return;
-
-        const modal = document.getElementById('place-detail-modal');
         const content = document.getElementById('modal-content');
-        const title = document.getElementById('modal-title');
-
-        title.textContent = rec.name;
-        modal.classList.remove('hidden');
-
-        const photosHTML = rec.photos ? `<div class="grid grid-cols-2 gap-2 p-4">${rec.photos.map(url => `<div class="aspect-video rounded-xl overflow-hidden shadow-md"><img src="${url}" class="w-full h-full object-cover"></div>`).join('')}</div>` : '';
-
-        const menusHTML = rec.menus ? `
-            <div class="px-4 mb-4">
-                <h5 class="font-bold text-gray-700 text-sm mb-2">🍽️ 메뉴 정보</h5>
-                <div class="space-y-2">
-                    ${rec.menus.map(menu => `
-                        <div class="flex items-center justify-between bg-white p-2 rounded-lg border border-gray-100 shadow-sm">
-                            <div class="flex items-center gap-2">
-                                <span class="text-lg">${menu.photo || '🍽️'}</span>
-                                <div>
-                                    <div class="text-sm font-bold text-gray-800">${menu.name}</div>
-                                    <div class="text-xs text-gray-500">${menu.desc}</div>
-                                </div>
-                            </div>
-                            <div class="text-sm font-bold text-orange-500">${menu.price}</div>
-                        </div>
-                    `).join('')}
-                </div>
-            </div>
-        ` : '';
 
         content.innerHTML = `
-            ${photosHTML}
-            <div class="px-4 mb-4">
-                <div class="bg-blue-50 p-3 rounded-xl border border-blue-100">
-                    <p class="text-sm text-gray-700">${rec.desc}</p>
+            <div class="relative h-72 bg-gray-900 group">
+                <img src="${item.photos[0]}" class="w-full h-full object-cover opacity-90 transition group-hover:opacity-100 duration-700">
+                <button onclick="closeModal()" class="absolute top-4 right-4 bg-black/50 text-white w-9 h-9 rounded-full flex items-center justify-center backdrop-blur hover:bg-black/70 transition z-20">✕</button>
+                <div class="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/90 via-black/50 to-transparent p-6 pt-20">
+                    <span class="bg-teal-600 text-white text-[10px] px-2 py-1 rounded-full font-bold mb-2 inline-block">${item.region.toUpperCase()}</span>
+                    <h2 class="text-3xl font-black text-white leading-tight mb-1">${item.name}</h2>
+                    <div class="flex items-center gap-2 text-white/90 text-sm">
+                        <span class="text-yellow-400">★ ${item.rating}</span>
+                        <span>•</span>
+                        <span>${item.type.toUpperCase()}</span>
+                    </div>
                 </div>
             </div>
-            ${menusHTML}
-            <div class="px-4">
-                 <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(rec.name)}" target="_blank" class="block w-full bg-gray-800 text-white text-center py-3 rounded-xl font-bold hover:bg-gray-700 transition shadow-lg">구글맵 보기</a>
+            
+            <div class="sticky top-0 bg-white z-10 flex border-b shadow-sm">
+                <button class="flex-1 py-4 text-sm font-bold text-teal-600 border-b-2 border-teal-600 transition">개요</button>
+                <button class="flex-1 py-4 text-sm font-bold text-gray-400 hover:text-gray-600 transition" onclick="alert('준비중입니다.')">리뷰 (128)</button>
+                <button class="flex-1 py-4 text-sm font-bold text-gray-400 hover:text-gray-600 transition" onclick="alert('준비중입니다.')">사진</button>
             </div>
-        `;
-    };
 
-    window.closePlaceDetailModal = function () {
-        document.getElementById('place-detail-modal').classList.add('hidden');
-    };
+            <div class="p-6 pb-24 space-y-8">
+                <!-- 설명 -->
+                <div>
+                    <p class="text-gray-600 leading-relaxed text-lg">${item.desc}</p>
+                </div>
 
-    // ==================== 인터랙션 & 유틸리티 ====================
-    function toggleDetail(idx, lat, lng) {
-        const detailPanel = document.getElementById(`detail-${idx}`);
-        const chevron = document.getElementById(`chevron-${idx}`);
-        if (detailPanel.classList.contains('hidden')) {
-            detailPanel.classList.remove('hidden');
-            chevron.classList.add('rotate-180');
-            if (map) { map.panTo({ lat, lng }); map.setZoom(15); }
-        } else {
-            detailPanel.classList.add('hidden');
-            chevron.classList.remove('rotate-180');
+                <!-- 정보 카드 -->
+                <div class="bg-gray-50 p-5 rounded-2xl border border-gray-100">
+                    <h3 class="font-bold text-gray-800 text-sm mb-3 flex items-center gap-2">
+                        <i class="fas fa-info-circle text-teal-500"></i> 상세 정보
+                    </h3>
+                    <div class="prose text-sm text-gray-600 leading-relaxed">${item.details?.info || '정보 업데이트 중...'}</div>
+                </div>
+
+                <!-- 교통/티켓 정보 -->
+                ${item.details?.transport ? `
+                <div class="space-y-3">
+                    <h3 class="font-bold text-gray-800 text-sm flex items-center gap-2">
+                        <i class="fas fa-ticket-alt text-purple-500"></i> 티켓 & 교통
+                    </h3>
+                    <div class="bg-purple-50 p-4 rounded-xl border border-purple-100">
+                        ${item.details.transport}
+                    </div>
+                </div>` : ''}
+                
+                <!-- 구글맵 버튼 -->
+                <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(item.name)}" target="_blank" class="block w-full bg-gray-800 text-white text-center py-4 rounded-xl font-bold hover:bg-gray-700 transition shadow-lg flex items-center justify-center gap-2">
+                    <i class="fas fa-map-marked-alt"></i> 구글맵에서 실제 위치 보기
+                </a>
+            </div>`;
+    }
+
+    // --- Helpers ---
+    function createModal() {
+        let m = document.getElementById('app-modal');
+        if (!m) {
+            m = document.createElement('div');
+            m.id = 'app-modal';
+            m.className = 'fixed inset-0 z-50 hidden';
+            m.innerHTML = `<div class="absolute inset-0 bg-black/70 backdrop-blur-sm transition-opacity" onclick="closeModal()"></div><div class="absolute bottom-0 w-full md:w-[480px] md:right-0 md:top-0 h-[90vh] md:h-full bg-white rounded-t-2xl md:rounded-none flex flex-col overflow-hidden shadow-2xl transition-transform transform translate-y-0"><div id="modal-content" class="flex-1 overflow-y-auto scrollbar-hide bg-white"></div></div>`;
+            document.body.appendChild(m);
         }
+        m.classList.remove('hidden');
+        return true;
     }
 
-    function getPlace(key) {
-        const override = localStorage.getItem(`okinawa_place_${key}`);
-        return override ? { ...placesDB[key], ...JSON.parse(override) } : placesDB[key];
+    window.closeModal = () => document.getElementById('app-modal').classList.add('hidden');
+
+    function injectCSS() {
+        const s = document.createElement('style');
+        s.textContent = `.scrollbar-hide::-webkit-scrollbar { display: none; } .line-clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; } .line-clamp-1 { display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden; }`;
+        document.head.appendChild(s);
     }
 
-    // ==================== 사용자 입력 (호텔/항공) ====================
-    let hotelAutocomplete;
-    function initHotelSearch() {
-        const input = document.getElementById('hotel-search-input');
-        if (!input || typeof google === 'undefined') return;
-        hotelAutocomplete = new google.maps.places.Autocomplete(input, { types: ['lodging'] });
-        hotelAutocomplete.addListener('place_changed', () => {
-            const place = hotelAutocomplete.getPlace();
-            if (!place.geometry) return alert("장소 정보 없음");
-            updateAccommodation(place);
-        });
-    }
+    initOkinawaTrip();
+}
 
-    function toggleHotelSearch() {
-        const input = document.getElementById('hotel-search-input');
-        const btn = document.getElementById('hotel-edit-btn');
-        if (input.classList.contains('hidden')) {
-            input.classList.remove('hidden');
-            input.focus();
-            btn.innerHTML = '취소';
-            initHotelSearch();
-        } else {
-            input.classList.add('hidden');
-            btn.innerHTML = '숙소 변경';
-        }
-    }
-
-    function updateAccommodation(place) {
-        const data = { name: place.name, lat: place.geometry.location.lat(), lng: place.geometry.location.lng(), desc: place.formatted_address };
-        localStorage.setItem('okinawa_place_hotel_checkin', JSON.stringify(data));
-        loadAccommodation();
-        toggleHotelSearch();
-        if (activeDay == 1) { renderSchedule(activeDay); updateMarkers(activeDay); }
-        setupSchedule();
-    }
-
-    function loadAccommodation() {
-        const item = getPlace('hotel_checkin');
-        const display = document.getElementById('hotel-info-display');
-        if (display && item) display.innerHTML = `<span class="font-bold">${item.name}</span><br><span class="text-xs">${item.desc}</span>`;
-    }
-
-    let flightInfo = { departure: '', arrival: '', number: '' };
-    function loadFlightInfo() {
-        const saved = localStorage.getItem('okinawa_flight_info');
-        if (saved) { flightInfo = JSON.parse(saved); updateFlightInfoUI(); }
-    }
-
-    function updateFlightInfoUI() {
-        const display = document.getElementById('flight-info-display');
-        const btn = document.getElementById('flight-edit-btn');
-        if (!display) return;
-        if (flightInfo.departure) {
-            display.innerHTML = `🛫 ${flightInfo.departure} <br> 🛬 ${flightInfo.arrival}`;
-            display.classList.remove('hidden');
-            btn.innerHTML = '정보 수정';
-        } else {
-            display.classList.add('hidden');
-            btn.innerHTML = '항공권 정보 입력';
-        }
-    }
-
-    function editFlightInfo() {
-        const dep = prompt("가는편 (예: 11/25 09:00)", flightInfo.departure);
-        if (!dep) return;
-        const arr = prompt("오는편 (예: 11/28 18:00)", flightInfo.arrival);
-        const num = prompt("편명", flightInfo.number);
-        flightInfo = { departure: dep, arrival: arr, number: num };
-        localStorage.setItem('okinawa_flight_info', JSON.stringify(flightInfo));
-        updateFlightInfoUI();
-        setupSchedule();
-    }
-
-    // ==================== 일정 관리 (New) ====================
-    function setupSchedule() {
-        console.log("일정 재설정: 항공/호텔 정보 업데이트됨");
-    }
-
-    function editItinerary() {
-        const day = prompt("편집할 일차를 입력하세요 (1-4):", activeDay);
-        if (!day || !schedule[day]) return alert("올바른 일차를 입력해주세요.");
-
-        const action = prompt(`[${day}일차 편집]\n1. 일정 초기화\n2. 장소 추가 (키 입력)\n3. 장소 삭제 (순서 번호)\n번호를 입력하세요:`);
-
-        if (action === '1') {
-            if (confirm(`${day}일차 일정을 초기화하시겠습니까?`)) {
-                schedule[day].items = [];
-                renderSchedule(day);
-                updateMarkers(day);
-            }
-        } else if (action === '2') {
-            const key = prompt("추가할 장소 키(key)를 입력하세요 (예: churaumi, american_village):");
-            if (key && placesDB[key]) {
-                schedule[day].items.push(key);
-                renderSchedule(day);
-                updateMarkers(day);
-            } else {
-                alert("존재하지 않는 장소 키입니다.");
-            }
-        } else if (action === '3') {
-            const idx = prompt(`삭제할 장소의 순서 번호를 입력하세요 (1~${schedule[day].items.length}):`);
-            if (idx && idx > 0 && idx <= schedule[day].items.length) {
-                schedule[day].items.splice(idx - 1, 1);
-                renderSchedule(day);
-                updateMarkers(day);
-            } else {
-                alert("잘못된 번호입니다.");
-            }
-        }
-    }
-
-    // ==================== 전역 노출 ====================
-    window.initOkinawaTrip = initOkinawaTrip;
-    window.changeOkinawaDay = changeOkinawaDay;
-    window.toggleDetail = toggleDetail;
-    window.editFlightInfo = editFlightInfo;
-    window.toggleHotelSearch = toggleHotelSearch;
-    window.editItinerary = editItinerary;
-
-})();
+window.initOkinawaTrip = initOkinawaTrip;
