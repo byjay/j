@@ -68,8 +68,24 @@ const japanRegions = {
         description: '아열대 해변 리조트',
         scriptFile: 'js/travel/okinawa.js',
         mission: '모든 퀴즈 평균 90점 이상'
-    }
+    },
+    // --- NEW CITIES ---
+    nagoya: { id: 'nagoya', name: '나고야', nameJp: '名古屋', icon: '🏯', color: 'yellow', unlockCondition: 'default', description: '히츠마부시와 지브리', scriptFile: 'js/travel/nagoya.js' },
+    yokohama: { id: 'yokohama', name: '요코하마', nameJp: '横浜', icon: '🎡', color: 'blue', unlockCondition: 'default', description: '항구도시와 야경', scriptFile: 'js/travel/yokohama.js' },
+    kobe: { id: 'kobe', name: '고베', nameJp: '神戸', icon: '🥩', color: 'red', unlockCondition: 'default', description: '고베규와 디저트', scriptFile: 'js/travel/kobe.js' },
+    nara: { id: 'nara', name: '나라', nameJp: '奈良', icon: '🦌', color: 'green', unlockCondition: 'default', description: '사슴공원과 대불', scriptFile: 'js/travel/nara.js' },
+    hiroshima: { id: 'hiroshima', name: '히로시마', nameJp: '広島', icon: '⛩️', color: 'orange', unlockCondition: 'default', description: '평화와 미야지마', scriptFile: 'js/travel/hiroshima.js' },
+    hakone: { id: 'hakone', name: '하코네', nameJp: '箱根', icon: '♨️', color: 'indigo', unlockCondition: 'default', description: '온천과 후지산', scriptFile: 'js/travel/hakone.js' },
+    kanazawa: { id: 'kanazawa', name: '가나자와', nameJp: '金沢', icon: '🍂', color: 'amber', unlockCondition: 'default', description: '작은 교토', scriptFile: 'js/travel/kanazawa.js' },
+    nikko: { id: 'nikko', name: '닛코', nameJp: '日光', icon: '🙈', color: 'emerald', unlockCondition: 'default', description: '세계유산과 자연', scriptFile: 'js/travel/nikko.js' },
+    sendai: { id: 'sendai', name: '센다이', nameJp: '仙台', icon: '🐮', color: 'lime', unlockCondition: 'default', description: '규탄과 숲의 도시', scriptFile: 'js/travel/sendai.js' },
+    nagasaki: { id: 'nagasaki', name: '나가사키', nameJp: '長崎', icon: '⛪', color: 'rose', unlockCondition: 'default', description: '짬뽕과 야경', scriptFile: 'js/travel/nagasaki.js' }
 };
+
+// Load Route Helper
+const routeScript = document.createElement('script');
+routeScript.src = 'js/travel/route_helper.js';
+document.head.appendChild(routeScript);
 
 let currentRegion = null;
 let loadedScripts = {};
