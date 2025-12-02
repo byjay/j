@@ -159,4 +159,129 @@ window.checkFukuokaAccess = checkFukuokaAccess;
 window.triggerLoginAnimation = triggerLoginAnimation;
 window.playAudio = playAudio;
 
+// ==================== PWA 설치 유도 (New) ====================
+let deferredPrompt;
+
+function initPWAInstall() {
+    // 1. 이미 설치된 상태인지 확인 (Standalone 모드)
+    const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+    if (isStandalone) {
+        console.log('App is already running in standalone mode.');
+        return;
+    }
+
+    // 2. Android/Desktop: beforeinstallprompt 이벤트 리스너
+    window.addEventListener('beforeinstallprompt', (e) => {
+        // 기본 미니 인포바 차단
+        e.preventDefault();
+        // 이벤트 저장 (나중에 트리거하기 위해)
+        deferredPrompt = e;
+        // 설치 버튼 표시
+        showInstallPromotion();
+    });
+
+    // 3. iOS 감지 및 안내 (beforeinstallprompt 미지원)
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+    if (isIOS && !isStandalone) {
+        // iOS는 사용자가 직접 설치해야 하므로, 최초 1회만 안내 모달 표시 (쿠키/로컬스토리지 체크)
+        const hasSeenInstallGuide = localStorage.getItem('ios_install_guide_seen');
+        if (!hasSeenInstallGuide) {
+            setTimeout(() => {
+                showIOSInstallGuide();
+            }, 2000); // 앱 진입 2초 후 표시
+        }
+    }
+}
+
+// 설치 버튼 표시 (Android/Desktop)
+function showInstallPromotion() {
+    // 기존에 버튼이 있다면 중복 생성 방지
+    if (document.getElementById('pwa-install-btn')) return;
+
+    const btnHtml = `
+        <div id="pwa-install-btn" class="fixed bottom-20 left-1/2 transform -translate-x-1/2 z-50 animate-bounce-slight">
+            <button onclick="triggerInstallPrompt()" class="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-6 py-3 rounded-full shadow-lg font-bold flex items-center gap-2 hover:scale-105 transition-transform">
+                <i class="fas fa-download"></i> 앱으로 설치하기
+            </button>
+        </div>
+    `;
+    document.body.insertAdjacentHTML('beforeend', btnHtml);
+}
+
+// 설치 프롬프트 트리거
+function triggerInstallPrompt() {
+    if (!deferredPrompt) return;
+
+    // 프롬프트 표시
+    deferredPrompt.prompt();
+
+    // 사용자 응답 대기
+    deferredPrompt.userChoice.then((choiceResult) => {
+        if (choiceResult.outcome === 'accepted') {
+            console.log('User accepted the install prompt');
+        } else {
+            console.log('User dismissed the install prompt');
+        }
+        deferredPrompt = null;
+        // 버튼 제거
+        const btn = document.getElementById('pwa-install-btn');
+        if (btn) btn.remove();
+    });
+}
+
+// iOS 설치 가이드 모달
+function showIOSInstallGuide() {
+    const modalHtml = `
+        <div id="ios-install-modal" class="fixed inset-0 z-[100] flex items-end justify-center bg-black/60 animate-fade-in" onclick="closeIOSInstallGuide()">
+            <div class="bg-white w-full max-w-md rounded-t-3xl p-6 pb-10 animate-slide-up relative" onclick="event.stopPropagation()">
+                <button onclick="closeIOSInstallGuide()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+                <div class="flex items-center gap-4 mb-4">
+                    <div class="w-14 h-14 bg-gray-100 rounded-xl flex items-center justify-center text-3xl">📱</div>
+                    <div>
+                        <h3 class="font-bold text-lg text-gray-800">앱으로 더 편하게 보세요!</h3>
+                        <p class="text-sm text-gray-500">주소창 없이 전체 화면으로 즐기세요.</p>
+                    </div>
+                </div>
+                <div class="space-y-3 text-sm text-gray-700">
+                    <div class="flex items-center gap-3 p-3 bg-gray-50 rounded-xl">
+                        <span class="w-6 h-6 flex items-center justify-center bg-blue-100 text-blue-600 rounded-full font-bold text-xs">1</span>
+                        <span>브라우저 하단의 <i class="fas fa-share-square text-blue-500 mx-1"></i> <strong>공유</strong> 버튼을 누르세요.</span>
+                    </div>
+                    <div class="flex items-center gap-3 p-3 bg-gray-50 rounded-xl">
+                        <span class="w-6 h-6 flex items-center justify-center bg-blue-100 text-blue-600 rounded-full font-bold text-xs">2</span>
+                        <span>메뉴에서 <i class="far fa-plus-square text-gray-600 mx-1"></i> <strong>홈 화면에 추가</strong>를 선택하세요.</span>
+                    </div>
+                </div>
+                <button onclick="closeIOSInstallGuide()" class="w-full mt-6 py-3 bg-blue-600 text-white font-bold rounded-xl hover:bg-blue-700 transition">
+                    알겠습니다
+                </button>
+            </div>
+            <!-- 화살표 지시 (아이폰 하단 바 위치 대략적 조준) -->
+            <div class="absolute bottom-2 left-1/2 transform -translate-x-1/2 text-white text-center animate-bounce">
+                <p class="text-sm font-bold mb-1">여기를 눌러주세요!</p>
+                <i class="fas fa-arrow-down text-2xl"></i>
+            </div>
+        </div>
+    `;
+    document.body.insertAdjacentHTML('beforeend', modalHtml);
+    localStorage.setItem('ios_install_guide_seen', 'true');
+}
+
+function closeIOSInstallGuide() {
+    const modal = document.getElementById('ios-install-modal');
+    if (modal) modal.remove();
+}
+
+// 전역 노출
+window.initPWAInstall = initPWAInstall;
+window.triggerInstallPrompt = triggerInstallPrompt;
+window.closeIOSInstallGuide = closeIOSInstallGuide;
+
+// 초기화 실행 (문서 로드 후)
+document.addEventListener('DOMContentLoaded', () => {
+    initPWAInstall();
+});
+
 console.log('ui.js loaded');
