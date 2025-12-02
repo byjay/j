@@ -201,6 +201,37 @@ function showEssentialApps() {
     document.body.insertAdjacentHTML('beforeend', modalHtml);
 }
 
+
+// 쇼핑 모듈 정보
+const shoppingModules = {
+    donki: { script: 'js/shopping/donki.js', init: 'openDonkiModal' },
+    drugstore: { script: 'js/shopping/drugstore.js', init: 'openDrugstoreModal' }
+};
+
+// 쇼핑 모듈 열기
+function openShopping(type) {
+    const module = shoppingModules[type];
+    if (!module) return;
+
+    // 이미 로드되었는지 확인
+    if (document.querySelector(`script[src="${module.script}"]`)) {
+        if (typeof window[module.init] === 'function') {
+            window[module.init]();
+        }
+        return;
+    }
+
+    // 스크립트 로드
+    const script = document.createElement('script');
+    script.src = module.script;
+    script.onload = () => {
+        if (typeof window[module.init] === 'function') {
+            window[module.init]();
+        }
+    };
+    document.head.appendChild(script);
+}
+
 // 지역 선택 그리드 렌더링
 function renderRegionSelection() {
     const container = document.getElementById('region-selection');
@@ -209,7 +240,17 @@ function renderRegionSelection() {
     // 헤더 업데이트 (현재 위치 없음)
     updateTravelHeader('일본 여행 지역 선택');
 
-    let html = '';
+    let html = `
+        <!-- 쇼핑 섹션 (상단 고정) -->
+        <div class="col-span-2 grid grid-cols-2 gap-4 mb-2">
+             <button onclick="openShopping('donki')" class="bg-gradient-to-r from-yellow-400 to-yellow-500 text-black p-4 rounded-2xl font-black text-lg shadow-md hover:scale-105 transition flex items-center justify-center gap-2 border-2 border-black">
+                <span class="text-2xl">🐧</span> 돈키호테
+             </button>
+             <button onclick="openShopping('drugstore')" class="bg-gradient-to-r from-blue-500 to-cyan-500 text-white p-4 rounded-2xl font-black text-lg shadow-md hover:scale-105 transition flex items-center justify-center gap-2 border-2 border-blue-600">
+                <span class="text-2xl">💊</span> 드럭스토어
+             </button>
+        </div>
+    `;
 
     Object.values(japanRegions).forEach(region => {
         const isUnlocked = checkRegionUnlock(region);
@@ -235,8 +276,16 @@ function renderRegionSelection() {
 
 // 헤더 업데이트 함수
 function updateTravelHeader(title) {
-    const headerTitle = document.querySelector('#japan_travel .header-title');
-    if (headerTitle) headerTitle.textContent = title;
+    // japan_travel 탭 내부의 h2 태그를 찾음
+    const headerTitle = document.querySelector('#japan_travel h2');
+    if (headerTitle) {
+        // 아이콘 유지하면서 텍스트만 변경하거나, 전체 변경
+        if (title.includes('지역 선택')) {
+            headerTitle.innerHTML = '✈️ 일본 여행';
+        } else {
+            headerTitle.innerHTML = `✈️ ${title} 여행`;
+        }
+    }
 }
 
 // 지역 클릭 핸들러
@@ -468,5 +517,6 @@ window.backToRegionSelection = backToRegionSelection;
 window.handleRegionClick = handleRegionClick;
 window.closeLevelUpModal = closeLevelUpModal;
 window.showEssentialApps = showEssentialApps;
+window.openShopping = openShopping;
 
 console.log('japan_travel.js loaded');

@@ -138,4 +138,15 @@ function resetAllProgress() {
     }
 }
 
+
+// 전역 노출
+window.showLoginModal = showLoginModal;
+window.hideLoginModal = hideLoginModal;
+window.login = login;
+window.logout = logout;
+window.checkAutoLogin = checkAutoLogin;
+window.showPasswordPrompt = showPasswordPrompt;
+window.resetAllProgress = resetAllProgress;
+
 console.log('auth.js loaded');
+

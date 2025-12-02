@@ -253,7 +253,15 @@ function initFukuokaTrip() {
         const pool = document.getElementById('spot-pool');
         const filtered = region === 'all' ? POI_DATABASE : POI_DATABASE.filter(p => p.region === region);
 
-        let htmlContent = filtered.map(place => `
+        let htmlContent = filtered.map(place => {
+            const isAdded = isItemInAnyDay(place.id);
+            const btnClass = isAdded
+                ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                : "bg-gray-50 hover:bg-gray-100 text-gray-700 hover:text-orange-600";
+            const btnText = isAdded ? "✅ 일정 포함됨" : `<i class="fas fa-plus"></i> 일정에 담기`;
+            const btnAction = isAdded ? "" : `onclick="addToPlan('${place.id}')"`;
+
+            return `
             <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition">
                 <div class="flex p-4 gap-4">
                     <!-- Image Section -->
@@ -280,14 +288,16 @@ function initFukuokaTrip() {
                 
                 <!-- Action Button -->
                 <div class="px-4 pb-4">
-                    <button onclick="addToPlan('${place.id}')" class="w-full bg-gray-50 hover:bg-gray-100 text-gray-700 font-bold py-3 rounded-lg flex items-center justify-center gap-2 transition">
-                        <i class="fas fa-plus"></i> 일정에 담기
+                    <button ${btnAction} class="w-full font-bold py-3 rounded-lg flex items-center justify-center gap-2 transition ${btnClass}">
+                        ${btnText}
                     </button>
                 </div>
-            </div>`).join('');
+            </div>`;
+        }).join('');
 
         pool.innerHTML = htmlContent;
     }
+
 
     // --- 인터랙션 로직 ---
     window.filterSpots = (region) => {
@@ -300,11 +310,63 @@ function initFukuokaTrip() {
         renderSpotPool(region);
     }
 
+    // 전일차 중복 체크 헬퍼
+    function isItemInAnyDay(id) {
+        return Object.values(userItinerary).some(dayItems => dayItems.includes(id));
+    }
+
     window.addToPlan = (id) => {
-        if (userItinerary[activeDay].includes(id)) return alert('이미 일정에 있습니다.');
+        // 전일차 중복 체크
+        if (isItemInAnyDay(id)) {
+            return alert('이미 여행 일정에 포함된 장소입니다! (다른 날짜 확인 필요)');
+        }
+
         userItinerary[activeDay].push(id);
+
+        // 동선 최적화 (Smart Route)
+        if (userItinerary[activeDay].length > 1) {
+            optimizeItinerary(activeDay);
+            alert('동선에 맞게 최적의 순서로 배치했습니다! 🚩');
+        } else {
+            alert('일정에 추가되었습니다!');
+        }
+
         renderBuilderUI();
         updateMapMarkers();
+    }
+
+    // 간단한 거리 계산 (Euclidean) - 실제로는 Haversine이 정확하지만, 좁은 지역이라 이걸로 충분
+    function getDistance(p1, p2) {
+        return Math.sqrt(Math.pow(p1.lat - p2.lat, 2) + Math.pow(p1.lng - p2.lng, 2));
+    }
+
+    // 동선 최적화 알고리즘 (Nearest Neighbor)
+    function optimizeItinerary(day) {
+        const currentIds = userItinerary[day];
+        if (currentIds.length <= 2) return; // 2개 이하는 최적화 불필요
+
+        const items = currentIds.map(id => POI_DATABASE.find(p => p.id === id));
+        const optimized = [items[0]]; // 첫 번째 장소는 고정 (출발지)
+        const remaining = items.slice(1);
+
+        while (remaining.length > 0) {
+            const last = optimized[optimized.length - 1];
+            let nearestIdx = 0;
+            let minDist = Infinity;
+
+            remaining.forEach((item, idx) => {
+                const dist = getDistance(last, item);
+                if (dist < minDist) {
+                    minDist = dist;
+                    nearestIdx = idx;
+                }
+            });
+
+            optimized.push(remaining[nearestIdx]);
+            remaining.splice(nearestIdx, 1);
+        }
+
+        userItinerary[day] = optimized.map(item => item.id);
     }
 
     window.removeFromPlan = (id) => {
@@ -413,10 +475,15 @@ function initFukuokaTrip() {
                     </div>
                 </div>` : ''}
                 
-                <!-- 구글맵 버튼 -->
-                <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(item.name)}" target="_blank" class="block w-full bg-blue-600 text-white text-center py-4 rounded-xl font-bold hover:bg-blue-700 transition shadow-lg flex items-center justify-center gap-2">
-                    <i class="fas fa-map-marked-alt"></i> 구글맵에서 실제 위치 보기
-                </a>
+                <!-- 하단 액션 버튼 그룹 -->
+                <div class="flex gap-3">
+                    <button onclick="addToPlan('${item.id}'); closeModal();" class="flex-1 bg-orange-500 text-white py-4 rounded-xl font-bold hover:bg-orange-600 transition shadow-lg flex items-center justify-center gap-2">
+                        <i class="fas fa-plus-circle"></i> 일정에 담기
+                    </button>
+                    <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(item.name)}" target="_blank" class="flex-1 bg-blue-600 text-white text-center py-4 rounded-xl font-bold hover:bg-blue-700 transition shadow-lg flex items-center justify-center gap-2">
+                        <i class="fas fa-map-marked-alt"></i> 구글맵
+                    </a>
+                </div>
             </div>`;
     }
 

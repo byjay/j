@@ -15844,3 +15844,14 @@ function togglePracticalDay(dayKey) {
     }
 }
 
+
+// 전역 노출
+window.initConversation = initConversation;
+window.initDayConversation = initDayConversation;
+window.loadConversationCategory = loadConversationCategory;
+window.openConversationCategory = openConversationCategory;
+window.backToCategories = backToCategories;
+window.togglePracticalDay = togglePracticalDay;
+window.AudioController = AudioController;
+
+console.log('conversation.js loaded');
