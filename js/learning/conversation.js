@@ -15717,4 +15717,130 @@ function updateNavigationButtons() {
 function previousConversation() { AudioController.stopAutoRepeat(); if (currentConversationIndex > 0) { currentConversationIndex--; displayCurrentConversation(); window.scrollTo({ top: 0, behavior: 'smooth' }); } }
 function nextConversation() { AudioController.stopAutoRepeat(); if (currentConversationIndex < conversationModuleData[currentConversationCategory].conversations.length - 1) { currentConversationIndex++; displayCurrentConversation(); window.scrollTo({ top: 0, behavior: 'smooth' }); } }
 
-document.addEventListener('DOMContentLoaded', () => { if (document.getElementById('conversation-content')) initConversation(); });
+
+// ==========================================
+// Added Logic for Situational & Practical Modes
+// ==========================================
+
+// 1. Practical Conversation Data (Sample for now, can be expanded)
+const practicalConversationData = {
+    day1: {
+        title: "1일차: 공항 & 이동",
+        items: [
+            { situation: "입국 심사", jp: "入国審査はどこですか。", kr: "입국 심사는 어디입니까?", romaji: "Nyūkoku shinsa wa doko desu ka." },
+            { situation: "짐 찾기", jp: "私の荷物が出てきません。", kr: "제 짐이 나오지 않습니다.", romaji: "Watashi no nimotsu ga detekimasen." },
+            { situation: "버스 티켓", jp: "新宿行きのバスはどこですか。", kr: "신주쿠행 버스는 어디입니까?", romaji: "Shinjuku iki no basu wa doko desu ka." }
+        ]
+    },
+    day2: {
+        title: "2일차: 호텔 & 식당",
+        items: [
+            { situation: "체크인", jp: "チェックインをお願いします。", kr: "체크인을 부탁합니다.", romaji: "Chekkuin o onegaishimasu." },
+            { situation: "와이파이", jp: "Wi-Fiのパスワードは何ですか。", kr: "와이파이 비밀번호는 무엇입니까?", romaji: "Wi-Fi no pasuwado wa nan desu ka." },
+            { situation: "주문하기", jp: "これとこれをください。", kr: "이것과 이것을 주세요.", romaji: "Kore to kore o kudasai." }
+        ]
+    },
+    day3: {
+        title: "3일차: 쇼핑 & 길묻기",
+        items: [
+            { situation: "가격 묻기", jp: "これはいくらですか。", kr: "이것은 얼마입니까?", romaji: "Kore wa ikura desu ka." },
+            { situation: "면세", jp: "免税になりますか。", kr: "면세가 됩니까?", romaji: "Menzei ni narimasu ka." },
+            { situation: "길 묻기", jp: "駅はどこですか。", kr: "역은 어디입니까?", romaji: "Eki wa doko desu ka." }
+        ]
+    }
+};
+
+// 2. Situational Conversation Initialization
+function initConversation() {
+    console.log('Initializing Situational Conversation...');
+    const container = document.getElementById('conversation-categories');
+    if (!container) {
+        console.error('conversation-categories container not found');
+        return;
+    }
+
+    container.innerHTML = Object.keys(conversationModuleData).map(key => {
+        const cat = conversationModuleData[key];
+        return `
+            <div onclick="openConversationCategory('${key}')" 
+                 class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 cursor-pointer hover:shadow-md hover:border-${cat.color}-200 transition-all group">
+                <div class="w-12 h-12 rounded-full bg-${cat.color}-50 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+                    <i class="${cat.icon} text-${cat.color}-500 text-xl"></i>
+                </div>
+                <h3 class="font-bold text-gray-800">${cat.title}</h3>
+                <p class="text-xs text-gray-400 mt-1">${cat.conversations.length}개 대화</p>
+            </div>
+        `;
+    }).join('');
+
+    // Ensure list is hidden and categories are shown
+    document.getElementById('conversation-list').classList.add('hidden');
+    document.getElementById('conversation-categories').classList.remove('hidden');
+}
+
+let currentConversationCategory = '';
+let currentConversationIndex = 0;
+
+function openConversationCategory(key) {
+    currentConversationCategory = key;
+    currentConversationIndex = 0;
+
+    document.getElementById('conversation-categories').classList.add('hidden');
+    document.getElementById('conversation-list').classList.remove('hidden');
+
+    displayCurrentConversation();
+}
+
+function backToCategories() {
+    if (typeof AudioController !== 'undefined') AudioController.stopAutoRepeat();
+    document.getElementById('conversation-list').classList.add('hidden');
+    document.getElementById('conversation-categories').classList.remove('hidden');
+}
+
+// 3. Practical Conversation Initialization
+function initDayConversation() {
+    console.log('Initializing Practical Conversation...');
+    const container = document.getElementById('practical-list');
+    if (!container) {
+        console.error('practical-list container not found');
+        return;
+    }
+
+    container.innerHTML = Object.keys(practicalConversationData).map(dayKey => {
+        const day = practicalConversationData[dayKey];
+        return `
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
+                <div class="bg-gray-50 px-4 py-3 border-b border-gray-100 flex justify-between items-center cursor-pointer" onclick="togglePracticalDay('${dayKey}')">
+                    <h3 class="font-bold text-gray-800">${day.title}</h3>
+                    <i id="icon-${dayKey}" class="fas fa-chevron-down text-gray-400 transition-transform"></i>
+                </div>
+                <div id="content-${dayKey}" class="hidden p-4 space-y-4">
+                    ${day.items.map(item => `
+                        <div class="bg-gray-50 rounded-xl p-4 border border-gray-100 hover:border-blue-200 transition-colors cursor-pointer" onclick="AudioController.playNormal('${item.jp}')">
+                            <div class="flex justify-between items-start mb-2">
+                                <span class="text-xs font-bold text-blue-500 bg-blue-50 px-2 py-1 rounded-md">${item.situation}</span>
+                                <button class="text-gray-400 hover:text-blue-500"><i class="fas fa-volume-up"></i></button>
+                            </div>
+                            <p class="text-lg font-bold text-gray-800 mb-1">${item.jp}</p>
+                            <p class="text-xs text-gray-400 mb-1">${item.romaji}</p>
+                            <p class="text-sm text-gray-600">${item.kr}</p>
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+        `;
+    }).join('');
+}
+
+function togglePracticalDay(dayKey) {
+    const content = document.getElementById(`content-${dayKey}`);
+    const icon = document.getElementById(`icon-${dayKey}`);
+    if (content.classList.contains('hidden')) {
+        content.classList.remove('hidden');
+        icon.classList.add('rotate-180');
+    } else {
+        content.classList.add('hidden');
+        icon.classList.remove('rotate-180');
+    }
+}
+

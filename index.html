@@ -260,7 +260,6 @@
                 </div>
 
                 <div id="conversation" class="tab-content hidden">
-                    <!-- New Simplified Conversation UI -->
                     <div class="max-w-4xl mx-auto">
                         <!-- Header -->
                         <div class="mb-6 text-center">
@@ -268,19 +267,37 @@
                             <p class="text-gray-500 text-sm">원어민처럼 말해보세요!</p>
                         </div>
 
-                        <!-- Category Grid -->
-                        <div id="conversation-categories" class="grid grid-cols-2 md:grid-cols-3 gap-4 mb-8">
-                            <!-- Categories injected by JS -->
+                        <!-- Mode Switch Buttons -->
+                        <div class="flex gap-4 mb-8 bg-gray-100 p-1.5 rounded-2xl">
+                            <button id="mode-situational-btn" onclick="showConversationMode('situational')"
+                                class="flex-1 py-2 px-4 rounded-xl font-bold text-base transition-all duration-300 bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-lg">상황별
+                                회화</button>
+                            <button id="mode-practical-btn" onclick="showConversationMode('practical')"
+                                class="flex-1 py-2 px-4 rounded-xl font-bold text-base transition-all duration-300 bg-white text-gray-600 border-2 border-gray-200">여행
+                                실전 회화</button>
                         </div>
 
-                        <!-- Conversation List (Hidden by default) -->
-                        <div id="conversation-list" class="hidden">
-                            <button onclick="initConversation()"
-                                class="mb-4 flex items-center gap-2 text-gray-500 hover:text-gray-800 font-bold transition-colors">
-                                <i class="fas fa-arrow-left"></i> 카테고리 목록으로
-                            </button>
-                            <div id="conversation-cards-container" class="space-y-8">
-                                <!-- Cards injected by JS -->
+                        <!-- Situational Container -->
+                        <div id="situational-conversation-container">
+                            <div id="conversation-categories" class="grid grid-cols-2 md:grid-cols-3 gap-4 mb-8">
+                                <!-- Categories injected by JS -->
+                            </div>
+
+                            <div id="conversation-list" class="hidden">
+                                <button onclick="backToCategories()"
+                                    class="mb-4 flex items-center gap-2 text-gray-500 hover:text-gray-800 font-bold transition-colors">
+                                    <i class="fas fa-arrow-left"></i> 카테고리 목록으로
+                                </button>
+                                <div id="conversation-viewer">
+                                    <!-- Cards injected by JS -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Practical Container -->
+                        <div id="practical-conversation-container" class="hidden">
+                            <div id="practical-list" class="space-y-4">
+                                <!-- Practical items injected by JS -->
                             </div>
                         </div>
                     </div>
