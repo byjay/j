@@ -186,40 +186,64 @@
 
                 <div id="home" class="tab-content active">
                     <div id="main-menu" class="grid grid-cols-2 gap-6 mb-10 pt-6">
-                        <button onclick="openSection('japan_travel')"
-                            class="user-card group bg-white p-7 rounded-3xl shadow-md hover:shadow-xl border-2 border-transparent hover:border-red-400 flex flex-col items-center cursor-pointer transition-all duration-200 transform hover:-translate-y-1">
-                            <div
-                                class="w-24 h-24 mb-4 rounded-full overflow-hidden border-4 border-gray-100 group-hover:border-red-100 transition-colors bg-red-50 flex items-center justify-center">
-                                <i class="fas fa-plane text-red-500 text-3xl"></i>
-                            </div>
-                            <h3 class="text-lg font-bold text-gray-800 group-hover:text-red-600">일본 여행</h3>
-                        </button>
-
-                        <button onclick="openSection('conversation')"
-                            class="user-card group bg-white p-7 rounded-3xl shadow-md hover:shadow-xl border-2 border-transparent hover:border-blue-400 flex flex-col items-center cursor-pointer transition-all duration-200 transform hover:-translate-y-1">
-                            <div
-                                class="w-24 h-24 mb-4 rounded-full overflow-hidden border-4 border-gray-100 group-hover:border-blue-100 transition-colors bg-blue-50 flex items-center justify-center">
-                                <i class="fas fa-comments text-blue-500 text-3xl"></i>
-                            </div>
-                            <h3 class="text-lg font-bold text-gray-800 group-hover:text-blue-600">실전 회화</h3>
-                        </button>
-
-                        <button onclick="openSection('vocabulary')"
-                            class="user-card group bg-white p-7 rounded-3xl shadow-md hover:shadow-xl border-2 border-transparent hover:border-green-400 flex flex-col items-center cursor-pointer transition-all duration-200 transform hover:-translate-y-1">
-                            <div
-                                class="w-24 h-24 mb-4 rounded-full overflow-hidden border-4 border-gray-100 group-hover:border-green-100 transition-colors bg-green-50 flex items-center justify-center">
-                                <i class="fas fa-book text-green-500 text-3xl"></i>
-                            </div>
-                            <h3 class="text-lg font-bold text-gray-800 group-hover:text-green-600">단어 학습</h3>
-                        </button>
-
+                        <!-- 1. 글자 연습 (Characters) -->
                         <button onclick="openSection('characters')"
                             class="user-card group bg-white p-7 rounded-3xl shadow-md hover:shadow-xl border-2 border-transparent hover:border-purple-400 flex flex-col items-center cursor-pointer transition-all duration-200 transform hover:-translate-y-1">
                             <div
-                                class="w-24 h-24 mb-4 rounded-full overflow-hidden border-4 border-gray-100 group-hover:border-purple-100 transition-colors bg-purple-50 flex items-center justify-center">
-                                <i class="fas fa-font text-purple-500 text-3xl"></i>
+                                class="w-24 h-24 mb-4 rounded-full overflow-hidden border-4 border-gray-100 group-hover:border-purple-100 transition-colors bg-purple-50 flex items-center justify-center relative">
+                                <div
+                                    class="absolute inset-0 bg-purple-200 opacity-0 group-hover:opacity-20 rounded-full transition-opacity duration-500 animate-pulse">
+                                </div>
+                                <i
+                                    class="fas fa-pen-nib text-purple-500 text-4xl group-hover:scale-110 transition-transform duration-300"></i>
                             </div>
                             <h3 class="text-lg font-bold text-gray-800 group-hover:text-purple-600">글자 연습</h3>
+                            <p class="text-xs text-gray-400 mt-1 font-medium">히라가나 / 가타카나</p>
+                        </button>
+
+                        <!-- 2. 단어 학습 (Vocabulary) -->
+                        <button onclick="openSection('vocabulary')"
+                            class="user-card group bg-white p-7 rounded-3xl shadow-md hover:shadow-xl border-2 border-transparent hover:border-green-400 flex flex-col items-center cursor-pointer transition-all duration-200 transform hover:-translate-y-1">
+                            <div
+                                class="w-24 h-24 mb-4 rounded-full overflow-hidden border-4 border-gray-100 group-hover:border-green-100 transition-colors bg-green-50 flex items-center justify-center relative">
+                                <div
+                                    class="absolute inset-0 bg-green-200 opacity-0 group-hover:opacity-20 rounded-full transition-opacity duration-500 animate-pulse">
+                                </div>
+                                <i
+                                    class="fas fa-book-open text-green-500 text-4xl group-hover:rotate-3 transition-transform duration-300"></i>
+                            </div>
+                            <h3 class="text-lg font-bold text-gray-800 group-hover:text-green-600">단어 학습</h3>
+                            <p class="text-xs text-gray-400 mt-1 font-medium">기초 단어 암기</p>
+                        </button>
+
+                        <!-- 3. 실전 회화 (Conversation) -->
+                        <button onclick="openSection('conversation')"
+                            class="user-card group bg-white p-7 rounded-3xl shadow-md hover:shadow-xl border-2 border-transparent hover:border-blue-400 flex flex-col items-center cursor-pointer transition-all duration-200 transform hover:-translate-y-1">
+                            <div
+                                class="w-24 h-24 mb-4 rounded-full overflow-hidden border-4 border-gray-100 group-hover:border-blue-100 transition-colors bg-blue-50 flex items-center justify-center relative">
+                                <div
+                                    class="absolute inset-0 bg-blue-200 opacity-0 group-hover:opacity-20 rounded-full transition-opacity duration-500 animate-pulse">
+                                </div>
+                                <i
+                                    class="fas fa-comments text-blue-500 text-4xl group-hover:scale-110 transition-transform duration-300"></i>
+                            </div>
+                            <h3 class="text-lg font-bold text-gray-800 group-hover:text-blue-600">실전 회화</h3>
+                            <p class="text-xs text-gray-400 mt-1 font-medium">상황별 / 여행 회화</p>
+                        </button>
+
+                        <!-- 4. 일본 여행 (Travel) -->
+                        <button onclick="openSection('japan_travel')"
+                            class="user-card group bg-white p-7 rounded-3xl shadow-md hover:shadow-xl border-2 border-transparent hover:border-red-400 flex flex-col items-center cursor-pointer transition-all duration-200 transform hover:-translate-y-1">
+                            <div
+                                class="w-24 h-24 mb-4 rounded-full overflow-hidden border-4 border-gray-100 group-hover:border-red-100 transition-colors bg-red-50 flex items-center justify-center relative">
+                                <div
+                                    class="absolute inset-0 bg-red-200 opacity-0 group-hover:opacity-20 rounded-full transition-opacity duration-500 animate-pulse">
+                                </div>
+                                <i
+                                    class="fas fa-plane-departure text-red-500 text-4xl group-hover:-translate-y-1 group-hover:translate-x-1 transition-transform duration-500"></i>
+                            </div>
+                            <h3 class="text-lg font-bold text-gray-800 group-hover:text-red-600">일본 여행</h3>
+                            <p class="text-xs text-gray-400 mt-1 font-medium">도시별 가이드</p>
                         </button>
                     </div>
 

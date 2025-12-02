@@ -51,7 +51,11 @@ function showTab(tabName) {
         if (typeof showCharacterGrid === 'function') {
             showCharacterGrid('hiragana');
         }
-    } else if (tabName === 'vocabulary' || tabName === 'word_study') {
+    } else if (tabName === 'vocabulary') {
+        if (typeof initVocabulary === 'function') {
+            initVocabulary();
+        }
+    } else if (tabName === 'word_study') {
         if (typeof initWordStudy === 'function') {
             initWordStudy();
         }
