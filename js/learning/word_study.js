@@ -183,21 +183,74 @@ const wordData = {
 };
 
 // ==========================================
-// 2. 상태 관리 변수
+// 2. 상태 관리 변수 & SRS 로직
 // ==========================================
 let currentWordCategory = '';
 let currentWordIndex = 0;
 let isCardFlipped = false;
 let isShuffled = false;
 let activeWordList = [];
+let srsState = {}; // { "category_id": { level: 0, nextReview: timestamp } }
+
+// SRS 설정
+const SRS_INTERVALS = [0, 1, 3, 7, 14, 30]; // Days
+
+function loadSRSState() {
+    const saved = localStorage.getItem('jap_bong_srs_state');
+    if (saved) {
+        srsState = JSON.parse(saved);
+    }
+}
+
+function saveSRSState() {
+    localStorage.setItem('jap_bong_srs_state', JSON.stringify(srsState));
+}
+
+function updateSRS(wordId, quality) {
+    // quality: 0 (Again), 1 (Hard), 2 (Good), 3 (Easy)
+    const key = `${currentWordCategory}_${wordId}`;
+    if (!srsState[key]) {
+        srsState[key] = { level: 0, nextReview: 0 };
+    }
+
+    let currentLevel = srsState[key].level;
+
+    if (quality === 0) {
+        currentLevel = 0; // Reset
+    } else if (quality === 1) {
+        currentLevel = Math.max(0, currentLevel - 1); // Decrease
+    } else {
+        currentLevel = Math.min(SRS_INTERVALS.length - 1, currentLevel + 1); // Increase
+    }
+
+    srsState[key].level = currentLevel;
+
+    // Calculate next review date
+    const now = new Date();
+    const daysToAdd = SRS_INTERVALS[currentLevel];
+    now.setDate(now.getDate() + daysToAdd);
+    srsState[key].nextReview = now.getTime();
+
+    saveSRSState();
+
+    // XP Reward (Gamification)
+    if (window.Gamification) {
+        const xp = quality === 3 ? 10 : quality === 2 ? 5 : 1;
+        window.Gamification.addXP(xp);
+    }
+
+    // Move to next word
+    nextWord();
+}
 
 // ==========================================
 // 3. 초기화 및 유틸리티
 // ==========================================
 function initWordStudy() {
+    loadSRSState();
     renderWordCategories();
     document.addEventListener('keydown', handleKeyboardInput);
-    console.log('단어 학습 모듈(Kana Enhanced) 초기화 완료');
+    console.log('단어 학습 모듈(Kana Enhanced + SRS) 초기화 완료');
 }
 
 function handleKeyboardInput(e) {
@@ -214,6 +267,12 @@ function handleKeyboardInput(e) {
     } else if (e.code === 'ArrowUp' || e.code === 'ArrowDown') {
         const currentWord = activeWordList[currentWordIndex];
         playWordAudio(currentWord.kanji);
+    } else if (isCardFlipped) {
+        // SRS Shortcuts
+        if (e.code === 'Digit1') updateSRS(activeWordList[currentWordIndex].id, 0); // Again
+        if (e.code === 'Digit2') updateSRS(activeWordList[currentWordIndex].id, 1); // Hard
+        if (e.code === 'Digit3') updateSRS(activeWordList[currentWordIndex].id, 2); // Good
+        if (e.code === 'Digit4') updateSRS(activeWordList[currentWordIndex].id, 3); // Easy
     }
 }
 
@@ -393,7 +452,7 @@ function renderCard() {
                 </div>
 
                 <!-- 메인 내용 영역 (Flex Column) -->
-                <div class="flex-1 flex flex-col items-center justify-center p-6 space-y-6 overflow-y-auto">
+                <div class="flex-1 flex flex-col items-center justify-center p-6 space-y-4 overflow-y-auto">
                     
                     <!-- 1. 히라가나 (가장 강조) -->
                     <div class="text-center w-full">
@@ -423,11 +482,20 @@ function renderCard() {
                         </div>
                     </div>
 
-                    <!-- 4. 품사 (뱃지) -->
-                    <div class="mt-2">
-                        <span class="px-3 py-1 bg-gray-200 text-gray-600 rounded-full text-xs font-bold uppercase">
-                            ${word.type}
-                        </span>
+                    <!-- SRS Buttons -->
+                    <div class="grid grid-cols-4 gap-2 w-full mt-2" onclick="event.stopPropagation()">
+                        <button onclick="updateSRS(${word.id}, 0)" class="bg-red-100 text-red-600 py-2 rounded-lg font-bold text-xs hover:bg-red-200">
+                            Again<br><span class="text-[10px] font-normal">1m</span>
+                        </button>
+                        <button onclick="updateSRS(${word.id}, 1)" class="bg-orange-100 text-orange-600 py-2 rounded-lg font-bold text-xs hover:bg-orange-200">
+                            Hard<br><span class="text-[10px] font-normal">1d</span>
+                        </button>
+                        <button onclick="updateSRS(${word.id}, 2)" class="bg-green-100 text-green-600 py-2 rounded-lg font-bold text-xs hover:bg-green-200">
+                            Good<br><span class="text-[10px] font-normal">3d</span>
+                        </button>
+                        <button onclick="updateSRS(${word.id}, 3)" class="bg-blue-100 text-blue-600 py-2 rounded-lg font-bold text-xs hover:bg-blue-200">
+                            Easy<br><span class="text-[10px] font-normal">7d</span>
+                        </button>
                     </div>
 
                 </div>
@@ -510,4 +578,4 @@ function backToWordCategories() {
     }
 }
 
-console.log('word_study.js (Kana Enhanced) 로드 완료');
+console.log('word_study.js (Kana Enhanced + SRS) 로드 완료');

@@ -1,195 +1,93 @@
 
-function initFukuokaTrip() {
-    console.log('✨ Fukuoka App V6.0 Loaded [DEEP DATA]');
+function initYokohamaTrip() {
+    console.log('✨ Yokohama App V6.0 Loaded [DEEP DATA]');
 
     // ==========================================================================
-    //  ✨ HIGH FIDELITY DATABASE: FUKUOKA
+    //  ✨ HIGH FIDELITY DATABASE: YOKOHAMA
     // ==========================================================================
     const POI_DATABASE = [
     {
-        "id": "fuk_airport",
-        "name": "후쿠오카 공항 (FUK)",
-        "lat": 33.5859,
-        "lng": 130.4501,
-        "type": "transport",
-        "region": "airport",
-        "rating": 4.6,
-        "desc": "도심과 가장 가까운 공항.",
-        "photos": [
-            "https://images.unsplash.com/photo-1542349385-52e971371b13?w=800"
-        ],
-        "details": {
-            "info": "시내 접근성 최고.",
-            "transport": "지하철 5분"
-        }
-    },
-    {
-        "id": "hakata_station",
-        "name": "JR 하카타역",
-        "lat": 33.5897,
-        "lng": 130.4207,
+        "id": "minato_mirai",
+        "name": "미나토 미라이 21",
+        "lat": 35.456,
+        "lng": 139.6306,
         "type": "spot",
-        "region": "hakata",
-        "rating": 4.5,
-        "desc": "규슈 여행의 시작점.",
+        "region": "bay",
+        "rating": 4.7,
+        "desc": "미래형 항구 도시.",
         "photos": [
-            "https://images.unsplash.com/photo-1575443207716-419b48997232?w=800"
+            "https://images.unsplash.com/photo-1542051841857-5f90071e7989?w=800"
         ],
         "details": {
-            "info": "쇼핑과 맛집의 중심.",
-            "transport": "모든 열차의 허브"
+            "info": "야경과 쇼핑.",
+            "transport": "미나토미라이선"
         }
     },
     {
-        "id": "dazaifu",
-        "name": "다자이푸 텐만구",
-        "lat": 33.5215,
-        "lng": 130.5349,
-        "type": "spot",
-        "region": "nearby",
-        "rating": 4.6,
-        "desc": "학문의 신과 매화가지떡.",
-        "photos": [
-            "https://images.unsplash.com/photo-1528360983277-13d9b152c6d1?w=800"
-        ],
-        "details": {
-            "info": "소 동상 뿔 만지기.",
-            "transport": "버스 투어 또는 전철"
-        }
-    },
-    {
-        "id": "yufuin",
-        "name": "유후인 온천 마을",
-        "lat": 33.2655,
-        "lng": 131.3556,
-        "type": "spot",
-        "region": "nearby",
-        "rating": 4.8,
-        "desc": "동화 속 마을 같은 온천지.",
-        "photos": [
-            "https://images.unsplash.com/photo-1524413840807-0c3cb6fa808d?w=800"
-        ],
-        "details": {
-            "info": "긴린코 호수 산책.",
-            "transport": "버스 투어"
-        }
-    },
-    {
-        "id": "beppu",
-        "name": "벳푸 가마솥 지옥",
-        "lat": 33.3155,
-        "lng": 131.4727,
-        "type": "spot",
-        "region": "nearby",
-        "rating": 4.5,
-        "desc": "지옥 온천 순례의 하이라이트.",
-        "photos": [
-            "https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=800"
-        ],
-        "details": {
-            "info": "온천 달걀과 라무네.",
-            "transport": "버스 투어"
-        }
-    },
-    {
-        "id": "momochi",
-        "name": "모모치 해변",
-        "lat": 33.5954,
-        "lng": 130.3523,
-        "type": "spot",
-        "region": "seaside",
-        "rating": 4.4,
-        "desc": "이국적인 인공 해변.",
-        "photos": [
-            "https://images.unsplash.com/photo-1621847466023-40c354031175?w=800"
-        ],
-        "details": {
-            "info": "석양이 아름다움.",
-            "transport": "버스"
-        }
-    },
-    {
-        "id": "fukuoka_tower",
-        "name": "후쿠오카 타워",
-        "lat": 33.5933,
-        "lng": 130.3515,
-        "type": "spot",
-        "region": "seaside",
-        "rating": 4.5,
-        "desc": "후쿠오카의 랜드마크.",
-        "photos": [
-            "https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=800"
-        ],
-        "details": {
-            "info": "야경 명소.",
-            "transport": "버스"
-        }
-    },
-    {
-        "id": "canal_city",
-        "name": "캐널시티 하카타",
-        "lat": 33.5892,
-        "lng": 130.4107,
-        "type": "spot",
-        "region": "hakata",
-        "rating": 4.4,
-        "desc": "분수쇼가 있는 쇼핑몰.",
-        "photos": [
-            "https://images.unsplash.com/photo-1565578768782-b78904df9764?w=800"
-        ],
-        "details": {
-            "info": "쇼핑과 엔터테인먼트.",
-            "transport": "도보/버스"
-        }
-    },
-    {
-        "id": "nakasu_yatai",
-        "name": "나카스 포장마차",
-        "lat": 33.5924,
-        "lng": 130.4037,
+        "id": "chinatown",
+        "name": "차이나타운",
+        "lat": 35.443,
+        "lng": 139.646,
         "type": "food",
-        "region": "hakata",
-        "rating": 4.2,
-        "desc": "강변의 낭만 포차.",
+        "region": "central",
+        "rating": 4.4,
+        "desc": "일본 최대 차이나타운.",
         "photos": [
-            "https://images.unsplash.com/photo-1624253321171-1be53e12f5f4?w=800"
+            "https://images.unsplash.com/photo-1582234033096-7c06834b97d7?w=800"
         ],
         "details": {
-            "info": "라멘과 오뎅.",
+            "info": "길거리 음식 천국.",
+            "transport": "미나토미라이선"
+        }
+    },
+    {
+        "id": "cupnoodle_museum",
+        "name": "컵라면 박물관",
+        "lat": 35.4554,
+        "lng": 139.6389,
+        "type": "spot",
+        "region": "bay",
+        "rating": 4.6,
+        "desc": "나만의 컵라면 만들기.",
+        "photos": [
+            "https://images.unsplash.com/photo-1624326887226-0e862363e00d?w=800"
+        ],
+        "details": {
+            "info": "체험형 박물관.",
             "transport": "도보"
         }
     },
     {
-        "id": "ichiran_hq",
-        "name": "이치란 본점",
-        "lat": 33.593,
-        "lng": 130.4045,
-        "type": "food",
-        "region": "hakata",
+        "id": "yamashita_park",
+        "name": "야마시타 공원",
+        "lat": 35.4459,
+        "lng": 139.6496,
+        "type": "spot",
+        "region": "bay",
         "rating": 4.6,
-        "desc": "돈코츠 라멘의 성지.",
+        "desc": "바다를 보며 산책하기 좋은 공원.",
         "photos": [
-            "https://images.unsplash.com/photo-1552611052-33e04de081de?w=800"
+            "https://images.unsplash.com/photo-1503899036084-c55cdd92da26?w=800"
         ],
         "details": {
-            "info": "24시간 영업.",
+            "info": "장미 정원이 유명.",
             "transport": "도보"
         }
     },
     {
-        "id": "donki_nakasu",
-        "name": "돈키호테 나카스점",
-        "lat": 33.5935,
-        "lng": 130.404,
-        "type": "shop",
-        "region": "hakata",
-        "rating": 4.3,
-        "desc": "24시간 쇼핑 천국.",
+        "id": "red_brick",
+        "name": "아카렌가 창고",
+        "lat": 35.4526,
+        "lng": 139.6429,
+        "type": "spot",
+        "region": "bay",
+        "rating": 4.5,
+        "desc": "붉은 벽돌의 감성 쇼핑몰.",
         "photos": [
-            "https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=800"
+            "https://images.unsplash.com/photo-1572569878853-4632c0215850?w=800"
         ],
         "details": {
-            "info": "기념품 쇼핑.",
+            "info": "이벤트가 자주 열림.",
             "transport": "도보"
         }
     }
@@ -198,7 +96,7 @@ function initFukuokaTrip() {
     // ==========================================================================
     //  🚀 CORE ENGINE (STATE MANAGEMENT & UI)
     // ==========================================================================
-    let userItinerary = {"1": ["fuk_airport", "hakata_station", "ichiran_hq", "canal_city", "nakasu_yatai"], "2": ["hakata_station", "dazaifu", "yufuin", "beppu", "hakata_station"], "3": ["momochi", "fukuoka_tower", "donki_nakasu"], "4": ["hakata_station", "fuk_airport"]};
+    let userItinerary = {"1": ["minato_mirai", "cupnoodle_museum", "red_brick"], "2": ["yamashita_park", "chinatown"], "3": ["minato_mirai"], "4": ["chinatown"]};
     let activeDay = 1;
     let map, markers = [];
 
@@ -457,5 +355,5 @@ function initFukuokaTrip() {
 
     initApp();
 }
-window.initFukuokaTrip = initFukuokaTrip;
+window.initYokohamaTrip = initYokohamaTrip;
     

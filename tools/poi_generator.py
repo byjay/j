@@ -1,195 +1,208 @@
 
-"""
-poi_generator.py
-Travel Data Generator for JAP-BONG Application
-This script defines the high-fidelity data structure for travel spots and generates the corresponding JavaScript code.
-"""
-
 import json
+import os
 
 # ==============================================================================
-#  DATA DEFINITION (FUKUOKA)
+#  🏙️ DEEP TRAVEL DATA REPOSITORY (11 CITIES)
 # ==============================================================================
-FUKUOKA_DATA = [
-    {
-        "id": "dazaifu",
-        "name": "다자이후 텐만구",
-        "lat": 33.5215,
-        "lng": 130.5349,
-        "type": "spot",
-        "region": "suburb",
-        "rating": 4.7,
-        "desc": "학문의 신을 모시는 신사. 합격 기원과 매화 명소.",
-        "photos": [
-            "https://images.unsplash.com/photo-1576487248805-cf45f6bcc67f?w=800",
-            "https://images.unsplash.com/photo-1590523741831-ab7e8b8f9c7f?w=800",
-            "https://images.unsplash.com/photo-1542051841857-5f90071e7989?w=800",
-            "https://images.unsplash.com/photo-1570459027562-4a916cc6113f?w=800",
-            "https://images.unsplash.com/photo-1599940824399-b87987ce0799?w=800",
-            "https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=800",
-            "https://images.unsplash.com/photo-1536691881682-1df64599547d?w=800",
-            "https://images.unsplash.com/photo-1553531384-cc64ac80f931?w=800",
-            "https://images.unsplash.com/photo-1492571350019-22de08371fd3?w=800",
-            "https://images.unsplash.com/photo-1576788235839-55668b577366?w=800"
+CITIES_DATA = {
+    "fukuoka": {
+        "spots": [
+            # --- 교통 ---
+            {"id": "fuk_airport", "name": "후쿠오카 공항 (FUK)", "lat": 33.5859, "lng": 130.4501, "type": "transport", "region": "airport", "rating": 4.6, "desc": "도심과 가장 가까운 공항.", "photos": ["https://images.unsplash.com/photo-1542349385-52e971371b13?w=800"], "details": {"info": "시내 접근성 최고.", "transport": "지하철 5분"}},
+            {"id": "hakata_station", "name": "JR 하카타역", "lat": 33.5897, "lng": 130.4207, "type": "spot", "region": "hakata", "rating": 4.5, "desc": "규슈 여행의 시작점.", "photos": ["https://images.unsplash.com/photo-1575443207716-419b48997232?w=800"], "details": {"info": "쇼핑과 맛집의 중심.", "transport": "모든 열차의 허브"}},
+            # --- 관광 ---
+            {"id": "dazaifu", "name": "다자이푸 텐만구", "lat": 33.5215, "lng": 130.5349, "type": "spot", "region": "nearby", "rating": 4.6, "desc": "학문의 신과 매화가지떡.", "photos": ["https://images.unsplash.com/photo-1528360983277-13d9b152c6d1?w=800"], "details": {"info": "소 동상 뿔 만지기.", "transport": "버스 투어 또는 전철"}},
+            {"id": "yufuin", "name": "유후인 온천 마을", "lat": 33.2655, "lng": 131.3556, "type": "spot", "region": "nearby", "rating": 4.8, "desc": "동화 속 마을 같은 온천지.", "photos": ["https://images.unsplash.com/photo-1524413840807-0c3cb6fa808d?w=800"], "details": {"info": "긴린코 호수 산책.", "transport": "버스 투어"}},
+            {"id": "beppu", "name": "벳푸 가마솥 지옥", "lat": 33.3155, "lng": 131.4727, "type": "spot", "region": "nearby", "rating": 4.5, "desc": "지옥 온천 순례의 하이라이트.", "photos": ["https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=800"], "details": {"info": "온천 달걀과 라무네.", "transport": "버스 투어"}},
+            {"id": "momochi", "name": "모모치 해변", "lat": 33.5954, "lng": 130.3523, "type": "spot", "region": "seaside", "rating": 4.4, "desc": "이국적인 인공 해변.", "photos": ["https://images.unsplash.com/photo-1621847466023-40c354031175?w=800"], "details": {"info": "석양이 아름다움.", "transport": "버스"}},
+            {"id": "fukuoka_tower", "name": "후쿠오카 타워", "lat": 33.5933, "lng": 130.3515, "type": "spot", "region": "seaside", "rating": 4.5, "desc": "후쿠오카의 랜드마크.", "photos": ["https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=800"], "details": {"info": "야경 명소.", "transport": "버스"}},
+            {"id": "canal_city", "name": "캐널시티 하카타", "lat": 33.5892, "lng": 130.4107, "type": "spot", "region": "hakata", "rating": 4.4, "desc": "분수쇼가 있는 쇼핑몰.", "photos": ["https://images.unsplash.com/photo-1565578768782-b78904df9764?w=800"], "details": {"info": "쇼핑과 엔터테인먼트.", "transport": "도보/버스"}},
+            {"id": "nakasu_yatai", "name": "나카스 포장마차", "lat": 33.5924, "lng": 130.4037, "type": "food", "region": "hakata", "rating": 4.2, "desc": "강변의 낭만 포차.", "photos": ["https://images.unsplash.com/photo-1624253321171-1be53e12f5f4?w=800"], "details": {"info": "라멘과 오뎅.", "transport": "도보"}},
+            {"id": "ichiran_hq", "name": "이치란 본점", "lat": 33.5930, "lng": 130.4045, "type": "food", "region": "hakata", "rating": 4.6, "desc": "돈코츠 라멘의 성지.", "photos": ["https://images.unsplash.com/photo-1552611052-33e04de081de?w=800"], "details": {"info": "24시간 영업.", "transport": "도보"}},
+             {"id": "donki_nakasu", "name": "돈키호테 나카스점", "lat": 33.5935, "lng": 130.4040, "type": "shop", "region": "hakata", "rating": 4.3, "desc": "24시간 쇼핑 천국.", "photos": ["https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=800"], "details": {"info": "기념품 쇼핑.", "transport": "도보"}}
         ],
-        "details": {
-            "info": "학문의 신 '스가와라노 미치자네'를 모시는 곳으로, 매년 수많은 수험생이 찾습니다. 경내에는 6,000그루의 매화나무가 있어 2~3월에 절경을 이룹니다. 입구의 참배길에는 명물 '우메가에 모치(매화떡)' 가게와 독특한 디자인의 스타벅스가 있습니다.",
-            "transport": '<p class="text-xs text-gray-600">🚆 <strong>니시테츠 전철:</strong> 텐진역에서 다자이후행 탑승 (약 25분)</p><p class="text-xs text-gray-600">🚌 <strong>버스:</strong> 하카타 버스터미널에서 다자이후 라이너 버스 (약 40분)</p>',
-            "tips": "우메가에 모치는 갓 구운 것을 사서 바로 드세요. 스타벅스 컨셉스토어는 사진 명소이니 꼭 들러보세요. 본전 뒤편의 매화나무 '토비우메'가 가장 유명합니다."
-        },
-        "reviews": [
-            {"user": "수험생맘", "date": "1주 전", "rating": 5, "text": "아이 합격 기원하러 다녀왔습니다. 분위기가 차분하고 좋네요. 매화떡도 맛있었어요."},
-            {"user": "건축학도", "date": "2주 전", "rating": 5, "text": "쿠마 켄고가 디자인한 스타벅스는 정말 독특합니다. 나무를 엮은 구조가 인상적이에요."},
-            {"user": "꽃놀이", "date": "1개월 전", "rating": 4, "text": "매화가 필 때 가면 정말 예쁩니다. 다만 사람이 너무 많아서 사진 찍기는 좀 힘들어요."}
-        ]
+        "default_plan": {
+            "1": ["fuk_airport", "hakata_station", "ichiran_hq", "canal_city", "nakasu_yatai"],
+            "2": ["hakata_station", "dazaifu", "yufuin", "beppu", "hakata_station"], # Leica Bus Tour Route
+            "3": ["momochi", "fukuoka_tower", "donki_nakasu"],
+            "4": ["hakata_station", "fuk_airport"]
+        }
     },
-    {
-        "id": "canal_city",
-        "name": "캐널시티 하카타",
-        "lat": 33.5897,
-        "lng": 130.4108,
-        "type": "spot",
-        "region": "hakata",
-        "rating": 4.5,
-        "desc": "운하가 흐르는 거대한 복합 쇼핑몰. 분수쇼가 하이라이트.",
-        "photos": [
-            "https://images.unsplash.com/photo-1569050467447-ce54b3bbc37d?w=800",
-            "https://images.unsplash.com/photo-1580442151529-343f2f6e0e27?w=800",
-            "https://images.unsplash.com/photo-1553621042-f6e147245754?w=800",
-            "https://images.unsplash.com/photo-1519708227418-c8fd9a3a2720?w=800",
-            "https://images.unsplash.com/photo-1565557623262-b51c2513a641?w=800",
-            "https://images.unsplash.com/photo-1579623696562-b91c01995801?w=800",
-            "https://images.unsplash.com/photo-1580225598739-44585c5d0459?w=800",
-            "https://images.unsplash.com/photo-1535448033526-2729314bbc30?w=800",
-            "https://images.unsplash.com/photo-1582719508461-905c673771fd?w=800",
-            "https://images.unsplash.com/photo-1548943487-a2e4e43b485c?w=800"
+    "nagoya": {
+        "spots": [
+            {"id": "nagoya_castle", "name": "나고야 성", "lat": 35.1848, "lng": 136.9004, "type": "spot", "region": "central", "rating": 4.6, "desc": "황금 샤치호코의 위엄.", "photos": ["https://images.unsplash.com/photo-1624326887226-0e862363e00d?w=800"], "details": {"info": "혼마루어전 복원.", "transport": "지하철 시청역"}},
+            {"id": "ghibli_park", "name": "지브리 파크", "lat": 35.1726, "lng": 137.0908, "type": "spot", "region": "suburb", "rating": 4.8, "desc": "지브리의 꿈이 현실로.", "photos": ["https://images.unsplash.com/photo-1516475429286-465d815a0df7?w=800"], "details": {"info": "예약 필수.", "transport": "리니모"}},
+            {"id": "hitsumabushi", "name": "아츠타 호라이켄", "lat": 35.1225, "lng": 136.9066, "type": "food", "region": "central", "rating": 4.7, "desc": "장어덮밥의 원조.", "photos": ["https://images.unsplash.com/photo-1569050467447-ce54b3bbc37d?w=800"], "details": {"info": "3가지 맛으로 즐기기.", "transport": "지하철 덴마초"}},
+            {"id": "osu_kannon", "name": "오스 칸논 & 상점가", "lat": 35.1598, "lng": 136.9019, "type": "spot", "region": "central", "rating": 4.4, "desc": "활기찬 서민적인 상점가.", "photos": ["https://images.unsplash.com/photo-1580442151529-343f2f6e0e27?w=800"], "details": {"info": "빈티지샵과 길거리 음식.", "transport": "지하철 오스칸논"}},
+            {"id": "mirai_tower", "name": "미라이 타워", "lat": 35.1723, "lng": 136.9083, "type": "spot", "region": "central", "rating": 4.5, "desc": "나고야의 에펠탑.", "photos": ["https://images.unsplash.com/photo-1542051841857-5f90071e7989?w=800"], "details": {"info": "야경 명소.", "transport": "지하철 사카에"}},
+            {"id": "lego_land", "name": "레고랜드 재팬", "lat": 35.0507, "lng": 136.8430, "type": "spot", "region": "bay", "rating": 4.5, "desc": "아이들의 천국.", "photos": ["https://images.unsplash.com/photo-1560964645-c5d9454526d3?w=800"], "details": {"info": "가족 여행 추천.", "transport": "아오나미선"}}
         ],
-        "details": {
-            "info": "호텔, 극장, 영화관, 상점, 레스토랑 등이 모인 대형 복합 시설입니다. 건물 사이로 인공 운하가 흐르며, 매시 정각과 30분마다 음악 분수쇼가 펼쳐집니다. 5층 라멘 스타디움에서는 전국의 유명 라멘을 맛볼 수 있습니다.",
-            "transport": '<p class="text-xs text-gray-600">🚶 <strong>도보:</strong> 하카타역에서 도보 10분, 나카스카와바타역에서 도보 10분</p><p class="text-xs text-gray-600">🚌 <strong>100엔 버스:</strong> 캐널시티 하카타 마에 하차</p>',
-            "tips": "분수쇼는 밤에 조명과 함께 볼 때 더 아름답습니다. 프랑프랑, 무인양품, 디즈니 스토어 등 쇼핑하기 좋습니다. 라멘 스타디움은 점심시간 피해서 가세요."
-        },
-        "reviews": [
-            {"user": "쇼핑광", "date": "1주 전", "rating": 5, "text": "하루 종일 있어도 지루하지 않아요. 분수쇼 퀄리티가 생각보다 훨씬 좋습니다."},
-            {"user": "라멘러버", "date": "3주 전", "rating": 4, "text": "라멘 스타디움에서 먹은 돈코츠 라멘이 맛있었습니다. 여러 가게를 비교해볼 수 있어 좋아요."},
-            {"user": "가족여행", "date": "1개월 전", "rating": 5, "text": "아이들이 분수쇼를 너무 좋아해서 두 번이나 봤습니다. 쇼핑몰 구조가 좀 복잡해서 길 잃기 쉬워요."}
-        ]
+        "default_plan": {
+            "1": ["nagoya_castle", "mirai_tower", "hitsumabushi"],
+            "2": ["ghibli_park"],
+            "3": ["lego_land", "osu_kannon"],
+            "4": ["nagoya_castle"] # Leaving Day 4 simple
+        }
     },
-    {
-        "id": "fukuoka_tower",
-        "name": "후쿠오카 타워",
-        "lat": 33.5932,
-        "lng": 130.3515,
-        "type": "spot",
-        "region": "momochi",
-        "rating": 4.6,
-        "desc": "8,000장의 반사 유리가 빛나는 해변의 랜드마크.",
-        "photos": [
-            "https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=800",
-            "https://images.unsplash.com/photo-1596394516093-501ba68a0ba6?w=800",
-            "https://images.unsplash.com/photo-1585672660340-966e33004946?w=800",
-            "https://images.unsplash.com/photo-1566982829230-a6e790949321?w=800",
-            "https://images.unsplash.com/photo-1571211919320-1c953097f1a6?w=800",
-            "https://images.unsplash.com/photo-1535591273668-578e31182c4f?w=800",
-            "https://images.unsplash.com/photo-1560275619-4662e36fa65c?w=800",
-            "https://images.unsplash.com/photo-1582967788606-a171f1080ca8?w=800",
-            "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=800",
-            "https://images.unsplash.com/photo-1580795479214-396813052e3e?w=800"
+    "yokohama": {
+        "spots": [
+            {"id": "minato_mirai", "name": "미나토 미라이 21", "lat": 35.4560, "lng": 139.6306, "type": "spot", "region": "bay", "rating": 4.7, "desc": "미래형 항구 도시.", "photos": ["https://images.unsplash.com/photo-1542051841857-5f90071e7989?w=800"], "details": {"info": "야경과 쇼핑.", "transport": "미나토미라이선"}},
+            {"id": "chinatown", "name": "차이나타운", "lat": 35.4430, "lng": 139.6460, "type": "food", "region": "central", "rating": 4.4, "desc": "일본 최대 차이나타운.", "photos": ["https://images.unsplash.com/photo-1582234033096-7c06834b97d7?w=800"], "details": {"info": "길거리 음식 천국.", "transport": "미나토미라이선"}},
+            {"id": "cupnoodle_museum", "name": "컵라면 박물관", "lat": 35.4554, "lng": 139.6389, "type": "spot", "region": "bay", "rating": 4.6, "desc": "나만의 컵라면 만들기.", "photos": ["https://images.unsplash.com/photo-1624326887226-0e862363e00d?w=800"], "details": {"info": "체험형 박물관.", "transport": "도보"}},
+            {"id": "yamashita_park", "name": "야마시타 공원", "lat": 35.4459, "lng": 139.6496, "type": "spot", "region": "bay", "rating": 4.6, "desc": "바다를 보며 산책하기 좋은 공원.", "photos": ["https://images.unsplash.com/photo-1503899036084-c55cdd92da26?w=800"], "details": {"info": "장미 정원이 유명.", "transport": "도보"}},
+            {"id": "red_brick", "name": "아카렌가 창고", "lat": 35.4526, "lng": 139.6429, "type": "spot", "region": "bay", "rating": 4.5, "desc": "붉은 벽돌의 감성 쇼핑몰.", "photos": ["https://images.unsplash.com/photo-1572569878853-4632c0215850?w=800"], "details": {"info": "이벤트가 자주 열림.", "transport": "도보"}}
         ],
-        "details": {
-            "info": "높이 234m의 해변 타워로, 8,000장의 반사 유리가 덮여 있어 '미러 세일(Mirror Sail)'이라는 별명을 가지고 있습니다. 전망대에서는 후쿠오카 시내와 하카타 만을 360도로 조망할 수 있습니다. 야간 일루미네이션도 볼거리입니다.",
-            "transport": '<p class="text-xs text-gray-600">🚌 <strong>버스:</strong> 하카타역/텐진에서 306번 등 탑승, 후쿠오카 타워 미나미구치 하차 (약 25분)</p>',
-            "tips": "외국인 여권 제시 시 입장료 할인이 있습니다. 해질녘에 가서 석양과 야경을 모두 보는 것을 추천합니다. 바로 앞 모모치 해변공원도 산책하기 좋습니다."
-        },
-        "reviews": [
-            {"user": "야경꾼", "date": "2주 전", "rating": 5, "text": "야경이 정말 끝내줍니다. 모모치 해변이랑 같이 묶어서 가면 딱이에요."},
-            {"user": "커플", "date": "1개월 전", "rating": 5, "text": "사랑의 자물쇠 거는 곳이 있어서 데이트 코스로 좋습니다. 엘리베이터 안내원분들도 친절해요."},
-            {"user": "가성비", "date": "3개월 전", "rating": 4, "text": "여권 할인 받으면 가격도 괜찮습니다. 날씨 좋은 날 가면 대마도까지 보인대요."}
-        ]
+        "default_plan": {
+            "1": ["minato_mirai", "cupnoodle_museum", "red_brick"],
+            "2": ["yamashita_park", "chinatown"],
+            "3": ["minato_mirai"],
+            "4": ["chinatown"]
+        }
     },
-    {
-        "id": "nakasu_yatai",
-        "name": "나카스 포장마차 거리",
-        "lat": 33.5924,
-        "lng": 130.4046,
-        "type": "food",
-        "region": "nakasu",
-        "rating": 4.3,
-        "desc": "강변을 따라 늘어선 낭만적인 야타이(포장마차) 거리.",
-        "photos": [
-            "https://images.unsplash.com/photo-1559925393-8be0ec4767c8?w=800",
-            "https://images.unsplash.com/photo-1582234033096-7c06834b97d7?w=800",
-            "https://images.unsplash.com/photo-1548943487-a2e4e43b485c?w=800",
-            "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800",
-            "https://images.unsplash.com/photo-1599354607478-6f363c473167?w=800",
-            "https://images.unsplash.com/photo-1535448033526-2729314bbc30?w=800",
-            "https://images.unsplash.com/photo-1582719508461-905c673771fd?w=800",
-            "https://images.unsplash.com/photo-1552611052-33e04de081de?w=800",
-            "https://images.unsplash.com/photo-1565557623262-b51c2513a641?w=800",
-            "https://images.unsplash.com/photo-1579623696562-b91c01995801?w=800"
+    "kobe": {
+        "spots": [
+            {"id": "harborland", "name": "고베 하버랜드", "lat": 34.6795, "lng": 135.1840, "type": "spot", "region": "bay", "rating": 4.6, "desc": "고베의 낭만 야경.", "photos": ["https://images.unsplash.com/photo-1572569878853-4632c0215850?w=800"], "details": {"info": "포트타워 뷰.", "transport": "JR 고베역"}},
+            {"id": "kitano_ijinkan", "name": "키타노 이진칸", "lat": 34.7024, "lng": 135.1907, "type": "spot", "region": "hill", "rating": 4.3, "desc": "이국적인 서양식 저택 거리.", "photos": ["https://images.unsplash.com/photo-1582234033096-7c06834b97d7?w=800"], "details": {"info": "사진 명소.", "transport": "산노미야역"}},
+            {"id": "arima_onsen", "name": "아리마 온천", "lat": 34.7969, "lng": 135.2478, "type": "spot", "region": "suburb", "rating": 4.7, "desc": "일본 3대 고탕.", "photos": ["https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=800"], "details": {"info": "금탕과 은탕.", "transport": "버스/전철"}},
+            {"id": "kobe_beef", "name": "고베규 스테이크", "lat": 34.6925, "lng": 135.1956, "type": "food", "region": "central", "rating": 4.8, "desc": "입에서 녹는 최고급 소고기.", "photos": ["https://images.unsplash.com/photo-1559339352-11d035aa65de?w=800"], "details": {"info": "런치 세트 추천.", "transport": "산노미야역"}},
+            {"id": "nunobiki", "name": "누노비키 허브원", "lat": 34.7167, "lng": 135.1925, "type": "spot", "region": "mountain", "rating": 4.6, "desc": "로프웨이 타고 가는 허브 정원.", "photos": ["https://images.unsplash.com/photo-1596394516093-501ba68a0ba6?w=800"], "details": {"info": "고베 시내 전망.", "transport": "신고베역"}}
         ],
-        "details": {
-            "info": "나카스 강변을 따라 저녁이 되면 들어서는 포장마차 거리입니다. 하카타 라멘, 오뎅, 꼬치구이(야키토리), 명란 계란말이 등 다양한 안주와 술을 즐길 수 있습니다. 현지인과 관광객이 어우러지는 활기찬 분위기가 특징입니다.",
-            "transport": '<p class="text-xs text-gray-600">🚇 <strong>지하철:</strong> 나카스카와바타역 또는 텐진미나미역에서 도보 10분</p>',
-            "tips": "가격이 조금 비쌀 수 있고, 현금 결제만 가능한 곳이 많습니다. 화장실 이용이 불편할 수 있으니 미리 다녀오세요. 분위기만 즐기고 식사는 다른 곳에서 하는 것도 방법입니다."
-        },
-        "reviews": [
-            {"user": "낭만파", "date": "1주 전", "rating": 4, "text": "강물에 비친 네온사인을 보며 먹는 라멘 맛은 잊을 수 없습니다. 분위기가 다 했어요."},
-            {"user": "솔직후기", "date": "2주 전", "rating": 3, "text": "사람이 너무 많고 자리가 좁습니다. 가격도 식당보다 비싼 편이에요. 경험 삼아 한 번쯤은 갈만합니다."},
-            {"user": "애주가", "date": "1개월 전", "rating": 5, "text": "옆자리 사람이랑 말 트고 술 마시는 재미가 있습니다. 명란 구이 꼭 드세요."}
-        ]
+        "default_plan": {
+            "1": ["kitano_ijinkan", "kobe_beef", "nunobiki"],
+            "2": ["arima_onsen"],
+            "3": ["harborland"],
+            "4": ["kobe_beef"]
+        }
     },
-    {
-        "id": "ohori_park",
-        "name": "오호리 공원",
-        "lat": 33.5860,
-        "lng": 130.3764,
-        "type": "spot",
-        "region": "tenjin",
-        "rating": 4.6,
-        "desc": "도심 속 거대한 호수 공원. 산책과 조깅의 명소.",
-        "photos": [
-            "https://images.unsplash.com/photo-1540206395-e8f80bb341cc?w=800",
-            "https://images.unsplash.com/photo-1596394516093-501ba68a0ba6?w=800",
-            "https://images.unsplash.com/photo-1585672660340-966e33004946?w=800",
-            "https://images.unsplash.com/photo-1566982829230-a6e790949321?w=800",
-            "https://images.unsplash.com/photo-1571211919320-1c953097f1a6?w=800",
-            "https://images.unsplash.com/photo-1535591273668-578e31182c4f?w=800",
-            "https://images.unsplash.com/photo-1560275619-4662e36fa65c?w=800",
-            "https://images.unsplash.com/photo-1582967788606-a171f1080ca8?w=800",
-            "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=800",
-            "https://images.unsplash.com/photo-1580795479214-396813052e3e?w=800"
+    "nara": {
+        "spots": [
+            {"id": "nara_park", "name": "나라 공원", "lat": 34.6850, "lng": 135.8430, "type": "spot", "region": "central", "rating": 4.8, "desc": "사슴들의 천국.", "photos": ["https://images.unsplash.com/photo-1590523741831-ab7e8b8f9c7f?w=800"], "details": {"info": "사슴 센베이 주기.", "transport": "긴테츠 나라역"}},
+            {"id": "todaiji", "name": "도다이지", "lat": 34.6890, "lng": 135.8398, "type": "spot", "region": "central", "rating": 4.7, "desc": "압도적인 대불.", "photos": ["https://images.unsplash.com/photo-1570459027562-4a916cc6113f?w=800"], "details": {"info": "세계 최대 목조 건물.", "transport": "도보"}},
+            {"id": "kasuga_taisha", "name": "카스가 타이샤", "lat": 34.6813, "lng": 135.8484, "type": "spot", "region": "central", "rating": 4.6, "desc": "수천 개의 석등이 있는 신사.", "photos": ["https://images.unsplash.com/photo-1599940824399-b87987ce0799?w=800"], "details": {"info": "신비로운 분위기.", "transport": "도보"}},
+            {"id": "mochi", "name": "나카타니도 모찌", "lat": 34.6820, "lng": 135.8280, "type": "food", "region": "central", "rating": 4.5, "desc": "고속 떡치기 퍼포먼스.", "photos": ["https://images.unsplash.com/photo-1565557623262-b51c2513a641?w=800"], "details": {"info": "쑥떡 맛집.", "transport": "도보"}},
+            {"id": "higashimuki", "name": "히가시무키 상점가", "lat": 34.6830, "lng": 135.8285, "type": "shop", "region": "central", "rating": 4.3, "desc": "나라의 중심 상점가.", "photos": ["https://images.unsplash.com/photo-1580442151529-343f2f6e0e27?w=800"], "details": {"info": "기념품과 맛집.", "transport": "긴테츠 나라역"}}
         ],
-        "details": {
-            "info": "후쿠오카 성의 해자를 이용하여 만든 공원으로, 큰 호수를 중심으로 산책로가 잘 조성되어 있습니다. 호수 중앙의 섬들을 잇는 다리가 운치 있으며, 오리배를 탈 수도 있습니다. 공원 내 스타벅스는 호수 뷰가 훌륭하기로 유명합니다.",
-            "transport": '<p class="text-xs text-gray-600">🚇 <strong>지하철:</strong> 오호리공원역 하차 바로 앞</p>',
-            "tips": "자전거를 빌려서 한 바퀴 도는 것을 추천합니다. 근처에 후쿠오카 성터와 미술관도 있어 함께 둘러보기 좋습니다. 벚꽃 시즌과 불꽃놀이 축제 때 가장 붐빕니다."
-        },
-        "reviews": [
-            {"user": "러너", "date": "1주 전", "rating": 5, "text": "조깅하기 최고의 코스입니다. 바닥이 고무로 되어 있어 무릎에 무리가 안 가요."},
-            {"user": "힐링", "date": "3주 전", "rating": 5, "text": "스타벅스 창가 자리에 앉아 호수 멍 때리면 시간 가는 줄 모릅니다. 도심 속에 이런 곳이 있다니 놀라워요."},
-            {"user": "커플", "date": "2개월 전", "rating": 4, "text": "오리배 탔는데 다리가 좀 아팠지만 재밌었습니다. 데이트하기 좋아요."}
-        ]
+        "default_plan": {
+            "1": ["nara_park", "todaiji", "mochi"],
+            "2": ["kasuga_taisha", "higashimuki"],
+            "3": ["nara_park"],
+            "4": ["higashimuki"]
+        }
+    },
+    "hiroshima": {
+        "spots": [
+            {"id": "peace_memorial", "name": "평화 기념 공원", "lat": 34.3929, "lng": 132.4526, "type": "spot", "region": "central", "rating": 4.8, "desc": "평화의 소중함.", "photos": ["https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=800"], "details": {"info": "원폭 돔.", "transport": "노면전차"}},
+            {"id": "miyajima", "name": "미야지마", "lat": 34.2960, "lng": 132.3198, "type": "spot", "region": "island", "rating": 4.9, "desc": "바다 위의 붉은 토리이.", "photos": ["https://images.unsplash.com/photo-1553531384-cc64ac80f931?w=800"], "details": {"info": "일본 3대 절경.", "transport": "페리"}},
+            {"id": "okonomiyaki", "name": "오코노미무라", "lat": 34.3915, "lng": 132.4615, "type": "food", "region": "central", "rating": 4.5, "desc": "히로시마풍 오코노미야키.", "photos": ["https://images.unsplash.com/photo-1580651315530-69c8e0026377?w=800"], "details": {"info": "면이 들어간 스타일.", "transport": "도보"}},
+            {"id": "shukkeien", "name": "슈케이엔", "lat": 34.4005, "lng": 132.4677, "type": "spot", "region": "central", "rating": 4.4, "desc": "아름다운 일본 정원.", "photos": ["https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800"], "details": {"info": "도심 속 힐링.", "transport": "도보"}},
+            {"id": "hondori", "name": "혼도리 상점가", "lat": 34.3935, "lng": 132.4580, "type": "shop", "region": "central", "rating": 4.3, "desc": "최대 번화가.", "photos": ["https://images.unsplash.com/photo-1588821949320-e222f771746c?w=800"], "details": {"info": "쇼핑과 식사.", "transport": "도보"}}
+        ],
+        "default_plan": {
+            "1": ["peace_memorial", "okonomiyaki", "hondori"],
+            "2": ["miyajima"],
+            "3": ["shukkeien"],
+            "4": ["hondori"]
+        }
+    },
+    "hakone": {
+        "spots": [
+            {"id": "open_air_museum", "name": "조각의 숲 미술관", "lat": 35.2447, "lng": 139.0516, "type": "spot", "region": "mountain", "rating": 4.6, "desc": "자연과 예술의 조화.", "photos": ["https://images.unsplash.com/photo-1576788235839-55668b577366?w=800"], "details": {"info": "야외 조각 공원.", "transport": "등산철도"}},
+            {"id": "owakudani", "name": "오와쿠다니", "lat": 35.2425, "lng": 139.0194, "type": "spot", "region": "mountain", "rating": 4.5, "desc": "살아있는 화산.", "photos": ["https://images.unsplash.com/photo-1599354607478-6f363c473167?w=800"], "details": {"info": "검은 달걀.", "transport": "로프웨이"}},
+            {"id": "lake_ashi", "name": "아시노코 호수", "lat": 35.2055, "lng": 139.0070, "type": "spot", "region": "nature", "rating": 4.6, "desc": "후지산이 보이는 호수.", "photos": ["https://images.unsplash.com/photo-1542051841857-5f90071e7989?w=800"], "details": {"info": "해적선 유람선.", "transport": "버스/로프웨이"}},
+            {"id": "hakone_shrine", "name": "하코네 신사", "lat": 35.2048, "lng": 139.0255, "type": "spot", "region": "nature", "rating": 4.5, "desc": "호수 위의 평화의 토리이.", "photos": ["https://images.unsplash.com/photo-1553531384-cc64ac80f931?w=800"], "details": {"info": "인생샷 명소.", "transport": "도보"}},
+            {"id": "yunessun", "name": "유넷상", "lat": 35.2385, "lng": 139.0450, "type": "spot", "region": "mountain", "rating": 4.4, "desc": "와인탕, 커피탕 테마파크.", "photos": ["https://images.unsplash.com/photo-1566982829230-a6e790949321?w=800"], "details": {"info": "수영복 입고 즐기는 온천.", "transport": "버스"}}
+        ],
+        "default_plan": {
+            "1": ["hakone_shrine", "lake_ashi"],
+            "2": ["owakudani", "open_air_museum"],
+            "3": ["yunessun"],
+            "4": ["open_air_museum"]
+        }
+    },
+    "kanazawa": {
+        "spots": [
+            {"id": "kenrokuen", "name": "겐로쿠엔", "lat": 36.5621, "lng": 136.6627, "type": "spot", "region": "central", "rating": 4.7, "desc": "일본 3대 정원.", "photos": ["https://images.unsplash.com/photo-1572569878853-4632c0215850?w=800"], "details": {"info": "사계절 아름다운 정원.", "transport": "버스"}},
+            {"id": "higashi_chaya", "name": "히가시 차야", "lat": 36.5724, "lng": 136.6664, "type": "spot", "region": "oldtown", "rating": 4.5, "desc": "전통 찻집 거리.", "photos": ["https://images.unsplash.com/photo-1582234033096-7c06834b97d7?w=800"], "details": {"info": "금박 아이스크림.", "transport": "버스"}},
+            {"id": "21st_museum", "name": "21세기 미술관", "lat": 36.5609, "lng": 136.6582, "type": "spot", "region": "central", "rating": 4.6, "desc": "현대 미술의 중심.", "photos": ["https://images.unsplash.com/photo-1518998053901-5348d3969105?w=800"], "details": {"info": "수영장 작품.", "transport": "버스"}},
+            {"id": "omicho_market", "name": "오미초 시장", "lat": 36.5705, "lng": 136.6555, "type": "food", "region": "central", "rating": 4.5, "desc": "가나자와의 부엌.", "photos": ["https://images.unsplash.com/photo-1565557623262-b51c2513a641?w=800"], "details": {"info": "신선한 해산물 덮밥.", "transport": "도보"}},
+            {"id": "kanazawa_castle", "name": "가나자와 성", "lat": 36.5650, "lng": 136.6595, "type": "spot", "region": "central", "rating": 4.4, "desc": "우아한 성곽.", "photos": ["https://images.unsplash.com/photo-1624326887226-0e862363e00d?w=800"], "details": {"info": "겐로쿠엔 바로 옆.", "transport": "도보"}}
+        ],
+        "default_plan": {
+            "1": ["kenrokuen", "kanazawa_castle", "higashi_chaya"],
+            "2": ["21st_museum", "omicho_market"],
+            "3": ["kenrokuen"],
+            "4": ["omicho_market"]
+        }
+    },
+    "nikko": {
+        "spots": [
+            {"id": "toshogu", "name": "닛코 도쇼구", "lat": 36.7581, "lng": 139.5989, "type": "spot", "region": "mountain", "rating": 4.7, "desc": "화려한 세계유산.", "photos": ["https://images.unsplash.com/photo-1565557623262-b51c2513a641?w=800"], "details": {"info": "세 원숭이 조각.", "transport": "버스"}},
+            {"id": "kegon_falls", "name": "게곤 폭포", "lat": 36.7383, "lng": 139.5023, "type": "spot", "region": "nature", "rating": 4.6, "desc": "압도적인 낙차.", "photos": ["https://images.unsplash.com/photo-1580225598739-44585c5d0459?w=800"], "details": {"info": "엘리베이터 관람.", "transport": "버스"}},
+            {"id": "chuzenji_lake", "name": "주젠지 호수", "lat": 36.7435, "lng": 139.4800, "type": "spot", "region": "nature", "rating": 4.5, "desc": "산 위의 거대한 호수.", "photos": ["https://images.unsplash.com/photo-1535448033526-2729314bbc30?w=800"], "details": {"info": "유람선.", "transport": "버스"}},
+            {"id": "edo_wonderland", "name": "에도 원더랜드", "lat": 36.7910, "lng": 139.6970, "type": "spot", "region": "theme", "rating": 4.5, "desc": "에도 시대 테마파크.", "photos": ["https://images.unsplash.com/photo-1552611052-33e04de081de?w=800"], "details": {"info": "닌자 쇼.", "transport": "버스"}},
+            {"id": "shinkyo", "name": "신쿄 (신성한 다리)", "lat": 36.7530, "lng": 139.6030, "type": "spot", "region": "entrance", "rating": 4.3, "desc": "아름다운 붉은 다리.", "photos": ["https://images.unsplash.com/photo-1579623696562-b91c01995801?w=800"], "details": {"info": "닛코의 관문.", "transport": "도보"}}
+        ],
+        "default_plan": {
+            "1": ["shinkyo", "toshogu"],
+            "2": ["kegon_falls", "chuzenji_lake"],
+            "3": ["edo_wonderland"],
+            "4": ["toshogu"]
+        }
+    },
+    "sendai": {
+        "spots": [
+            {"id": "zuihoden", "name": "즈이호전", "lat": 38.2524, "lng": 140.8686, "type": "spot", "region": "central", "rating": 4.5, "desc": "화려한 영묘.", "photos": ["https://images.unsplash.com/photo-1582719508461-905c673771fd?w=800"], "details": {"info": "다테 마사무네.", "transport": "루플 센다이 버스"}},
+            {"id": "matsushima", "name": "마츠시마", "lat": 38.3716, "lng": 141.0667, "type": "spot", "region": "coast", "rating": 4.6, "desc": "일본 3대 절경.", "photos": ["https://images.unsplash.com/photo-1552611052-33e04de081de?w=800"], "details": {"info": "유람선과 굴 구이.", "transport": "JR 센석선"}},
+            {"id": "gyutan", "name": "규탄 (우설) 거리", "lat": 38.2601, "lng": 140.8824, "type": "food", "region": "central", "rating": 4.7, "desc": "센다이 명물 우설 구이.", "photos": ["https://images.unsplash.com/photo-1541544744-5e3a01994119?w=800"], "details": {"info": "두툼한 식감.", "transport": "센다이역"}},
+            {"id": "sendai_castle", "name": "센다이 성터", "lat": 38.2530, "lng": 140.8560, "type": "spot", "region": "hill", "rating": 4.4, "desc": "시내를 내려다보는 전망.", "photos": ["https://images.unsplash.com/photo-1548943487-a2e4e43b485c?w=800"], "details": {"info": "기마상.", "transport": "루플 센다이 버스"}},
+            {"id": "jozenji", "name": "조젠지 거리", "lat": 38.2635, "lng": 140.8700, "type": "spot", "region": "central", "rating": 4.5, "desc": "느티나무 가로수길.", "photos": ["https://images.unsplash.com/photo-1588821949320-e222f771746c?w=800"], "details": {"info": "겨울 일루미네이션.", "transport": "지하철"}}
+        ],
+        "default_plan": {
+            "1": ["sendai_castle", "zuihoden", "gyutan"],
+            "2": ["matsushima"],
+            "3": ["jozenji", "gyutan"],
+            "4": ["gyutan"]
+        }
+    },
+    "nagasaki": {
+        "spots": [
+            {"id": "glover_garden", "name": "글로버 정원", "lat": 32.7340, "lng": 129.8696, "type": "spot", "region": "hill", "rating": 4.6, "desc": "항구 뷰 서양식 저택.", "photos": ["https://images.unsplash.com/photo-1579623696562-b91c01995801?w=800"], "details": {"info": "하트 돌 찾기.", "transport": "노면전차"}},
+            {"id": "mt_inasa", "name": "이나사야마 전망대", "lat": 32.7525, "lng": 129.8496, "type": "spot", "region": "mountain", "rating": 4.8, "desc": "세계 3대 야경.", "photos": ["https://images.unsplash.com/photo-1535448033526-2729314bbc30?w=800"], "details": {"info": "1000만불짜리 야경.", "transport": "로프웨이"}},
+            {"id": "peace_park", "name": "평화 공원", "lat": 32.7765, "lng": 129.8635, "type": "spot", "region": "north", "rating": 4.5, "desc": "평화 기원상.", "photos": ["https://images.unsplash.com/photo-1580225598739-44585c5d0459?w=800"], "details": {"info": "원폭 낙하 중심지.", "transport": "노면전차"}},
+            {"id": "champon", "name": "시카이로 (짬뽕)", "lat": 32.7350, "lng": 129.8700, "type": "food", "region": "hill", "rating": 4.4, "desc": "나가사키 짬뽕 원조.", "photos": ["https://images.unsplash.com/photo-1569937756447-e19164275f30?w=800"], "details": {"info": "진한 국물.", "transport": "글로버 정원 앞"}},
+            {"id": "megane_bridge", "name": "메가네바시 (안경다리)", "lat": 32.7470, "lng": 129.8800, "type": "spot", "region": "central", "rating": 4.3, "desc": "물에 비친 모습이 안경 모양.", "photos": ["https://images.unsplash.com/photo-1555400038-63f5ba517a47?w=800"], "details": {"info": "사진 명소.", "transport": "노면전차"}}
+        ],
+        "default_plan": {
+            "1": ["glover_garden", "champon", "mt_inasa"],
+            "2": ["peace_park", "megane_bridge"],
+            "3": ["glover_garden"],
+            "4": ["champon"]
+        }
     }
-]
+}
 
 # ==============================================================================
 #  CODE GENERATION FUNCTION
 # ==============================================================================
 def generate_js_file(city_name, city_data):
-    js_template = f"""
+    spots = city_data.get('spots', [])
+    default_plan = city_data.get('default_plan', {1: [], 2: [], 3: [], 4: []})
+    
+    # Generate JS content
+    js_content = f"""
 function init{city_name.capitalize()}Trip() {{
-    console.log('🍜 {city_name.capitalize()} App V5.0 Loaded [HIGH FIDELITY DATA]');
+    console.log('✨ {city_name.capitalize()} App V6.0 Loaded [DEEP DATA]');
 
     // ==========================================================================
-    //  🍜 HIGH FIDELITY DATABASE: {city_name.upper()}
+    //  ✨ HIGH FIDELITY DATABASE: {city_name.upper()}
     // ==========================================================================
-    const POI_DATABASE = {json.dumps(city_data, indent=4, ensure_ascii=False)};
+    const POI_DATABASE = {json.dumps(spots, indent=4, ensure_ascii=False)};
 
     // ==========================================================================
     //  🚀 CORE ENGINE (STATE MANAGEMENT & UI)
     // ==========================================================================
-    let userItinerary = {{ 1: [], 2: [], 3: [] }};
+    let userItinerary = {json.dumps(default_plan, ensure_ascii=False)};
     let activeDay = 1;
     let map, markers = [];
 
@@ -203,13 +216,15 @@ function init{city_name.capitalize()}Trip() {{
     function initMap() {{
         const mapEl = document.getElementById('map');
         if (!mapEl) return;
+        // Center map on the first spot of Day 1, or the first spot in DB
+        const centerSpot = POI_DATABASE.find(p => p.id === userItinerary[1][0]) || POI_DATABASE[0];
         map = new google.maps.Map(mapEl, {{
-            center: {{ lat: {city_data[0]['lat']}, lng: {city_data[0]['lng']} }},
+            center: {{ lat: centerSpot.lat, lng: centerSpot.lng }},
             zoom: 12,
             mapTypeControl: false, streetViewControl: false, fullscreenControl: true
         }});
         
-        // Route Helper 초기화
+        // Route Helper (Preview Travel)
         if (window.initRouteHelper) window.initRouteHelper(map);
         
         updateMapMarkers();
@@ -221,7 +236,7 @@ function init{city_name.capitalize()}Trip() {{
         container.innerHTML = Object.keys(userItinerary).map(day =>
             `<button onclick="switchDay(${{day}})" 
                 class="px-4 py-2 rounded-full text-sm font-bold transition-all border shadow-sm ${{day == activeDay
-                ? 'bg-red-500 text-white scale-105 border-red-600'
+                ? 'bg-blue-600 text-white scale-105 border-blue-700'
                 : 'bg-white text-gray-500 hover:bg-gray-100'
             }}">
                 Day ${{day}}
@@ -235,13 +250,14 @@ function init{city_name.capitalize()}Trip() {{
 
         const planList = userItinerary[activeDay].map((id, idx) => {{
             const item = POI_DATABASE.find(p => p.id === id);
+            if (!item) return '';
             return `
                 <div class="flex items-center bg-white p-3 rounded-lg shadow-sm border border-gray-200 transition hover:shadow-md">
-                    <div class="w-6 h-6 rounded-full bg-red-500 text-white flex items-center justify-center text-xs font-bold mr-3 flex-shrink-0">
+                    <div class="w-6 h-6 rounded-full bg-blue-600 text-white flex items-center justify-center text-xs font-bold mr-3 flex-shrink-0">
                         ${{idx + 1}}
                     </div>
                     <div class="flex-1 min-w-0">
-                        <div class="font-bold text-gray-700 text-sm cursor-pointer hover:text-red-600 truncate" onclick="showDetail('${{item.id}}')">
+                        <div class="font-bold text-gray-700 text-sm cursor-pointer hover:text-blue-600 truncate" onclick="showDetail('${{item.id}}')">
                             ${{item.name}}
                         </div>
                         <div class="text-[10px] text-gray-400">
@@ -256,18 +272,18 @@ function init{city_name.capitalize()}Trip() {{
 
         container.innerHTML = `
             <!-- 1. 내 일정 -->
-            <div class="bg-red-50 p-4 rounded-xl mb-6 border border-red-100 shadow-inner">
+            <div class="bg-blue-50 p-4 rounded-xl mb-6 border border-blue-100 shadow-inner">
                 <div class="flex justify-between items-center mb-3">
-                    <h3 class="font-bold text-red-800 flex items-center gap-2">📅 Day ${{activeDay}} 일정</h3>
+                    <h3 class="font-bold text-blue-800 flex items-center gap-2">📅 Day ${{activeDay}} 일정</h3>
                     <div class="flex gap-2">
                          <button onclick="verifyRoute()" class="text-xs bg-gradient-to-r from-cyan-500 to-blue-500 text-white border-none px-3 py-1.5 rounded-full font-bold hover:scale-105 transition flex items-center gap-1 shadow-md animate-pulse">
                             <i class="fas fa-plane-departure"></i> 미리여행
                         </button>
-                        <span class="text-xs text-red-600 bg-white px-2 py-1 rounded border border-red-200 font-bold">${{userItinerary[activeDay].length}}곳</span>
+                        <span class="text-xs text-blue-600 bg-white px-2 py-1 rounded border border-blue-200 font-bold">${{userItinerary[activeDay].length}}곳</span>
                     </div>
                 </div>
                 <div id="my-plan-list" class="space-y-2 min-h-[50px]">
-                    ${{userItinerary[activeDay].length === 0 ? '<p class="text-center text-gray-400 text-xs py-6 border-2 border-dashed border-red-200 rounded-lg">아래 목록에서 [+] 버튼을 눌러<br>장소를 추가해보세요.</p>' : planList}}
+                    ${{userItinerary[activeDay].length === 0 ? '<p class="text-center text-gray-400 text-xs py-6 border-2 border-dashed border-blue-200 rounded-lg">아래 목록에서 [+] 버튼을 눌러<br>장소를 추가해보세요.</p>' : planList}}
                 </div>
             </div>
 
@@ -290,10 +306,12 @@ function init{city_name.capitalize()}Trip() {{
         const filtered = region === 'all' ? POI_DATABASE : POI_DATABASE.filter(p => p.region === region);
 
         let htmlContent = filtered.map(place => {{
-            const isAdded = userItinerary[activeDay].includes(place.id);
-            const btnClass = isAdded ? "bg-gray-100 text-gray-400 cursor-not-allowed" : "bg-gray-50 hover:bg-gray-100 text-gray-700 hover:text-red-600";
+            const isAdded = Object.values(userItinerary).flat().includes(place.id);
+            const btnClass = isAdded ? "bg-gray-100 text-gray-400 cursor-not-allowed" : "bg-gray-50 hover:bg-gray-100 text-gray-700 hover:text-blue-600";
             const btnText = isAdded ? "✅ 일정 포함됨" : `<i class="fas fa-plus"></i> 일정에 담기`;
             const btnAction = isAdded ? "" : `onclick="addToPlan('${{place.id}}')"`;
+            
+            const themeTags = place.details.themes ? place.details.themes.map(t => `<span class="text-[9px] bg-gray-100 text-gray-500 px-1.5 py-0.5 rounded">${{t}}</span>`).join('') : '';
 
             return `
             <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition">
@@ -305,10 +323,11 @@ function init{city_name.capitalize()}Trip() {{
                     <div class="flex-1 min-w-0 flex flex-col justify-between">
                         <div>
                             <div class="flex justify-between items-start">
-                                <h4 class="font-bold text-gray-900 text-lg truncate cursor-pointer hover:text-red-600" onclick="showDetail('${{place.id}}')">${{place.name}}</h4>
+                                <h4 class="font-bold text-gray-900 text-lg truncate cursor-pointer hover:text-blue-600" onclick="showDetail('${{place.id}}')">${{place.name}}</h4>
                                 <span class="text-[10px] font-bold px-2 py-0.5 rounded ${{place.type === 'food' ? 'bg-orange-50 text-orange-600' : 'bg-blue-50 text-blue-600'}}">${{place.type.toUpperCase()}}</span>
                             </div>
                             <p class="text-sm text-gray-500 mt-1 line-clamp-2">${{place.desc}}</p>
+                            <div class="flex flex-wrap gap-1 mt-2">${{themeTags}}</div>
                             <div class="flex items-center gap-1 mt-2">
                                 <span class="text-yellow-400 text-xs">★</span>
                                 <span class="text-xs font-bold text-gray-700">${{place.rating}}</span>
@@ -330,7 +349,7 @@ function init{city_name.capitalize()}Trip() {{
 
     // --- 인터랙션 로직 ---
     window.addToPlan = (id) => {{
-        if (userItinerary[activeDay].includes(id)) return alert('이미 일정에 있습니다.');
+        if (Object.values(userItinerary).flat().includes(id)) return alert('이미 일정에 있습니다.');
         userItinerary[activeDay].push(id);
         renderBuilderUI();
         updateMapMarkers();
@@ -371,33 +390,62 @@ function init{city_name.capitalize()}Trip() {{
         }});
 
         if (markers.length > 0) map.fitBounds(bounds);
-        
-        // 동선 업데이트 (자동)
         if (window.drawRoute) window.drawRoute(userItinerary[activeDay], POI_DATABASE);
     }}
 
-    // --- 상세 모달 (기존과 동일 패턴) ---
+    // --- 상세 모달 ---
     window.showDetail = function (id) {{
         const item = POI_DATABASE.find(p => p.id === id);
         if (!createModal()) return;
         if (map) {{ map.panTo({{ lat: item.lat, lng: item.lng }}); map.setZoom(16); }}
         const content = document.getElementById('modal-content');
         window.currentDetailTab = 'overview';
+        
         function renderModalContent() {{
-             const overviewClass = window.currentDetailTab === 'overview' ? 'text-red-600 border-b-2 border-red-600' : 'text-gray-400 hover:text-gray-600';
-            const reviewsClass = window.currentDetailTab === 'reviews' ? 'text-red-600 border-b-2 border-red-600' : 'text-gray-400 hover:text-gray-600';
-            const photosClass = window.currentDetailTab === 'photos' ? 'text-red-600 border-b-2 border-red-600' : 'text-gray-400 hover:text-gray-600';
+            const overviewClass = window.currentDetailTab === 'overview' ? 'text-blue-600 border-b-2 border-blue-600' : 'text-gray-400 hover:text-gray-600';
+            const reviewsClass = window.currentDetailTab === 'reviews' ? 'text-blue-600 border-b-2 border-blue-600' : 'text-gray-400 hover:text-gray-600';
+            const photosClass = window.currentDetailTab === 'photos' ? 'text-blue-600 border-b-2 border-blue-600' : 'text-gray-400 hover:text-gray-600';
 
             let tabContent = '';
             if (window.currentDetailTab === 'overview') {{
-                tabContent = `<div class="space-y-8 animate-fade-in"><div><p class="text-gray-600 leading-relaxed text-lg">${{item.desc}}</p></div><div class="bg-gray-50 p-5 rounded-2xl border border-gray-100"><h3 class="font-bold text-gray-800 text-sm mb-3 flex items-center gap-2"><i class="fas fa-info-circle text-red-500"></i> 상세 정보</h3><div class="prose text-sm text-gray-600 leading-relaxed space-y-2"><p>${{item.details?.info || '정보 업데이트 중...'}}</p>${{item.details?.tips ? `<p class="text-xs bg-yellow-50 p-2 rounded text-yellow-800">💡 <strong>꿀팁:</strong> ${{item.details.tips}}</p>` : ''}}</div></div>${{item.details?.transport ? `<div class="space-y-3"><h3 class="font-bold text-gray-800 text-sm flex items-center gap-2"><i class="fas fa-subway text-purple-500"></i> 교통편</h3><div class="bg-purple-50 p-4 rounded-xl border border-purple-100">${{item.details.transport}}</div></div>` : ''}}<div class="flex gap-3"><button onclick="addToPlan('${{item.id}}'); closeModal();" class="flex-1 bg-red-500 text-white py-4 rounded-xl font-bold hover:bg-red-600 transition shadow-lg flex items-center justify-center gap-2"><i class="fas fa-plus-circle"></i> 일정에 담기</button><a href="https://www.google.com/maps/search/?api=1&query=${{encodeURIComponent(item.name)}}" target="_blank" class="flex-1 bg-gray-800 text-white text-center py-4 rounded-xl font-bold hover:bg-gray-700 transition shadow-lg flex items-center justify-center gap-2"><i class="fas fa-map-marked-alt"></i> 구글맵</a></div></div>`;
+                const seasonalInfo = item.details.seasonal ? Object.entries(item.details.seasonal).map(([k, v]) => `<li class="text-xs text-gray-600"><span class="font-bold text-blue-500">${{k.toUpperCase()}}:</span> ${{v}}</li>`).join('') : '';
+                const recommendTags = item.details.recommend ? item.details.recommend.map(r => `<span class="bg-blue-50 text-blue-600 px-2 py-1 rounded text-xs font-bold">#${{r}}</span>`).join('') : '';
+
+                tabContent = `
+                <div class="space-y-6 animate-fade-in">
+                    <div>
+                        <p class="text-gray-600 leading-relaxed text-lg">${{item.desc}}</p>
+                        <div class="flex gap-2 mt-3">${{recommendTags}}</div>
+                    </div>
+                    
+                    <div class="bg-gray-50 p-5 rounded-2xl border border-gray-100">
+                        <h3 class="font-bold text-gray-800 text-sm mb-3 flex items-center gap-2"><i class="fas fa-info-circle text-blue-500"></i> 상세 정보</h3>
+                        <div class="prose text-sm text-gray-600 leading-relaxed space-y-2">
+                            <p>${{item.details?.info || '정보 업데이트 중...'}}</p>
+                            ${{item.details?.tips ? `<p class="text-xs bg-yellow-50 p-2 rounded text-yellow-800">💡 <strong>꿀팁:</strong> ${{item.details.tips}}</p>` : ''}}
+                        </div>
+                    </div>
+
+                    ${{seasonalInfo ? `
+                    <div class="bg-green-50 p-5 rounded-2xl border border-green-100">
+                        <h3 class="font-bold text-green-800 text-sm mb-2 flex items-center gap-2"><i class="fas fa-leaf"></i> 계절별 포인트</h3>
+                        <ul class="space-y-1">${{seasonalInfo}}</ul>
+                    </div>` : ''}}
+
+                    ${{item.details?.transport ? `<div class="space-y-2"><h3 class="font-bold text-gray-800 text-sm flex items-center gap-2"><i class="fas fa-subway text-purple-500"></i> 교통편</h3><div class="bg-purple-50 p-3 rounded-xl border border-purple-100 text-xs">${{item.details.transport}}</div></div>` : ''}}
+                    
+                    <div class="flex gap-3 pt-4">
+                        <button onclick="addToPlan('${{item.id}}'); closeModal();" class="flex-1 bg-blue-600 text-white py-4 rounded-xl font-bold hover:bg-blue-700 transition shadow-lg flex items-center justify-center gap-2"><i class="fas fa-plus-circle"></i> 일정에 담기</button>
+                        <a href="https://www.google.com/maps/search/?api=1&query=${{encodeURIComponent(item.name)}}" target="_blank" class="flex-1 bg-gray-800 text-white text-center py-4 rounded-xl font-bold hover:bg-gray-700 transition shadow-lg flex items-center justify-center gap-2"><i class="fas fa-map-marked-alt"></i> 구글맵</a>
+                    </div>
+                </div>`;
             }} else if (window.currentDetailTab === 'reviews') {{
-                tabContent = `<div class="space-y-4 animate-fade-in"><div class="flex items-center gap-4 mb-6 bg-red-50 p-4 rounded-xl"><div class="text-4xl font-black text-red-600">${{item.rating}}</div><div><div class="flex text-yellow-400 text-sm mb-1">${{'★'.repeat(Math.floor(item.rating))}}</div><p class="text-xs text-gray-500">구글맵/트립어드바이저 리뷰 기반</p></div></div><div class="space-y-4">${{item.reviews.map(r => `<div class="border-b border-gray-100 pb-4"><div class="flex justify-between mb-2"><span class="font-bold text-sm text-gray-800">${{r.user}}</span><span class="text-xs text-gray-400">${{r.date}}</span></div><p class="text-sm text-gray-600">${{r.text}}</p></div>`).join('')}}</div></div>`;
+                tabContent = `<div class="space-y-4 animate-fade-in"><div class="flex items-center gap-4 mb-6 bg-blue-50 p-4 rounded-xl"><div class="text-4xl font-black text-blue-600">${{item.rating}}</div><div><div class="flex text-yellow-400 text-sm mb-1">${{'★'.repeat(Math.floor(item.rating))}}</div><p class="text-xs text-gray-500">실제 여행객 리뷰 요약</p></div></div><div class="space-y-4">${{item.reviews ? item.reviews.map(r => `<div class="border-b border-gray-100 pb-4"><div class="flex justify-between mb-2"><span class="font-bold text-sm text-gray-800">${{r.user}}</span><span class="text-xs text-gray-400">${{r.date}}</span></div><p class="text-sm text-gray-600">${{r.text}}</p></div>`).join('') : '<p class="text-sm text-gray-500">리뷰가 없습니다.</p>'}}</div></div>`;
             }} else if (window.currentDetailTab === 'photos') {{
                 tabContent = `<div class="grid grid-cols-2 gap-2 animate-fade-in">${{item.photos.map(p => `<div class="aspect-square rounded-lg overflow-hidden bg-gray-100"><img src="${{p}}" class="w-full h-full object-cover" onclick="window.open('${{p}}','_blank')"></div>`).join('')}}</div>`;
             }}
 
-            content.innerHTML = `<div class="relative h-72 bg-gray-900 group"><img src="${{item.photos[0]}}" class="w-full h-full object-cover opacity-90"><button onclick="closeModal()" class="absolute top-4 right-4 bg-black/50 text-white w-9 h-9 rounded-full flex items-center justify-center">✕</button><div class="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/90 to-transparent p-6 pt-20"><h2 class="text-3xl font-black text-white mb-1">${{item.name}}</h2></div></div><div class="sticky top-0 bg-white z-10 flex border-b shadow-sm"><button class="flex-1 py-4 text-sm font-bold transition ${{overviewClass}}" onclick="window.switchDetailTab('overview')">개요</button><button class="flex-1 py-4 text-sm font-bold transition ${{reviewsClass}}" onclick="window.switchDetailTab('reviews')">리뷰</button><button class="flex-1 py-4 text-sm font-bold transition ${{photosClass}}" onclick="window.switchDetailTab('photos')">사진</button></div><div class="p-6 pb-24">${{tabContent}}</div>`;
+            content.innerHTML = `<div class="relative h-72 bg-gray-900 group"><img src="${{item.photos[0]}}" class="w-full h-full object-cover opacity-90"><button onclick="closeModal()" class="absolute top-4 right-4 bg-black/50 text-white w-9 h-9 rounded-full flex items-center justify-center">✕</button><div class="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/90 to-transparent p-6 pt-20"><h2 class="text-3xl font-black text-white mb-1">${{item.name}}</h2><div class="flex gap-2 mt-2">${{item.details.themes ? item.details.themes.map(t => `<span class="text-[10px] bg-white/20 text-white px-2 py-0.5 rounded backdrop-blur-sm">${{t}}</span>`).join('') : ''}}</div></div></div><div class="sticky top-0 bg-white z-10 flex border-b shadow-sm"><button class="flex-1 py-4 text-sm font-bold transition ${{overviewClass}}" onclick="window.switchDetailTab('overview')">개요</button><button class="flex-1 py-4 text-sm font-bold transition ${{reviewsClass}}" onclick="window.switchDetailTab('reviews')">리뷰</button><button class="flex-1 py-4 text-sm font-bold transition ${{photosClass}}" onclick="window.switchDetailTab('photos')">사진</button></div><div class="p-6 pb-24">${{tabContent}}</div>`;
         }}
         window.switchDetailTab = (tab) => {{ window.currentDetailTab = tab; renderModalContent(); }};
         renderModalContent();
@@ -415,15 +463,22 @@ function init{city_name.capitalize()}Trip() {{
 }}
 window.init{city_name.capitalize()}Trip = init{city_name.capitalize()}Trip;
     """
-    return js_template
+    return js_content
 
 # ==============================================================================
 #  MAIN EXECUTION
 # ==============================================================================
 if __name__ == "__main__":
-    # Generate Fukuoka JS
-    fukuoka_js = generate_js_file("fukuoka", FUKUOKA_DATA)
+    output_dir = "f:/genmini/japness/변환/fam/js/travel/"
     
-    # In a real scenario, this would write to a file. 
-    # For this environment, we print it to be captured by the agent or user.
-    print(fukuoka_js)
+    for city, data in CITIES_DATA.items():
+        file_name = f"{city}.js"
+        full_path = os.path.join(output_dir, file_name)
+        
+        print(f"Generating {{file_name}}...")
+        js_code = generate_js_file(city, data)
+        
+        with open(full_path, "w", encoding="utf-8") as f:
+            f.write(js_code)
+            
+    print("All 11 city files generated successfully!")
