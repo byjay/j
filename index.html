@@ -20,7 +20,7 @@
     <link rel="stylesheet" href="css/styles.css">
 
     <script
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDkmhTzFKcxxfQIrYlkcFjXAgIDdTZMdvU&callback=initFukuokaTrip&libraries=places,directions,geometry&v=weekly"
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDkmhTzFKcxxfQIrYlkcFjXAgIDdTZMdvU&callback=initJapanTravel&libraries=places,directions,geometry&v=weekly"
         defer></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 
@@ -252,57 +252,28 @@
                 </div>
 
                 <div id="conversation" class="tab-content hidden">
-                    <!-- Mode Selector -->
-                    <div
-                        class="mb-4 flex gap-2 justify-center sticky top-14 z-30 bg-gray-50 py-3 -mx-4 px-4 border-b border-gray-200">
-                        <button id="mode-situational-btn" onclick="showConversationMode('situational')"
-                            class="flex-1 py-2 px-4 rounded-xl font-bold text-base transition-all duration-300 bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-lg">
-                            📚 상황별 대화
-                        </button>
-                        <button id="mode-practical-btn" onclick="showConversationMode('practical')"
-                            class="flex-1 py-2 px-4 rounded-xl font-bold text-base transition-all duration-300 bg-white text-gray-600 border-2 border-gray-200">
-                            💬 일상 대화
-                        </button>
-                    </div>
+                    <!-- New Simplified Conversation UI -->
+                    <div class="max-w-4xl mx-auto">
+                        <!-- Header -->
+                        <div class="mb-6 text-center">
+                            <h2 class="text-2xl font-black text-gray-800 mb-2">🗣️ 실전 회화</h2>
+                            <p class="text-gray-500 text-sm">원어민처럼 말해보세요!</p>
+                        </div>
 
-                    <!-- Situational Conversation Content -->
-                    <div id="situational-conversation-container" class="conversation-mode-content">
-                        <div class="mb-3">
-                            <h2 class="text-xl font-bold text-gray-900 mb-2">💬 상황별 대화</h2>
-                            <div id="conversation-category-buttons"
-                                class="flex flex-wrap gap-2 text-xs overflow-x-auto pb-1">
+                        <!-- Category Grid -->
+                        <div id="conversation-categories" class="grid grid-cols-2 md:grid-cols-3 gap-4 mb-8">
+                            <!-- Categories injected by JS -->
+                        </div>
+
+                        <!-- Conversation List (Hidden by default) -->
+                        <div id="conversation-list" class="hidden">
+                            <button onclick="initConversation()"
+                                class="mb-4 flex items-center gap-2 text-gray-500 hover:text-gray-800 font-bold transition-colors">
+                                <i class="fas fa-arrow-left"></i> 카테고리 목록으로
+                            </button>
+                            <div id="conversation-cards-container" class="space-y-8">
+                                <!-- Cards injected by JS -->
                             </div>
-                        </div>
-
-                        <div id="conversation-content" class="mb-3"></div>
-
-                        <div
-                            class="p-3 bg-gray-50 border border-gray-100 rounded-2xl flex justify-between items-center">
-                            <button id="conv-prev-btn" onclick="previousConversation()"
-                                class="w-11 h-11 rounded-full bg-white shadow text-gray-600 flex items-center justify-center active:bg-gray-100 text-sm">
-                                <i class="fas fa-chevron-left"></i>
-                            </button>
-                            <button id="conv-next-btn" onclick="nextConversation()"
-                                class="w-11 h-11 rounded-full bg-red-500 shadow text-white flex items-center justify-center active:bg-red-600 text-sm">
-                                <i class="fas fa-chevron-right"></i>
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Practical Conversation Content -->
-                    <div id="practical-conversation-container" class="conversation-mode-content hidden">
-                        <div id="practical-conversation-content" class="mb-3"></div>
-
-                        <div
-                            class="p-3 bg-gray-50 border border-gray-100 rounded-2xl flex justify-between items-center">
-                            <button id="practical-prev-btn" onclick="previousConversation()"
-                                class="w-11 h-11 rounded-full bg-white shadow text-gray-600 flex items-center justify-center active:bg-gray-100 text-sm">
-                                <i class="fas fa-chevron-left"></i>
-                            </button>
-                            <button id="practical-next-btn" onclick="nextConversation()"
-                                class="w-11 h-11 rounded-full bg-purple-500 shadow text-white flex items-center justify-center active:bg-purple-600 text-sm">
-                                <i class="fas fa-chevron-right"></i>
-                            </button>
                         </div>
                     </div>
                 </div>
@@ -457,7 +428,7 @@
     <script src="js/ui.js"></script>
     <script src="js/templates.js"></script>
     <script src="js/words_data.js"></script>
-    <script src="js/fukuoka.js"></script>
+
     <script src="js/japan_travel.js"></script>
     <script src="js/conversation.js"></script>
     <script src="js/conversation_day.js"></script>
