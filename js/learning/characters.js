@@ -287,6 +287,9 @@ function stopDraw() { isDrawing = false; }
 function clearCanvas() { if (canvas && ctx) ctx.clearRect(0, 0, canvas.width, canvas.height); }
 
 // 퀴즈 로직
+
+let wrongAnswers = []; // 오답 노트용 배열
+
 function startQuiz(mode) {
     let pool = [];
     if (mode === 'hiragana') pool = charData.hiragana;
@@ -307,6 +310,7 @@ function startQuiz(mode) {
     }
     currentQuestionIdx = 0;
     quizScore = 0;
+    wrongAnswers = []; // 초기화
     showQuizModal();
 }
 
@@ -335,6 +339,14 @@ function showQuizModal() {
                     </button>
                 `).join('')}
             </div>
+            
+            <!-- 정답 팝업 (숨김 상태로 시작) -->
+            <div id="correct-answer-popup" class="hidden absolute inset-0 bg-black/80 flex items-center justify-center z-[60] animate-fade-in">
+                <div class="text-center">
+                    <div class="text-9xl font-black text-red-500 mb-4 animate-bounce">${q.answer.char}</div>
+                    <div class="text-4xl font-bold text-white">${q.answer.pron}</div>
+                </div>
+            </div>
         </div>
     `;
     container.classList.remove('hidden');
@@ -343,24 +355,80 @@ function showQuizModal() {
 function submitAnswer(selectedIdx) {
     const q = quizQuestions[currentQuestionIdx];
     const isCorrect = q.options[selectedIdx].char === q.answer.char;
-    if (isCorrect) quizScore++;
-    if (currentQuestionIdx < 9) { currentQuestionIdx++; showQuizModal(); }
-    else { showQuizResult(); }
+
+    if (isCorrect) {
+        quizScore++;
+        nextQuestion();
+    } else {
+        // 오답 기록
+        wrongAnswers.push({
+            question: q.answer.char,
+            answer: q.answer.pron,
+            wrong: q.options[selectedIdx].pron
+        });
+
+        // 오답 시 정답 팝업 표시
+        const popup = document.getElementById('correct-answer-popup');
+        if (popup) {
+            popup.classList.remove('hidden');
+            playAudio(q.answer.char); // 정답 소리 재생
+            setTimeout(() => {
+                nextQuestion();
+            }, 1500); // 1.5초 후 다음 문제로
+        } else {
+            nextQuestion();
+        }
+    }
+}
+
+function nextQuestion() {
+    if (currentQuestionIdx < 9) {
+        currentQuestionIdx++;
+        showQuizModal();
+    } else {
+        showQuizResult();
+    }
 }
 
 function showQuizResult() {
     saveStudyLog('quiz', quizScore);
     const container = document.getElementById('character-study-container');
     const message = quizScore === 10 ? "만점입니다! 🎉" : "수고하셨어요! 👍";
+
+    // 오답 리스트 HTML 생성
+    let wrongListHTML = '';
+    if (wrongAnswers.length > 0) {
+        wrongListHTML = `
+            <div class="w-full max-w-xs bg-red-50 rounded-xl p-4 mb-6 border border-red-100">
+                <h3 class="font-bold text-red-500 mb-3 text-sm text-center">❌ 오답 노트</h3>
+                <div class="space-y-2 max-h-40 overflow-y-auto custom-scrollbar">
+                    ${wrongAnswers.map(item => `
+                        <div class="flex justify-between items-center bg-white p-2 rounded-lg shadow-sm">
+                            <span class="text-2xl font-bold text-gray-800">${item.question}</span>
+                            <div class="text-right">
+                                <span class="text-xs text-gray-400 line-through mr-2">${item.wrong}</span>
+                                <span class="text-lg font-bold text-red-500">${item.answer}</span>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+        `;
+    }
+
     container.innerHTML = `
         <div class="fixed top-14 bottom-0 left-0 right-0 z-50 bg-white flex flex-col items-center justify-center p-4 animate-fade-in">
             <div class="text-6xl mb-4">🏆</div>
             <h2 class="text-3xl font-black text-gray-800 mb-2">퀴즈 종료!</h2>
-            <p class="text-gray-500 mb-8">${message}</p>
-            <div class="bg-gray-50 px-10 py-8 rounded-3xl mb-8 text-center border border-gray-200">
+            <p class="text-gray-500 mb-6">${message}</p>
+            
+            <div class="bg-gray-50 px-10 py-6 rounded-3xl mb-6 text-center border border-gray-200">
                 <span class="block text-sm text-gray-400 uppercase tracking-widest mb-1">SCORE</span>
                 <span class="text-6xl font-black ${quizScore >= 7 ? 'text-blue-500' : 'text-red-500'}">${quizScore} <span class="text-3xl text-gray-300">/ 10</span></span>
             </div>
+
+            ${wrongListHTML}
+
             <div class="w-full max-w-xs space-y-3">
                 <button onclick="closeModal(); showCharacterGrid(currentMode);" class="w-full py-4 bg-gray-800 text-white rounded-xl font-bold shadow-lg active:scale-95 transition">목록으로</button>
                 <button onclick="startQuiz('mix')" class="w-full py-4 bg-white text-gray-700 border border-gray-200 rounded-xl font-bold hover:bg-gray-50 active:scale-95 transition">다시 하기</button>
