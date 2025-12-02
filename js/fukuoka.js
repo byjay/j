@@ -717,12 +717,11 @@
         ` : '';
 
         // 추천 장소 (클릭 가능하도록 수정)
-        const recommendHTML = item.recommend && item.recommend.length > 0 ? `
             <div class="px-4 mb-4">
                 <h5 class="font-bold text-gray-700 text-sm mb-2">👍 주변 추천 (클릭하여 상세 보기)</h5>
                 <div class="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
                     ${item.recommend.map((rec, i) => `
-                        <div onclick="showPlaceDetailModal('${keyToSafeId(item.name + '_rec_' + i)}')" 
+                        <div onclick="showPlaceDetailModal('p_${idx}_r_${i}')" 
                              class="flex-none w-32 bg-white p-2 rounded-lg border border-gray-100 shadow-sm text-center cursor-pointer hover:border-blue-300 hover:bg-blue-50 transition">
                             <div class="text-xl mb-1">${rec.icon}</div>
                             <div class="text-xs font-bold text-gray-800 truncate">${rec.name}</div>
@@ -733,12 +732,10 @@
             </div>
         ` : '';
 
-        // 추천 장소 데이터 저장을 위한 숨겨진 스크립트 (임시 방편)
-        // 실제로는 전역 객체나 모달 함수에서 접근 가능한 곳에 저장해야 함.
-        // 여기서는 window 객체에 임시 저장.
+        // 추천 장소 데이터 저장을 위한 숨겨진 스크립트
         if (item.recommend) {
             item.recommend.forEach((rec, i) => {
-                const recKey = keyToSafeId(item.name + '_rec_' + i);
+                const recKey = `p_${idx}_r_${i}`;
                 window.placeRecommendations = window.placeRecommendations || {};
                 window.placeRecommendations[recKey] = rec;
             });

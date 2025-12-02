@@ -502,7 +502,7 @@
                 <h5 class="font-bold text-gray-700 text-sm mb-2">👍 주변 추천 (클릭하여 상세 보기)</h5>
                 <div class="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
                     ${item.recommend.map((rec, i) => `
-                        <div onclick="showPlaceDetailModal('${keyToSafeId(item.name + '_rec_' + i)}')" 
+                        <div onclick="showPlaceDetailModal('p_${idx}_r_${i}')" 
                              class="flex-none w-32 bg-white p-2 rounded-lg border border-gray-100 shadow-sm text-center cursor-pointer hover:border-pink-300 hover:bg-pink-50 transition">
                             <div class="text-xl mb-1">${rec.icon}</div>
                             <div class="text-xs font-bold text-gray-800 truncate">${rec.name}</div>
@@ -515,7 +515,7 @@
 
         if (item.recommend) {
             item.recommend.forEach((rec, i) => {
-                const recKey = keyToSafeId(item.name + '_rec_' + i);
+                const recKey = `p_${idx}_r_${i}`;
                 window.placeRecommendations = window.placeRecommendations || {};
                 window.placeRecommendations[recKey] = rec;
             });
