@@ -150,31 +150,35 @@ function checkFukuokaAccess() {
         showTab('characters');
     }
 }
-return;
+// PWA 설치 관련 변수
+let deferredPrompt;
+
+function initPWAInstall() {
+    // 2. Android/Desktop: beforeinstallprompt 이벤트 리스너
+    window.addEventListener('beforeinstallprompt', (e) => {
+        // 기본 미니 인포바 차단
+        e.preventDefault();
+        // 이벤트 저장 (나중에 트리거하기 위해)
+        deferredPrompt = e;
+        // 설치 버튼 표시
+        showInstallPromotion();
+    });
+
+    // 3. iOS 감지 및 안내 (beforeinstallprompt 미지원)
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+    // const isStandalone = window.matchMedia('(display-mode: standalone)').matches; // isStandalone is not defined here, need to check
+    const isStandalone = window.navigator.standalone || window.matchMedia('(display-mode: standalone)').matches;
+
+    if (isIOS && !isStandalone) {
+        // iOS는 사용자가 직접 설치해야 하므로, 최초 1회만 안내 모달 표시 (쿠키/로컬스토리지 체크)
+        const hasSeenInstallGuide = localStorage.getItem('ios_install_guide_seen');
+        if (!hasSeenInstallGuide) {
+            setTimeout(() => {
+                showIOSInstallGuide();
+            }, 2000); // 앱 진입 2초 후 표시
         }
-
-// 2. Android/Desktop: beforeinstallprompt 이벤트 리스너
-window.addEventListener('beforeinstallprompt', (e) => {
-    // 기본 미니 인포바 차단
-    e.preventDefault();
-    // 이벤트 저장 (나중에 트리거하기 위해)
-    deferredPrompt = e;
-    // 설치 버튼 표시
-    showInstallPromotion();
-});
-
-// 3. iOS 감지 및 안내 (beforeinstallprompt 미지원)
-const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-if (isIOS && !isStandalone) {
-    // iOS는 사용자가 직접 설치해야 하므로, 최초 1회만 안내 모달 표시 (쿠키/로컬스토리지 체크)
-    const hasSeenInstallGuide = localStorage.getItem('ios_install_guide_seen');
-    if (!hasSeenInstallGuide) {
-        setTimeout(() => {
-            showIOSInstallGuide();
-        }, 2000); // 앱 진입 2초 후 표시
     }
 }
-    }
 
 // 설치 버튼 표시 (Android/Desktop)
 function showInstallPromotion() {
