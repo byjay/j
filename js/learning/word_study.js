@@ -579,3 +579,13 @@ function backToWordCategories() {
 }
 
 console.log('word_study.js (Kana Enhanced + SRS) 로드 완료');
+
+// 전역 노출
+window.initWordStudy = initWordStudy;
+window.openWordLesson = openWordLesson;
+window.backToWordCategories = backToWordCategories;
+window.toggleShuffle = toggleShuffle;
+window.flipCard = flipCard;
+window.nextWord = nextWord;
+window.prevWord = prevWord;
+window.playWordAudio = playWordAudio;

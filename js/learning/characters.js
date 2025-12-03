@@ -573,15 +573,6 @@ function getWeeklyActivityHTML(logs) {
 }
 
 // 전역 노출
-window.showCharacterGrid = showCharacterGrid;
-window.selectCharacter = selectCharacter;
-window.closeModal = closeModal;
-window.nextChar = nextChar;
-window.prevChar = prevChar;
-window.clearCanvas = clearCanvas;
-window.startQuiz = startQuiz;
-window.checkQuizAnswer = checkQuizAnswer;
-window.closeQuizModal = closeQuizModal;
-window.playAudio = playAudio; // ui.js에도 있지만 여기서도 사용
+// Duplicate exports removed
 
 console.log("characters.js loaded (Fixed Layout & Weekly Report)");
