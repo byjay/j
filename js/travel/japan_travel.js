@@ -258,13 +258,28 @@ function renderRegionSelection() {
 
     let html = `
         <!-- 쇼핑 섹션 (상단 고정) -->
-        <div class="col-span-2 grid grid-cols-2 gap-4 mb-2">
-             <button onclick="openShopping('donki')" class="bg-gradient-to-r from-yellow-400 to-yellow-500 text-black p-4 rounded-2xl font-black text-lg shadow-md hover:scale-105 transition flex items-center justify-center gap-2 border-2 border-black">
-                <span class="text-2xl">🐧</span> 돈키호테
+        <div class="col-span-2 grid grid-cols-2 gap-3 mb-2">
+             <button onclick="openShopping('donki')" class="bg-gradient-to-r from-yellow-400 to-yellow-500 text-black p-2 rounded-xl font-bold text-sm shadow-sm hover:scale-105 transition flex items-center justify-center gap-2 border border-black">
+                <span class="text-lg">🐧</span> 돈키호테
              </button>
-             <button onclick="openShopping('drugstore')" class="bg-gradient-to-r from-blue-500 to-cyan-500 text-white p-4 rounded-2xl font-black text-lg shadow-md hover:scale-105 transition flex items-center justify-center gap-2 border-2 border-blue-600">
-                <span class="text-2xl">💊</span> 드럭스토어
+             <button onclick="openShopping('drugstore')" class="bg-gradient-to-r from-blue-500 to-cyan-500 text-white p-2 rounded-xl font-bold text-sm shadow-sm hover:scale-105 transition flex items-center justify-center gap-2 border border-blue-600">
+                <span class="text-lg">💊</span> 드럭스토어
              </button>
+        </div>
+
+        <!-- Transportation Guide Button -->
+        <div class="col-span-2 mb-4">
+            <button onclick="initTransportationGuide()" 
+                class="w-full bg-gradient-to-r from-green-500 to-teal-600 text-white p-3 rounded-xl shadow-md hover:shadow-lg transform hover:-translate-y-1 transition-all duration-300 flex items-center justify-center gap-3 group">
+                <div class="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center group-hover:rotate-12 transition-transform">
+                    <i class="fas fa-subway text-sm"></i>
+                </div>
+                <div class="text-left">
+                    <div class="font-bold text-sm">일본 교통 완전 정복</div>
+                    <div class="text-[10px] text-green-100">지하철/버스 패스, 구매법, 에티켓 총정리</div>
+                </div>
+                <i class="fas fa-chevron-right ml-auto opacity-70 text-xs"></i>
+            </button>
         </div>
     `;
 

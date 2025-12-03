@@ -3,6 +3,10 @@
  */
 
 // 탭 전환
+function openSection(tabName) {
+    showTab(tabName);
+}
+
 function showTab(tabName) {
     console.log('showTab called:', tabName);
 
@@ -48,8 +52,12 @@ function showTab(tabName) {
 
     // 탭별 초기화
     if (tabName === 'characters') {
+        // alert("DEBUG: showTab('characters') reached"); 
         if (typeof showCharacterGrid === 'function') {
             showCharacterGrid('hiragana');
+        } else {
+            console.error("showCharacterGrid function not found!");
+            alert("Error: showCharacterGrid function not found! Check characters.js loading.");
         }
     } else if (tabName === 'vocabulary') {
         if (typeof initVocabulary === 'function') {
@@ -142,62 +150,31 @@ function checkFukuokaAccess() {
         showTab('characters');
     }
 }
-
-// 오디오 재생 (TTS)
-function playAudio(text) {
-    if (!text) return;
-
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = 'ja-JP';
-    utterance.rate = 0.9;
-    window.speechSynthesis.speak(utterance);
-
-    console.log('Playing audio:', text);
-}
-
-// 전역 노출
-window.showTab = showTab;
-window.handleNavClick = handleNavClick;
-
-// 구버전 호환성을 위한 별칭
-window.openSection = handleNavClick;
-window.checkFukuokaAccess = checkFukuokaAccess;
-window.triggerLoginAnimation = triggerLoginAnimation;
-window.playAudio = playAudio;
-
-// ==================== PWA 설치 유도 (New) ====================
-let deferredPrompt;
-
-function initPWAInstall() {
-    // 1. 이미 설치된 상태인지 확인 (Standalone 모드)
-    const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
-    if (isStandalone) {
-        console.log('App is already running in standalone mode.');
-        return;
-    }
-
-    // 2. Android/Desktop: beforeinstallprompt 이벤트 리스너
-    window.addEventListener('beforeinstallprompt', (e) => {
-        // 기본 미니 인포바 차단
-        e.preventDefault();
-        // 이벤트 저장 (나중에 트리거하기 위해)
-        deferredPrompt = e;
-        // 설치 버튼 표시
-        showInstallPromotion();
-    });
-
-    // 3. iOS 감지 및 안내 (beforeinstallprompt 미지원)
-    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-    if (isIOS && !isStandalone) {
-        // iOS는 사용자가 직접 설치해야 하므로, 최초 1회만 안내 모달 표시 (쿠키/로컬스토리지 체크)
-        const hasSeenInstallGuide = localStorage.getItem('ios_install_guide_seen');
-        if (!hasSeenInstallGuide) {
-            setTimeout(() => {
-                showIOSInstallGuide();
-            }, 2000); // 앱 진입 2초 후 표시
+return;
         }
+
+// 2. Android/Desktop: beforeinstallprompt 이벤트 리스너
+window.addEventListener('beforeinstallprompt', (e) => {
+    // 기본 미니 인포바 차단
+    e.preventDefault();
+    // 이벤트 저장 (나중에 트리거하기 위해)
+    deferredPrompt = e;
+    // 설치 버튼 표시
+    showInstallPromotion();
+});
+
+// 3. iOS 감지 및 안내 (beforeinstallprompt 미지원)
+const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+if (isIOS && !isStandalone) {
+    // iOS는 사용자가 직접 설치해야 하므로, 최초 1회만 안내 모달 표시 (쿠키/로컬스토리지 체크)
+    const hasSeenInstallGuide = localStorage.getItem('ios_install_guide_seen');
+    if (!hasSeenInstallGuide) {
+        setTimeout(() => {
+            showIOSInstallGuide();
+        }, 2000); // 앱 진입 2초 후 표시
     }
 }
+    }
 
 // 설치 버튼 표시 (Android/Desktop)
 function showInstallPromotion() {

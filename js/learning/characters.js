@@ -53,11 +53,15 @@ let isDrawing = false;
 // ==========================================
 
 function showCharacterGrid(type) {
+    // alert(`DEBUG: showCharacterGrid called with type: ${type}`); // 디버깅용 알림
+    console.log(`showCharacterGrid called with type: ${type}`);
+
     currentMode = type;
     const container = document.getElementById('character-grid-container');
 
     if (!container) {
         console.error("character-grid-container ID를 찾을 수 없습니다.");
+        alert("Error: character-grid-container ID를 찾을 수 없습니다.");
         return;
     }
 
@@ -207,7 +211,12 @@ function selectCharacter(idx) {
                     <button onclick="prevChar()" class="text-gray-400 hover:text-gray-800 p-2 transition ${currentIndex === 0 ? 'invisible' : ''}">
                         <i class="fas fa-chevron-left text-xl"></i>
                     </button>
-                    <span class="text-[10px] text-gray-400 font-medium bg-gray-100 px-2 py-0.5 rounded-full">따라 써보세요 ✍️</span>
+                    <div class="flex gap-2">
+                        <button onclick="clearCanvas()" class="bg-gray-100 text-gray-600 px-3 py-1.5 rounded-lg text-xs font-bold hover:bg-gray-200 transition">
+                            <i class="fas fa-eraser mr-1"></i> 지우기
+                        </button>
+                        <span class="text-[10px] text-gray-400 font-medium bg-gray-100 px-2 py-0.5 rounded-full flex items-center">따라 써보세요 ✍️</span>
+                    </div>
                     <button onclick="nextChar()" class="bg-red-500 text-white px-4 py-2 rounded-lg font-bold shadow hover:bg-red-600 active:scale-95 transition flex items-center gap-1 text-sm">
                         다음 <i class="fas fa-chevron-right text-xs"></i>
                     </button>
@@ -562,5 +571,17 @@ function getWeeklyActivityHTML(logs) {
         `;
     }).join('');
 }
+
+// 전역 노출
+window.showCharacterGrid = showCharacterGrid;
+window.selectCharacter = selectCharacter;
+window.closeModal = closeModal;
+window.nextChar = nextChar;
+window.prevChar = prevChar;
+window.clearCanvas = clearCanvas;
+window.startQuiz = startQuiz;
+window.checkQuizAnswer = checkQuizAnswer;
+window.closeQuizModal = closeQuizModal;
+window.playAudio = playAudio; // ui.js에도 있지만 여기서도 사용
 
 console.log("characters.js loaded (Fixed Layout & Weekly Report)");

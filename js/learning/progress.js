@@ -1,233 +1,157 @@
 /**
- * progress.js - 학습 진도 대시보드
+ * progress.js - 학습 현황 대시보드 (Chart.js 활용)
  */
 
-let conversationChart = null;
-let vocabularyChart = null;
-let characterChart = null;
-let characterQuizChart = null;
-let vocabularyQuizChart = null;
-
-// 학습현황 탭 표시
 function showProgressDashboard() {
-    if (!currentUser) return;
+    const container = document.getElementById('progress');
+    if (!container) return;
 
-    // 아빠 계정이면 사용자 선택 드롭다운 표시
-    const adminSelector = document.getElementById('admin-user-selector');
-    const adminReset = document.getElementById('admin-reset-user');
-
-    if (currentUser.id === 'dad') {
-        if (adminSelector) adminSelector.style.display = 'block';
-        if (adminReset) adminReset.style.display = 'block';
-    } else {
-        if (adminSelector) adminSelector.style.display = 'none';
-        if (adminReset) adminReset.style.display = 'none';
+    // 사용자 체크
+    if (!currentUser) {
+        container.innerHTML = `
+            <div class="flex flex-col items-center justify-center h-full p-8 text-center">
+                <div class="text-6xl mb-4">🔒</div>
+                <h2 class="text-xl font-bold text-gray-800 mb-2">로그인이 필요해요!</h2>
+                <p class="text-gray-500 mb-6">학습 기록을 보려면 먼저 로그인해주세요.</p>
+                <button onclick="showLoginModal()" class="bg-blue-500 text-white px-6 py-3 rounded-xl font-bold shadow-lg hover:bg-blue-600 transition">
+                    로그인하기
+                </button>
+            </div>
+        `;
+        return;
     }
 
-    renderProgressCharts(currentUser.id);
+    // 데이터 로드
+    const historyKey = `jap_bong_history_v1_${currentUser.id}`;
+    const history = JSON.parse(localStorage.getItem(historyKey) || '[]');
+    const gamificationState = Gamification.state;
+
+    // HTML 구조 생성
+    container.innerHTML = `
+        <div class="p-4 pb-24 space-y-6 max-w-md mx-auto">
+            <!-- 헤더 -->
+            <div class="bg-white rounded-3xl p-6 shadow-lg">
+                <div class="flex items-center gap-4 mb-4">
+                    <img src="${currentUser.avatar}" class="w-16 h-16 rounded-full border-2 border-blue-100">
+                    <div>
+                        <h2 class="text-2xl font-black text-gray-800">${currentUser.name}의 학습 현황</h2>
+                        <p class="text-sm text-gray-500">오늘도 열심히 공부했네요! 🔥</p>
+                    </div>
+                </div>
+                <div class="grid grid-cols-3 gap-2 text-center">
+                    <div class="bg-orange-50 rounded-xl p-3">
+                        <div class="text-2xl font-black text-orange-500">${gamificationState.streak}일</div>
+                        <div class="text-xs text-gray-500">연속 학습</div>
+                    </div>
+                    <div class="bg-blue-50 rounded-xl p-3">
+                        <div class="text-2xl font-black text-blue-500">${gamificationState.level}</div>
+                        <div class="text-xs text-gray-500">현재 레벨</div>
+                    </div>
+                    <div class="bg-purple-50 rounded-xl p-3">
+                        <div class="text-2xl font-black text-purple-500">${gamificationState.totalXP}</div>
+                        <div class="text-xs text-gray-500">총 XP</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 주간 학습 차트 -->
+            <div class="bg-white rounded-3xl p-6 shadow-lg">
+                <h3 class="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
+                    <i class="fas fa-chart-bar text-blue-500"></i> 주간 학습량
+                </h3>
+                <canvas id="weeklyChart"></canvas>
+            </div>
+
+            <!-- 최근 퀴즈 성적 -->
+            <div class="bg-white rounded-3xl p-6 shadow-lg">
+                <h3 class="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
+                    <i class="fas fa-trophy text-yellow-500"></i> 최근 퀴즈 성적
+                </h3>
+                <canvas id="quizChart"></canvas>
+            </div>
+        </div>
+    `;
+
+    // 차트 렌더링
+    renderWeeklyChart(history);
+    renderQuizChart(history);
 }
 
-// 사용자 선택 변경 (아빠 전용)
-function changeProgressUser() {
-    const select = document.getElementById('progress-user-select');
-    if (select) {
-        renderProgressCharts(select.value);
-    }
-}
+function renderWeeklyChart(history) {
+    const ctx = document.getElementById('weeklyChart').getContext('2d');
 
-// 개별 사용자 진도 리셋 (아빠 전용)
-function resetUserProgress() {
-    const select = document.getElementById('progress-user-select');
-    const userId = select ? select.value : currentUser.id;
-    const userName = { 'dad': '아빠', 'mom': '엄마', 'sieun': '시으니', 'harong': '하롱이' }[userId];
+    // 최근 7일 날짜 생성
+    const labels = [];
+    const data = [];
+    for (let i = 6; i >= 0; i--) {
+        const d = new Date();
+        d.setDate(d.getDate() - i);
+        const dateStr = d.toISOString().split('T')[0];
+        labels.push(dateStr.slice(5).replace('-', '/')); // MM/DD
 
-    if (confirm(`⚠️ ${userName}의 학습 진도를 리셋하시겠습니까?`)) {
-        const password = prompt('비밀번호(1435):');
-        if (password === '1435') {
-            localStorage.removeItem(`learning_history_${userId}`);
-            alert('✅ 리셋 완료!');
-            renderProgressCharts(userId);
-        } else if (password !== null) {
-            alert('❌ 비밀번호가 틀렸습니다!');
-        }
-    }
-}
-
-// 차트 렌더링
-function renderProgressCharts(userId) {
-    const history = JSON.parse(localStorage.getItem(`learning_history_${userId}`) || '{"daily":[]}');
-    const last7Days = history.daily.slice(-7);
-
-    // 데이터가 없으면 빈 데이터 생성
-    if (last7Days.length === 0) {
-        for (let i = 6; i >= 0; i--) {
-            const date = new Date();
-            date.setDate(date.getDate() - i);
-            last7Days.push({
-                date: date.toISOString().split('T')[0],
-                conversation: { count: 0, minutes: 0 },
-                vocabulary: { count: 0, minutes: 0 },
-                characters: { count: 0, minutes: 0 },
-                characterQuiz: { count: 0, correct: 0, total: 0 },
-                vocabularyQuiz: { count: 0, correct: 0, total: 0 }
-            });
-        }
+        // 해당 날짜의 로그 수 계산
+        const count = history.filter(h => h.date === dateStr).length;
+        data.push(count);
     }
 
-    const dates = last7Days.map(d => {
-        const [year, month, day] = d.date.split('-');
-        return `${month}/${day}`;
-    });
-
-    // 요약 통계 업데이트
-    updateSummaryStats(history);
-
-    // 회화 그래프
-    renderLineChart('conversation-chart', '일별 회화 학습',
-        dates, last7Days.map(d => d.conversation.count), '#3b82f6');
-
-    // 단어 그래프
-    renderLineChart('vocabulary-chart', '일별 단어 학습',
-        dates, last7Days.map(d => d.vocabulary.count), '#10b981');
-
-    // 글자 그래프
-    renderLineChart('character-chart', '일별 글자 연습',
-        dates, last7Days.map(d => d.characters.count), '#8b5cf6');
-
-    // 문자 퀴즈 정답률 그래프
-    renderLineChart('character-quiz-chart', '일별 문자 퀴즈 정답률 (%)',
-        dates,
-        last7Days.map(d => d.characterQuiz.total > 0
-            ? (d.characterQuiz.correct / d.characterQuiz.total * 100).toFixed(1)
-            : 0),
-        '#f59e0b',
-        true);
-
-    // 단어 퀴즈 정답률 그래프
-    renderLineChart('vocabulary-quiz-chart', '일별 단어 퀴즈 정답률 (%)',
-        dates,
-        last7Days.map(d => d.vocabularyQuiz.total > 0
-            ? (d.vocabularyQuiz.correct / d.vocabularyQuiz.total * 100).toFixed(1)
-            : 0),
-        '#ef4444',
-        true);
-}
-
-// 라인 차트 렌더링
-function renderLineChart(canvasId, title, labels, data, color, isPercentage = false) {
-    const canvas = document.getElementById(canvasId);
-    if (!canvas) return;
-
-    const ctx = canvas.getContext('2d');
-
-    // 기존 차트 제거
-    const chartVar = canvasId.replace('-chart', 'Chart').replace(/-./g, x => x[1].toUpperCase());
-    if (window[chartVar]) {
-        window[chartVar].destroy();
-    }
-
-    const chart = new Chart(ctx, {
-        type: 'line',
+    new Chart(ctx, {
+        type: 'bar',
         data: {
             labels: labels,
             datasets: [{
-                label: title,
+                label: '학습 활동',
                 data: data,
-                borderColor: color,
-                backgroundColor: color + '20',
-                tension: 0.4,
-                fill: true,
-                pointRadius: 4,
-                pointHoverRadius: 6
+                backgroundColor: 'rgba(59, 130, 246, 0.5)',
+                borderColor: 'rgb(59, 130, 246)',
+                borderWidth: 1,
+                borderRadius: 5
             }]
         },
         options: {
             responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                title: {
-                    display: true,
-                    text: title,
-                    font: { size: 16, weight: 'bold' }
-                },
-                legend: {
-                    display: false
-                }
-            },
             scales: {
-                y: {
-                    beginAtZero: true,
-                    max: isPercentage ? 100 : undefined,
-                    ticks: {
-                        callback: function (value) {
-                            return isPercentage ? value + '%' : value;
-                        }
-                    }
-                }
-            }
+                y: { beginAtZero: true, ticks: { stepSize: 1 } }
+            },
+            plugins: { legend: { display: false } }
         }
     });
-
-    window[chartVar] = chart;
 }
 
-// 요약 통계 업데이트
-function updateSummaryStats(history) {
-    const total = {
-        conversation: 0,
-        vocabulary: 0,
-        characters: 0,
-        characterQuiz: { count: 0, correct: 0, total: 0 },
-        vocabularyQuiz: { count: 0, correct: 0, total: 0 }
-    };
+function renderQuizChart(history) {
+    const ctx = document.getElementById('quizChart').getContext('2d');
 
-    history.daily.forEach(day => {
-        total.conversation += day.conversation.count;
-        total.vocabulary += day.vocabulary.count;
-        total.characters += day.characters.count;
-        total.characterQuiz.count += day.characterQuiz.count;
-        total.characterQuiz.correct += day.characterQuiz.correct;
-        total.characterQuiz.total += day.characterQuiz.total;
-        total.vocabularyQuiz.count += day.vocabularyQuiz.count;
-        total.vocabularyQuiz.correct += day.vocabularyQuiz.correct;
-        total.vocabularyQuiz.total += day.vocabularyQuiz.total;
-    });
+    // 퀴즈 로그만 필터링 (최근 10개)
+    const quizLogs = history.filter(h => h.type === 'quiz_score').slice(-10);
 
-    // UI 업데이트
-    const summary = document.getElementById('progress-summary');
-    if (summary) {
-        const charQuizAccuracy = total.characterQuiz.total > 0
-            ? (total.characterQuiz.correct / total.characterQuiz.total * 100).toFixed(1)
-            : 0;
-        const vocabQuizAccuracy = total.vocabularyQuiz.total > 0
-            ? (total.vocabularyQuiz.correct / total.vocabularyQuiz.total * 100).toFixed(1)
-            : 0;
-
-        summary.innerHTML = `
-            <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
-                <div class="bg-blue-50 p-4 rounded-xl border border-blue-200">
-                    <div class="text-blue-600 text-sm font-bold mb-1">회화</div>
-                    <div class="text-2xl font-black text-blue-700">${total.conversation}</div>
-                </div>
-                <div class="bg-green-50 p-4 rounded-xl border border-green-200">
-                    <div class="text-green-600 text-sm font-bold mb-1">단어</div>
-                    <div class="text-2xl font-black text-green-700">${total.vocabulary}</div>
-                </div>
-                <div class="bg-purple-50 p-4 rounded-xl border border-purple-200">
-                    <div class="text-purple-600 text-sm font-bold mb-1">글자</div>
-                    <div class="text-2xl font-black text-purple-700">${total.characters}</div>
-                </div>
-                <div class="bg-orange-50 p-4 rounded-xl border border-orange-200">
-                    <div class="text-orange-600 text-sm font-bold mb-1">문자퀴즈</div>
-                    <div class="text-2xl font-black text-orange-700">${charQuizAccuracy}%</div>
-                </div>
-                <div class="bg-red-50 p-4 rounded-xl border border-red-200">
-                    <div class="text-red-600 text-sm font-bold mb-1">단어퀴즈</div>
-                    <div class="text-2xl font-black text-red-700">${vocabQuizAccuracy}%</div>
-                </div>
-            </div>
-        `;
+    if (quizLogs.length === 0) {
+        ctx.font = "14px Arial";
+        ctx.textAlign = "center";
+        ctx.fillText("아직 퀴즈 기록이 없습니다.", ctx.canvas.width / 2, ctx.canvas.height / 2);
+        return;
     }
+
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: quizLogs.map((_, i) => `${i + 1}회`),
+            datasets: [{
+                label: '점수',
+                data: quizLogs.map(h => h.score),
+                borderColor: 'rgb(245, 158, 11)',
+                backgroundColor: 'rgba(245, 158, 11, 0.1)',
+                tension: 0.3,
+                fill: true
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: { min: 0, max: 100 }
+            },
+            plugins: { legend: { display: false } }
+        }
+    });
 }
 
-console.log('progress.js loaded');
+// 전역 노출
+window.showProgressDashboard = showProgressDashboard;
