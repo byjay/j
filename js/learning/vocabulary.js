@@ -37,9 +37,6 @@ function injectVocabularyHTML() {
         <div id="vocabulary-categories" class="container mx-auto px-3">
             <div class="flex justify-between items-center mb-6">
                 <h2 class="text-2xl font-bold text-gray-900">📚 단어장</h2>
-                <button onclick="showTab('word_study')" class="px-4 py-2 bg-indigo-600 text-white rounded-lg shadow-md hover:bg-indigo-700 transition-colors font-bold text-sm">
-                    <i class="fas fa-layer-group mr-2"></i>암기 모드
-                </button>
             </div>
             <!-- 모바일에서 더 많은 카테고리가 한 화면에 보이도록 3열 + 작은 간격 적용 -->
             <div id="vocabulary-category-grid" class="grid grid-cols-3 md:grid-cols-4 gap-3"></div>

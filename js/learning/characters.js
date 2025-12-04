@@ -425,9 +425,58 @@ function showQuizResult() {
         `;
     }
 
+    // 춤추는 캐릭터 (10점 만점 시)
+    let celebrationHTML = '';
+    if (quizScore === 10) {
+        // 현재 로그인한 사용자 확인 (localStorage 또는 전역 변수)
+        // auth.js의 currentUser 또는 localStorage 'jap_bong_user' 확인
+        let currentUser = 'dad'; // 기본값
+        try {
+            const storedUser = localStorage.getItem('jap_bong_user');
+            if (storedUser) {
+                currentUser = JSON.parse(storedUser).id;
+            }
+        } catch (e) {
+            console.error('User check failed', e);
+        }
+
+        // 이미지 매핑
+        const dancingImages = {
+            'dad': 'images/dad_dancing.png',
+            'mom': 'images/mom_dancing.png',
+            'sieun': 'images/sieun_dancing.png',
+            'harong': 'images/harong_dancing.png'
+        };
+
+        // 하롱이 이미지가 없으면 기본 이미지 사용 (Rate Limit 대응)
+        // 실제 파일 존재 여부는 JS에서 체크하기 어려우므로, 
+        // 서버 사이드나 빌드 타임에 보장되어야 하지만, 
+        // 여기서는 일단 매핑대로 출력. 
+        // 만약 파일이 없으면 엑박이 뜨므로, onerror 처리를 추가함.
+
+        const dancingImg = dancingImages[currentUser] || dancingImages['dad'];
+
+        celebrationHTML = `
+            <div class="mb-6 relative h-48 flex justify-center items-center">
+                <!-- Dancing Character -->
+                <img src="${dancingImg}" 
+                     class="h-full object-contain drop-shadow-2xl animate-bounce" 
+                     alt="Dancing Character"
+                     onerror="this.src='images/${currentUser}.png'">
+                
+                <!-- Squirrel Trophy -->
+                <img src="images/squirrel.png" 
+                     class="absolute -bottom-2 -right-4 w-24 h-24 object-contain animate-bounce-short drop-shadow-lg" 
+                     style="animation-delay: 0.5s;"
+                     alt="Squirrel Trophy">
+            </div>
+        `;
+    }
+
     container.innerHTML = `
         <div class="fixed top-14 bottom-0 left-0 right-0 z-50 bg-white flex flex-col items-center justify-center p-4 animate-fade-in">
-            <div class="text-6xl mb-4">🏆</div>
+            ${celebrationHTML}
+            <div class="text-6xl mb-4">${quizScore === 10 ? '🎉' : '🏆'}</div>
             <h2 class="text-3xl font-black text-gray-800 mb-2">퀴즈 종료!</h2>
             <p class="text-gray-500 mb-6">${message}</p>
             
@@ -440,7 +489,7 @@ function showQuizResult() {
 
             <div class="w-full max-w-xs space-y-3">
                 <button onclick="closeModal(); showCharacterGrid(currentMode);" class="w-full py-4 bg-gray-800 text-white rounded-xl font-bold shadow-lg active:scale-95 transition">목록으로</button>
-                <button onclick="startQuiz('mix')" class="w-full py-4 bg-white text-gray-700 border border-gray-200 rounded-xl font-bold hover:bg-gray-50 active:scale-95 transition">다시 하기</button>
+                <button onclick="startQuiz(currentMode)" class="w-full py-4 bg-white text-gray-700 border border-gray-200 rounded-xl font-bold hover:bg-gray-50 active:scale-95 transition">다시 하기</button>
             </div>
         </div>
     `;

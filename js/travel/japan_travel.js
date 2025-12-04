@@ -4,82 +4,31 @@
 
 // 일본 여행 지역 정보
 const japanRegions = {
-    fukuoka: {
-        id: 'fukuoka',
-        name: '후쿠오카',
-        nameJp: '福岡',
-        icon: '🏯',
-        color: 'red',
-        unlockCondition: 'default', // 기본 오픈
-        description: '규슈 최대 도시',
-        scriptFile: 'js/travel/fukuoka.js'
-    },
-    tokyo: {
-        id: 'tokyo',
-        name: '도쿄',
-        nameJp: '東京',
-        icon: '🗼',
-        color: 'blue',
-        unlockCondition: 'characterQuiz100x3',
-        description: '일본의 수도',
-        scriptFile: 'js/travel/tokyo.js',
-        mission: '글자 퀴즈 100점 3회 달성'
-    },
-    kyoto: {
-        id: 'kyoto',
-        name: '교토',
-        nameJp: '京都',
-        icon: '⛩️',
-        color: 'purple',
-        unlockCondition: 'conversation10min7days',
-        description: '전통과 문화의 도시',
-        scriptFile: 'js/travel/kyoto.js',
-        mission: '회화 학습 10분 이상 7일 달성'
-    },
-    osaka: {
-        id: 'osaka',
-        name: '오사카',
-        nameJp: '大阪',
-        icon: '🍜',
-        color: 'orange',
-        unlockCondition: 'vocabularyQuiz100x3',
-        description: '맛의 도시',
-        scriptFile: 'js/travel/osaka.js',
-        mission: '단어 퀴즈 100점 3회 달성'
-    },
-    sapporo: {
-        id: 'sapporo',
-        name: '삿포로',
-        nameJp: '札幌',
-        icon: '⛷️',
-        color: 'cyan',
-        unlockCondition: 'conversation10min14days',
-        description: '설경과 자연',
-        scriptFile: 'js/travel/sapporo.js',
-        mission: '회화 학습 10분 이상 14일 달성'
-    },
-    okinawa: {
-        id: 'okinawa',
-        name: '오키나와',
-        nameJp: '沖縄',
-        icon: '🏖️',
-        color: 'teal',
-        unlockCondition: 'quizAverage90',
-        description: '아열대 해변 리조트',
-        scriptFile: 'js/travel/okinawa.js',
-        mission: '모든 퀴즈 평균 90점 이상'
-    },
-    // --- NEW CITIES ---
-    nagoya: { id: 'nagoya', name: '나고야', nameJp: '名古屋', icon: '🏯', color: 'yellow', unlockCondition: 'default', description: '히츠마부시와 지브리', scriptFile: 'js/travel/nagoya.js' },
-    yokohama: { id: 'yokohama', name: '요코하마', nameJp: '横浜', icon: '🎡', color: 'blue', unlockCondition: 'default', description: '항구도시와 야경', scriptFile: 'js/travel/yokohama.js' },
-    kobe: { id: 'kobe', name: '고베', nameJp: '神戸', icon: '🥩', color: 'red', unlockCondition: 'default', description: '고베규와 디저트', scriptFile: 'js/travel/kobe.js' },
-    nara: { id: 'nara', name: '나라', nameJp: '奈良', icon: '🦌', color: 'green', unlockCondition: 'default', description: '사슴공원과 대불', scriptFile: 'js/travel/nara.js' },
-    hiroshima: { id: 'hiroshima', name: '히로시마', nameJp: '広島', icon: '⛩️', color: 'orange', unlockCondition: 'default', description: '평화와 미야지마', scriptFile: 'js/travel/hiroshima.js' },
-    hakone: { id: 'hakone', name: '하코네', nameJp: '箱根', icon: '♨️', color: 'indigo', unlockCondition: 'default', description: '온천과 후지산', scriptFile: 'js/travel/hakone.js' },
-    kanazawa: { id: 'kanazawa', name: '가나자와', nameJp: '金沢', icon: '🍂', color: 'amber', unlockCondition: 'default', description: '작은 교토', scriptFile: 'js/travel/kanazawa.js' },
-    nikko: { id: 'nikko', name: '닛코', nameJp: '日光', icon: '🙈', color: 'emerald', unlockCondition: 'default', description: '세계유산과 자연', scriptFile: 'js/travel/nikko.js' },
-    sendai: { id: 'sendai', name: '센다이', nameJp: '仙台', icon: '🐮', color: 'lime', unlockCondition: 'default', description: '규탄과 숲의 도시', scriptFile: 'js/travel/sendai.js' },
-    nagasaki: { id: 'nagasaki', name: '나가사키', nameJp: '長崎', icon: '⛪', color: 'rose', unlockCondition: 'default', description: '짬뽕과 야경', scriptFile: 'js/travel/nagasaki.js' }
+    // --- TIER 1: 기본 제공 (바로 여행 가능) ---
+    fukuoka: { id: 'fukuoka', name: '후쿠오카', nameJp: '福岡', icon: '🏯', color: 'red', unlockCondition: 'default', description: '규슈 최대 도시', scriptFile: 'js/travel/fukuoka.js', mission: '기본 제공 (바로 여행 가능)' },
+    nagoya: { id: 'nagoya', name: '나고야', nameJp: '名古屋', icon: '🏯', color: 'yellow', unlockCondition: 'default', description: '히츠마부시와 지브리', scriptFile: 'js/travel/nagoya.js', mission: '기본 제공 (바로 여행 가능)' },
+    kobe: { id: 'kobe', name: '고베', nameJp: '神戸', icon: '🥩', color: 'red', unlockCondition: 'default', description: '고베규와 디저트', scriptFile: 'js/travel/kobe.js', mission: '기본 제공 (바로 여행 가능)' },
+
+    // --- TIER 2: 글자 퀴즈 90점 이상 2회 ---
+    osaka: { id: 'osaka', name: '오사카', nameJp: '大阪', icon: '🍜', color: 'orange', unlockCondition: 'quiz_90_2times', description: '맛의 도시', scriptFile: 'js/travel/osaka.js', mission: '글자 퀴즈 90점 이상 2회 달성' },
+    nara: { id: 'nara', name: '나라', nameJp: '奈良', icon: '🦌', color: 'green', unlockCondition: 'quiz_90_2times', description: '사슴공원과 대불', scriptFile: 'js/travel/nara.js', mission: '글자 퀴즈 90점 이상 2회 달성' },
+    kyoto: { id: 'kyoto', name: '교토', nameJp: '京都', icon: '⛩️', color: 'purple', unlockCondition: 'quiz_90_2times', description: '전통과 문화의 도시', scriptFile: 'js/travel/kyoto.js', mission: '글자 퀴즈 90점 이상 2회 달성' },
+
+    // --- TIER 3: 3일 연속 학습 ---
+    yokohama: { id: 'yokohama', name: '요코하마', nameJp: '横浜', icon: '🎡', color: 'blue', unlockCondition: 'streak_3days', description: '항구도시와 야경', scriptFile: 'js/travel/yokohama.js', mission: '3일 연속 학습 달성' },
+    hakone: { id: 'hakone', name: '하코네', nameJp: '箱根', icon: '♨️', color: 'indigo', unlockCondition: 'streak_3days', description: '온천과 후지산', scriptFile: 'js/travel/hakone.js', mission: '3일 연속 학습 달성' },
+    sendai: { id: 'sendai', name: '센다이', nameJp: '仙台', icon: '🐮', color: 'lime', unlockCondition: 'streak_3days', description: '규탄과 숲의 도시', scriptFile: 'js/travel/sendai.js', mission: '3일 연속 학습 달성' },
+
+    // --- TIER 4: 학습 시간 10분 (단어/회화) ---
+    sapporo: { id: 'sapporo', name: '삿포로', nameJp: '札幌', icon: '⛷️', color: 'cyan', unlockCondition: 'study_10mins', description: '설경과 자연', scriptFile: 'js/travel/sapporo.js', mission: '학습(단어/회화) 10분 이상 달성' },
+    kanazawa: { id: 'kanazawa', name: '가나자와', nameJp: '金沢', icon: '🍂', color: 'amber', unlockCondition: 'study_10mins', description: '작은 교토', scriptFile: 'js/travel/kanazawa.js', mission: '학습(단어/회화) 10분 이상 달성' },
+
+    // --- TIER 5: 경험치 500XP ---
+    tokyo: { id: 'tokyo', name: '도쿄', nameJp: '東京', icon: '🗼', color: 'blue', unlockCondition: 'xp_500', description: '일본의 수도', scriptFile: 'js/travel/tokyo.js', mission: '총 경험치 500XP 달성' },
+    okinawa: { id: 'okinawa', name: '오키나와', nameJp: '沖縄', icon: '🏖️', color: 'teal', unlockCondition: 'xp_500', description: '아열대 해변 리조트', scriptFile: 'js/travel/okinawa.js', mission: '총 경험치 500XP 달성' },
+    hiroshima: { id: 'hiroshima', name: '히로시마', nameJp: '広島', icon: '⛩️', color: 'orange', unlockCondition: 'xp_500', description: '평화와 미야지마', scriptFile: 'js/travel/hiroshima.js', mission: '총 경험치 500XP 달성' },
+    nagasaki: { id: 'nagasaki', name: '나가사키', nameJp: '長崎', icon: '⛪', color: 'rose', unlockCondition: 'xp_500', description: '짬뽕과 야경', scriptFile: 'js/travel/nagasaki.js', mission: '총 경험치 500XP 달성' },
+    nikko: { id: 'nikko', name: '닛코', nameJp: '日光', icon: '🙈', color: 'emerald', unlockCondition: 'xp_500', description: '세계유산과 자연', scriptFile: 'js/travel/nikko.js', mission: '총 경험치 500XP 달성' }
 };
 
 // Load Route Helper

@@ -136,6 +136,39 @@ const Gamification = {
         }
     },
 
+    // 용돈 청구 (1000 XP 당 1만원)
+    claimAllowance() {
+        const CLAIM_UNIT = 1000;
+        const REWARD_AMOUNT = 20000;
+
+        // 현재까지 청구한 횟수 계산
+        const historyKey = 'allowance_claims';
+        const claims = JSON.parse(localStorage.getItem(historyKey) || '[]');
+        const myClaims = claims.filter(c => c.userId === currentUser.id);
+        const nextTarget = (myClaims.length + 1) * CLAIM_UNIT;
+
+        if (this.state.totalXP < nextTarget) {
+            alert(`포인트가 부족해요! 😢\n다음 청구까지 ${nextTarget - this.state.totalXP} XP가 더 필요해요.`);
+            return false;
+        }
+
+        // 청구 기록 저장
+        const newClaim = {
+            id: Date.now(),
+            userId: currentUser.id,
+            userName: currentUser.name,
+            amount: REWARD_AMOUNT,
+            date: new Date().toISOString(),
+            status: 'pending' // pending, approved
+        };
+
+        claims.push(newClaim);
+        localStorage.setItem(historyKey, JSON.stringify(claims));
+
+        alert(`🎉 와우! 1만원 용돈 청구가 완료되었어요!\n아빠에게 승인 요청을 보냈습니다.`);
+        return true;
+    },
+
     // 토스트 메시지 (간단 구현)
     showToast(message) {
         const toast = document.createElement('div');

@@ -50,8 +50,13 @@ function showTab(tabName) {
         }
     });
 
-    // 탭별 초기화
+    // 탭별 초기화 및 학습 추적 시작
+    if (typeof LearningTracker !== 'undefined' && LearningTracker.stopTracking) {
+        LearningTracker.stopTracking(); // 기존 추적 중지
+    }
+
     if (tabName === 'characters') {
+        if (typeof LearningTracker !== 'undefined') LearningTracker.startTracking('characters');
         // alert("DEBUG: showTab('characters') reached"); 
         if (typeof showCharacterGrid === 'function') {
             showCharacterGrid('hiragana');
@@ -60,14 +65,18 @@ function showTab(tabName) {
             alert("Error: showCharacterGrid function not found! Check characters.js loading.");
         }
     } else if (tabName === 'vocabulary') {
+        if (typeof LearningTracker !== 'undefined') LearningTracker.startTracking('vocabulary');
         if (typeof initVocabulary === 'function') {
             initVocabulary();
         }
     } else if (tabName === 'word_study') {
+        // word_study는 vocabulary의 일부로 간주하거나 별도 트래킹
+        if (typeof LearningTracker !== 'undefined') LearningTracker.startTracking('vocabulary');
         if (typeof initWordStudy === 'function') {
             initWordStudy();
         }
     } else if (tabName === 'conversation') {
+        if (typeof LearningTracker !== 'undefined') LearningTracker.startTracking('conversation');
         if (typeof showConversationMode === 'function') {
             showConversationMode('practical');
         } else if (typeof initDayConversation === 'function') {
@@ -141,12 +150,24 @@ function checkFukuokaAccess() {
     const highScoreCount = parseInt(localStorage.getItem('fukuoka_unlock_count') || '0');
 
     if (highScoreCount >= 2) {
-        // 잠금 해제됨
+        // 잠금 해제됨 (모든 여행지)
+        // 탭 이름이 'fukuoka'가 아니더라도, 잠금 해제 조건은 공유됨
+        // 현재는 후쿠오카 탭만 있지만, 나중에 오사카, 도쿄 등이 추가되면 
+        // 여기서 탭 이름을 인자로 받아서 처리하거나, 그냥 다 열어주면 됨.
+        // 여기서는 요청대로 "모든 여행지"가 풀리는 개념으로 접근.
+
+        // 만약 특정 탭으로 이동하고 싶다면 인자로 받은 tabName 사용 (기본값 fukuoka)
+        // 하지만 함수 시그니처를 변경하지 않고 내부에서 처리.
+
+        // 현재 클릭된 탭이 무엇인지 알 수 없으므로, 
+        // 이 함수를 호출하는 쪽에서 탭 이름을 넘겨주도록 수정하는 것이 좋으나,
+        // 기존 코드 호환성을 위해 일단 'fukuoka'로 이동하되, 
+        // 실제로는 모든 여행 탭의 잠금 로직이 이 함수를 통한다면 다 열리게 됨.
         showTab('fukuoka');
     } else {
         // 아직 잠금 상태
         const remaining = 2 - highScoreCount;
-        alert(`🔒 후쿠오카 여행 정보는 잠겨있습니다!\n\n퀴즈 90점 이상을 ${remaining}회 더 달성해야 합니다.\n현재 달성: ${highScoreCount}/2회\n\n글자 탭에서 퀴즈를 풀어보세요!`);
+        alert(`🔒 여행 정보는 잠겨있습니다!\n\n퀴즈 90점 이상을 ${remaining}회 더 달성해야 합니다.\n현재 달성: ${highScoreCount}/2회\n\n글자 탭에서 퀴즈를 풀어보세요!\n미션을 완료하면 모든 여행지가 열립니다.`);
         showTab('characters');
     }
 }

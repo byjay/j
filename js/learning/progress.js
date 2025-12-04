@@ -69,6 +69,82 @@ function showProgressDashboard() {
                 </h3>
                 <canvas id="quizChart"></canvas>
             </div>
+            <!-- 용돈 청구 섹션 (아이들용) - 상세 진행률 표시 -->
+            ${(currentUser.id === 'sieun' || currentUser.id === 'harong') ? (() => {
+            // 진행률 계산
+            const trackerKey = `learning_history_${currentUser.id}`;
+            const trackerHistory = JSON.parse(localStorage.getItem(trackerKey) || '{"daily":[]}');
+            let totalMinutes = 0;
+            trackerHistory.daily.forEach(day => {
+                totalMinutes += (day.conversation?.minutes || 0) + (day.vocabulary?.minutes || 0) + (day.characters?.minutes || 0);
+            });
+
+            const detailHistoryKey = `jap_bong_history_v1_${currentUser.id}`;
+            const detailHistory = JSON.parse(localStorage.getItem(detailHistoryKey) || '[]');
+            const perfectQuizCount = detailHistory.filter(h => h.type === 'quiz_score' && h.score === 100).length;
+
+            const nextXP = (Math.floor(gamificationState.totalXP / 1000) + 1) * 1000;
+            const xpProgress = (gamificationState.totalXP % 1000) / 10; // 0-100%
+            const timeProgress = Math.min((totalMinutes / 180) * 100, 100);
+            const quizProgress = Math.min((perfectQuizCount / 3) * 100, 100);
+
+            const canClaim = gamificationState.totalXP >= 1000 && totalMinutes >= 180 && perfectQuizCount >= 3;
+
+            return `
+                <div class="bg-gradient-to-r from-yellow-400 to-orange-500 rounded-3xl p-6 shadow-lg text-white">
+                    <h3 class="text-xl font-bold mb-4 text-center">💰 용돈 모으기 미션</h3>
+                    
+                    <div class="space-y-3 mb-6 text-sm">
+                        <!-- 1. XP -->
+                        <div>
+                            <div class="flex justify-between mb-1">
+                                <span>1. 포인트 (${gamificationState.totalXP % 1000}/1000 XP)</span>
+                                <span>${Math.round(xpProgress)}%</span>
+                            </div>
+                            <div class="bg-white/20 rounded-full h-2 overflow-hidden">
+                                <div class="bg-white h-full transition-all" style="width: ${xpProgress}%"></div>
+                            </div>
+                        </div>
+                        <!-- 2. 학습 시간 -->
+                        <div>
+                            <div class="flex justify-between mb-1">
+                                <span>2. 총 공부 시간 (${totalMinutes}/180분)</span>
+                                <span>${Math.round(timeProgress)}%</span>
+                            </div>
+                            <div class="bg-white/20 rounded-full h-2 overflow-hidden">
+                                <div class="bg-white h-full transition-all" style="width: ${timeProgress}%"></div>
+                            </div>
+                        </div>
+                        <!-- 3. 퀴즈 만점 -->
+                        <div>
+                            <div class="flex justify-between mb-1">
+                                <span>3. 퀴즈 100점 (${perfectQuizCount}/3회)</span>
+                                <span>${Math.round(quizProgress)}%</span>
+                            </div>
+                            <div class="bg-white/20 rounded-full h-2 overflow-hidden">
+                                <div class="bg-white h-full transition-all" style="width: ${quizProgress}%"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button onclick="Gamification.claimAllowance()" class="w-full bg-white ${canClaim ? 'text-orange-600' : 'text-gray-400'} font-bold py-3 rounded-xl shadow hover:bg-gray-50 transition active:scale-95">
+                        💸 2만원 용돈 청구하기
+                    </button>
+                </div>
+                `;
+        })() : ''}
+
+            <!-- 용돈 관리 섹션 (아빠용) -->
+            ${currentUser.id === 'dad' ? `
+            <div class="bg-white rounded-3xl p-6 shadow-lg border-2 border-yellow-400">
+                <h3 class="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
+                    <i class="fas fa-money-bill-wave text-green-500"></i> 용돈 청구 내역
+                </h3>
+                <div id="allowance-list" class="space-y-3">
+                    ${getAllowanceListHTML()}
+                </div>
+            </div>
+            ` : ''}
         </div>
     `;
 
@@ -152,6 +228,38 @@ function renderQuizChart(history) {
         }
     });
 }
+
+// 용돈 내역 HTML 생성
+function getAllowanceListHTML() {
+    const claims = JSON.parse(localStorage.getItem('allowance_claims') || '[]');
+    if (claims.length === 0) return '<p class="text-gray-400 text-center text-sm">청구 내역이 없습니다.</p>';
+
+    return claims.reverse().map(claim => `
+        <div class="flex items-center justify-between bg-gray-50 p-3 rounded-xl">
+            <div>
+                <div class="font-bold text-gray-800">${claim.userName}</div>
+                <div class="text-xs text-gray-500">${new Date(claim.date).toLocaleDateString()} - ${claim.amount.toLocaleString()}원</div>
+            </div>
+            <div>
+                ${claim.status === 'pending'
+            ? `<button onclick="approveAllowance(${claim.id})" class="bg-green-500 text-white px-3 py-1 rounded-lg text-xs font-bold hover:bg-green-600">승인</button>`
+            : `<span class="text-green-600 text-xs font-bold">지급완료</span>`}
+            </div>
+        </div>
+    `).join('');
+}
+
+// 용돈 승인 처리
+window.approveAllowance = function (claimId) {
+    const claims = JSON.parse(localStorage.getItem('allowance_claims') || '[]');
+    const target = claims.find(c => c.id === claimId);
+    if (target) {
+        target.status = 'approved';
+        localStorage.setItem('allowance_claims', JSON.stringify(claims));
+        showProgressDashboard(); // UI 갱신
+        alert(`${target.userName}의 용돈 청구를 승인했습니다!`);
+    }
+};
 
 // 전역 노출
 window.showProgressDashboard = showProgressDashboard;

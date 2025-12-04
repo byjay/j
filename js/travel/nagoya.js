@@ -1,168 +1,54 @@
 
-function initNagoyaTrip() {
-    console.log('✨ Nagoya App V6.0 Loaded [DEEP DATA]');
+let userItinerary = { "1": ["nagoya_castle", "mirai_tower", "hitsumabushi"], "2": ["ghibli_park"], "3": ["lego_land", "osu_kannon"], "4": ["nagoya_castle"] };
+let activeDay = 1;
+let map, markers = [];
 
-    // ==========================================================================
-    //  ✨ HIGH FIDELITY DATABASE: NAGOYA
-    // ==========================================================================
-    const POI_DATABASE = [
-    {
-        "id": "nagoya_castle",
-        "name": "나고야 성",
-        "lat": 35.1848,
-        "lng": 136.9004,
-        "type": "spot",
-        "region": "central",
-        "rating": 4.6,
-        "desc": "황금 샤치호코의 위엄.",
-        "photos": [
-            "https://images.unsplash.com/photo-1624326887226-0e862363e00d?w=800"
-        ],
-        "details": {
-            "info": "혼마루어전 복원.",
-            "transport": "지하철 시청역"
-        }
-    },
-    {
-        "id": "ghibli_park",
-        "name": "지브리 파크",
-        "lat": 35.1726,
-        "lng": 137.0908,
-        "type": "spot",
-        "region": "suburb",
-        "rating": 4.8,
-        "desc": "지브리의 꿈이 현실로.",
-        "photos": [
-            "https://images.unsplash.com/photo-1516475429286-465d815a0df7?w=800"
-        ],
-        "details": {
-            "info": "예약 필수.",
-            "transport": "리니모"
-        }
-    },
-    {
-        "id": "hitsumabushi",
-        "name": "아츠타 호라이켄",
-        "lat": 35.1225,
-        "lng": 136.9066,
-        "type": "food",
-        "region": "central",
-        "rating": 4.7,
-        "desc": "장어덮밥의 원조.",
-        "photos": [
-            "https://images.unsplash.com/photo-1569050467447-ce54b3bbc37d?w=800"
-        ],
-        "details": {
-            "info": "3가지 맛으로 즐기기.",
-            "transport": "지하철 덴마초"
-        }
-    },
-    {
-        "id": "osu_kannon",
-        "name": "오스 칸논 & 상점가",
-        "lat": 35.1598,
-        "lng": 136.9019,
-        "type": "spot",
-        "region": "central",
-        "rating": 4.4,
-        "desc": "활기찬 서민적인 상점가.",
-        "photos": [
-            "https://images.unsplash.com/photo-1580442151529-343f2f6e0e27?w=800"
-        ],
-        "details": {
-            "info": "빈티지샵과 길거리 음식.",
-            "transport": "지하철 오스칸논"
-        }
-    },
-    {
-        "id": "mirai_tower",
-        "name": "미라이 타워",
-        "lat": 35.1723,
-        "lng": 136.9083,
-        "type": "spot",
-        "region": "central",
-        "rating": 4.5,
-        "desc": "나고야의 에펠탑.",
-        "photos": [
-            "https://images.unsplash.com/photo-1542051841857-5f90071e7989?w=800"
-        ],
-        "details": {
-            "info": "야경 명소.",
-            "transport": "지하철 사카에"
-        }
-    },
-    {
-        "id": "lego_land",
-        "name": "레고랜드 재팬",
-        "lat": 35.0507,
-        "lng": 136.843,
-        "type": "spot",
-        "region": "bay",
-        "rating": 4.5,
-        "desc": "아이들의 천국.",
-        "photos": [
-            "https://images.unsplash.com/photo-1560964645-c5d9454526d3?w=800"
-        ],
-        "details": {
-            "info": "가족 여행 추천.",
-            "transport": "아오나미선"
-        }
-    }
-];
+function initApp() {
+    injectCSS();
+    renderHeader();
+    renderBuilderUI();
+    setTimeout(initMap, 500);
+}
 
-    // ==========================================================================
-    //  🚀 CORE ENGINE (STATE MANAGEMENT & UI)
-    // ==========================================================================
-    let userItinerary = {"1": ["nagoya_castle", "mirai_tower", "hitsumabushi"], "2": ["ghibli_park"], "3": ["lego_land", "osu_kannon"], "4": ["nagoya_castle"]};
-    let activeDay = 1;
-    let map, markers = [];
+function initMap() {
+    const mapEl = document.getElementById('map');
+    if (!mapEl) return;
+    // Center map on the first spot of Day 1, or the first spot in DB
+    const centerSpot = POI_DATABASE.find(p => p.id === userItinerary[1][0]) || POI_DATABASE[0];
+    map = new google.maps.Map(mapEl, {
+        center: { lat: centerSpot.lat, lng: centerSpot.lng },
+        zoom: 12,
+        mapTypeControl: false, streetViewControl: false, fullscreenControl: true
+    });
 
-    function initApp() {
-        injectCSS();
-        renderHeader();
-        renderBuilderUI();
-        setTimeout(initMap, 500);
-    }
+    // Route Helper (Preview Travel)
+    if (window.initRouteHelper) window.initRouteHelper(map);
 
-    function initMap() {
-        const mapEl = document.getElementById('map');
-        if (!mapEl) return;
-        // Center map on the first spot of Day 1, or the first spot in DB
-        const centerSpot = POI_DATABASE.find(p => p.id === userItinerary[1][0]) || POI_DATABASE[0];
-        map = new google.maps.Map(mapEl, {
-            center: { lat: centerSpot.lat, lng: centerSpot.lng },
-            zoom: 12,
-            mapTypeControl: false, streetViewControl: false, fullscreenControl: true
-        });
-        
-        // Route Helper (Preview Travel)
-        if (window.initRouteHelper) window.initRouteHelper(map);
-        
-        updateMapMarkers();
-    }
+    updateMapMarkers();
+}
 
-    function renderHeader() {
-        const container = document.getElementById('day-tabs');
-        if (!container) return;
-        container.innerHTML = Object.keys(userItinerary).map(day =>
-            `<button onclick="switchDay(${day})" 
+function renderHeader() {
+    const container = document.getElementById('day-tabs');
+    if (!container) return;
+    container.innerHTML = Object.keys(userItinerary).map(day =>
+        `<button onclick="switchDay(${day})" 
                 class="px-4 py-2 rounded-full text-sm font-bold transition-all border shadow-sm ${day == activeDay
-                ? 'bg-blue-600 text-white scale-105 border-blue-700'
-                : 'bg-white text-gray-500 hover:bg-gray-100'
-            }">
+            ? 'bg-blue-600 text-white scale-105 border-blue-700'
+            : 'bg-white text-gray-500 hover:bg-gray-100'
+        }">
                 Day ${day}
             </button>`
-        ).join('');
-    }
+    ).join('');
+}
 
-    function renderBuilderUI() {
-        const container = document.getElementById('itinerary-content');
-        if (!container) return;
+function renderBuilderUI() {
+    const container = document.getElementById('itinerary-content');
+    if (!container) return;
 
-        const planList = userItinerary[activeDay].map((id, idx) => {
-            const item = POI_DATABASE.find(p => p.id === id);
-            if (!item) return '';
-            return `
+    const planList = userItinerary[activeDay].map((id, idx) => {
+        const item = POI_DATABASE.find(p => p.id === id);
+        if (!item) return '';
+        return `
                 <div class="flex items-center bg-white p-3 rounded-lg shadow-sm border border-gray-200 transition hover:shadow-md">
                     <div class="w-6 h-6 rounded-full bg-blue-600 text-white flex items-center justify-center text-xs font-bold mr-3 flex-shrink-0">
                         ${idx + 1}
@@ -179,9 +65,9 @@ function initNagoyaTrip() {
                         ⛔
                     </button>
                 </div>`;
-        }).join('');
+    }).join('');
 
-        container.innerHTML = `
+    container.innerHTML = `
             <!-- 1. 내 일정 -->
             <div class="bg-blue-50 p-4 rounded-xl mb-6 border border-blue-100 shadow-inner">
                 <div class="flex justify-between items-center mb-3">
@@ -201,30 +87,30 @@ function initNagoyaTrip() {
             <!-- 2. 장소 리스트 -->
             <div id="spot-pool" class="grid grid-cols-1 gap-4 pb-24"></div>`;
 
-        renderSpotPool('all');
+    renderSpotPool('all');
+}
+
+window.verifyRoute = () => {
+    if (window.startPreviewTravel) {
+        window.startPreviewTravel(userItinerary[activeDay], POI_DATABASE);
+    } else {
+        alert('미리여행 기능을 로드하는 중입니다. 잠시 후 다시 시도해주세요.');
     }
+};
 
-    window.verifyRoute = () => {
-        if (window.startPreviewTravel) {
-            window.startPreviewTravel(userItinerary[activeDay], POI_DATABASE);
-        } else {
-            alert('미리여행 기능을 로드하는 중입니다. 잠시 후 다시 시도해주세요.');
-        }
-    };
+window.renderSpotPool = function (region) {
+    const pool = document.getElementById('spot-pool');
+    const filtered = region === 'all' ? POI_DATABASE : POI_DATABASE.filter(p => p.region === region);
 
-    window.renderSpotPool = function (region) {
-        const pool = document.getElementById('spot-pool');
-        const filtered = region === 'all' ? POI_DATABASE : POI_DATABASE.filter(p => p.region === region);
+    let htmlContent = filtered.map(place => {
+        const isAdded = Object.values(userItinerary).flat().includes(place.id);
+        const btnClass = isAdded ? "bg-gray-100 text-gray-400 cursor-not-allowed" : "bg-gray-50 hover:bg-gray-100 text-gray-700 hover:text-blue-600";
+        const btnText = isAdded ? "✅ 일정 포함됨" : `<i class="fas fa-plus"></i> 일정에 담기`;
+        const btnAction = isAdded ? "" : `onclick="addToPlan('${place.id}')"`;
 
-        let htmlContent = filtered.map(place => {
-            const isAdded = Object.values(userItinerary).flat().includes(place.id);
-            const btnClass = isAdded ? "bg-gray-100 text-gray-400 cursor-not-allowed" : "bg-gray-50 hover:bg-gray-100 text-gray-700 hover:text-blue-600";
-            const btnText = isAdded ? "✅ 일정 포함됨" : `<i class="fas fa-plus"></i> 일정에 담기`;
-            const btnAction = isAdded ? "" : `onclick="addToPlan('${place.id}')"`;
-            
-            const themeTags = place.details.themes ? place.details.themes.map(t => `<span class="text-[9px] bg-gray-100 text-gray-500 px-1.5 py-0.5 rounded">${t}</span>`).join('') : '';
+        const themeTags = place.details.themes ? place.details.themes.map(t => `<span class="text-[9px] bg-gray-100 text-gray-500 px-1.5 py-0.5 rounded">${t}</span>`).join('') : '';
 
-            return `
+        return `
             <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition">
                 <div class="flex p-4 gap-4">
                     <div class="w-24 h-24 flex-shrink-0 relative rounded-lg overflow-hidden cursor-pointer group" onclick="showDetail('${place.id}')">
@@ -253,76 +139,76 @@ function initNagoyaTrip() {
                     </button>
                 </div>
             </div>`;
-        }).join('');
+    }).join('');
 
-        pool.innerHTML = htmlContent;
-    }
+    pool.innerHTML = htmlContent;
+}
 
-    // --- 인터랙션 로직 ---
-    window.addToPlan = (id) => {
-        if (Object.values(userItinerary).flat().includes(id)) return alert('이미 일정에 있습니다.');
-        userItinerary[activeDay].push(id);
-        renderBuilderUI();
-        updateMapMarkers();
-    }
+// --- 인터랙션 로직 ---
+window.addToPlan = (id) => {
+    if (Object.values(userItinerary).flat().includes(id)) return alert('이미 일정에 있습니다.');
+    userItinerary[activeDay].push(id);
+    renderBuilderUI();
+    updateMapMarkers();
+}
 
-    window.removeFromPlan = (id) => {
-        userItinerary[activeDay] = userItinerary[activeDay].filter(itemId => itemId !== id);
-        renderBuilderUI();
-        updateMapMarkers();
-    }
+window.removeFromPlan = (id) => {
+    userItinerary[activeDay] = userItinerary[activeDay].filter(itemId => itemId !== id);
+    renderBuilderUI();
+    updateMapMarkers();
+}
 
-    window.switchDay = (day) => {
-        activeDay = day;
-        renderHeader();
-        renderBuilderUI();
-        updateMapMarkers();
-    }
+window.switchDay = (day) => {
+    activeDay = day;
+    renderHeader();
+    renderBuilderUI();
+    updateMapMarkers();
+}
 
-    function updateMapMarkers() {
-        if (!map) return;
-        markers.forEach(m => m.setMap(null));
-        markers = [];
-        const bounds = new google.maps.LatLngBounds();
+function updateMapMarkers() {
+    if (!map) return;
+    markers.forEach(m => m.setMap(null));
+    markers = [];
+    const bounds = new google.maps.LatLngBounds();
 
-        userItinerary[activeDay].forEach((id, idx) => {
-            const item = POI_DATABASE.find(p => p.id === id);
-            if (item) {
-                const marker = new google.maps.Marker({
-                    position: { lat: item.lat, lng: item.lng },
-                    map: map,
-                    label: { text: (idx + 1).toString(), color: "white", fontWeight: 'bold' },
-                    animation: google.maps.Animation.DROP
-                });
-                marker.addListener('click', () => showDetail(id));
-                markers.push(marker);
-                bounds.extend(marker.getPosition());
-            }
-        });
-
-        if (markers.length > 0) map.fitBounds(bounds);
-        if (window.drawRoute) window.drawRoute(userItinerary[activeDay], POI_DATABASE);
-    }
-
-    // --- 상세 모달 ---
-    window.showDetail = function (id) {
+    userItinerary[activeDay].forEach((id, idx) => {
         const item = POI_DATABASE.find(p => p.id === id);
-        if (!createModal()) return;
-        if (map) { map.panTo({ lat: item.lat, lng: item.lng }); map.setZoom(16); }
-        const content = document.getElementById('modal-content');
-        window.currentDetailTab = 'overview';
-        
-        function renderModalContent() {
-            const overviewClass = window.currentDetailTab === 'overview' ? 'text-blue-600 border-b-2 border-blue-600' : 'text-gray-400 hover:text-gray-600';
-            const reviewsClass = window.currentDetailTab === 'reviews' ? 'text-blue-600 border-b-2 border-blue-600' : 'text-gray-400 hover:text-gray-600';
-            const photosClass = window.currentDetailTab === 'photos' ? 'text-blue-600 border-b-2 border-blue-600' : 'text-gray-400 hover:text-gray-600';
+        if (item) {
+            const marker = new google.maps.Marker({
+                position: { lat: item.lat, lng: item.lng },
+                map: map,
+                label: { text: (idx + 1).toString(), color: "white", fontWeight: 'bold' },
+                animation: google.maps.Animation.DROP
+            });
+            marker.addListener('click', () => showDetail(id));
+            markers.push(marker);
+            bounds.extend(marker.getPosition());
+        }
+    });
 
-            let tabContent = '';
-            if (window.currentDetailTab === 'overview') {
-                const seasonalInfo = item.details.seasonal ? Object.entries(item.details.seasonal).map(([k, v]) => `<li class="text-xs text-gray-600"><span class="font-bold text-blue-500">${k.toUpperCase()}:</span> ${v}</li>`).join('') : '';
-                const recommendTags = item.details.recommend ? item.details.recommend.map(r => `<span class="bg-blue-50 text-blue-600 px-2 py-1 rounded text-xs font-bold">#${r}</span>`).join('') : '';
+    if (markers.length > 0) map.fitBounds(bounds);
+    if (window.drawRoute) window.drawRoute(userItinerary[activeDay], POI_DATABASE);
+}
 
-                tabContent = `
+// --- 상세 모달 ---
+window.showDetail = function (id) {
+    const item = POI_DATABASE.find(p => p.id === id);
+    if (!createModal()) return;
+    if (map) { map.panTo({ lat: item.lat, lng: item.lng }); map.setZoom(16); }
+    const content = document.getElementById('modal-content');
+    window.currentDetailTab = 'overview';
+
+    function renderModalContent() {
+        const overviewClass = window.currentDetailTab === 'overview' ? 'text-blue-600 border-b-2 border-blue-600' : 'text-gray-400 hover:text-gray-600';
+        const reviewsClass = window.currentDetailTab === 'reviews' ? 'text-blue-600 border-b-2 border-blue-600' : 'text-gray-400 hover:text-gray-600';
+        const photosClass = window.currentDetailTab === 'photos' ? 'text-blue-600 border-b-2 border-blue-600' : 'text-gray-400 hover:text-gray-600';
+
+        let tabContent = '';
+        if (window.currentDetailTab === 'overview') {
+            const seasonalInfo = item.details.seasonal ? Object.entries(item.details.seasonal).map(([k, v]) => `<li class="text-xs text-gray-600"><span class="font-bold text-blue-500">${k.toUpperCase()}:</span> ${v}</li>`).join('') : '';
+            const recommendTags = item.details.recommend ? item.details.recommend.map(r => `<span class="bg-blue-50 text-blue-600 px-2 py-1 rounded text-xs font-bold">#${r}</span>`).join('') : '';
+
+            tabContent = `
                 <div class="space-y-6 animate-fade-in">
                     <div>
                         <p class="text-gray-600 leading-relaxed text-lg">${item.desc}</p>
@@ -350,27 +236,26 @@ function initNagoyaTrip() {
                         <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(item.name)}" target="_blank" class="flex-1 bg-gray-800 text-white text-center py-4 rounded-xl font-bold hover:bg-gray-700 transition shadow-lg flex items-center justify-center gap-2"><i class="fas fa-map-marked-alt"></i> 구글맵</a>
                     </div>
                 </div>`;
-            } else if (window.currentDetailTab === 'reviews') {
-                tabContent = `<div class="space-y-4 animate-fade-in"><div class="flex items-center gap-4 mb-6 bg-blue-50 p-4 rounded-xl"><div class="text-4xl font-black text-blue-600">${item.rating}</div><div><div class="flex text-yellow-400 text-sm mb-1">${'★'.repeat(Math.floor(item.rating))}</div><p class="text-xs text-gray-500">실제 여행객 리뷰 요약</p></div></div><div class="space-y-4">${item.reviews ? item.reviews.map(r => `<div class="border-b border-gray-100 pb-4"><div class="flex justify-between mb-2"><span class="font-bold text-sm text-gray-800">${r.user}</span><span class="text-xs text-gray-400">${r.date}</span></div><p class="text-sm text-gray-600">${r.text}</p></div>`).join('') : '<p class="text-sm text-gray-500">리뷰가 없습니다.</p>'}</div></div>`;
-            } else if (window.currentDetailTab === 'photos') {
-                tabContent = `<div class="grid grid-cols-2 gap-2 animate-fade-in">${item.photos.map(p => `<div class="aspect-square rounded-lg overflow-hidden bg-gray-100"><img src="${p}" class="w-full h-full object-cover" onclick="window.open('${p}','_blank')"></div>`).join('')}</div>`;
-            }
-
-            content.innerHTML = `<div class="relative h-72 bg-gray-900 group"><img src="${item.photos[0]}" class="w-full h-full object-cover opacity-90"><button onclick="closeModal()" class="absolute top-4 right-4 bg-black/50 text-white w-9 h-9 rounded-full flex items-center justify-center">✕</button><div class="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/90 to-transparent p-6 pt-20"><h2 class="text-3xl font-black text-white mb-1">${item.name}</h2><div class="flex gap-2 mt-2">${item.details.themes ? item.details.themes.map(t => `<span class="text-[10px] bg-white/20 text-white px-2 py-0.5 rounded backdrop-blur-sm">${t}</span>`).join('') : ''}</div></div></div><div class="sticky top-0 bg-white z-10 flex border-b shadow-sm"><button class="flex-1 py-4 text-sm font-bold transition ${overviewClass}" onclick="window.switchDetailTab('overview')">개요</button><button class="flex-1 py-4 text-sm font-bold transition ${reviewsClass}" onclick="window.switchDetailTab('reviews')">리뷰</button><button class="flex-1 py-4 text-sm font-bold transition ${photosClass}" onclick="window.switchDetailTab('photos')">사진</button></div><div class="p-6 pb-24">${tabContent}</div>`;
+        } else if (window.currentDetailTab === 'reviews') {
+            tabContent = `<div class="space-y-4 animate-fade-in"><div class="flex items-center gap-4 mb-6 bg-blue-50 p-4 rounded-xl"><div class="text-4xl font-black text-blue-600">${item.rating}</div><div><div class="flex text-yellow-400 text-sm mb-1">${'★'.repeat(Math.floor(item.rating))}</div><p class="text-xs text-gray-500">실제 여행객 리뷰 요약</p></div></div><div class="space-y-4">${item.reviews ? item.reviews.map(r => `<div class="border-b border-gray-100 pb-4"><div class="flex justify-between mb-2"><span class="font-bold text-sm text-gray-800">${r.user}</span><span class="text-xs text-gray-400">${r.date}</span></div><p class="text-sm text-gray-600">${r.text}</p></div>`).join('') : '<p class="text-sm text-gray-500">리뷰가 없습니다.</p>'}</div></div>`;
+        } else if (window.currentDetailTab === 'photos') {
+            tabContent = `<div class="grid grid-cols-2 gap-2 animate-fade-in">${item.photos.map(p => `<div class="aspect-square rounded-lg overflow-hidden bg-gray-100"><img src="${p}" class="w-full h-full object-cover" onclick="window.open('${p}','_blank')"></div>`).join('')}</div>`;
         }
-        window.switchDetailTab = (tab) => { window.currentDetailTab = tab; renderModalContent(); };
-        renderModalContent();
-    }
 
-    function createModal() {
-        let m = document.getElementById('app-modal');
-        if (!m) { m = document.createElement('div'); m.id = 'app-modal'; m.className = 'fixed inset-0 z-50 hidden'; m.innerHTML = `<div class="absolute inset-0 bg-black/70 backdrop-blur-sm" onclick="closeModal()"></div><div class="absolute bottom-0 w-full md:w-[480px] md:right-0 md:top-0 h-[90vh] md:h-full bg-white rounded-t-2xl md:rounded-none flex flex-col overflow-hidden shadow-2xl"><div id="modal-content" class="flex-1 overflow-y-auto scrollbar-hide bg-white"></div></div>`; document.body.appendChild(m); }
-        m.classList.remove('hidden'); return true;
+        content.innerHTML = `<div class="relative h-72 bg-gray-900 group"><img src="${item.photos[0]}" class="w-full h-full object-cover opacity-90"><button onclick="closeModal()" class="absolute top-4 right-4 bg-black/50 text-white w-9 h-9 rounded-full flex items-center justify-center">✕</button><div class="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/90 to-transparent p-6 pt-20"><h2 class="text-3xl font-black text-white mb-1">${item.name}</h2><div class="flex gap-2 mt-2">${item.details.themes ? item.details.themes.map(t => `<span class="text-[10px] bg-white/20 text-white px-2 py-0.5 rounded backdrop-blur-sm">${t}</span>`).join('') : ''}</div></div></div><div class="sticky top-0 bg-white z-10 flex border-b shadow-sm"><button class="flex-1 py-4 text-sm font-bold transition ${overviewClass}" onclick="window.switchDetailTab('overview')">개요</button><button class="flex-1 py-4 text-sm font-bold transition ${reviewsClass}" onclick="window.switchDetailTab('reviews')">리뷰</button><button class="flex-1 py-4 text-sm font-bold transition ${photosClass}" onclick="window.switchDetailTab('photos')">사진</button></div><div class="p-6 pb-24">${tabContent}</div>`;
     }
-    window.closeModal = () => document.getElementById('app-modal').classList.add('hidden');
-    function injectCSS() { const s = document.createElement('style'); s.textContent = `.scrollbar-hide::-webkit-scrollbar { display: none; } .animate-fade-in { animation: fadeIn 0.3s ease-in-out; } @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }`; document.head.appendChild(s); }
+    window.switchDetailTab = (tab) => { window.currentDetailTab = tab; renderModalContent(); };
+    renderModalContent();
+}
 
-    initApp();
+function createModal() {
+    let m = document.getElementById('app-modal');
+    if (!m) { m = document.createElement('div'); m.id = 'app-modal'; m.className = 'fixed inset-0 z-50 hidden'; m.innerHTML = `<div class="absolute inset-0 bg-black/70 backdrop-blur-sm" onclick="closeModal()"></div><div class="absolute bottom-0 w-full md:w-[480px] md:right-0 md:top-0 h-[90vh] md:h-full bg-white rounded-t-2xl md:rounded-none flex flex-col overflow-hidden shadow-2xl"><div id="modal-content" class="flex-1 overflow-y-auto scrollbar-hide bg-white"></div></div>`; document.body.appendChild(m); }
+    m.classList.remove('hidden'); return true;
+}
+window.closeModal = () => document.getElementById('app-modal').classList.add('hidden');
+function injectCSS() { const s = document.createElement('style'); s.textContent = `.scrollbar-hide::-webkit-scrollbar { display: none; } .animate-fade-in { animation: fadeIn 0.3s ease-in-out; } @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }`; document.head.appendChild(s); }
+
+initApp();
 }
 window.initNagoyaTrip = initNagoyaTrip;
-    

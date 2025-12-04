@@ -40,7 +40,51 @@ const LearningTracker = {
         }
 
         localStorage.setItem(key, JSON.stringify(history));
+    },
+
+    // --- Idle Detection System ---
+    currentModule: null,
+    lastActivityTime: Date.now(),
+    trackingInterval: null,
+
+    initIdleTracker() {
+        const resetIdle = () => { this.lastActivityTime = Date.now(); };
+        ['mousemove', 'keydown', 'touchstart', 'scroll', 'click'].forEach(event => {
+            window.addEventListener(event, resetIdle);
+        });
+
+        if (this.trackingInterval) clearInterval(this.trackingInterval);
+
+        // 1분마다 체크
+        this.trackingInterval = setInterval(() => {
+            if (!this.currentModule || !currentUser) return;
+
+            const now = Date.now();
+            // 마지막 활동 후 1분 이내라면 학습 시간 인정
+            if (now - this.lastActivityTime < 60000) {
+                this.recordActivity(this.currentModule, 0); // 1분 추가
+                console.log(`[LearningTracker] Recorded 1 min for ${this.currentModule}`);
+            } else {
+                console.log(`[LearningTracker] Idle - No time recorded for ${this.currentModule}`);
+            }
+        }, 60000);
+
+        console.log('[LearningTracker] Idle tracker initialized');
+    },
+
+    startTracking(moduleName) {
+        this.currentModule = moduleName;
+        this.lastActivityTime = Date.now(); // 시작 시 활동 시간 갱신
+        console.log(`[LearningTracker] Started tracking: ${moduleName}`);
+    },
+
+    stopTracking() {
+        this.currentModule = null;
+        console.log(`[LearningTracker] Stopped tracking`);
     }
 };
+
+// 초기화 호출
+LearningTracker.initIdleTracker();
 
 console.log('learning_tracker.js loaded');
