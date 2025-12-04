@@ -63,6 +63,16 @@ function initTokyoTrip() {
             learning: { situation: "주문", phrase: "꼬치 모듬으로 주세요.", pronunciation: "모리아와세 오네가이시마스.", meaning: "고민될 땐 모듬이 최고" }
         },
         {
+            id: 'blue_cave', name: '시부야 푸른 동굴', lat: 35.6640, lng: 139.6980, type: 'spot', region: 'west', rating: 4.7,
+            desc: '겨울 시부야를 파랗게 물들이는 일루미네이션.',
+            photos: ['https://images.unsplash.com/photo-1514222709107-a180c68d72b4?w=800'],
+            details: {
+                info: "요요기 공원 케야키 나미키 거리가 온통 파란 불빛으로 감싸집니다. 바닥에 반사판을 깔아 더욱 환상적입니다.",
+                transport: "시부야역 도보 10분",
+                seasonal: { "winter": "12월 한정 운영" }
+            }
+        },
+        {
             id: 'harajuku', name: '하라주쿠 다케시타', lat: 35.6715, lng: 139.7030, type: 'spot', region: 'west', rating: 4.3,
             desc: '카와이 문화의 발상지. 크레페와 스티커사진.',
             photos: ['https://images.unsplash.com/photo-1525010660686-2775f564778b?w=800'],
@@ -121,6 +131,16 @@ function initTokyoTrip() {
                 transport: `<p class="text-xs text-gray-600">🚆 JR 우에노역 공원 출구 바로 앞</p>`
             }
         },
+        {
+            id: 'monja_street', name: '츠키시마 몬자 거리', lat: 35.6635, lng: 139.7820, type: 'food', region: 'east', rating: 4.3,
+            desc: '도쿄 소울푸드 몬자야키 전문점 거리.',
+            photos: ['https://images.unsplash.com/photo-1569050467447-ce54b3bbc37d?w=800'],
+            details: {
+                info: "오코노미야키와 달리 묽은 반죽을 철판에 긁어 먹습니다. 명란 떡 치즈 몬자가 베스트셀러입니다.",
+                transport: "지하철 츠키시마역 7번 출구",
+                tips: "직원이 직접 구워주는 곳으로 가세요."
+            }
+        },
 
         // --- 긴자/도쿄역 (Central) ---
         {
@@ -130,6 +150,16 @@ function initTokyoTrip() {
             details: {
                 info: "중앙 홀의 설치 미술은 쿠사마 야요이 등 유명 작가의 작품으로 주기적으로 바뀝니다. 옥상 정원은 무료로 개방되며 도쿄 타워가 보입니다.",
                 transport: `<p class="text-xs text-gray-600">🚇 긴자역 A3 출구 도보 2분</p>`
+            }
+        },
+        {
+            id: 'roppongi_illumination', name: '롯폰기 힐즈 일루미네이션', lat: 35.6604, lng: 139.7292, type: 'spot', region: 'central', rating: 4.8,
+            desc: '도쿄 타워와 함께 찍는 겨울 인생샷.',
+            photos: ['https://images.unsplash.com/photo-1513622470522-26c3c8a854bc?w=800'],
+            details: {
+                info: "케야키자카 거리가 은백색 빛으로 물듭니다. 도쿄 타워가 정면으로 보이는 육교 위가 포토존입니다.",
+                transport: "롯폰기역 1C 출구",
+                seasonal: { "winter": "11월 초 ~ 12월 25일" }
             }
         },
         {
@@ -150,6 +180,15 @@ function initTokyoTrip() {
                 info: "무릎까지 물이 차오르니 반바지를 입거나 걷기 편한 옷을 입으세요. 바닥이 거울인 곳이 있어 치마는 피하는 것이 좋습니다(반바지 대여 가능).",
                 transport: `<p class="text-xs text-gray-600">🎫 전시회 예매 필수 (매진 빠름)</p>
                             <p class="text-xs text-gray-600">🚆 유리카모메 신토요스역 도보 1분</p>`
+            }
+        },
+        {
+            id: 'oden_ya', name: '오뎅바 거리', lat: 35.6725, lng: 139.7635, type: 'food', region: 'central', rating: 4.4,
+            desc: '추운 겨울 따끈한 오뎅과 사케.',
+            photos: ['https://images.unsplash.com/photo-1582297607323-289523223062?w=800'],
+            details: {
+                info: "무(다이콘)와 실곤약은 필수입니다. 편의점 오뎅도 맛있지만 전문점의 국물 맛은 다릅니다.",
+                transport: "긴자/신바시 주변"
             }
         },
 

@@ -61,6 +61,26 @@ function initOsakaTrip() {
                 transport: `<p class="text-xs text-gray-600">🚇 닛폰바시역 10번 출구 도보 2분</p>`
             }
         },
+        {
+            id: 'midosuji_illumination', name: '미도스지 일루미네이션', lat: 34.6823, lng: 135.5002, type: 'spot', region: 'minami', rating: 4.8,
+            desc: '기네스북에 등재된 세계 최장 빛의 거리.',
+            photos: ['https://images.unsplash.com/photo-1510265119258-db115b0e8172?w=800'],
+            details: {
+                info: "우메다부터 난바까지 4km 구간의 은행나무 가로수가 빛으로 물듭니다. 구간마다 색깔이 다릅니다.",
+                transport: "미도스지선 요도야바시~난바 구간",
+                seasonal: { "winter": "11월 초 ~ 12월 31일" }
+            }
+        },
+        {
+            id: 'fugu_ryori', name: '즈보라야 (복어 요리)', lat: 34.6515, lng: 135.5060, type: 'food', region: 'minami', rating: 4.3,
+            desc: '오사카 명물 복어 요리 코스.',
+            photos: ['https://images.unsplash.com/photo-1553621042-f6e147245754?w=800'],
+            details: {
+                info: "복어회(텟사)와 복어 지리(텟치리)가 일품입니다. 점심 특선 코스가 가성비 좋습니다. (※즈보라야 폐업 시 대체 맛집: 겐핀후구)",
+                transport: "신세카이 / 도톤보리",
+                tips: "예약 추천"
+            }
+        },
 
         // --- 우메다/오사카성 ---
         {
@@ -72,6 +92,16 @@ function initOsakaTrip() {
                 info: "천수각 내부는 박물관입니다. 주유패스로 고자부네 놀잇배를 무료로 탈 수 있습니다(매표소에서 교환 필수). 봄에는 벚꽃 명소입니다.",
                 transport: `<p class="text-xs text-gray-600">🚇 다니마치욘초메역 9번 출구 (오테몬 방향)</p>
                             <p class="text-xs text-gray-600">🚆 JR 오사카조코엔역 (홀 방향)</p>`
+            }
+        },
+        {
+            id: 'osaka_castle_3d', name: '오사카성 3D 매핑', lat: 34.6873, lng: 135.5262, type: 'spot', region: 'kita', rating: 4.7,
+            desc: '오사카성의 밤을 수놓는 빛의 예술.',
+            photos: ['https://images.unsplash.com/photo-1574259392081-dbe3c19cd15e?w=800'],
+            details: {
+                info: "니시노마루 정원에서 열립니다. 웅장한 음악과 함께 천수각에 영상이 투사됩니다. 티켓 별도 구매 필요.",
+                transport: "오사카성 니시노마루 정원",
+                seasonal: { "winter": "겨울 시즌 한정 (일루미나주)" }
             }
         },
         {
@@ -91,6 +121,16 @@ function initOsakaTrip() {
             details: {
                 info: "내부에 블루투스 스피커가 있어 음악을 들으며 야경을 즐길 수 있습니다. 쇼핑몰 7층에 탑승장이 있습니다.",
                 transport: `<p class="text-xs text-gray-600">🚇 우메다역 도보 5분</p>`
+            }
+        },
+        {
+            id: 'kitsune_udon', name: '키츠네 우동 (이마이)', lat: 34.6680, lng: 135.5010, type: 'food', region: 'minami', rating: 4.4,
+            desc: '오사카가 원조인 유부 우동.',
+            photos: ['https://images.unsplash.com/photo-1596560548464-f010549b84d7?w=800'],
+            details: {
+                info: "달콤짭짤한 유부가 통째로 들어갑니다. 국물이 끝내줍니다. 도톤보리 이마이 본점이 유명합니다.",
+                transport: "도톤보리 중심가",
+                tips: "오야코동도 맛있습니다."
             }
         },
 
