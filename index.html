@@ -350,256 +350,179 @@
                     <div id="vocab-study" class="hidden"></div>
                 </div>
 
-                <div id="word_study" class="tab-content hidden">
-                    <div id="word-categories" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div id="word-grid" class="grid grid-cols-1 gap-4 w-full col-span-2"></div>
+
+
+                <div id="characters" class="tab-content hidden">
+
+                    <div id="character-grid-container" class="bg-white rounded-2xl shadow-sm p-4">
+                        <div id="character-grid" class="grid grid-cols-5 gap-2 sm:grid-cols-8"></div>
                     </div>
-                    <div id="word-lesson" style="display: none;">
-                        <div class="flex justify-between items-center mb-4">
-                            <button onclick="backToWordCategories()" class="text-gray-600 hover:text-gray-900">
-                                <i class="fas fa-arrow-left mr-2"></i>목록으로
+                    <div id="character-study-container" class="hidden fixed inset-0 z-50 bg-white flex flex-col"></div>
+                </div>
+
+                <!-- 단어 학습 탭 (SRS) -->
+                <div id="word_study" class="tab-content hidden">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-4 px-4">🧠 단어 암기</h2>
+                    <div id="word-categories" class="grid grid-cols-2 gap-3 mb-6 px-4">
+                        <!-- 카테고리 버튼들이 여기에 렌더링됨 -->
+                    </div>
+
+                    <!-- 단어 학습 모달 (전체 화면) -->
+                    <div id="word-lesson" class="hidden fixed inset-0 z-50 bg-gray-50 flex flex-col">
+                        <!-- 상단 헤더 -->
+                        <div class="bg-white px-4 py-3 flex items-center justify-between shadow-sm z-10">
+                            <button onclick="closeWordLesson()" class="text-gray-400 hover:text-gray-600 p-2">
+                                <i class="fas fa-times text-xl"></i>
                             </button>
-                            <h3 id="word-lesson-title" class="text-xl font-bold"></h3>
-                            <button id="btn-shuffle" onclick="toggleShuffle()"
-                                class="px-3 py-1 rounded-full border border-gray-300 text-gray-600 text-sm hover:bg-gray-50">
-                                <i class="fas fa-random mr-1"></i> 셔플 끄기
-                                ```
-                                <div class="flex justify-between items-center px-4">
-                                    <button id="word-prev-btn" onclick="prevWord()"
-                                        class="text-gray-600 hover:text-blue-600 transition-colors">
-                                        <i class="fas fa-chevron-left text-2xl"></i>
-                                    </button>
-                                    <span id="word-counter" class="font-mono text-gray-500"></span>
-                                    <button id="word-next-btn" onclick="nextWord()"
-                                        class="text-gray-600 hover:text-blue-600 transition-colors">
-                                        <i class="fas fa-chevron-right text-2xl"></i>
-                                    </button>
+                            <div class="flex flex-col items-center">
+                                <span id="lesson-category-title" class="font-bold text-gray-800">카테고리</span>
+                                <div class="flex gap-1 mt-1">
+                                    <span id="current-word-idx"
+                                        class="text-xs font-mono text-blue-500 font-bold">1</span>
+                                    <span class="text-xs text-gray-300">/</span>
+                                    <span id="total-word-count" class="text-xs font-mono text-gray-400">10</span>
                                 </div>
-
-                                <div class="w-full bg-gray-200 h-1 mt-6 rounded-full overflow-hidden">
-                                    <div id="word-progress-bar" class="bg-blue-500 h-full transition-all duration-300"
-                                        style="width: 0%"></div>
-                                </div>
+                            </div>
+                            <button onclick="toggleShuffle()" id="shuffle-btn"
+                                class="text-gray-300 hover:text-blue-500 p-2 transition">
+                                <i class="fas fa-random"></i>
+                            </button>
                         </div>
 
-                        <!-- Header -->
-                        <header class="flex justify-between items-center mb-6 sticky top-0 bg-gray-50 z-10 py-2">
-                            <div class="flex items-center gap-2">
-                                <div class="w-10 h-10 bg-red-600 rounded-xl flex items-center justify-center shadow-lg">
-                                    <i class="fas fa-torii-gate text-white text-xl"></i>
-                                </div>
-                                <h1 class="text-xl font-black text-gray-800 tracking-tight">JAP-BONG<span
-                                        class="text-red-500">일본어</span></h1>
-                            </div>
+                        <!-- 메인 카드 영역 -->
+                        <div class="flex-1 flex items-center justify-center p-6 relative overflow-hidden">
+                            <!-- 카드 컨테이너 (3D 효과) -->
+                            <div id="word-card"
+                                class="w-full max-w-sm aspect-[3/4] bg-white rounded-3xl shadow-xl relative preserve-3d transition-transform duration-500 cursor-pointer"
+                                onclick="flipCard()">
 
-                            <!-- Gamification: Streak -->
-                            <div
-                                class="flex items-center gap-1 bg-white px-3 py-1 rounded-full shadow-sm border border-gray-200">
-                                <i class="fas fa-fire text-gray-300 transition-colors duration-500"></i>
-                                <span id="streak-counter" class="font-bold text-gray-600">0</span>
-                            </div>
-
-                            <div class="flex items-center gap-3">
-                                <div class="text-right hidden sm:block">
-                                    <p id="user-name-display" class="font-bold text-gray-800 text-sm">게스트</p>
-                                    <p class="text-xs text-gray-500">오늘도 화이팅! 💪</p>
-                                </div>
-                                <div class="w-10 h-10 rounded-full bg-gray-200 overflow-hidden border-2 border-white shadow-md cursor-pointer hover:scale-105 transition-transform"
-                                    onclick="logout()">
-                                    <img id="user-avatar-display"
-                                        src="https://api.dicebear.com/7.x/avataaars/svg?seed=Guest" alt="Profile"
-                                        class="w-full h-full object-cover">
-                                </div>
-                            </div>
-                        </header>
-
-                        <!-- Gamification: Daily Goal -->
-                        <div class="mb-6 bg-white rounded-2xl p-4 shadow-sm border border-gray-100">
-                            <div class="flex justify-between items-center mb-2">
-                                <span class="text-xs font-bold text-gray-500 uppercase">Daily Goal</span>
-                                <span id="daily-goal-text" class="text-xs font-bold text-blue-600">0 / 50 XP</span>
-                            </div>
-                            <div class="w-full bg-gray-100 h-2.5 rounded-full overflow-hidden">
-                                <div id="daily-goal-bar"
-                                    class="bg-blue-500 h-full w-0 transition-all duration-1000 ease-out"></div>
-                            </div>
-                        </div>
-
-                        <div id="characters" class="tab-content hidden">
-
-                            <div id="character-grid-container" class="bg-white rounded-2xl shadow-sm p-4">
-                                <div id="character-grid" class="grid grid-cols-5 gap-2 sm:grid-cols-8"></div>
-                            </div>
-                            <div id="character-study-container"
-                                class="hidden fixed inset-0 z-50 bg-white flex flex-col"></div>
-                        </div>
-
-                        <!-- 단어 학습 탭 (SRS) -->
-                        <div id="word_study" class="tab-content hidden">
-                            <h2 class="text-2xl font-bold text-gray-900 mb-4 px-4">🧠 단어 암기</h2>
-                            <div id="word-categories" class="grid grid-cols-2 gap-3 mb-6 px-4">
-                                <!-- 카테고리 버튼들이 여기에 렌더링됨 -->
-                            </div>
-
-                            <!-- 단어 학습 모달 (전체 화면) -->
-                            <div id="word-lesson" class="hidden fixed inset-0 z-50 bg-gray-50 flex flex-col">
-                                <!-- 상단 헤더 -->
-                                <div class="bg-white px-4 py-3 flex items-center justify-between shadow-sm z-10">
-                                    <button onclick="closeWordLesson()" class="text-gray-400 hover:text-gray-600 p-2">
-                                        <i class="fas fa-times text-xl"></i>
-                                    </button>
-                                    <div class="flex flex-col items-center">
-                                        <span id="lesson-category-title" class="font-bold text-gray-800">카테고리</span>
-                                        <div class="flex gap-1 mt-1">
-                                            <span id="current-word-idx"
-                                                class="text-xs font-mono text-blue-500 font-bold">1</span>
-                                            <span class="text-xs text-gray-300">/</span>
-                                            <span id="total-word-count"
-                                                class="text-xs font-mono text-gray-400">10</span>
-                                        </div>
+                                <!-- 앞면 (일본어) -->
+                                <div
+                                    class="absolute inset-0 backface-hidden flex flex-col items-center justify-center p-6 bg-white rounded-3xl border-2 border-gray-100">
+                                    <span id="word-type"
+                                        class="absolute top-6 right-6 text-xs font-bold text-gray-400 bg-gray-100 px-2 py-1 rounded-full">명사</span>
+                                    <div class="flex-1 flex flex-col items-center justify-center gap-4">
+                                        <h3 id="word-kanji"
+                                            class="text-5xl font-black text-gray-800 text-center leading-tight">
+                                            漢字</h3>
+                                        <p id="word-kana" class="text-2xl text-blue-500 font-medium">かな</p>
                                     </div>
-                                    <button onclick="toggleShuffle()" id="shuffle-btn"
-                                        class="text-gray-300 hover:text-blue-500 p-2 transition">
-                                        <i class="fas fa-random"></i>
-                                    </button>
-                                </div>
-
-                                <!-- 메인 카드 영역 -->
-                                <div class="flex-1 flex items-center justify-center p-6 relative overflow-hidden">
-                                    <!-- 카드 컨테이너 (3D 효과) -->
-                                    <div id="word-card"
-                                        class="w-full max-w-sm aspect-[3/4] bg-white rounded-3xl shadow-xl relative preserve-3d transition-transform duration-500 cursor-pointer"
-                                        onclick="flipCard()">
-
-                                        <!-- 앞면 (일본어) -->
-                                        <div
-                                            class="absolute inset-0 backface-hidden flex flex-col items-center justify-center p-6 bg-white rounded-3xl border-2 border-gray-100">
-                                            <span id="word-type"
-                                                class="absolute top-6 right-6 text-xs font-bold text-gray-400 bg-gray-100 px-2 py-1 rounded-full">명사</span>
-                                            <div class="flex-1 flex flex-col items-center justify-center gap-4">
-                                                <h3 id="word-kanji"
-                                                    class="text-5xl font-black text-gray-800 text-center leading-tight">
-                                                    漢字</h3>
-                                                <p id="word-kana" class="text-2xl text-blue-500 font-medium">かな</p>
-                                            </div>
-                                            <div class="mt-auto text-center">
-                                                <p class="text-gray-400 text-sm mb-2">탭해서 뜻 확인하기 👆</p>
-                                            </div>
-                                        </div>
-
-                                        <!-- 뒷면 (한국어/영어) -->
-                                        <div
-                                            class="absolute inset-0 backface-hidden rotate-y-180 flex flex-col items-center justify-center p-6 bg-blue-50 rounded-3xl border-2 border-blue-100">
-                                            <div class="flex-1 flex flex-col items-center justify-center gap-2">
-                                                <h3 id="word-kr"
-                                                    class="text-4xl font-black text-gray-800 text-center break-keep">한국어
-                                                    뜻</h3>
-                                                <p id="word-en" class="text-lg text-gray-500 font-medium mt-2">English
-                                                    Meaning</p>
-                                                <div class="w-12 h-1 bg-blue-200 rounded-full my-4"></div>
-                                                <p id="word-kr-pron" class="text-xl text-gray-600">발음</p>
-                                            </div>
-                                        </div>
+                                    <div class="mt-auto text-center">
+                                        <p class="text-gray-400 text-sm mb-2">탭해서 뜻 확인하기 👆</p>
                                     </div>
                                 </div>
 
-                                <!-- 하단 컨트롤 (SRS 버튼) -->
-                                <div id="srs-controls" class="bg-white p-4 pb-safe border-t border-gray-100 hidden">
-                                    <div class="grid grid-cols-4 gap-2 max-w-md mx-auto">
-                                        <button onclick="rateWord(0)"
-                                            class="flex flex-col items-center justify-center p-2 rounded-xl bg-red-50 text-red-500 hover:bg-red-100 transition">
-                                            <span class="text-xs font-bold mb-1">몰라요</span>
-                                            <span class="text-[10px] opacity-70">Again</span>
-                                        </button>
-                                        <button onclick="rateWord(1)"
-                                            class="flex flex-col items-center justify-center p-2 rounded-xl bg-orange-50 text-orange-500 hover:bg-orange-100 transition">
-                                            <span class="text-xs font-bold mb-1">어려워요</span>
-                                            <span class="text-[10px] opacity-70">Hard</span>
-                                        </button>
-                                        <button onclick="rateWord(2)"
-                                            class="flex flex-col items-center justify-center p-2 rounded-xl bg-blue-50 text-blue-500 hover:bg-blue-100 transition">
-                                            <span class="text-xs font-bold mb-1">알아요</span>
-                                            <span class="text-[10px] opacity-70">Good</span>
-                                        </button>
-                                        <button onclick="rateWord(3)"
-                                            class="flex flex-col items-center justify-center p-2 rounded-xl bg-green-50 text-green-500 hover:bg-green-100 transition">
-                                            <span class="text-xs font-bold mb-1">쉬워요</span>
-                                            <span class="text-[10px] opacity-70">Easy</span>
-                                        </button>
+                                <!-- 뒷면 (한국어/영어) -->
+                                <div
+                                    class="absolute inset-0 backface-hidden rotate-y-180 flex flex-col items-center justify-center p-6 bg-blue-50 rounded-3xl border-2 border-blue-100">
+                                    <div class="flex-1 flex flex-col items-center justify-center gap-2">
+                                        <h3 id="word-kr"
+                                            class="text-4xl font-black text-gray-800 text-center break-keep">한국어
+                                            뜻</h3>
+                                        <p id="word-en" class="text-lg text-gray-500 font-medium mt-2">English
+                                            Meaning</p>
+                                        <div class="w-12 h-1 bg-blue-200 rounded-full my-4"></div>
+                                        <p id="word-kr-pron" class="text-xl text-gray-600">발음</p>
                                     </div>
-                                </div>
-
-                                <!-- 하단 컨트롤 (기본) -->
-                                <div id="basic-controls"
-                                    class="bg-white p-4 pb-safe border-t border-gray-100 flex justify-between items-center">
-                                    <button onclick="prevWord()"
-                                        class="p-4 text-gray-400 hover:text-gray-800 transition">
-                                        <i class="fas fa-chevron-left text-2xl"></i>
-                                    </button>
-                                    <button onclick="playCurrentWordAudio()"
-                                        class="w-16 h-16 rounded-full bg-blue-500 text-white shadow-lg flex items-center justify-center hover:bg-blue-600 active:scale-95 transition">
-                                        <i class="fas fa-volume-up text-2xl"></i>
-                                    </button>
-                                    <button onclick="nextWord()"
-                                        class="p-4 text-gray-400 hover:text-gray-800 transition">
-                                        <i class="fas fa-chevron-right text-2xl"></i>
-                                    </button>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- 학습현황 탭 -->
-                        <div id="progress" class="tab-content hidden">
-                            <h2 class="text-2xl font-bold text-gray-900 mb-4">📊 학습 현황</h2>
-
-                            <!-- 아빠 전용: 사용자 선택 -->
-                            <div id="admin-user-selector" style="display:none;"
-                                class="mb-4 p-4 bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl border-2 border-blue-200">
-                                <label class="block text-sm font-bold text-gray-700 mb-2">
-                                    <i class="fas fa-users mr-2"></i>회원 선택
-                                </label>
-                                <select id="progress-user-select" onchange="changeProgressUser()"
-                                    class="w-full px-4 py-2 border-2 border-gray-300 rounded-xl font-bold focus:border-blue-500 focus:outline-none">
-                                    <option value="dad">아빠</option>
-                                    <option value="mom">엄마</option>
-                                    <option value="sieun">시으니</option>
-                                    <option value="harong">하롱이</option>
-                                </select>
-                            </div>
-
-                            <!-- 요약 통계 -->
-                            <div id="progress-summary" class="mb-6"></div>
-
-                            <!-- 그래프 섹션 -->
-                            <div class="space-y-6">
-                                <div class="bg-white rounded-xl shadow-sm p-4" style="height: 250px;">
-                                    <canvas id="conversation-chart"></canvas>
-                                </div>
-                                <div class="bg-white rounded-xl shadow-sm p-4" style="height: 250px;">
-                                    <canvas id="vocabulary-chart"></canvas>
-                                </div>
-                                <div class="bg-white rounded-xl shadow-sm p-4" style="height: 250px;">
-                                    <canvas id="character-chart"></canvas>
-                                </div>
-                                <div class="bg-white rounded-xl shadow-sm p-4" style="height: 250px;">
-                                    <canvas id="character-quiz-chart"></canvas>
-                                </div>
-                                <div class="bg-white rounded-xl shadow-sm p-4" style="height: 250px;">
-                                    <canvas id="vocabulary-quiz-chart"></canvas>
-                                </div>
-                            </div>
-
-                            <!-- 아빠 전용: 개별 리셋 -->
-                            <div id="admin-reset-user" style="display:none;"
-                                class="mt-6 p-4 bg-red-50 rounded-xl border-2 border-red-200">
-                                <button onclick="resetUserProgress()"
-                                    class="w-full py-3 bg-red-600 text-white font-bold rounded-xl hover:bg-red-700 active:scale-95 transition-all shadow-md">
-                                    <i class="fas fa-trash-alt mr-2"></i>선택한 사용자 진도 리셋
+                        <!-- 하단 컨트롤 (SRS 버튼) -->
+                        <div id="srs-controls" class="bg-white p-4 pb-safe border-t border-gray-100 hidden">
+                            <div class="grid grid-cols-4 gap-2 max-w-md mx-auto">
+                                <button onclick="rateWord(0)"
+                                    class="flex flex-col items-center justify-center p-2 rounded-xl bg-red-50 text-red-500 hover:bg-red-100 transition">
+                                    <span class="text-xs font-bold mb-1">몰라요</span>
+                                    <span class="text-[10px] opacity-70">Again</span>
+                                </button>
+                                <button onclick="rateWord(1)"
+                                    class="flex flex-col items-center justify-center p-2 rounded-xl bg-orange-50 text-orange-500 hover:bg-orange-100 transition">
+                                    <span class="text-xs font-bold mb-1">어려워요</span>
+                                    <span class="text-[10px] opacity-70">Hard</span>
+                                </button>
+                                <button onclick="rateWord(2)"
+                                    class="flex flex-col items-center justify-center p-2 rounded-xl bg-blue-50 text-blue-500 hover:bg-blue-100 transition">
+                                    <span class="text-xs font-bold mb-1">알아요</span>
+                                    <span class="text-[10px] opacity-70">Good</span>
+                                </button>
+                                <button onclick="rateWord(3)"
+                                    class="flex flex-col items-center justify-center p-2 rounded-xl bg-green-50 text-green-500 hover:bg-green-100 transition">
+                                    <span class="text-xs font-bold mb-1">쉬워요</span>
+                                    <span class="text-[10px] opacity-70">Easy</span>
                                 </button>
                             </div>
                         </div>
 
+                        <!-- 하단 컨트롤 (기본) -->
+                        <div id="basic-controls"
+                            class="bg-white p-4 pb-safe border-t border-gray-100 flex justify-between items-center">
+                            <button onclick="prevWord()" class="p-4 text-gray-400 hover:text-gray-800 transition">
+                                <i class="fas fa-chevron-left text-2xl"></i>
+                            </button>
+                            <button onclick="playCurrentWordAudio()"
+                                class="w-16 h-16 rounded-full bg-blue-500 text-white shadow-lg flex items-center justify-center hover:bg-blue-600 active:scale-95 transition">
+                                <i class="fas fa-volume-up text-2xl"></i>
+                            </button>
+                            <button onclick="nextWord()" class="p-4 text-gray-400 hover:text-gray-800 transition">
+                                <i class="fas fa-chevron-right text-2xl"></i>
+                            </button>
+                        </div>
                     </div>
+                </div>
+
+                <!-- 학습현황 탭 -->
+                <div id="progress" class="tab-content hidden">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-4">📊 학습 현황</h2>
+
+                    <!-- 아빠 전용: 사용자 선택 -->
+                    <div id="admin-user-selector" style="display:none;"
+                        class="mb-4 p-4 bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl border-2 border-blue-200">
+                        <label class="block text-sm font-bold text-gray-700 mb-2">
+                            <i class="fas fa-users mr-2"></i>회원 선택
+                        </label>
+                        <select id="progress-user-select" onchange="changeProgressUser()"
+                            class="w-full px-4 py-2 border-2 border-gray-300 rounded-xl font-bold focus:border-blue-500 focus:outline-none">
+                            <option value="dad">아빠</option>
+                            <option value="mom">엄마</option>
+                            <option value="sieun">시으니</option>
+                            <option value="harong">하롱이</option>
+                        </select>
+                    </div>
+
+                    <!-- 요약 통계 -->
+                    <div id="progress-summary" class="mb-6"></div>
+
+                    <!-- 그래프 섹션 -->
+                    <div class="space-y-6">
+                        <div class="bg-white rounded-xl shadow-sm p-4" style="height: 250px;">
+                            <canvas id="conversation-chart"></canvas>
+                        </div>
+                        <div class="bg-white rounded-xl shadow-sm p-4" style="height: 250px;">
+                            <canvas id="vocabulary-chart"></canvas>
+                        </div>
+                        <div class="bg-white rounded-xl shadow-sm p-4" style="height: 250px;">
+                            <canvas id="character-chart"></canvas>
+                        </div>
+                        <div class="bg-white rounded-xl shadow-sm p-4" style="height: 250px;">
+                            <canvas id="character-quiz-chart"></canvas>
+                        </div>
+                        <div class="bg-white rounded-xl shadow-sm p-4" style="height: 250px;">
+                            <canvas id="vocabulary-quiz-chart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- 아빠 전용: 개별 리셋 -->
+                    <div id="admin-reset-user" style="display:none;"
+                        class="mt-6 p-4 bg-red-50 rounded-xl border-2 border-red-200">
+                        <button onclick="resetUserProgress()"
+                            class="w-full py-3 bg-red-600 text-white font-bold rounded-xl hover:bg-red-700 active:scale-95 transition-all shadow-md">
+                            <i class="fas fa-trash-alt mr-2"></i>선택한 사용자 진도 리셋
+                        </button>
+                    </div>
+                </div>
+
+            </div>
         </main>
 
         <nav class="bg-white border-t border-gray-200 fixed bottom-0 left-0 right-0 z-50 h-16 pb-safe">
@@ -718,7 +641,10 @@
                     <div>
                         <h3 class="font-bold text-gray-800 mb-1">일본 여행 가이드</h3>
                         <p class="text-sm text-gray-600 leading-relaxed">
-                            후쿠오카, 도쿄 등 주요 도시별 여행 정보와 돈키호테/드럭스토어 쇼핑 꿀팁, 교통 이용법을 제공합니다.
+                            후쿠오카, 도쿄 등 주요 도시별 여행 정보와 돈키호테/드럭스토어 쇼핑 꿀팁, 교통 이용법을 제공합니다.<br>
+                            <span class="text-red-500 font-bold text-xs mt-1 block">
+                                <i class="fas fa-lock mr-1"></i>미션: 글자 퀴즈 90점 이상 2회 달성 시 잠금 해제!
+                            </span>
                         </p>
                     </div>
                 </div>

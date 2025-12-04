@@ -271,4 +271,44 @@ document.addEventListener('DOMContentLoaded', () => {
     initPWAInstall();
 });
 
+
+// Help Modal Functions
+function openHelpModal() {
+    const modal = document.getElementById('help-modal');
+    if (modal) {
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+        // Add animation class if needed
+        const content = modal.querySelector('div');
+        if (content) {
+            content.classList.remove('animate-fade-out-down');
+            content.classList.add('animate-fade-in-up');
+        }
+    }
+}
+
+function closeHelpModal() {
+    const modal = document.getElementById('help-modal');
+    if (modal) {
+        const content = modal.querySelector('div');
+        if (content) {
+            content.classList.remove('animate-fade-in-up');
+            content.classList.add('animate-fade-out-down');
+
+            // Wait for animation to finish before hiding
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }, 300); // Match animation duration
+        } else {
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+    }
+}
+
+// Expose to window
+window.openHelpModal = openHelpModal;
+window.closeHelpModal = closeHelpModal;
+
 console.log('ui.js loaded');

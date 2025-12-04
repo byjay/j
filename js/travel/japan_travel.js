@@ -328,18 +328,13 @@ function handleRegionClick(regionId) {
         // 이미 열려있으면 바로 이동
         selectRegion(regionId);
     } else {
-        // 잠겨있으면 미션 달성 여부 재확인 (방금 달성했을 수도 있음)
-        // 실제로는 checkRegionUnlock이 실시간 데이터를 확인하므로, 
-        // 여기서 true가 나오면 "방금 해제됨"을 의미할 수 있음.
-        // 하지만 UI상으로는 잠겨보이는데 클릭했으므로, 다시 체크해서 true면 해제 연출
-
-        // 강제로 다시 체크 (데이터 갱신되었을 수 있음)
+        // 잠겨있으면 맛보기(Preview) 모드로 이동
+        // 단, 이미 미션을 달성했는지 한 번 더 체크 (방금 달성했을 수도 있음)
         if (checkRegionUnlock(region)) {
-            // 미션 달성! 레벨업 연출
             playLevelUpEffect(region);
         } else {
-            // 아직 미달성
-            showUnlockRequirement(regionId);
+            // 맛보기 모드 실행
+            selectRegion(regionId, true);
         }
     }
 }
@@ -368,9 +363,7 @@ function playLevelUpEffect(region) {
     `;
     document.body.insertAdjacentHTML('beforeend', modalHtml);
 
-    // 3. 폭죽 효과 (Canvas Confetti)
-    // CDN이 없으므로 간단한 CSS 파티클이나 이모지로 대체하거나, 
-    // 만약 confetti 라이브러리가 있다면 사용. 여기서는 간단히 이모지 폭죽 효과 구현
+    // 3. 폭죽 효과
     createEmojiConfetti();
 }
 
@@ -477,12 +470,11 @@ function showUnlockRequirement(regionId) {
 }
 
 // 지역 선택
-function selectRegion(regionId) {
+function selectRegion(regionId, isPreview = false) {
     const region = japanRegions[regionId];
 
-    // 여기서 체크하지 않고 handleRegionClick에서 처리했으므로 바로 진행
-    // 하지만 안전을 위해 한번 더 체크 (아빠 계정 등 고려)
-    if (!checkRegionUnlock(region) && !(currentUser && currentUser.id === 'dad')) {
+    // Preview 모드가 아니고 잠겨있으면 차단
+    if (!isPreview && !checkRegionUnlock(region) && !(currentUser && currentUser.id === 'dad')) {
         showUnlockRequirement(regionId);
         return;
     }
@@ -494,7 +486,23 @@ function selectRegion(regionId) {
     loadRegionScript(region).then(() => {
         // 지역 선택 숨기고 상세 정보 표시
         document.getElementById('region-selection').style.display = 'none';
-        document.getElementById('region-detail').style.display = 'block';
+        const detailView = document.getElementById('region-detail');
+        detailView.style.display = 'block';
+
+        // 뒤로가기 버튼 주입 (항상 상단에 표시)
+        // 기존에 버튼이 있다면 제거 후 다시 추가 (중복 방지)
+        const existingBackBtn = document.getElementById('travel-back-btn');
+        if (existingBackBtn) existingBackBtn.remove();
+
+        const backBtnHtml = `
+            <div id="travel-back-btn" class="mb-4">
+                <button onclick="backToRegionSelection()" class="flex items-center gap-2 text-gray-600 hover:text-blue-600 font-bold transition-colors bg-white px-4 py-2 rounded-xl shadow-sm border border-gray-200">
+                    <i class="fas fa-arrow-left"></i> 목록으로
+                </button>
+            </div>
+        `;
+        detailView.insertAdjacentHTML('afterbegin', backBtnHtml);
+
 
         // 해당 지역 초기화 함수 호출
         const initFuncName = `init${regionId.charAt(0).toUpperCase() + regionId.slice(1)}Trip`;
@@ -507,7 +515,48 @@ function selectRegion(regionId) {
                 initFukuokaTrip();
             }
         }
+
+        // Preview 모드일 경우: 1.5초 후 모달 표시
+        if (isPreview) {
+            setTimeout(() => {
+                showPreviewModal(region);
+            }, 1500);
+        }
     });
+}
+
+// 맛보기 모드 종료 모달
+function showPreviewModal(region) {
+    const modalHtml = `
+        <div id="preview-modal" class="fixed inset-0 z-[80] flex items-center justify-center bg-black/80 backdrop-blur-sm animate-fade-in">
+            <div class="bg-white rounded-3xl p-8 max-w-sm w-full mx-4 text-center relative overflow-hidden shadow-2xl animate-slide-up">
+                <div class="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4 text-4xl">
+                    🔒
+                </div>
+                <h2 class="text-2xl font-black text-gray-800 mb-2">맛보기 종료!</h2>
+                <p class="text-gray-600 mb-6 text-sm">
+                    <strong>${region.name}</strong> 여행 정보를 계속 보려면<br>
+                    아래 미션을 완료해야 합니다.
+                </p>
+                
+                <div class="bg-red-50 border border-red-100 rounded-xl p-4 mb-6">
+                    <h3 class="text-red-600 font-bold text-xs uppercase mb-1">Mission</h3>
+                    <p class="text-red-800 font-bold text-sm">${region.mission}</p>
+                </div>
+
+                <button onclick="closePreviewModal()" class="w-full py-3 bg-gray-800 text-white font-bold rounded-xl shadow-lg hover:bg-gray-900 transition-colors">
+                    확인 (목록으로 돌아가기)
+                </button>
+            </div>
+        </div>
+    `;
+    document.body.insertAdjacentHTML('beforeend', modalHtml);
+}
+
+function closePreviewModal() {
+    const modal = document.getElementById('preview-modal');
+    if (modal) modal.remove();
+    backToRegionSelection();
 }
 
 // 지역 스크립트 동적 로드
