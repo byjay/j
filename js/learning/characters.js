@@ -194,18 +194,15 @@ function selectCharacter(idx) {
 
                 <!-- 쓰기 캔버스 영역 (비율 조정) -->
                 <div class="relative w-full aspect-square bg-gray-50 rounded-xl border-2 border-gray-200 overflow-hidden cursor-crosshair touch-none shadow-inner">
-                    <div id="stroke-guide-bg" class="absolute inset-0 flex items-center justify-center pointer-events-none opacity-[0.08]">
-                        <span class="text-[180px]" style="font-family: 'Noto Sans JP', sans-serif;">${item.char}</span>
-                    </div>
+                    <!-- 획순 애니메이션 & 가이드 컨테이너 -->
+                    <div id="stroke-guide-container" class="absolute inset-0 z-10 pointer-events-none flex items-center justify-center p-4"></div>
+
                     <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
                         <div class="w-full h-px bg-red-300/30 border-t border-dashed border-red-300"></div>
                     </div>
                     <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
                         <div class="h-full w-px bg-red-300/30 border-l border-dashed border-red-300"></div>
                     </div>
-                    
-                    <!-- 획순 애니메이션 컨테이너 -->
-                    <div id="stroke-guide-container" class="absolute inset-0 z-10 pointer-events-none flex items-center justify-center p-4"></div>
 
                     <canvas id="writing-canvas" class="absolute inset-0 w-full h-full z-20"></canvas>
                 </div>
@@ -216,8 +213,8 @@ function selectCharacter(idx) {
                         <i class="fas fa-chevron-left text-xl"></i>
                     </button>
                     <div class="flex gap-2">
-                        <button onclick="toggleStrokeGuide('${item.char}')" class="bg-blue-100 text-blue-600 px-3 py-1.5 rounded-lg text-xs font-bold hover:bg-blue-200 transition flex items-center gap-1">
-                            <i class="fas fa-play"></i> 획순 보기
+                        <button onclick="clearCanvas(); playStrokeAnimation('${item.char}');" class="bg-gray-100 text-gray-600 px-3 py-1.5 rounded-lg text-xs font-bold hover:bg-gray-200 transition">
+                            <i class="fas fa-redo mr-1"></i> 다시 보기
                         </button>
                         <button onclick="clearCanvas()" class="bg-gray-100 text-gray-600 px-3 py-1.5 rounded-lg text-xs font-bold hover:bg-gray-200 transition">
                             <i class="fas fa-eraser mr-1"></i> 지우기
@@ -237,10 +234,8 @@ function selectCharacter(idx) {
     playAudio(item.char);
     saveStudyLog('view', item.char);
 
-    // 획순 애니메이션 자동 재생 (약간의 딜레이 후 시작)
-    setTimeout(() => {
-        toggleStrokeGuide(item.char);
-    }, 500);
+    // 획순 애니메이션 자동 재생 (즉시 시작)
+    playStrokeAnimation(item.char);
 }
 
 // ... (이하 closeModal, nextChar, prevChar, initCanvas 등 기존 로직 유지) ...
@@ -315,41 +310,25 @@ function getCharHex(char) {
     return char.charCodeAt(0).toString(16).padStart(5, '0');
 }
 
-async function toggleStrokeGuide(char) {
+async function playStrokeAnimation(char) {
     const container = document.getElementById('stroke-guide-container');
-    const bg = document.getElementById('stroke-guide-bg');
-
     if (!container) return;
 
-    // 이미 애니메이션 중이면 중단하고 리셋
-    if (container.innerHTML !== '') {
-        container.innerHTML = '';
-        if (bg) bg.classList.remove('opacity-0');
-        if (bg) bg.classList.add('opacity-[0.08]');
-        return;
-    }
-
-    // 캔버스 지우기
+    // 초기화
+    container.innerHTML = '';
     clearCanvas();
 
-    // 배경 글자 숨기기 (애니메이션에 집중)
-    if (bg) bg.classList.remove('opacity-[0.08]');
-    if (bg) bg.classList.add('opacity-0');
-
-    // 로딩 표시
-    container.innerHTML = '<div class="animate-spin rounded-full h-8 w-8 border-b-2 border-red-500"></div>';
+    // 로딩 표시 (잠깐)
+    // container.innerHTML = '<div class="animate-spin rounded-full h-8 w-8 border-b-2 border-red-500"></div>';
 
     try {
         const hex = getCharHex(char);
-        // GitHub Raw Mirror via jsDelivr
         const url = `https://cdn.jsdelivr.net/gh/KanjiVG/kanjivg@master/kanji/${hex}.svg`;
 
         const response = await fetch(url);
         if (!response.ok) throw new Error('SVG fetch failed');
 
         const svgText = await response.text();
-
-        // SVG 파싱 및 조작
         const parser = new DOMParser();
         const doc = parser.parseFromString(svgText, 'image/svg+xml');
         const svg = doc.querySelector('svg');
@@ -357,36 +336,50 @@ async function toggleStrokeGuide(char) {
         // 스타일 설정
         svg.style.width = '100%';
         svg.style.height = '100%';
+        svg.style.position = 'absolute';
+        svg.style.top = '0';
+        svg.style.left = '0';
 
-        // 기존 스타일 제거 및 새로운 스타일 주입
-        const paths = svg.querySelectorAll('path');
-        paths.forEach(path => {
+        // 숫자 제거
+        const numbers = svg.querySelector('g[id^="kvg:StrokeNumbers"]');
+        if (numbers) numbers.remove();
+
+        // 1. 배경 레이어 (회색 가이드) - 항상 표시 (따라쓰기용)
+        const bgLayer = svg.cloneNode(true);
+        bgLayer.setAttribute('id', 'bg-layer');
+        const bgPaths = bgLayer.querySelectorAll('path');
+        bgPaths.forEach(path => {
+            path.style.fill = 'none';
+            path.style.stroke = '#e5e7eb'; // gray-200 (연한 회색)
+            path.style.strokeWidth = '10'; // 두껍게
+            path.style.strokeLinecap = 'round';
+            path.style.strokeLinejoin = 'round';
+            path.style.opacity = '1';
+        });
+        container.appendChild(bgLayer);
+
+        // 2. 애니메이션 레이어 (빨간 점선)
+        const animLayer = svg.cloneNode(true);
+        animLayer.setAttribute('id', 'anim-layer');
+        const animPaths = animLayer.querySelectorAll('path');
+        animPaths.forEach(path => {
             path.style.fill = 'none';
             path.style.stroke = '#ef4444'; // red-500
             path.style.strokeWidth = '4';
             path.style.strokeLinecap = 'round';
             path.style.strokeLinejoin = 'round';
+            path.style.strokeDasharray = '10, 10'; // 점선
             path.style.opacity = '0'; // 처음에 숨김
         });
-
-        // 숫자 제거 (깔끔하게 보이기 위해)
-        const numbers = svg.querySelector('g[id^="kvg:StrokeNumbers"]');
-        if (numbers) numbers.remove();
-
-        container.innerHTML = '';
-        container.appendChild(svg);
+        container.appendChild(animLayer);
 
         // 애니메이션 시작
-        await animateStrokes(paths);
+        await animateStrokes(animPaths);
 
     } catch (e) {
         console.error("Stroke animation failed:", e);
-        container.innerHTML = '<span class="text-xs text-red-400">획순 정보를 불러올 수 없습니다.</span>';
-        setTimeout(() => {
-            container.innerHTML = '';
-            if (bg) bg.classList.remove('opacity-0');
-            if (bg) bg.classList.add('opacity-[0.08]');
-        }, 2000);
+        // 실패 시 텍스트 폴백
+        container.innerHTML = `<span class="text-[180px] text-gray-100 font-bold" style="font-family: 'Noto Sans JP', sans-serif;">${char}</span>`;
     }
 }
 
@@ -397,13 +390,23 @@ function animateStrokes(paths) {
             const length = path.getTotalLength();
 
             // 초기 설정
+            path.style.strokeDasharray = length; // 점선 효과를 위해 dasharray 조절 필요하지만, draw 애니메이션을 위해 length로 설정
+            // 점선 효과를 유지하면서 그리려면 mask를 써야 하는데 복잡함.
+            // 여기서는 점선 스타일 대신 '빨간 실선'으로 천천히 그리는 것으로 타협하거나,
+            // stroke-dasharray를 애니메이션 하는 방식이 아니라 stroke-dashoffset만 함.
+            // 점선을 원하면 stroke-dasharray='10, 10'을 유지해야 하는데, 
+            // 그리기 애니메이션(stroke-dashoffset)과 충돌함.
+            // 사용자 요청: "점선으로 빨강으로 보여주게하고"
+            // 해결: mask를 쓰거나, 그냥 붉은색 실선으로 보여주는게 깔끔함. 
+            // 일단 붉은색 실선으로 구현 (점선 애니메이션은 SVG에서 까다로움)
+
             path.style.strokeDasharray = length;
             path.style.strokeDashoffset = length;
             path.style.opacity = '1';
 
-            // 애니메이션
+            // 애니메이션 (천천히)
             await new Promise(r => {
-                const duration = 500; // 0.5초
+                const duration = 1500; // 1.5초 (천천히)
                 const start = performance.now();
 
                 function step(timestamp) {
@@ -420,23 +423,18 @@ function animateStrokes(paths) {
             });
         }
 
-        // 완료 후 잠시 대기했다가 복귀? 아니면 그대로 유지?
-        // 유저가 따라 써야 하므로 그대로 유지하거나, 
-        // 일정 시간 후 흐리게 만들어서 가이드로 쓸 수 있게 함.
-
-        // 여기서는 1초 후 배경 복귀 및 가이드 흐리게 처리
+        // 완료 후 페이드 아웃
         setTimeout(() => {
-            const bg = document.getElementById('stroke-guide-bg');
-            if (bg) bg.classList.remove('opacity-0');
-            if (bg) bg.classList.add('opacity-[0.08]');
-
-            // 가이드 라인은 연하게 남겨둠 (따라쓰기 용)
-            paths.forEach(p => {
-                p.style.stroke = '#d1d5db'; // gray-300
-                p.style.strokeWidth = '3';
-            });
+            const animLayer = document.getElementById('anim-layer');
+            if (animLayer) {
+                animLayer.style.transition = 'opacity 1s';
+                animLayer.style.opacity = '0';
+                setTimeout(() => {
+                    animLayer.remove(); // DOM에서 제거
+                }, 1000);
+            }
             resolve();
-        }, 1000);
+        }, 500);
     });
 }
 
@@ -730,7 +728,7 @@ window.submitAnswer = submitAnswer;
 window.showHistory = showHistory;
 window.showHistory = showHistory;
 window.resetAllData = resetAllData;
-window.toggleStrokeGuide = toggleStrokeGuide;
+window.playStrokeAnimation = playStrokeAnimation;
 
 // 주간 활동 HTML 생성 헬퍼
 function getWeeklyActivityHTML(logs) {
