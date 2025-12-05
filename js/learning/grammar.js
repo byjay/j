@@ -1,163 +1,127 @@
 /**
- * grammar.js
- * Handles the UI and logic for the AI-powered Grammar Practice module.
+ * grammar.js - AI 문장 연습 모듈
  */
 
 const GrammarPractice = {
-    currentMode: 'transform', // 'transform' or 'builder'
-
-    init() {
-        this.renderUI();
-        this.bindEvents();
+    init: function () {
+        console.log('GrammarPractice initialized');
+        this.render();
     },
 
-    renderUI() {
+    render: function () {
         const container = document.getElementById('grammar-content');
         if (!container) return;
 
         container.innerHTML = `
-            <div class="grammar-header">
-                <button class="mode-btn active" data-mode="transform">🔄 문장 변환 (Conjugation)</button>
-                <button class="mode-btn" data-mode="builder">🧩 문장 만들기 (Builder)</button>
-            </div>
-            
-            <div id="grammar-workspace" class="grammar-workspace">
-                <!-- Dynamic Content Loaded Here -->
+            <div class="space-y-6">
+                <!-- 1. 문장 변환 연습 -->
+                <div class="bg-indigo-50 rounded-2xl p-5 border border-indigo-100">
+                    <h3 class="font-bold text-indigo-900 mb-3 flex items-center gap-2">
+                        <i class="fas fa-magic"></i> 문장 변환기
+                    </h3>
+                    <div class="space-y-3">
+                        <textarea id="grammar-input" 
+                            class="w-full p-4 rounded-xl border border-indigo-200 focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none resize-none text-gray-700"
+                            rows="3" 
+                            placeholder="예: 학교에 가다 (한국어 또는 일본어 입력)"></textarea>
+                        
+                        <div class="flex gap-2 overflow-x-auto pb-2 no-scrollbar">
+                            <button onclick="GrammarPractice.setInput('학교에 가다')" class="px-3 py-1 bg-white text-indigo-600 text-xs rounded-full border border-indigo-200 whitespace-nowrap">학교에 가다</button>
+                            <button onclick="GrammarPractice.setInput('밥을 먹다')" class="px-3 py-1 bg-white text-indigo-600 text-xs rounded-full border border-indigo-200 whitespace-nowrap">밥을 먹다</button>
+                            <button onclick="GrammarPractice.setInput('친구를 만나다')" class="px-3 py-1 bg-white text-indigo-600 text-xs rounded-full border border-indigo-200 whitespace-nowrap">친구를 만나다</button>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-2">
+                            <select id="target-form" class="p-3 rounded-xl border border-indigo-200 bg-white text-gray-700 font-medium">
+                                <option value="polite">정중형 (ます/です)</option>
+                                <option value="past">과거형 (た/だ)</option>
+                                <option value="negative">부정형 (ない)</option>
+                                <option value="te-form">연결형 (て)</option>
+                                <option value="potential">가능형 (れる)</option>
+                            </select>
+                            <button onclick="GrammarPractice.transform()" 
+                                class="bg-indigo-600 text-white font-bold rounded-xl shadow-lg hover:bg-indigo-700 transition active:scale-95 flex items-center justify-center gap-2">
+                                <span>변환하기</span> <i class="fas fa-arrow-right"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 결과 영역 -->
+                    <div id="grammar-result" class="hidden mt-4 bg-white rounded-xl p-4 border border-indigo-100 animate-fade-in">
+                        <div class="flex justify-between items-start mb-2">
+                            <span class="text-xs font-bold text-indigo-500 bg-indigo-50 px-2 py-1 rounded">결과</span>
+                            <button onclick="GrammarPractice.speak()" class="text-gray-400 hover:text-indigo-600">
+                                <i class="fas fa-volume-up text-lg"></i>
+                            </button>
+                        </div>
+                        <p id="result-text" class="text-xl font-bold text-gray-800 mb-1"></p>
+                        <p id="result-romaji" class="text-sm text-gray-500 mb-3 font-mono"></p>
+                        <div class="bg-gray-50 rounded-lg p-3">
+                            <p id="result-explanation" class="text-sm text-gray-600 leading-relaxed"></p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. 문장 만들기 퀴즈 (추후 구현) -->
+                <div class="bg-white rounded-2xl p-5 border-2 border-dashed border-gray-200 text-center opacity-75">
+                    <div class="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-3 text-gray-400">
+                        <i class="fas fa-puzzle-piece text-xl"></i>
+                    </div>
+                    <h3 class="font-bold text-gray-600">문장 조립 퀴즈</h3>
+                    <p class="text-xs text-gray-400 mt-1">준비 중입니다...</p>
+                </div>
             </div>
         `;
-        this.loadMode(this.currentMode);
     },
 
-    bindEvents() {
-        document.querySelectorAll('.mode-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
-                e.target.classList.add('active');
-                this.currentMode = e.target.dataset.mode;
-                this.loadMode(this.currentMode);
-            });
-        });
+    setInput: function (text) {
+        document.getElementById('grammar-input').value = text;
     },
 
-    loadMode(mode) {
-        const workspace = document.getElementById('grammar-workspace');
-        if (mode === 'transform') {
-            workspace.innerHTML = `
-                <div class="practice-card">
-                    <h3>문장 변환 연습</h3>
-                    <p>원하는 문장을 입력하고, 바꾸고 싶은 형태를 선택하세요.</p>
-                    
-                    <input type="text" id="input-sentence" placeholder="예: 밥을 먹다 (ご飯を食べる)" class="grammar-input">
-                    
-                    <div class="form-options">
-                        <label><input type="radio" name="target-form" value="polite" checked> 정중형 (입니다/합니다)</label>
-                        <label><input type="radio" name="target-form" value="negative"> 부정형 (아닙니다/안 합니다)</label>
-                        <label><input type="radio" name="target-form" value="past"> 과거형 (했습니다)</label>
-                        <label><input type="radio" name="target-form" value="question"> 의문형 (합니까?)</label>
-                        <label><input type="radio" name="target-form" value="te-form"> 연결형 (~하고/~해서)</label>
-                    </div>
+    transform: async function () {
+        const input = document.getElementById('grammar-input').value.trim();
+        const form = document.getElementById('target-form').value;
 
-                    <button id="btn-transform" class="action-btn">변환하기 (AI)</button>
-
-                    <div id="result-area" class="result-area hidden">
-                        <h4>결과:</h4>
-                        <p id="result-text" class="highlight-text"></p>
-                        <p id="result-romaji" class="sub-text"></p>
-                        <div id="result-explanation" class="explanation-box"></div>
-                    </div>
-                </div>
-            `;
-
-            document.getElementById('btn-transform').addEventListener('click', () => this.handleTransform());
-
-        } else if (mode === 'builder') {
-            workspace.innerHTML = `
-                <div class="practice-card">
-                    <h3>문장 만들기 연습</h3>
-                    <p>주어진 단어들을 사용해서 자연스러운 문장을 만들어보세요.</p>
-                    
-                    <div class="word-bank">
-                        <span class="word-tag">私 (나)</span>
-                        <span class="word-tag">学校 (학교)</span>
-                        <span class="word-tag">行く (가다)</span>
-                        <span class="word-tag">バス (버스)</span>
-                    </div>
-
-                    <input type="text" id="user-composition" placeholder="위 단어들을 사용해 문장을 만드세요" class="grammar-input">
-                    
-                    <button id="btn-check" class="action-btn">채점하기 (AI)</button>
-
-                    <div id="check-result-area" class="result-area hidden">
-                        <h4 id="check-status"></h4>
-                        <p id="check-feedback"></p>
-                    </div>
-                </div>
-            `;
-
-            document.getElementById('btn-check').addEventListener('click', () => this.handleCheck());
-        }
-    },
-
-    async handleTransform() {
-        const sentence = document.getElementById('input-sentence').value;
-        const targetForm = document.querySelector('input[name="target-form"]:checked').value;
-        const resultArea = document.getElementById('result-area');
-
-        if (!sentence) {
+        if (!input) {
             alert('문장을 입력해주세요!');
             return;
         }
 
-        // Show loading
-        resultArea.classList.remove('hidden');
-        document.getElementById('result-text').innerText = "AI가 생각 중입니다... 🤖";
-        document.getElementById('result-romaji').innerText = "";
-        document.getElementById('result-explanation').innerText = "";
+        // UI 로딩 상태
+        const btn = document.querySelector('button[onclick="GrammarPractice.transform()"]');
+        const originalText = btn.innerHTML;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> 변환 중...';
+        btn.disabled = true;
 
         try {
-            const data = await ApiClient.transformSentence(sentence, targetForm);
+            const data = await ApiClient.transformSentence(input, form);
 
-            document.getElementById('result-text').innerText = data.result;
-            document.getElementById('result-romaji').innerText = data.romaji || '';
-            document.getElementById('result-explanation').innerText = data.explanation || '';
-        } catch (err) {
-            document.getElementById('result-text').innerText = "오류가 발생했습니다. (API Key 확인 필요)";
-            console.error(err);
+            // 결과 표시
+            const resultDiv = document.getElementById('grammar-result');
+            document.getElementById('result-text').textContent = data.result;
+            document.getElementById('result-romaji').textContent = data.romaji;
+            document.getElementById('result-explanation').textContent = data.explanation;
+
+            resultDiv.classList.remove('hidden');
+
+            // TTS용 텍스트 저장
+            this.currentText = data.result;
+
+        } catch (error) {
+            console.error('Transform failed:', error);
+            alert('변환에 실패했습니다. 잠시 후 다시 시도해주세요.');
+        } finally {
+            btn.innerHTML = originalText;
+            btn.disabled = false;
         }
     },
 
-    async handleCheck() {
-        const words = ["私", "学校", "行く", "バス"]; // Hardcoded for demo, can be dynamic later
-        const userSentence = document.getElementById('user-composition').value;
-        const resultArea = document.getElementById('check-result-area');
+    speak: function () {
+        if (!this.currentText) return;
 
-        if (!userSentence) {
-            alert('문장을 만들어주세요!');
-            return;
-        }
-
-        resultArea.classList.remove('hidden');
-        document.getElementById('check-status').innerText = "채점 중... 📝";
-        document.getElementById('check-feedback').innerText = "";
-
-        try {
-            const data = await ApiClient.checkSentence(words, userSentence);
-
-            const statusElem = document.getElementById('check-status');
-            if (data.is_correct) {
-                statusElem.innerText = "✅ 정답입니다! 아주 자연스러워요.";
-                statusElem.style.color = "green";
-            } else {
-                statusElem.innerText = "⚠️ 조금 어색해요.";
-                statusElem.style.color = "orange";
-            }
-            document.getElementById('check-feedback').innerText = data.feedback;
-        } catch (err) {
-            document.getElementById('check-status').innerText = "오류 발생";
-            console.error(err);
-        }
+        const utterance = new SpeechSynthesisUtterance(this.currentText);
+        utterance.lang = 'ja-JP';
+        utterance.rate = 0.9;
+        window.speechSynthesis.speak(utterance);
     }
 };
-
-// Initialize when tab is active (logic to be added in main script)
-window.GrammarPractice = GrammarPractice;
