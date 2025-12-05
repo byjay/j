@@ -154,14 +154,19 @@ def transform_sentence(req: SentenceRequest):
         raise HTTPException(status_code=503, detail="AI Service Unavailable (Missing Key)")
     
     prompt = f"""
-    Transform the following Japanese sentence into the '{req.target_form}' form.
+    You are a Japanese language teacher.
+    Task:
+    1. If the input is a word (e.g., 'apple', 'eat'), create a natural, simple Japanese sentence using that word in the '{req.target_form}' form.
+    2. If the input is a sentence (e.g., 'I eat apple'), transform it into the '{req.target_form}' form.
+    
     Input: {req.sentence}
+    Target Form: {req.target_form}
     
     Output JSON format:
     {{
-        "result": "transformed sentence",
-        "romaji": "romaji reading",
-        "explanation": "brief grammatical explanation in Korean"
+        "result": "The Japanese sentence (in Kanji/Kana)",
+        "romaji": "The reading in Romaji",
+        "explanation": "A brief explanation in Korean (e.g., 'Past tense of eat')"
     }}
     """
     
