@@ -5,13 +5,13 @@ FROM python:3.9-slim
 WORKDIR /app
 
 # Copy the requirements file into the container
-COPY requirements.txt .
+COPY backend/requirements.txt .
 
 # Install any needed packages specified in requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy the rest of the application code
-COPY . .
+# Copy the backend code
+COPY backend/ backend/
 
 # Make port 8000 available to the world outside this container
 EXPOSE 8000
@@ -20,4 +20,4 @@ EXPOSE 8000
 ENV PORT="8000"
 
 # Run app.py when the container launches using uvicorn correctly for prod
-CMD ["sh", "-c", "uvicorn main:app --host 0.0.0.0 --port $PORT"]
+CMD ["sh", "-c", "uvicorn backend.main:app --host 0.0.0.0 --port $PORT"]
