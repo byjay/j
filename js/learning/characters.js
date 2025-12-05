@@ -68,7 +68,7 @@ function showCharacterGrid(type) {
     // 1. 상단 고정 헤더 (탭 + 퀴즈/통계 버튼) - 컴팩트 디자인
     const isHiragana = type === 'hiragana';
     const topHTML = `
-        <div class="sticky top-14 z-30 bg-gray-50/95 backdrop-blur-sm -mx-4 px-4 py-2 border-b border-gray-200 mb-2">
+        <div class="sticky top-12 z-30 bg-gray-50/95 backdrop-blur-sm -mx-4 px-4 py-2 border-b border-gray-200 mb-2">
             <div class="flex gap-1 mb-2">
                 <button onclick="showCharacterGrid('hiragana')" 
                     class="flex-1 py-2 rounded-lg font-bold text-xs transition-colors ${isHiragana ? 'bg-red-500 text-white shadow-sm' : 'bg-white text-gray-500 border border-gray-200'}">
@@ -159,7 +159,7 @@ function selectCharacter(idx) {
     }).join('');
 
     container.innerHTML = `
-        <div class="fixed top-14 bottom-0 left-0 right-0 z-50 bg-black/90 flex flex-col items-center justify-center p-3 animate-fade-in">
+        <div class="fixed top-12 bottom-0 left-0 right-0 z-50 bg-black/90 flex flex-col items-center justify-center p-3 animate-fade-in">
             <!-- 상단 컨트롤: 닫기 & 행 내비게이션 -->
             <div class="w-full max-w-sm flex justify-between items-center mb-3">
                 <div class="flex gap-1 bg-gray-800/50 p-1 rounded-lg border border-white/10">
@@ -351,7 +351,7 @@ async function playStrokeAnimation(char) {
         bgPaths.forEach(path => {
             path.style.fill = 'none';
             path.style.stroke = '#e5e7eb'; // gray-200 (연한 회색)
-            path.style.strokeWidth = '10'; // 두껍게
+            path.style.strokeWidth = '6'; // 두께 줄임 (10 -> 6)
             path.style.strokeLinecap = 'round';
             path.style.strokeLinejoin = 'round';
             path.style.opacity = '1';
@@ -404,9 +404,9 @@ function animateStrokes(paths) {
             path.style.strokeDashoffset = length;
             path.style.opacity = '1';
 
-            // 애니메이션 (천천히)
+            // 애니메이션 (빠르게)
             await new Promise(r => {
-                const duration = 1500; // 1.5초 (천천히)
+                const duration = 800; // 0.8초 (빠르게)
                 const start = performance.now();
 
                 function step(timestamp) {
@@ -427,14 +427,14 @@ function animateStrokes(paths) {
         setTimeout(() => {
             const animLayer = document.getElementById('anim-layer');
             if (animLayer) {
-                animLayer.style.transition = 'opacity 1s';
+                animLayer.style.transition = 'opacity 0.5s';
                 animLayer.style.opacity = '0';
                 setTimeout(() => {
                     animLayer.remove(); // DOM에서 제거
-                }, 1000);
+                }, 300);
             }
             resolve();
-        }, 500);
+        }, 200);
     });
 }
 
@@ -470,7 +470,7 @@ function showQuizModal() {
     const q = quizQuestions[currentQuestionIdx];
     const container = document.getElementById('character-study-container');
     container.innerHTML = `
-        <div class="fixed top-14 bottom-0 left-0 right-0 z-50 bg-white flex flex-col items-center justify-center p-4">
+        <div class="fixed top-12 bottom-0 left-0 right-0 z-50 bg-white flex flex-col items-center justify-center p-4">
             <div class="w-full max-w-sm mb-8">
                 <div class="flex justify-between items-center mb-2 text-gray-500 font-bold">
                     <span>문제 ${currentQuestionIdx + 1} / 10</span>
@@ -617,7 +617,7 @@ function showQuizResult() {
     }
 
     container.innerHTML = `
-        <div class="fixed top-14 bottom-0 left-0 right-0 z-50 bg-white flex flex-col items-center justify-center p-4 animate-fade-in">
+        <div class="fixed top-12 bottom-0 left-0 right-0 z-50 bg-white flex flex-col items-center justify-center p-4 animate-fade-in">
             ${celebrationHTML}
             <div class="text-6xl mb-4">${quizScore === 10 ? '🎉' : '🏆'}</div>
             <h2 class="text-3xl font-black text-gray-800 mb-2">퀴즈 종료!</h2>
@@ -680,7 +680,7 @@ function showHistory() {
     ` : '';
 
     container.innerHTML = `
-        <div class="fixed top-14 bottom-0 left-0 right-0 z-50 bg-gray-900/95 flex flex-col items-center justify-center p-4 text-white animate-fade-in">
+        <div class="fixed top-12 bottom-0 left-0 right-0 z-50 bg-gray-900/95 flex flex-col items-center justify-center p-4 text-white animate-fade-in">
             <div class="w-full max-w-md bg-gray-800 rounded-2xl overflow-hidden border border-gray-700 shadow-2xl p-6 text-center">
                 <h2 class="text-xl font-bold mb-4">📊 학습 리포트</h2>
                 <!-- 마스터 현황 -->
