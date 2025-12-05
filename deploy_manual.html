@@ -141,7 +141,66 @@
 
         <p style="margin-top: 15px;">🎉 <strong>설정 끝!</strong> 이제 약 10분~1시간 뒤부터 <code>jap.blogreet.com</code>으로 접속할 수
             있습니다.</p>
-    </div>
+        <div class="step">
+            <h2>5단계: 백엔드 배포 (Render - 무료 추천)</h2>
+            <p>이제 데이터 저장을 위한 <strong>백엔드 서버</strong>를 배포합니다. <strong>Render</strong>는 무료로 사용하기 가장 좋습니다.</p>
+            <ol>
+                <li><a href="https://render.com/" target="_blank">Render.com</a>에 접속하여 GitHub 아이디로 가입/로그인합니다.</li>
+                <li>우측 상단 <strong>New +</strong> 버튼을 누르고 <strong>Web Service</strong>를 선택합니다.</li>
+                <li><strong>Build and deploy from a Git repository</strong>를 선택하고 <strong>Next</strong>를 누릅니다.</li>
+                <li><strong>JAP_BONG</strong> 저장소를 찾아 <strong>Connect</strong> 버튼을 누릅니다.</li>
+                <li>설정 화면에서 다음 내용을 정확히 입력합니다:
+                    <ul>
+                        <li><strong>Name:</strong> <code>japbong-backend</code> (원하는 이름)</li>
+                        <li><strong>Root Directory:</strong> <code>fam/backend</code> <span
+                                style="color:red; font-weight:bold;">(매우 중요!)</span></li>
+                        <li><strong>Runtime:</strong> <code>Docker</code></li>
+                        <li><strong>Instance Type:</strong> <code>Free</code></li>
+                    </ul>
+                </li>
+                <li>아래로 내려서 <strong>Environment Variables</strong> 섹션의 <strong>Add Environment Variable</strong>을 누릅니다.
+                    <ul>
+                        <li><strong>Key:</strong> <code>PORT</code></li>
+                        <li><strong>Value:</strong> <code>8000</code></li>
+                    </ul>
+                </li>
+                <li>맨 아래 <strong>Create Web Service</strong> 버튼을 누릅니다.</li>
+                <li>배포가 완료되면(약 5분 소요), 좌측 상단에 있는 주소(예: <code>https://japbong-backend.onrender.com</code>)를 복사합니다.</li>
+            </ol>
+        </div>
+
+        <div class="step">
+            <h2>6단계: 프론트엔드와 백엔드 연결</h2>
+            <p>마지막으로, 웹사이트(프론트엔드)가 방금 만든 서버(백엔드)를 바라보도록 설정합니다.</p>
+            <ol>
+                <li>내 컴퓨터에서 <code>fam/js/api_client.js</code> 파일을 엽니다.</li>
+                <li>맨 윗부분의 <code>API_BASE_URL</code>을 수정합니다.
+                    <pre><code>const API_BASE_URL = "https://[복사한 Render 주소]/api";</code></pre>
+                    (예: <code>const API_BASE_URL = "https://japbong-backend.onrender.com/api";</code>)
+                </li>
+                <li>저장 후 터미널에서 다음 명령어로 GitHub에 올립니다.
+                    <pre><code>git add .
+git commit -m "Fix: Connect to Render Backend"
+git push</code></pre>
+                </li>
+                <li>이제 <code>jap.blogreet.com</code>에서 로그인을 시도해보세요!</li>
+            </ol>
+        </div>
+
+        <div class="step">
+            <h2>(대안) Railway 배포</h2>
+            <p>Render가 느리거나 마음에 안 들면 Railway를 쓸 수도 있습니다. (초기 무료, 이후 유료 가능성 있음)</p>
+            <ol>
+                <li><a href="https://railway.app/" target="_blank">Railway.app</a>에 로그인합니다.</li>
+                <li><strong>New Project</strong> -> <strong>Deploy from GitHub repo</strong> ->
+                    <strong>JAP_BONG</strong> 선택.</li>
+                <li>프로젝트 설정(Settings)에서 <strong>Root Directory</strong>를 <code>/fam/backend</code>로 수정합니다.</li>
+                <li>Variables 탭에서 <code>PORT</code> = <code>8000</code>을 추가합니다.</li>
+                <li>Settings -> Domains에서 도메인을 생성하고 주소를 복사합니다.</li>
+                <li>6단계와 동일하게 <code>api_client.js</code>에 주소를 넣고 git push 합니다.</li>
+            </ol>
+        </div>
+
 
 </body>
 
