@@ -114,7 +114,7 @@
         <div class="bg-white/80 backdrop-blur-sm p-8 rounded-3xl shadow-2xl w-full max-w-md border border-white/50">
             <div class="flex items-center justify-between">
                 <h1 onclick="showTab('home')"
-                    class="text-xl font-black tracking-tighter text-red-600 flex items-center gap-2 cursor-pointer hover:opacity-80 transition-opacity">
+                    class="text-2xl font-black tracking-tighter text-red-600 flex items-center gap-2 cursor-pointer hover:opacity-80 transition-opacity whitespace-nowrap">
                     <span
                         class="bg-red-600 text-white w-8 h-8 rounded-lg flex items-center justify-center text-lg shadow-sm">JP</span>
                     JAP-BONG
@@ -174,6 +174,10 @@
                     <h1 class="text-base font-bold text-gray-900 truncate whitespace-nowrap">JAP-BONG일본어</h1>
                 </div>
                 <div class="flex items-center space-x-1.5 flex-shrink-0 ml-2">
+                    <button id="header-install-btn" onclick="triggerInstallPrompt()"
+                        class="hidden text-gray-400 hover:text-blue-500 p-1.5 animate-pulse">
+                        <i class="fas fa-download text-sm"></i>
+                    </button>
                     <div class="flex items-center bg-gray-100 rounded-full px-2 py-0.5 max-w-[120px]">
                         <span id="current-user-avatar" class="mr-1.5 text-xs flex-shrink-0"></span>
                         <span id="current-user-name" class="text-xs font-bold text-gray-700 truncate"></span>
@@ -673,6 +677,53 @@
             </div>
         </div>
     </div>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <nav id="bottom-nav" class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 pb-safe z-50 hidden">
+        <div class="flex justify-around items-center h-16 max-w-3xl mx-auto px-2">
+            <button onclick="showTab('home')"
+                class="nav-tab active flex-1 flex flex-col items-center justify-center py-1 text-gray-400 hover:text-red-600 transition-colors group">
+                <div
+                    class="w-12 h-8 flex items-center justify-center rounded-full group-hover:bg-red-50 transition-colors mb-0.5">
+                    <i class="fas fa-home text-xl mb-0.5"></i>
+                </div>
+                <span class="text-[10px] font-bold">홈</span>
+            </button>
+            <button onclick="showTab('fukuoka')"
+                class="nav-tab flex-1 flex flex-col items-center justify-center py-1 text-gray-400 hover:text-blue-600 transition-colors group">
+                <div
+                    class="w-12 h-8 flex items-center justify-center rounded-full group-hover:bg-blue-50 transition-colors mb-0.5">
+                    <i class="fas fa-plane-departure text-xl mb-0.5"></i>
+                </div>
+                <span class="text-[10px] font-bold">여행</span>
+            </button>
+            <button onclick="showTab('conversation')"
+                class="nav-tab flex-1 flex flex-col items-center justify-center py-1 text-gray-400 hover:text-purple-600 transition-colors group">
+                <div
+                    class="w-12 h-8 flex items-center justify-center rounded-full group-hover:bg-purple-50 transition-colors mb-0.5">
+                    <i class="fas fa-comments text-xl mb-0.5"></i>
+                </div>
+                <span class="text-[10px] font-bold">회화</span>
+            </button>
+            <button onclick="showTab('vocabulary')"
+                class="nav-tab flex-1 flex flex-col items-center justify-center py-1 text-gray-400 hover:text-green-600 transition-colors group">
+                <div
+                    class="w-12 h-8 flex items-center justify-center rounded-full group-hover:bg-green-50 transition-colors mb-0.5">
+                    <i class="fas fa-book text-xl mb-0.5"></i>
+                </div>
+                <span class="text-[10px] font-bold">단어</span>
+            </button>
+            <button onclick="showTab('characters')"
+                class="nav-tab flex-1 flex flex-col items-center justify-center py-1 text-gray-400 hover:text-yellow-600 transition-colors group">
+                <div
+                    class="w-12 h-8 flex items-center justify-center rounded-full group-hover:bg-yellow-50 transition-colors mb-0.5">
+                    <i class="fas fa-font text-xl mb-0.5"></i>
+                </div>
+                <span class="text-[10px] font-bold">글자</span>
+            </button>
+        </div>
+    </nav>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="js/auth.js"></script>

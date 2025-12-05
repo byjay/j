@@ -183,6 +183,10 @@ function initPWAInstall() {
         deferredPrompt = e;
         // 설치 버튼 표시
         showInstallPromotion();
+
+        // 헤더 버튼 표시
+        const headerBtn = document.getElementById('header-install-btn');
+        if (headerBtn) headerBtn.classList.remove('hidden');
     });
 
     // 3. iOS 감지 및 안내 (beforeinstallprompt 미지원)
@@ -218,7 +222,10 @@ function showInstallPromotion() {
 
 // 설치 프롬프트 트리거
 function triggerInstallPrompt() {
-    if (!deferredPrompt) return;
+    if (!deferredPrompt) {
+        alert('앱이 이미 설치되어 있거나, 현재 브라우저에서 설치를 지원하지 않습니다.\n(iOS의 경우 사파리에서 "홈 화면에 추가"를 해주세요)');
+        return;
+    }
 
     // 프롬프트 표시
     deferredPrompt.prompt();

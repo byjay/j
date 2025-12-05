@@ -1,383 +1,407 @@
-
 function initFukuokaTrip() {
     // ==========================================================================
     //  ✨ HIGH FIDELITY DATABASE: FUKUOKA (CLONED FROM GUIDE)
     // ==========================================================================
     const POI_DATABASE = [
-        // --- Day 1: Tenjin & Daimyo ---
+        // Day 1: Arrival & City Tour
         {
-            "id": "fuk_airport",
-            "name": "후쿠오카 공항 (FUK)",
-            "lat": 33.5859,
-            "lng": 130.4506,
-            "type": "transport",
-            "region": "hakata",
-            "rating": 4.5,
-            "desc": "도심에서 가장 가까운 공항.",
-            "photos": ["images/travel/fukuoka/fuk_airport.jpg"],
-            "details": {
-                "info": "하카타역까지 지하철로 5분. 국제선 터미널에서 셔틀버스 이용.",
-                "transport": "지하철 공항선"
+            id: "fukuoka_airport",
+            name: "후쿠오카 공항",
+            lat: 33.5859,
+            lng: 130.4501,
+            type: "transport",
+            region: "hakata",
+            rating: 4.0,
+            desc: "후쿠오카의 관문. 시내와 매우 가까워 이동이 편리합니다.",
+            photos: ["https://images.unsplash.com/photo-1570697767926-9e66f1e3d970?w=800"],
+            details: {
+                info: "국제선 터미널에서 하카타역까지 버스나 지하철로 약 15분 소요됩니다.",
+                transport: "지하철/버스",
+                tips: "산큐패스를 미리 구매했다면 공항 카운터에서 도장을 받으세요."
             }
         },
         {
-            "id": "shinshin_ramen",
-            "name": "신신 라멘 텐진 본점",
-            "lat": 33.5890,
-            "lng": 130.3960,
-            "type": "food",
-            "region": "tenjin",
-            "rating": 4.5,
-            "desc": "동방신기 등 연예인들이 사랑한 라멘 맛집.",
-            "photos": ["images/travel/fukuoka/shinshin_ramen.jpg"],
-            "details": {
-                "info": "진하지만 잡내 없는 돈코츠 국물과 얇은 면발이 특징. 벽면 가득한 싸인이 인상적.",
-                "menu": "하카타 신신 라멘 760엔, 볶음밥 세트",
-                "tips": "식사 시간에는 대기 줄이 깁니다. 오픈런 추천.",
-                "transport": "텐진역 도보 5분"
-            },
-            "reviews": [
-                { "user": "RamenLover", "date": "2024.01", "text": "국물이 정말 진국이고 면이 얇아서 호로록 넘어가요. 인생 라멘!" },
-                { "user": "Traveler_K", "date": "2023.12", "text": "웨이팅이 있었지만 기다릴 가치가 충분했습니다. 볶음밥도 꼭 드세요." }
-            ]
-        },
-        {
-            "id": "daimyo_street",
-            "name": "다이묘 거리",
-            "lat": 33.5883,
-            "lng": 130.3937,
-            "type": "shop",
-            "region": "tenjin",
-            "rating": 4.6,
-            "desc": "후쿠오카의 가로수길. 힙한 편집샵과 카페.",
-            "photos": ["images/travel/fukuoka/daimyo_street.jpg"],
-            "details": {
-                "info": "슈프림, 베이프 등 스트릿 브랜드와 예쁜 카페가 모여있는 거리.",
-                "transport": "텐진역 도보 7분"
+            id: "oriental_hotel",
+            name: "오리엔탈 호텔 후쿠오카",
+            lat: 33.5900,
+            lng: 130.4200, // Approx
+            type: "hotel",
+            region: "hakata",
+            rating: 4.5,
+            desc: "하카타역 치쿠시구치 도보 1분 거리의 위치 최강 호텔.",
+            photos: ["https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800"], // Placeholder hotel image
+            details: {
+                info: "체크인 전/후 짐 보관 서비스가 훌륭합니다. 로비가 넓고 쾌적해요.",
+                transport: "하카타역 도보 1분",
+                tips: "조식이 맛있기로 유명하니 꼭 신청하세요."
             }
         },
         {
-            "id": "cafe_del_sol",
-            "name": "카페 델 솔",
-            "lat": 33.5898,
-            "lng": 130.3966,
-            "type": "food",
-            "region": "tenjin",
-            "rating": 4.4,
-            "desc": "폭신폭신한 수플레 팬케이크 맛집.",
-            "photos": ["images/travel/fukuoka/cafe_del_sol.jpg"],
-            "details": {
-                "info": "입안에서 사르르 녹는 식감의 팬케이크. 라떼아트도 귀여움.",
-                "menu": "수플레 팬케이크 1,100엔~",
-                "transport": "다이묘 거리 내"
+            id: "shinshin_ramen",
+            name: "하카타 라멘 신신",
+            lat: 33.5910,
+            lng: 130.4210, // Approx
+            type: "food",
+            region: "hakata",
+            rating: 4.6,
+            desc: "동방신기 등 유명 연예인들도 줄 서서 먹는다는 돈코츠 라멘 맛집.",
+            photos: ["https://images.unsplash.com/photo-1580442151529-343f2f6e0e27?w=800"],
+            details: {
+                info: "진하지만 잡내 없는 깔끔한 국물이 특징입니다. 교자 세트를 추천해요.",
+                transport: "하카타역 데이토스 2층",
+                tips: "식사 시간에는 대기가 기니 오픈런을 추천합니다."
             }
         },
         {
-            "id": "ohori_park",
-            "name": "오호리 공원",
-            "lat": 33.5860,
-            "lng": 130.3764,
-            "type": "spot",
-            "region": "tenjin",
-            "rating": 4.8,
-            "desc": "도심 속 거대한 호수 공원.",
-            "photos": ["images/travel/fukuoka/ohori_park.jpg"],
-            "details": {
-                "info": "현지인들의 휴식처. 스타벅스 컨셉스토어에서 호수 뷰를 즐기세요.",
-                "transport": "오호리공원역"
+            id: "ohori_park",
+            name: "오호리 공원",
+            lat: 33.5860,
+            lng: 130.3764,
+            type: "spot",
+            region: "central",
+            rating: 4.7,
+            desc: "후쿠오카 시민들의 휴식처. 큰 호수를 끼고 산책하기 좋습니다.",
+            photos: ["https://images.unsplash.com/photo-1624672666964-e49d7a4c4d58?w=800"],
+            details: {
+                info: "호수 가운데 섬들이 다리로 연결되어 있어 건너볼 수 있습니다. 스타벅스 컨셉스토어도 있어요.",
+                transport: "지하철 오호리코엔역",
+                tips: "해 질 녘에 방문하면 호수에 비친 노을이 정말 아름답습니다."
             }
         },
         {
-            "id": "motsunabe_rakutenchi",
-            "name": "모츠나베 라쿠텐치 텐진 본점",
-            "lat": 33.5915,
-            "lng": 130.4025,
-            "type": "food",
-            "region": "tenjin",
-            "rating": 4.5,
-            "desc": "산더미처럼 쌓인 부추가 특징인 모츠나베.",
-            "photos": ["images/travel/fukuoka/motsunabe_rakutenchi.jpg"],
-            "details": {
-                "info": "간장 베이스의 깔끔한 육수. 부추와 양배추가 푸짐함.",
-                "menu": "모츠나베 1인 1,090엔~",
-                "tips": "마무리는 짬뽕면 필수!",
-                "transport": "텐진역 도보 3분"
+            id: "momochi_seaside",
+            name: "모모치 해변 공원",
+            lat: 33.5930,
+            lng: 130.3515,
+            type: "spot",
+            region: "bay",
+            rating: 4.5,
+            desc: "이국적인 분위기의 인공 해변. 후쿠오카 타워 바로 앞입니다.",
+            photos: ["https://images.unsplash.com/photo-1605270960538-420032c2569f?w=800"],
+            details: {
+                info: "유럽풍 건물인 마리존 예식장이 있어 사진 명소로 유명합니다.",
+                transport: "버스 (후쿠오카 타워 남구 하차)",
+                tips: "해변 모래사장에서 후쿠오카 타워를 배경으로 사진을 찍어보세요."
             }
         },
         {
-            "id": "don_quijote",
-            "name": "돈키호테 텐진 본점",
-            "lat": 33.5890,
-            "lng": 130.4000,
-            "type": "shop",
-            "region": "tenjin",
-            "rating": 4.3,
-            "desc": "일본 여행 필수 쇼핑 코스.",
-            "photos": ["images/travel/fukuoka/don_quijote.jpg"],
-            "details": {
-                "info": "화장품, 의약품, 간식 등 모든 것이 있는 잡화점. 24시간 영업.",
-                "tips": "할인 쿠폰과 면세 혜택 꼭 챙기세요.",
-                "transport": "텐진역 도보 5분"
-            }
-        },
-
-        // --- Day 2: Yufuin & Hakata ---
-        {
-            "id": "hakata_station",
-            "name": "하카타역 (출발)",
-            "lat": 33.5902,
-            "lng": 130.4207,
-            "type": "transport",
-            "region": "hakata",
-            "rating": 4.7,
-            "desc": "유후인노모리 열차 또는 버스 탑승.",
-            "photos": ["images/travel/fukuoka/hakata_station.jpg"],
-            "details": {
-                "info": "크로와상 맛집 '일 포르노 델 미뇽'에서 간식 사기.",
-                "transport": "JR 하카타역"
+            id: "fukuoka_tower",
+            name: "후쿠오카 타워",
+            lat: 33.5932,
+            lng: 130.3515,
+            type: "spot",
+            region: "bay",
+            rating: 4.4,
+            desc: "후쿠오카의 랜드마크. 234m 높이에서 시내와 바다를 조망할 수 있습니다.",
+            photos: ["https://images.unsplash.com/photo-1558862107-d49ef2a04d72?w=800"],
+            details: {
+                info: "계절마다 바뀌는 일루미네이션이 볼거리입니다. 외국인 여권 제시 시 할인됩니다.",
+                transport: "버스 (후쿠오카 타워 남구 하차)",
+                tips: "야경도 멋지지만, 맑은 날 낮에 보는 바다 뷰도 환상적입니다."
             }
         },
         {
-            "id": "yufuin_yunotsubo",
-            "name": "유노츠보 거리",
-            "lat": 33.2650,
-            "lng": 131.3600,
-            "type": "spot",
-            "region": "nearby",
-            "rating": 4.6,
-            "desc": "아기자기한 상점과 먹거리가 가득한 거리.",
-            "photos": ["images/travel/fukuoka/yufuin_yunotsubo.jpg"],
-            "details": {
-                "info": "금상고로케, 스누피 차야, 미피 베이커리 등 구경거리 천국.",
-                "transport": "유후인역 도보 10분"
+            id: "motsunabe_rakutenchi",
+            name: "모츠나베 라쿠텐치",
+            lat: 33.5920,
+            lng: 130.4000, // Approx
+            type: "food",
+            region: "tenjin",
+            rating: 4.3,
+            desc: "후쿠오카 소울푸드 모츠나베(곱창전골)의 원조격 맛집.",
+            photos: ["https://images.unsplash.com/photo-1569058242253-92a9c755a0ec?w=800"],
+            details: {
+                info: "산더미처럼 쌓아주는 부추가 인상적입니다. 짬뽕면 사리는 필수!",
+                transport: "텐진역 도보 5분",
+                tips: "국물이 졸아들면 육수 추가를 요청하세요."
             }
         },
         {
-            "id": "yufumabushi_shin",
-            "name": "유후마부시 신 (긴린코점)",
-            "lat": 33.2672,
-            "lng": 131.3678,
-            "type": "food",
-            "region": "nearby",
-            "rating": 4.5,
-            "desc": "유후인 명물 뚝배기 덮밥.",
-            "photos": ["images/travel/fukuoka/yufumabushi_shin.jpg"],
-            "details": {
-                "info": "소고기(분고규), 장어, 닭고기 덮밥. 세 가지 방법으로 즐기는 맛.",
-                "menu": "소고기 마부시 2,850엔~",
-                "tips": "웨이팅이 기니 오픈 시간 맞춰 가세요.",
-                "transport": "긴린코 호수 근처"
-            }
-        },
-        {
-            "id": "kinrin_lake",
-            "name": "긴린코 호수",
-            "lat": 33.2660,
-            "lng": 131.3680,
-            "type": "spot",
-            "region": "nearby",
-            "rating": 4.7,
-            "desc": "물안개가 피어오르는 신비로운 호수.",
-            "photos": ["images/travel/fukuoka/kinrin_lake.jpg"],
-            "details": {
-                "info": "온천수와 지하수가 만나 겨울 아침 물안개가 장관.",
-                "transport": "유노츠보 거리 끝"
-            }
-        },
-        {
-            "id": "yufuin_onsen",
-            "name": "유후인 온천 (무소엔)",
-            "lat": 33.2580,
-            "lng": 131.3500,
-            "type": "spot",
-            "region": "nearby",
-            "rating": 4.8,
-            "desc": "유후다케 산이 보이는 노천탕.",
-            "photos": ["images/travel/fukuoka/yufuin_onsen.jpg"],
-            "details": {
-                "info": "당일 온천 가능. 탁 트인 전망이 일품.",
-                "transport": "유후인역 택시 5분"
-            }
-        },
-        {
-            "id": "hakata_issou",
-            "name": "하카타 잇소우 본점",
-            "lat": 33.5900,
-            "lng": 130.4250,
-            "type": "food",
-            "region": "hakata",
-            "rating": 4.6,
-            "desc": "'돈코츠 카푸치노'라 불리는 거품 가득 진한 라멘.",
-            "photos": ["images/travel/fukuoka/hakata_issou.jpg"],
-            "details": {
-                "info": "현지인 줄이 가장 긴 라멘집 중 하나. 크리미하고 진한 국물.",
-                "menu": "라멘 800엔~",
-                "transport": "하카타역 도보 10분"
+            id: "nakasu_yatai",
+            name: "나카스 포장마차 거리",
+            lat: 33.5915,
+            lng: 130.4085,
+            type: "spot",
+            region: "nakasu",
+            rating: 4.0,
+            desc: "강변을 따라 늘어선 포장마차들이 낭만적인 분위기를 자아냅니다.",
+            photos: ["https://images.unsplash.com/photo-1576675784201-0e142b423952?w=800"],
+            details: {
+                info: "라멘, 오뎅, 꼬치 등 다양한 안주를 팝니다. 현지인들과 어울리기 좋아요.",
+                transport: "나카스카와바타역 도보 7분",
+                tips: "가격이 조금 비쌀 수 있으니 메뉴판 가격을 잘 확인하세요. 분위기만 즐겨도 좋습니다."
             }
         },
 
-        // --- Day 3: Hakata & Nakasu ---
+        // Day 2: Yufuin Bus Tour
         {
-            "id": "sumiyoshi_shrine",
-            "name": "스미요시 신사",
-            "lat": 33.5860,
-            "lng": 130.4150,
-            "type": "spot",
-            "region": "hakata",
-            "rating": 4.4,
-            "desc": "규슈 최고의 역사를 자랑하는 신사.",
-            "photos": ["images/travel/fukuoka/sumiyoshi_shrine.jpg"],
-            "details": {
-                "info": "도심 속 고즈넉한 산책 코스. 바다의 신을 모심.",
-                "transport": "하카타역 도보 15분"
+            id: "yufuin_tour_start",
+            name: "유후인 버스투어 집결",
+            lat: 33.5900,
+            lng: 130.4200,
+            type: "transport",
+            region: "hakata",
+            rating: 0,
+            desc: "하카타역 오리엔탈 호텔 1층 로손 편의점 앞 미팅.",
+            photos: ["https://images.unsplash.com/photo-1540573133985-87b6da6dce60?w=800"],
+            details: {
+                info: "가이드님이 깃발을 들고 계십니다. 늦지 않게 도착해주세요.",
+                transport: "하카타역 치쿠시구치",
+                tips: "버스 이동 시간이 기니 멀미약을 챙기면 좋습니다."
             }
         },
         {
-            "id": "udon_taira",
-            "name": "우동 타이라",
-            "lat": 33.5880,
-            "lng": 130.4180,
-            "type": "food",
-            "region": "hakata",
-            "rating": 4.5,
-            "desc": "오픈 전부터 줄 서는 고기 우엉튀김 우동.",
-            "photos": ["images/travel/fukuoka/udon_taira.jpg"],
-            "details": {
-                "info": "직접 뽑는 쫄깃한 면발. 고기(니쿠)와 우엉(고보) 토핑 추천.",
-                "menu": "니쿠고보 우동 700엔~",
-                "transport": "캐널시티 근처"
+            id: "dazaifu",
+            name: "다자이후 텐만구",
+            lat: 33.5215,
+            lng: 130.5349,
+            type: "spot",
+            region: "suburb",
+            rating: 4.6,
+            desc: "학문의 신을 모시는 신사. 합격 기원 명소로 유명합니다.",
+            photos: ["https://images.unsplash.com/photo-1565597989343-424472289457?w=800"],
+            details: {
+                info: "입구의 '소 동상'을 만지면 머리가 좋아진다는 전설이 있습니다.",
+                transport: "투어 버스 이용",
+                tips: "참배길(오모테산도)에서 파는 '우메가에모치(매화떡)'를 꼭 드셔보세요."
             }
         },
         {
-            "id": "canal_city",
-            "name": "캐널시티 하카타",
-            "lat": 33.5897,
-            "lng": 130.4108,
-            "type": "shop",
-            "region": "hakata",
-            "rating": 4.6,
-            "desc": "운하가 흐르는 복합 쇼핑몰.",
-            "photos": ["images/travel/fukuoka/canal_city.jpg"],
-            "details": {
-                "info": "매시 정각 분수쇼 관람. 프랑프랑, 디즈니스토어 쇼핑.",
-                "transport": "하카타역/텐진역 도보 10분"
+            id: "yufuin_village",
+            name: "유후인 플로럴 빌리지",
+            lat: 33.2650,
+            lng: 131.3600,
+            type: "spot",
+            region: "suburb",
+            rating: 4.4,
+            desc: "동화 속 마을처럼 꾸며진 아기자기한 상점가.",
+            photos: ["https://images.unsplash.com/photo-1549643276-fbc2bd5f5f56?w=800"],
+            details: {
+                info: "지브리 샵, 동물원 등 볼거리가 많습니다. 사진 찍기 정말 예뻐요.",
+                transport: "투어 버스 이용",
+                tips: "염소와 다람쥐 등 귀여운 동물들에게 먹이 주기 체험도 가능합니다."
             }
         },
         {
-            "id": "kushida_shrine",
-            "name": "쿠시다 신사",
-            "lat": 33.5930,
-            "lng": 130.4110,
-            "type": "spot",
-            "region": "hakata",
-            "rating": 4.5,
-            "desc": "하카타의 수호신을 모시는 신사.",
-            "photos": ["images/travel/fukuoka/kushida_shrine.jpg"],
-            "details": {
-                "info": "명성황후 시해 칼이 보관된 곳으로도 알려짐(비공개). 거대한 가마(야마카사) 전시.",
-                "transport": "캐널시티 연결"
+            id: "kinrin_lake",
+            name: "긴린코 호수",
+            lat: 33.2660,
+            lng: 131.3650,
+            type: "spot",
+            region: "suburb",
+            rating: 4.5,
+            desc: "바닥에서 온천수와 지하수가 솟아나 안개가 자욱한 신비로운 호수.",
+            photos: ["https://images.unsplash.com/photo-1492571350019-22de08371fd3?w=800"],
+            details: {
+                info: "호수 물고기 비늘이 석양에 금빛으로 빛난다고 해서 '긴린코'라 불립니다.",
+                transport: "유후인역에서 도보 20분",
+                tips: "이른 아침 물안개가 피어오를 때가 가장 아름답습니다."
             }
         },
         {
-            "id": "nakasu_river",
-            "name": "나카스 강변 산책",
-            "lat": 33.5920,
-            "lng": 130.4080,
-            "type": "spot",
-            "region": "nakasu",
-            "rating": 4.7,
-            "desc": "네온사인이 비치는 아름다운 야경.",
-            "photos": ["images/travel/fukuoka/nakasu_river.jpg"],
-            "details": {
-                "info": "강변을 따라 걸으며 버스킹 구경. 리버크루즈 탑승도 추천.",
-                "transport": "나카스카와바타역"
+            id: "yufumabushi_shin",
+            name: "유후마부시 신",
+            lat: 33.2640,
+            lng: 131.3580,
+            type: "food",
+            region: "suburb",
+            rating: 4.7,
+            desc: "유후인 최고의 맛집. 소고기, 장어, 닭고기 덮밥(마부시) 전문점.",
+            photos: ["https://images.unsplash.com/photo-1553621042-f6e147245754?w=800"],
+            details: {
+                info: "뚝배기에 나오는 덮밥을 세 가지 방법(그냥, 양념, 육수)으로 즐겨보세요.",
+                transport: "긴린코 호수 근처 본점",
+                tips: "웨이팅이 엄청나니 투어 자유시간 시작하자마자 달려가세요!"
             }
         },
         {
-            "id": "ichiran_hq",
-            "name": "이치란 라멘 본점",
-            "lat": 33.5930,
-            "lng": 130.4040,
-            "type": "food",
-            "region": "nakasu",
-            "rating": 4.6,
-            "desc": "건물 전체가 라멘집인 이치란의 총본산.",
-            "photos": ["images/travel/fukuoka/ichiran_head.jpg"],
-            "details": {
-                "info": "24시간 영업. 독서실 좌석. 본점 한정 '가마다레 돈코츠' 라멘.",
-                "transport": "나카스카와바타역"
-            }
-        },
-        {
-            "id": "nakasu_yatai",
-            "name": "나카스 야타이 거리",
-            "lat": 33.5910,
-            "lng": 130.4080,
-            "type": "food",
-            "region": "nakasu",
-            "rating": 4.3,
-            "desc": "후쿠오카의 밤을 책임지는 포장마차 거리.",
-            "photos": ["images/travel/fukuoka/yatai_nakasu.jpg"],
-            "details": {
-                "info": "강변 낭만. 오뎅, 꼬치, 라멘. 현금 준비 필수.",
-                "transport": "나카스 강변"
+            id: "kamado_jigoku",
+            name: "벳푸 가마도 지옥",
+            lat: 33.3150,
+            lng: 131.4850,
+            type: "spot",
+            region: "suburb",
+            rating: 4.3,
+            desc: "펄펄 끓는 온천수가 솥(가마도)을 닮았다고 해서 붙여진 이름.",
+            photos: ["https://images.unsplash.com/photo-1573126617899-41f1dff52502?w=800"],
+            details: {
+                info: "담배 연기를 불어넣으면 수증기가 폭발하는 쇼가 재미있습니다.",
+                transport: "투어 버스 이용",
+                tips: "온천 달걀과 라무네(사이다)는 필수 코스! 족욕 체험도 잊지 마세요."
             }
         },
 
-        // --- Day 4: Return ---
+        // Day 3: Hakata & Tenjin Shopping
         {
-            "id": "tanya_hakata",
-            "name": "탄야 하카타",
-            "lat": 33.5898,
-            "lng": 130.4207,
-            "type": "food",
-            "region": "hakata",
-            "rating": 4.4,
-            "desc": "하카타역 지하 1번가의 가성비 우설 조식.",
-            "photos": ["images/travel/fukuoka/tanya_hakata.jpg"],
-            "details": {
-                "info": "아침 한정 우설 정식이 인기. 얇게 썬 우설 구이.",
-                "menu": "우설 조식 정식 700엔~",
-                "transport": "하카타역 지하 1번가"
+            id: "sumiyoshi_shrine",
+            name: "스미요시 신사",
+            lat: 33.5865,
+            lng: 130.4135,
+            type: "spot",
+            region: "hakata",
+            rating: 4.2,
+            desc: "규슈 전체 스미요시 신사의 시조. 고즈넉한 산책 명소.",
+            photos: ["https://images.unsplash.com/photo-1604928141064-207cea6f571f?w=800"],
+            details: {
+                info: "도심 속에 있지만 숲이 우거져 있어 조용하고 평화롭습니다.",
+                transport: "하카타역 도보 10분",
+                tips: "아침 산책 코스로 추천합니다. 붉은색 본전 건물이 인상적이에요."
             }
         },
         {
-            "id": "amu_plaza",
-            "name": "아뮤플라자 하카타",
-            "lat": 33.5900,
-            "lng": 130.4200,
-            "type": "shop",
-            "region": "hakata",
-            "rating": 4.6,
-            "desc": "마지막 쇼핑을 위한 대형 쇼핑몰.",
-            "photos": ["images/travel/fukuoka/hakata_station.jpg"],
-            "details": {
-                "info": "도큐핸즈, 포켓몬센터, 무인양품. 옥상 정원 전망대.",
-                "transport": "하카타역 직결"
+            id: "canal_city",
+            name: "캐널시티 하카타",
+            lat: 33.5895,
+            lng: 130.4110,
+            type: "spot",
+            region: "hakata",
+            rating: 4.5,
+            desc: "운하가 흐르는 거대한 복합 쇼핑몰. 쇼핑과 엔터테인먼트의 천국.",
+            photos: ["https://images.unsplash.com/photo-1559067515-bf7d799b6d4d?w=800"],
+            details: {
+                info: "매 정시마다 열리는 분수쇼가 하이라이트입니다. 프랑프랑, 디즈니스토어 등이 있어요.",
+                transport: "하카타역/텐진역 도보 10-15분",
+                tips: "밤에는 분수쇼에 3D 매핑 영상이 더해져 더욱 화려합니다."
             }
         },
         {
-            "id": "hakata_bento",
-            "name": "에키벤 (도시락)",
-            "lat": 33.5902,
-            "lng": 130.4207,
-            "type": "food",
-            "region": "hakata",
-            "rating": 4.5,
-            "desc": "기차/비행기 여행의 묘미.",
-            "photos": ["images/travel/fukuoka/hakata_bento.jpg"],
-            "details": {
-                "info": "하카타역 내 '에키벤토'에서 다양한 도시락 구매 가능.",
-                "transport": "하카타역"
+            id: "beef_tongue_lunch",
+            name: "우설 구이 정식",
+            lat: 33.5895,
+            lng: 130.4110, // In Canal City
+            type: "food",
+            region: "hakata",
+            rating: 4.4,
+            desc: "쫄깃하고 고소한 소 혀 구이. 후쿠오카의 별미.",
+            photos: ["https://images.unsplash.com/photo-1594040291635-a88bd4854cd0?w=800"],
+            details: {
+                info: "얇게 썬 우설을 숯불에 구워 파와 함께 먹으면 꿀맛입니다.",
+                transport: "캐널시티 내 식당가",
+                tips: "밥 리필이 가능한 곳이 많으니 든든하게 드세요."
+            }
+        },
+        {
+            id: "kushida_shrine",
+            name: "구시다 신사",
+            lat: 33.5930,
+            lng: 130.4105,
+            type: "spot",
+            region: "hakata",
+            rating: 4.1,
+            desc: "하카타의 수호신을 모시는 신사. 명성황후 시해 칼이 보관된 곳으로도 알려져 있습니다.",
+            photos: ["https://images.unsplash.com/photo-1599579178553-527395634543?w=800"],
+            details: {
+                info: "7월 마츠리(축제) 때 사용되는 거대한 가마(야마카사)가 전시되어 있습니다.",
+                transport: "캐널시티 바로 옆",
+                tips: "역사적인 의미를 되새기며 둘러보시길 권합니다."
+            }
+        },
+        {
+            id: "tenjin_underground",
+            name: "텐진 지하상가",
+            lat: 33.5915,
+            lng: 130.4010,
+            type: "spot",
+            region: "tenjin",
+            rating: 4.3,
+            desc: "19세기 유럽 거리를 모티브로 한 규슈 최대의 지하 쇼핑가.",
+            photos: ["https://images.unsplash.com/photo-1519810755548-39cd217da494?w=800"],
+            details: {
+                info: "패션, 잡화, 카페 등 150여 개의 점포가 길게 늘어서 있습니다.",
+                transport: "지하철 텐진역 직결",
+                tips: "유명한 '베이크 치즈 타르트'나 '링고 애플파이'를 간식으로 드셔보세요."
+            }
+        },
+        {
+            id: "yakiniku_dinner",
+            name: "야키니쿠 타베호다이",
+            lat: 33.5915,
+            lng: 130.4010, // Near Tenjin
+            type: "food",
+            region: "tenjin",
+            rating: 4.6,
+            desc: "일본식 숯불 고기 구이 무한리필(타베호다이)로 배터지게!",
+            photos: ["https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=800"],
+            details: {
+                info: "와규를 포함한 다양한 부위를 마음껏 즐길 수 있습니다. 노미호다이(음료 무제한)도 추가 가능.",
+                transport: "텐진역 주변",
+                tips: "인기 맛집은 예약 필수입니다. 우설부터 시작해서 갈비, 로스 순으로 드세요."
+            }
+        },
+        {
+            id: "don_quijote",
+            name: "돈키호테 나카스점",
+            lat: 33.5935,
+            lng: 130.4080,
+            type: "spot",
+            region: "nakasu",
+            rating: 4.2,
+            desc: "없는 게 없는 만물상. 일본 여행 쇼핑의 성지.",
+            photos: ["https://images.unsplash.com/photo-1598556776374-2c6cb2060852?w=800"],
+            details: {
+                info: "의약품, 화장품, 간식, 캐릭터 굿즈 등 기념품 사기에 최적입니다. 24시간 영업.",
+                transport: "나카스카와바타역",
+                tips: "5,500엔 이상 구매 시 면세 혜택을 받을 수 있습니다. 여권을 꼭 챙기세요."
+            }
+        },
+
+        // Day 4: Last Shopping & Departure
+        {
+            id: "tanya_hakata",
+            name: "탄야 하카타",
+            lat: 33.5900,
+            lng: 130.4205,
+            type: "food",
+            region: "hakata",
+            rating: 4.4,
+            desc: "하카타역 지하 1번가의 가성비 최고의 우설 조식 맛집.",
+            photos: ["https://images.unsplash.com/photo-1606509653193-4b6b69b2447e?w=800"],
+            details: {
+                info: "아침 한정 메뉴인 우설 정식이 저렴하고 맛있습니다. 밥과 국이 무한리필!",
+                transport: "하카타역 지하 1번가",
+                tips: "아침 7시 오픈인데 줄이 깁니다. 조금 서두르세요."
+            }
+        },
+        {
+            id: "amu_plaza",
+            name: "아뮤 플라자 하카타",
+            lat: 33.5900,
+            lng: 130.4205,
+            type: "spot",
+            region: "hakata",
+            rating: 4.5,
+            desc: "하카타역과 연결된 대형 쇼핑몰. 마지막 쇼핑 찬스.",
+            photos: ["https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?w=800"],
+            details: {
+                info: "도큐핸즈, 포켓몬센터 등이 입점해 있습니다. 옥상 정원 전망도 좋아요.",
+                transport: "하카타역 직결",
+                tips: "1층 인포메이션에서 외국인 할인 쿠폰을 받을 수 있는지 확인해보세요."
+            }
+        },
+        {
+            id: "ekiben_lunch",
+            name: "하카타역 에키벤",
+            lat: 33.5900,
+            lng: 130.4205,
+            type: "food",
+            region: "hakata",
+            rating: 4.2,
+            desc: "기차역 도시락(에키벤)을 사서 공항 가는 길이나 공항에서 즐기기.",
+            photos: ["https://images.unsplash.com/photo-1569050467447-ce54b3bbc37d?w=800"],
+            details: {
+                info: "명란 도시락, 스테이크 도시락 등 종류가 엄청납니다. 고르는 재미가 있어요.",
+                transport: "하카타역 내 도시락 매장",
+                tips: "인기 도시락은 금방 품절되니 미리 구매하세요."
             }
         }
     ];
 
+    // 4-Day Itinerary Structure
     let userItinerary = {
-        "1": ["fuk_airport", "shinshin_ramen", "daimyo_street", "cafe_del_sol", "ohori_park", "motsunabe_rakutenchi", "don_quijote"],
-        "2": ["hakata_station", "yufuin_yunotsubo", "yufumabushi_shin", "kinrin_lake", "yufuin_onsen", "hakata_issou"],
-        "3": ["sumiyoshi_shrine", "udon_taira", "canal_city", "kushida_shrine", "nakasu_river", "ichiran_hq", "nakasu_yatai"],
-        "4": ["tanya_hakata", "amu_plaza", "hakata_bento", "fuk_airport"]
+        "1": ["fukuoka_airport", "oriental_hotel", "shinshin_ramen", "ohori_park", "momochi_seaside", "fukuoka_tower", "motsunabe_rakutenchi", "nakasu_yatai"],
+        "2": ["yufuin_tour_start", "dazaifu", "yufuin_village", "kinrin_lake", "yufumabushi_shin", "kamado_jigoku"],
+        "3": ["sumiyoshi_shrine", "canal_city", "beef_tongue_lunch", "kushida_shrine", "tenjin_underground", "yakiniku_dinner", "don_quijote"],
+        "4": ["tanya_hakata", "amu_plaza", "ekiben_lunch"]
     };
     
     let activeDay = 1;

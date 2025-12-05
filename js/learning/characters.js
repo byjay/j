@@ -194,7 +194,7 @@ function selectCharacter(idx) {
 
                 <!-- 쓰기 캔버스 영역 (비율 조정) -->
                 <div class="relative w-full aspect-square bg-gray-50 rounded-xl border-2 border-gray-200 overflow-hidden cursor-crosshair touch-none shadow-inner">
-                    <div class="absolute inset-0 flex items-center justify-center pointer-events-none opacity-[0.08]">
+                    <div id="stroke-guide-bg" class="absolute inset-0 flex items-center justify-center pointer-events-none opacity-[0.08]">
                         <span class="text-[180px]" style="font-family: 'Noto Sans JP', sans-serif;">${item.char}</span>
                     </div>
                     <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
@@ -203,7 +203,11 @@ function selectCharacter(idx) {
                     <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
                         <div class="h-full w-px bg-red-300/30 border-l border-dashed border-red-300"></div>
                     </div>
-                    <canvas id="writing-canvas" class="absolute inset-0 w-full h-full"></canvas>
+                    
+                    <!-- 획순 애니메이션 컨테이너 -->
+                    <div id="stroke-guide-container" class="absolute inset-0 z-10 pointer-events-none flex items-center justify-center p-4"></div>
+
+                    <canvas id="writing-canvas" class="absolute inset-0 w-full h-full z-20"></canvas>
                 </div>
 
                 <!-- 하단 내비게이션 -->
@@ -212,6 +216,9 @@ function selectCharacter(idx) {
                         <i class="fas fa-chevron-left text-xl"></i>
                     </button>
                     <div class="flex gap-2">
+                        <button onclick="toggleStrokeGuide('${item.char}')" class="bg-blue-100 text-blue-600 px-3 py-1.5 rounded-lg text-xs font-bold hover:bg-blue-200 transition flex items-center gap-1">
+                            <i class="fas fa-play"></i> 획순 보기
+                        </button>
                         <button onclick="clearCanvas()" class="bg-gray-100 text-gray-600 px-3 py-1.5 rounded-lg text-xs font-bold hover:bg-gray-200 transition">
                             <i class="fas fa-eraser mr-1"></i> 지우기
                         </button>
@@ -294,6 +301,138 @@ function startDraw(e) { isDrawing = true; const pos = getPos(e); ctx.beginPath()
 function drawing(e) { if (!isDrawing) return; const pos = getPos(e); ctx.lineTo(pos.x, pos.y); ctx.stroke(); }
 function stopDraw() { isDrawing = false; }
 function clearCanvas() { if (canvas && ctx) ctx.clearRect(0, 0, canvas.width, canvas.height); }
+
+// ==========================================
+// 획순 애니메이션 로직 (KanjiVG)
+// ==========================================
+
+function getCharHex(char) {
+    return char.charCodeAt(0).toString(16).padStart(5, '0');
+}
+
+async function toggleStrokeGuide(char) {
+    const container = document.getElementById('stroke-guide-container');
+    const bg = document.getElementById('stroke-guide-bg');
+
+    if (!container) return;
+
+    // 이미 애니메이션 중이면 중단하고 리셋
+    if (container.innerHTML !== '') {
+        container.innerHTML = '';
+        if (bg) bg.classList.remove('opacity-0');
+        if (bg) bg.classList.add('opacity-[0.08]');
+        return;
+    }
+
+    // 캔버스 지우기
+    clearCanvas();
+
+    // 배경 글자 숨기기 (애니메이션에 집중)
+    if (bg) bg.classList.remove('opacity-[0.08]');
+    if (bg) bg.classList.add('opacity-0');
+
+    // 로딩 표시
+    container.innerHTML = '<div class="animate-spin rounded-full h-8 w-8 border-b-2 border-red-500"></div>';
+
+    try {
+        const hex = getCharHex(char);
+        const url = `https://cdn.jsdelivr.net/npm/kanjivg@latest/kanji/${hex}.svg`;
+
+        const response = await fetch(url);
+        if (!response.ok) throw new Error('SVG fetch failed');
+
+        const svgText = await response.text();
+
+        // SVG 파싱 및 조작
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(svgText, 'image/svg+xml');
+        const svg = doc.querySelector('svg');
+
+        // 스타일 설정
+        svg.style.width = '100%';
+        svg.style.height = '100%';
+
+        // 기존 스타일 제거 및 새로운 스타일 주입
+        const paths = svg.querySelectorAll('path');
+        paths.forEach(path => {
+            path.style.fill = 'none';
+            path.style.stroke = '#ef4444'; // red-500
+            path.style.strokeWidth = '4';
+            path.style.strokeLinecap = 'round';
+            path.style.strokeLinejoin = 'round';
+            path.style.opacity = '0'; // 처음에 숨김
+        });
+
+        // 숫자 제거 (깔끔하게 보이기 위해)
+        const numbers = svg.querySelector('g[id^="kvg:StrokeNumbers"]');
+        if (numbers) numbers.remove();
+
+        container.innerHTML = '';
+        container.appendChild(svg);
+
+        // 애니메이션 시작
+        await animateStrokes(paths);
+
+    } catch (e) {
+        console.error("Stroke animation failed:", e);
+        container.innerHTML = '<span class="text-xs text-red-400">획순 정보를 불러올 수 없습니다.</span>';
+        setTimeout(() => {
+            container.innerHTML = '';
+            if (bg) bg.classList.remove('opacity-0');
+            if (bg) bg.classList.add('opacity-[0.08]');
+        }, 2000);
+    }
+}
+
+function animateStrokes(paths) {
+    return new Promise(async (resolve) => {
+        for (let i = 0; i < paths.length; i++) {
+            const path = paths[i];
+            const length = path.getTotalLength();
+
+            // 초기 설정
+            path.style.strokeDasharray = length;
+            path.style.strokeDashoffset = length;
+            path.style.opacity = '1';
+
+            // 애니메이션
+            await new Promise(r => {
+                const duration = 500; // 0.5초
+                const start = performance.now();
+
+                function step(timestamp) {
+                    const progress = Math.min((timestamp - start) / duration, 1);
+                    path.style.strokeDashoffset = length * (1 - progress);
+
+                    if (progress < 1) {
+                        requestAnimationFrame(step);
+                    } else {
+                        r();
+                    }
+                }
+                requestAnimationFrame(step);
+            });
+        }
+
+        // 완료 후 잠시 대기했다가 복귀? 아니면 그대로 유지?
+        // 유저가 따라 써야 하므로 그대로 유지하거나, 
+        // 일정 시간 후 흐리게 만들어서 가이드로 쓸 수 있게 함.
+
+        // 여기서는 1초 후 배경 복귀 및 가이드 흐리게 처리
+        setTimeout(() => {
+            const bg = document.getElementById('stroke-guide-bg');
+            if (bg) bg.classList.remove('opacity-0');
+            if (bg) bg.classList.add('opacity-[0.08]');
+
+            // 가이드 라인은 연하게 남겨둠 (따라쓰기 용)
+            paths.forEach(p => {
+                p.style.stroke = '#d1d5db'; // gray-300
+                p.style.strokeWidth = '3';
+            });
+            resolve();
+        }, 1000);
+    });
+}
 
 // 퀴즈 로직
 
@@ -583,7 +722,9 @@ window.playAudio = playAudio;
 window.startQuiz = startQuiz;
 window.submitAnswer = submitAnswer;
 window.showHistory = showHistory;
+window.showHistory = showHistory;
 window.resetAllData = resetAllData;
+window.toggleStrokeGuide = toggleStrokeGuide;
 
 // 주간 활동 HTML 생성 헬퍼
 function getWeeklyActivityHTML(logs) {
