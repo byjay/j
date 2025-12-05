@@ -41,6 +41,11 @@ function login(userId) {
     localStorage.setItem('currentUser', userId);
     console.log('Login successful:', currentUser.name);
 
+    // Gamification 사용자 전환 및 데이터 로드
+    if (window.Gamification) {
+        window.Gamification.switchUser(userId);
+    }
+
     updateUserDisplay();
     hideLoginModal();
 
