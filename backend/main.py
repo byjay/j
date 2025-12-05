@@ -124,8 +124,81 @@ def save_progress(data: Dict[str, Any]):
         return {"status": "saved", "user_id": user_id}
         
     except Exception as e:
-        print(f"Error saving progress for {user_id}: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+# ... existing code ...
+import google.generativeai as genai
+
+# ... existing code ...
+
+# Gemini API Setup
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
+if GEMINI_API_KEY:
+    genai.configure(api_key=GEMINI_API_KEY)
+    model = genai.GenerativeModel('gemini-pro')
+else:
+    model = None
+    print("⚠️ GEMINI_API_KEY not found. AI features will be disabled.")
+
+# ... existing code ...
+
+class SentenceRequest(BaseModel):
+    sentence: str
+    target_form: str # e.g., "negative", "past", "polite", "question"
+
+class CheckRequest(BaseModel):
+    words: List[str]
+    user_sentence: str
+
+@app.post("/api/practice/transform")
+def transform_sentence(req: SentenceRequest):
+    if not model:
+        raise HTTPException(status_code=503, detail="AI Service Unavailable (Missing Key)")
+    
+    prompt = f"""
+    Transform the following Japanese sentence into the '{req.target_form}' form.
+    Input: {req.sentence}
+    
+    Output JSON format:
+    {{
+        "result": "transformed sentence",
+        "romaji": "romaji reading",
+        "explanation": "brief grammatical explanation in Korean"
+    }}
+    """
+    
+    try:
+        response = model.generate_content(prompt)
+        # Simple cleanup to ensure JSON parsing if model adds backticks
+        text = response.text.replace("```json", "").replace("```", "").strip()
+        return json.loads(text)
+    except Exception as e:
+        print(f"AI Error: {e}")
+        raise HTTPException(status_code=500, detail="AI Processing Failed")
+
+@app.post("/api/practice/check")
+def check_sentence(req: CheckRequest):
+    if not model:
+        raise HTTPException(status_code=503, detail="AI Service Unavailable (Missing Key)")
+        
+    prompt = f"""
+    Check if the user constructed a natural Japanese sentence using the provided words.
+    Words: {', '.join(req.words)}
+    User Sentence: {req.user_sentence}
+    
+    Output JSON format:
+    {{
+        "is_correct": true/false,
+        "feedback": "feedback in Korean",
+        "better_version": "optional better version"
+    }}
+    """
+    
+    try:
+        response = model.generate_content(prompt)
+        text = response.text.replace("```json", "").replace("```", "").strip()
+        return json.loads(text)
+    except Exception as e:
+        print(f"AI Error: {e}")
+        raise HTTPException(status_code=500, detail="AI Processing Failed")
 
 # --- Routers ---
 from routers import scraper

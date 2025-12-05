@@ -3,7 +3,7 @@
  * Wrapper for communicating with the Docker Python Backend
  */
 
-const API_BASE_URL = 'http://localhost:8000/api';
+const API_BASE_URL = 'https://japbong-production.up.railway.app/api';
 
 const ApiClient = {
     /**
@@ -72,6 +72,15 @@ const ApiClient = {
     // Dictionary Scraper (Future)
     async searchDictionary(query) {
         return await this.get(`/dictionary/search?q=${encodeURIComponent(query)}`);
+    },
+
+    // Grammar Practice (AI)
+    async transformSentence(sentence, targetForm) {
+        return await this.post('/practice/transform', { sentence, target_form: targetForm });
+    },
+
+    async checkSentence(words, userSentence) {
+        return await this.post('/practice/check', { words, user_sentence: userSentence });
     }
 };
 

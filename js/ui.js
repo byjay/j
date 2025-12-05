@@ -92,6 +92,10 @@ function showTab(tabName) {
         if (typeof showProgressDashboard === 'function') {
             showProgressDashboard();
         }
+    } else if (tabName === 'grammar') {
+        if (typeof GrammarPractice !== 'undefined') {
+            GrammarPractice.init();
+        }
     }
 }
 
