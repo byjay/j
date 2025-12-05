@@ -236,6 +236,11 @@ function selectCharacter(idx) {
     setTimeout(initCanvas, 50);
     playAudio(item.char);
     saveStudyLog('view', item.char);
+
+    // 획순 애니메이션 자동 재생 (약간의 딜레이 후 시작)
+    setTimeout(() => {
+        toggleStrokeGuide(item.char);
+    }, 500);
 }
 
 // ... (이하 closeModal, nextChar, prevChar, initCanvas 등 기존 로직 유지) ...
@@ -336,7 +341,8 @@ async function toggleStrokeGuide(char) {
 
     try {
         const hex = getCharHex(char);
-        const url = `https://cdn.jsdelivr.net/npm/kanjivg@latest/kanji/${hex}.svg`;
+        // GitHub Raw Mirror via jsDelivr
+        const url = `https://cdn.jsdelivr.net/gh/KanjiVG/kanjivg@master/kanji/${hex}.svg`;
 
         const response = await fetch(url);
         if (!response.ok) throw new Error('SVG fetch failed');
