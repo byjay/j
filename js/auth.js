@@ -55,6 +55,12 @@ function login(userId) {
         mainMenu.style.display = 'grid';
     }
 
+    // 하단 네비게이션 표시
+    const bottomNav = document.getElementById('bottom-nav');
+    if (bottomNav) {
+        bottomNav.classList.remove('hidden');
+    }
+
     document.querySelectorAll('.tab-content').forEach(tab => {
         tab.classList.add('hidden');
         tab.classList.remove('active');
@@ -99,6 +105,13 @@ function updateUserDisplay() {
 function logout() {
     currentUser = null;
     localStorage.removeItem('currentUser');
+
+    // 하단 네비게이션 숨기기
+    const bottomNav = document.getElementById('bottom-nav');
+    if (bottomNav) {
+        bottomNav.classList.add('hidden');
+    }
+
     showLoginModal();
     console.log('Logged out');
 }
