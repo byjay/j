@@ -104,14 +104,13 @@ function logout() {
 }
 
 function checkAutoLogin() {
-    // 자동 로그인 비활성화 (항상 로그인 화면 표시)
-    // const savedUserId = localStorage.getItem('currentUser');
-    // if (savedUserId && users[savedUserId]) {
-    //     console.log('Auto-login found:', savedUserId);
-    //     login(savedUserId);
-    // } else {
-    showLoginModal();
-    // }
+    const savedUserId = localStorage.getItem('currentUser');
+    if (savedUserId && users[savedUserId]) {
+        console.log('Auto-login found:', savedUserId);
+        login(savedUserId);
+    } else {
+        showLoginModal();
+    }
 }
 
 // 아빠 비밀번호 입력
