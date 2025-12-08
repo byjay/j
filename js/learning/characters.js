@@ -665,13 +665,38 @@ function saveStudyLog(type, val) {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(history));
 }
 
-// 관리자 데이터 초기화
+// 관리자 데이터 초기화 (모든 사용자 데이터 포함)
 function resetAllData() {
+    // 아빠 계정인지 확인
+    if (!window.currentUser || window.currentUser.id !== 'dad') {
+        alert('관리자 권한이 필요합니다.');
+        return;
+    }
+
     const pw = prompt("관리자 비밀번호를 입력하세요 (데이터가 모두 삭제됩니다)");
     if (pw === '1435') {
+        // 기존 공통 키 삭제
         localStorage.removeItem(STORAGE_KEY);
         localStorage.removeItem('fukuoka_unlock_count');
-        alert('모든 학습 데이터가 초기화되었습니다.');
+
+        // 모든 사용자별 히스토리 키 삭제
+        const userIds = ['dad', 'mom', 'sieun', 'harong'];
+        userIds.forEach(userId => {
+            localStorage.removeItem(`jap_bong_history_v1_${userId}`);
+            localStorage.removeItem(`jap_bong_xp_${userId}`);
+            localStorage.removeItem(`jap_bong_streak_${userId}`);
+            localStorage.removeItem(`jap_bong_last_login_${userId}`);
+        });
+
+        // 글자별 마스터 상태 삭제 (히라가나/가타카나 개별 문자들)
+        for (let i = 0; i < localStorage.length; i++) {
+            const key = localStorage.key(i);
+            if (key && (key.startsWith('char_mastered_') || key.startsWith('char_practice_'))) {
+                localStorage.removeItem(key);
+            }
+        }
+
+        alert('모든 사용자의 학습 데이터가 초기화되었습니다!');
         location.reload();
     } else {
         if (pw !== null) alert('비밀번호가 틀렸습니다.');

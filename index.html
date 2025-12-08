@@ -782,9 +782,26 @@
                 </div>
                 <span class="text-[10px] font-bold">글자</span>
             </button>
+            <button onclick="showTab('progress')"
+                class="nav-tab flex-1 flex flex-col items-center justify-center py-1 text-gray-400 hover:text-indigo-600 transition-colors group">
+                <div
+                    class="w-12 h-8 flex items-center justify-center rounded-full group-hover:bg-indigo-50 transition-colors mb-0.5">
+                    <i class="fas fa-chart-line text-xl mb-0.5"></i>
+                </div>
+                <span class="text-[10px] font-bold">현황</span>
+            </button>
 
         </div>
     </nav>
+
+    <!-- PWA 플로팅 설치 버튼 (항상 표시, 작은 사이즈) -->
+    <div id="pwa-floating-install" class="fixed bottom-20 right-4 z-40">
+        <button onclick="showInstallGuide()"
+            class="w-10 h-10 rounded-full bg-gradient-to-r from-blue-500 to-indigo-600 text-white shadow-lg flex items-center justify-center hover:scale-110 transition-transform active:scale-95"
+            title="앱 설치">
+            <i class="fas fa-download text-sm"></i>
+        </button>
+    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="js/auth.js"></script>

@@ -271,6 +271,29 @@ window.initPWAInstall = initPWAInstall;
 window.triggerInstallPrompt = triggerInstallPrompt;
 window.closeIOSInstallGuide = closeIOSInstallGuide;
 
+// 플로팅 버튼용 설치 가이드 함수
+function showInstallGuide() {
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+    const isStandalone = window.navigator.standalone || window.matchMedia('(display-mode: standalone)').matches;
+
+    if (isStandalone) {
+        alert('이미 앱으로 설치되어 있습니다! 🎉');
+        return;
+    }
+
+    if (isIOS) {
+        // iOS: 수동 설치 가이드 표시
+        showIOSInstallGuide();
+    } else if (deferredPrompt) {
+        // Android/Desktop: 자동 설치 프롬프트
+        triggerInstallPrompt();
+    } else {
+        // 프롬프트 없음 - 일반 안내
+        alert('앱 설치 방법:\n\n📱 모바일: 브라우저 메뉴 → "홈 화면에 추가"\n💻 PC: 주소창 오른쪽 설치 아이콘 클릭\n\n(Chrome, Edge, Safari 권장)');
+    }
+}
+window.showInstallGuide = showInstallGuide;
+
 // 초기화 실행 (문서 로드 후)
 document.addEventListener('DOMContentLoaded', () => {
     initPWAInstall();
