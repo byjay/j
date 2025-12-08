@@ -1,0 +1,32 @@
+# Git
+.git
+.gitignore
+
+# Frontend Assets (Not needed for Python Backend)
+js/
+css/
+images/
+index.html
+manifest.json
+service-worker.js
+deploy_manual.html
+icon.png
+icon_192.png
+icon_512.png
+screenshot_mobile.png
+screenshot_desktop.png
+
+# Node modules (if any)
+node_modules/
+package-lock.json
+package.json
+
+# VS Code
+.vscode/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+.env
