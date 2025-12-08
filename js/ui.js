@@ -97,11 +97,6 @@ function showTab(tabName) {
             GrammarPractice.init();
         }
     }
-} else if (tabName === 'grammar') {
-    if (typeof GrammarPractice !== 'undefined') {
-        GrammarPractice.init();
-    }
-}
 }
 
 // Main Menu Button Handler (redirects to showTab)
