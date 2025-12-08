@@ -207,22 +207,26 @@ function selectCharacter(idx) {
                     <canvas id="writing-canvas" class="absolute inset-0 w-full h-full z-20"></canvas>
                 </div>
 
-                <!-- 하단 내비게이션 -->
-                <div class="flex justify-between items-center">
-                    <button onclick="prevChar()" class="text-gray-400 hover:text-gray-800 p-2 transition ${currentIndex === 0 ? 'invisible' : ''}">
-                        <i class="fas fa-chevron-left text-xl"></i>
+                <!-- 하단 내비게이션 (Compact) -->
+                <div class="flex justify-between items-center w-full gap-2">
+                    <button onclick="prevChar()" class="text-gray-400 hover:text-gray-800 p-2 transition shrink-0 ${currentIndex === 0 ? 'invisible' : ''}">
+                        <i class="fas fa-chevron-left text-lg"></i>
                     </button>
-                    <div class="flex gap-2">
-                        <button onclick="clearCanvas(); playStrokeAnimation('${item.char}');" class="bg-gray-100 text-gray-600 px-3 py-1.5 rounded-lg text-xs font-bold hover:bg-gray-200 transition">
-                            <i class="fas fa-redo mr-1"></i> 다시 보기
+                    
+                    <div class="flex flex-1 justify-center items-center gap-2 overflow-x-auto no-scrollbar">
+                        <button onclick="clearCanvas(); playStrokeAnimation('${item.char}');" class="bg-gray-100 text-gray-600 px-2 py-1.5 rounded text-[10px] font-bold hover:bg-gray-200 transition whitespace-nowrap shrink-0">
+                            <i class="fas fa-redo mr-1"></i>다시쓰기
                         </button>
-                        <button onclick="clearCanvas()" class="bg-gray-100 text-gray-600 px-3 py-1.5 rounded-lg text-xs font-bold hover:bg-gray-200 transition">
-                            <i class="fas fa-eraser mr-1"></i> 지우기
+                        <button onclick="clearCanvas()" class="bg-gray-100 text-gray-600 px-2 py-1.5 rounded text-[10px] font-bold hover:bg-gray-200 transition whitespace-nowrap shrink-0">
+                            <i class="fas fa-eraser mr-1"></i>지우기
                         </button>
-                        <span class="text-[10px] text-gray-400 font-medium bg-gray-100 px-2 py-0.5 rounded-full flex items-center">따라 써보세요 ✍️</span>
+                         <div class="text-[9px] text-gray-400 font-medium bg-gray-50 px-2 py-1 rounded-full flex items-center whitespace-nowrap shrink-0">
+                            <span class="mr-1">따라쓰기</span>✍️
+                        </div>
                     </div>
-                    <button onclick="nextChar()" class="bg-red-500 text-white px-4 py-2 rounded-lg font-bold shadow hover:bg-red-600 active:scale-95 transition flex items-center gap-1 text-sm">
-                        다음 <i class="fas fa-chevron-right text-xs"></i>
+
+                    <button onclick="nextChar()" class="bg-red-500 text-white px-3 py-1.5 rounded-lg font-bold shadow hover:bg-red-600 active:scale-95 transition flex items-center gap-1 text-xs whitespace-nowrap shrink-0">
+                        다음 <i class="fas fa-chevron-right text-[10px]"></i>
                     </button>
                 </div>
             </div>
