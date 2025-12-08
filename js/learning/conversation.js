@@ -45,6 +45,7 @@
     style.textContent = css;
     document.head.appendChild(style);
 })();
+
 const conversationModuleData = {
     "family": {
         "title": "가족",
