@@ -625,6 +625,440 @@ function initFukuokaTrip() {
                 menu: "시즌 오마카세 런치 ¥8,000~12,000 / 디너 ¥15,000~25,000 / 규슈 와규 스테이크 시가 / 계절 사시미 시가",
                 hours: "월,수-토 11:30-14:30, 17:00-23:00 / 화 17:00-23:00 / 금-토 점심+17:00-24:00 / 일 11:30-14:30, 17:00-23:00"
             }
+        },
+
+        // =======================================
+        // 🛍️ FUKUOKA SHOPPING CENTERS
+        // =======================================
+        {
+            id: "canal_city_hakata",
+            name: "캐널시티 하카타",
+            name_en: "Canal City Hakata",
+            lat: 33.5895, lng: 130.4110,
+            type: "shopping", region: "hakata", rating: 4.5,
+            desc: "중앙을 가로지르는 독특한 운하와 역동적인 분수 쇼로 유명한 활기찬 쇼핑 및 엔터테인먼트 복합 시설.",
+            photos: [
+                "https://images.unsplash.com/photo-1542931287-023b922fa89b?w=800",
+                "https://images.unsplash.com/photo-1523475496153-3d6cc0f0bf19?w=800"
+            ],
+            details: {
+                info: "인기 패션 브랜드부터 독특한 기념품 가게까지 다양한 상점. 라멘 스타디움에서 다양한 지역 라멘 맛보기.",
+                transport: "스미요시 1-2-2, 하카타구",
+                tips: "매 정시마다 열리는 역동적인 분수쇼 감상 필수! 평일 방문 추천.",
+                menu: "일본 패션 브랜드, 국제 브랜드, 라멘 스타디움, 캐릭터 굿즈, 테마 카페",
+                hours: "10:00-21:00"
+            }
+        },
+        {
+            id: "tenjin_underground",
+            name: "텐진 지하상가",
+            name_en: "Tenjin Underground Shopping Center",
+            lat: 33.5915, lng: 130.4010,
+            type: "shopping", region: "tenjin", rating: 4.2,
+            desc: "주요 백화점과 지하철 노선을 연결하는 유럽풍 건축 디자인의 거대한 지하 쇼핑 공간.",
+            photos: [
+                "https://images.unsplash.com/photo-1519810755548-39cd217da494?w=800",
+                "https://images.unsplash.com/photo-1555529669-e69e7aa0ba9a?w=800"
+            ],
+            details: {
+                info: "최신 유행 패션부터 화장품, 기념품까지 150여 개 점포. 비 오는 날 쇼핑에 최적.",
+                transport: "지하철 텐진역 직결",
+                tips: "백화점과 지하철역을 직접 연결. 독특한 로컬 부티크와 카페 발견 가능.",
+                menu: "여성패션 ¥2,000~15,000 / 액세서리 ¥1,000~8,000 / 화장품 ¥1,500~10,000",
+                hours: "10:00-20:00"
+            }
+        },
+        {
+            id: "jr_hakata_city",
+            name: "JR 하카타 시티 아뮤 플라자",
+            name_en: "JR Hakata City Amu Plaza",
+            lat: 33.5900, lng: 130.4205,
+            type: "shopping", region: "hakata", rating: 4.4,
+            desc: "하카타역과 연결된 대형 쇼핑 복합몰. 옥상 정원에서 파노라마 도시 전망 감상 가능.",
+            photos: [
+                "https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?w=800",
+                "https://images.unsplash.com/photo-1519420573924-65fcd45245f8?w=800"
+            ],
+            details: {
+                info: "패션, 전자제품, 전문점 등 다양한 상점. '쿠텐' 식당가에서 훌륭한 식사.",
+                transport: "하카타역 직결",
+                tips: "옥상 정원 '츠바메노모리 히로바'에서 야경 필수! 어린이 열차도 운행.",
+                menu: "트렌드 패션 ¥4,000~25,000 / 전자기기 ¥5,000~50,000 / 기념품 ¥500~4,000",
+                hours: "상점 10:00-21:00 / 식당 11:00-23:00"
+            }
+        },
+        {
+            id: "fukuoka_mitsukoshi",
+            name: "후쿠오카 미츠코시",
+            name_en: "Fukuoka Mitsukoshi",
+            lat: 33.5910, lng: 130.4015,
+            type: "shopping", region: "tenjin", rating: 4.1,
+            desc: "텐진 중심부의 명문 백화점. 세련되고 고급스러운 쇼핑 경험. 지하 식품관 '데파치카' 필수.",
+            photos: [
+                "https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?w=800",
+                "https://images.unsplash.com/photo-1567449303078-57ad995bd329?w=800"
+            ],
+            details: {
+                info: "고급 패션, 화장품, 정교한 생활용품. 일본 특유의 훌륭한 서비스.",
+                transport: "텐진 2-1-1, 츄오구",
+                tips: "지하 식품관(데파치카)은 장인의 디저트부터 고급 도시락까지 미식의 천국.",
+                menu: "명품 의류 ¥10,000~200,000 / 디자이너백 ¥20,000~500,000 / 고급 화장품 ¥5,000~30,000",
+                hours: "10:00-20:00"
+            }
+        },
+        {
+            id: "marinoa_city",
+            name: "마리노아 시티 후쿠오카",
+            name_en: "Marinoa City Fukuoka",
+            lat: 33.5800, lng: 130.3200,
+            type: "shopping", region: "bay", rating: 4.0,
+            desc: "하카타만에 위치한 아울렛 몰. 도심에서 벗어나 바닷가 분위기에서 여유로운 쇼핑.",
+            photos: [
+                "https://images.unsplash.com/photo-1567449303078-57ad995bd329?w=800",
+                "https://images.unsplash.com/photo-1519420573924-65fcd45245f8?w=800"
+            ],
+            details: {
+                info: "다양한 인기 브랜드 제품 할인 가격. 상징적인 관람차에서 멋진 파노라마 전망.",
+                transport: "오도 2-12-30, 니시구",
+                tips: "관람차 꼭 탑승! 하카타만과 도시 전망 환상적. 교통편 미리 확인.",
+                menu: "아울렛 패션 ¥2,000~15,000 / 스포츠웨어 ¥3,000~10,000 / 홈굿즈 ¥1,000~8,000",
+                hours: "상점 10:00-21:00 / 식당 11:00-23:00"
+            }
+        },
+        {
+            id: "lalaport_fukuoka",
+            name: "라라포트 후쿠오카",
+            name_en: "LaLaport Fukuoka",
+            lat: 33.5910, lng: 130.4280,
+            type: "shopping", region: "hakata", rating: 4.3,
+            desc: "실물 크기의 건담 동상이 인상적인 현대적 쇼핑몰. 가족 단위 방문객에게 최적.",
+            photos: [
+                "https://images.unsplash.com/photo-1567449303078-57ad995bd329?w=800",
+                "https://images.unsplash.com/photo-1555529669-e69e7aa0ba9a?w=800"
+            ],
+            details: {
+                info: "패션부터 라이프스타일 용품까지 다양한 상점. 넓은 푸드코트.",
+                transport: "나카 6-23-1, 하카타구",
+                tips: "실물 크기 RX-93ff ν 건담 동상 필수 촬영! 정시마다 움직임/조명쇼.",
+                menu: "의류 시가 / 라이프스타일 용품 시가 / 건담 모델킷 ¥2,000~10,000 / 푸드코트 ¥800~1,500",
+                hours: "10:00-21:00"
+            }
+        },
+        {
+            id: "solaria_plaza",
+            name: "솔라리아 플라자",
+            name_en: "Solaria Plaza",
+            lat: 33.5898, lng: 130.4005,
+            type: "shopping", region: "tenjin", rating: 4.0,
+            desc: "텐진 중심부의 세련된 9층 규모 쇼핑, 다이닝, 엔터테인먼트 복합 시설. 영화관도 완비.",
+            photos: [
+                "https://images.unsplash.com/photo-1519420573924-65fcd45245f8?w=800",
+                "https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?w=800"
+            ],
+            details: {
+                info: "국제 패션 브랜드와 독특한 일본 디자인. 캐주얼 카페부터 고급 레스토랑까지.",
+                transport: "텐진 2-2-43, 츄오구",
+                tips: "텐진 중심부에 위치해 접근성 뛰어남. 다른 쇼핑 지역과 연결.",
+                menu: "국제 패션 브랜드 시가 / 일본 디자이너 아이템 시가 / 카페 음료 ¥500~900 / 영화 ¥1,500~2,000",
+                hours: "월-금 11:00-20:00 / 토-일 10:00-20:00"
+            }
+        },
+
+        // =======================================
+        // ☕ FUKUOKA SPECIALTY CAFES
+        // =======================================
+        {
+            id: "bluebottle_tenjin",
+            name: "블루보틀 커피 후쿠오카 텐진",
+            name_en: "Blue Bottle Coffee Fukuoka Tenjin",
+            lat: 33.5892, lng: 130.3995,
+            type: "cafe", region: "tenjin", rating: 4.5,
+            desc: "미니멀한 디자인과 전문적으로 준비된 커피로 평온한 휴식 제공. 핸드드립 커피 필수.",
+            photos: [
+                "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=800",
+                "https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=800"
+            ],
+            details: {
+                info: "효율적이고 친절한 서비스. 브랜드의 높은 기준 유지. 야외 좌석에서 텐진 사람 구경.",
+                transport: "텐진 2-2-20, 츄오구",
+                tips: "이른 아침 방문 추천. 근처 케고 공원에서 테이크아웃 커피 즐기기.",
+                menu: "드립커피 ¥550 / 라떼 ¥650 / 에스프레소 ¥500 / 와플 ¥450 / 피낭시에 ¥350",
+                hours: "08:00-20:00"
+            }
+        },
+        {
+            id: "sora_coffee",
+            name: "소라 커피",
+            name_en: "SORA COFFEE",
+            lat: 33.5920, lng: 130.4095,
+            type: "cafe", region: "hakata", rating: 4.8,
+            desc: "캐널시티 근처의 숨겨진 보석. 부드럽고 향긋한 드립 커피가 까다로운 입맛에도 완벽.",
+            photos: [
+                "https://images.unsplash.com/photo-1511920170033-f8396924c348?w=800",
+                "https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=800"
+            ],
+            details: {
+                info: "조용하고 매력적인 분위기. 개인적이고 따뜻한 서비스. 품질과 고요함을 찾는 분께 추천.",
+                transport: "기온마치 8-13, 하카타구",
+                tips: "캐널시티와 구시다 신사 근처. 관광 중 조용한 휴식처로 딱.",
+                menu: "드립커피 ¥600 / 카페라떼 ¥650 / 아메리카노 ¥580 / 홈메이드 쿠키 ¥300 / 파운드케이크 ¥400",
+                hours: "월-금 10:00-17:00 / 토 14:00-18:00 / 일 휴무"
+            }
+        },
+        {
+            id: "connect_coffee",
+            name: "커넥트 커피",
+            name_en: "CONNECT COFFEE",
+            lat: 33.5880, lng: 130.3998,
+            type: "cafe", region: "tenjin", rating: 4.5,
+            desc: "텐진의 스페셜티 커피 명소. 현대적이고 매력적인 분위기에서 훌륭한 라떼와 핸드드립.",
+            photos: [
+                "https://images.unsplash.com/photo-1453614512568-c4024d13c247?w=800",
+                "https://images.unsplash.com/photo-1497515114889-3f227db71ea6?w=800"
+            ],
+            details: {
+                info: "숙련된 바리스타. 잠깐 들르거나 오래 머물기에도 편안한 공간.",
+                transport: "텐진 5-6-13, 츄오구",
+                tips: "SNS 확인해서 계절 한정 메뉴 체크. 작업이나 독서에도 좋은 분위기.",
+                menu: "에스프레소 ¥450 / 카페라떼 ¥580 / 핸드드립 ¥650 / 치즈케이크 ¥500 / 쿠키 ¥300",
+                hours: "월,수-토 12:00-20:00 / 일 11:00-18:00 / 화 휴무"
+            }
+        },
+        {
+            id: "coffee_county",
+            name: "커피카운티 후쿠오카",
+            name_en: "Coffee County Fukuoka",
+            lat: 33.5858, lng: 130.3945,
+            type: "cafe", region: "tenjin", rating: 4.6,
+            desc: "커피 애호가들의 진정한 안식처. 탁월한 싱글 오리진 원두와 뛰어난 추출 기술.",
+            photos: [
+                "https://images.unsplash.com/photo-1442512595331-e89e73853f31?w=800",
+                "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=800"
+            ],
+            details: {
+                info: "따뜻하고 매력적인 분위기. 바리스타들이 원두 선택 안내. 교육적인 커피 경험.",
+                transport: "타카사고 1-21-21, 츄오구",
+                tips: "원두 구매 가능. 집에서도 후쿠오카 커피 맛 재현. 커피 애호가 필수 방문.",
+                menu: "싱글오리진 드립 ¥700 / 에스프레소 토닉 ¥680 / 카페라떼 ¥620 / 베이킹류 ¥350~500",
+                hours: "월,화,목-일 10:00-18:30 / 수 휴무"
+            }
+        },
+        {
+            id: "manly_cafe",
+            name: "맨리 카페",
+            name_en: "Manly Cafe",
+            lat: 33.5865, lng: 130.3985,
+            type: "cafe", region: "tenjin", rating: 4.5,
+            desc: "후쿠오카 한가운데서 호주 분위기. 리코타 팬케이크와 미트 파이가 인기.",
+            photos: [
+                "https://images.unsplash.com/photo-1567620832903-9fc6debc209f?w=800",
+                "https://images.unsplash.com/photo-1506354666786-959d6d497f1a?w=800"
+            ],
+            details: {
+                info: "소박한 인테리어와 매력적인 야외 테이블. 따뜻하고 환영하는 직원.",
+                transport: "이마이즈미 1-18-55, 츄오구",
+                tips: "브런치로 인기. 주말 예약 추천. 반려견 동반 가능.",
+                menu: "리코타 팬케이크 ¥1,200~1,500 / 에그베네딕트 ¥1,300~1,600 / 미트파이 ¥800~1,000 / 플랫화이트 ¥600",
+                hours: "월-목,일 11:00-22:00 / 금-토 11:00-23:00"
+            }
+        },
+        {
+            id: "rec_coffee_hakata",
+            name: "REC 커피 (하카타점)",
+            name_en: "REC Coffee Hakata",
+            lat: 33.5903, lng: 130.4203,
+            type: "cafe", region: "hakata", rating: 4.1,
+            desc: "하카타역 파노라마 전망과 함께하는 세련된 카페. 아름다운 라떼 아트와 숙련된 핸드드립.",
+            photos: [
+                "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=800",
+                "https://images.unsplash.com/photo-1442512595331-e89e73853f31?w=800"
+            ],
+            details: {
+                info: "키테 하카타 6층. 효율적이고 친절한 서비스. 치즈케이크와 함께 완벽한 오후.",
+                transport: "하카타에키츄오가이 9-1, 6층",
+                tips: "창가 좌석 추천! 쇼핑이나 열차 대기 중 휴식에 딱.",
+                menu: "라떼아트 커피 ¥550~700 / 핸드드립 ¥600~900 / 에스프레소 ¥500 / 치즈케이크 ¥500~600",
+                hours: "10:00-21:00"
+            }
+        },
+        {
+            id: "cafe_motito",
+            name: "카페 모티토",
+            name_en: "Cafe Motito",
+            lat: 33.5890, lng: 130.4105,
+            type: "cafe", region: "hakata", rating: 4.7,
+            desc: "캐널시티 근처 4층에 숨겨진 보석. 유기농 커피와 홈메이드 케이크. 채식 옵션 풍부.",
+            photos: [
+                "https://images.unsplash.com/photo-1554118811-1e0d58224f24?w=800",
+                "https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=800"
+            ],
+            details: {
+                info: "친절하고 세심한 직원. 따뜻하고 환영하는 분위기. 건강식을 찾는 여행객에게 추천.",
+                transport: "스미요시 1-5-1, 하카타구, 선댄스빌딩 4층",
+                tips: "금토 늦게까지 운영. 저녁 디저트나 조용한 음료에 좋음. 현금 전용!",
+                menu: "유기농커피 ¥550~700 / 홈메이드케이크세트 ¥1,000~1,200 / 허브티 ¥600~800 / 채식런치 ¥1,200~1,500",
+                hours: "월-목,일 11:45-23:00 / 금 12:00-02:00 / 토 11:00-23:00"
+            }
+        },
+        {
+            id: "fuglen_fukuoka",
+            name: "후글렌 후쿠오카",
+            name_en: "Fuglen Fukuoka",
+            lat: 33.5908, lng: 130.4235,
+            type: "cafe", region: "hakata", rating: 4.4,
+            desc: "오슬로의 유명한 커피 문화를 하카타에 선보이는 세련되고 미니멀한 카페. 저녁엔 바로 변신.",
+            photos: [
+                "https://images.unsplash.com/photo-1497515114889-3f227db71ea6?w=800",
+                "https://images.unsplash.com/photo-1511920170033-f8396924c348?w=800"
+            ],
+            details: {
+                info: "완벽하게 추출된 필터 커피가 하이라이트. 활기차면서도 편안한 분위기.",
+                transport: "하카타에키히가시 1-18-33, 하카타 이스트 테라스 1층",
+                tips: "저녁에는 크래프트 맥주도 제공. 세계적 수준의 커피 문화 체험.",
+                menu: "에스프레소 베이스 ¥550~750 / 필터커피 ¥650~900 / 노르웨이 와플 ¥600 / 크래프트맥주 ¥800~1,000",
+                hours: "월-목 07:00-20:00 / 금 07:00-22:00 / 토-일 08:00-22:00"
+            }
+        },
+
+        // =======================================
+        // 🏛️ FUKUOKA SIGHTSEEING SPOTS
+        // =======================================
+        {
+            id: "dazaifu_tenmangu",
+            name: "다자이후 텐만구 신사",
+            name_en: "Dazaifu Tenmangu Shrine",
+            lat: 33.5215, lng: 130.5349,
+            type: "temple", region: "suburb", rating: 4.4,
+            desc: "학문의 신을 모시는 신사. 아름다운 매화나무와 고요한 연못이 어우러진 평화로운 분위기.",
+            photos: [
+                "https://images.unsplash.com/photo-1565597989343-424472289457?w=800",
+                "https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=800"
+            ],
+            details: {
+                info: "일본 전통과 건축미를 깊이 느낄 수 있는 곳. 영적 분위기와 역사적 중요성.",
+                transport: "니시테츠 다자이후역에서 도보 5분",
+                tips: "이른 아침 방문 추천. 신성한 소 동상 머리 만지면 지혜 상승! 우메가에모치(매화떡) 필수.",
+                menu: "우메가에모치 ¥130~150 / 오마모리(부적) ¥500~2,000 / 에마(기원패) ¥500~1,000",
+                hours: "06:30-19:00"
+            }
+        },
+        {
+            id: "ohori_park_castle",
+            name: "오호리 공원 & 후쿠오카 성터",
+            name_en: "Fukuoka Castle Ruins & Ohori Park",
+            lat: 33.5860, lng: 130.3764,
+            type: "spot", region: "central", rating: 4.3,
+            desc: "자연의 아름다움과 역사적 흥미가 완벽하게 조화된 곳. 도심 속 평화로운 휴식처.",
+            photos: [
+                "https://images.unsplash.com/photo-1624672666964-e49d7a4c4d58?w=800",
+                "https://images.unsplash.com/photo-1492571350019-22de08371fd3?w=800"
+            ],
+            details: {
+                info: "커다란 호수에서 산책, 조깅, 보트 타기. 인접한 성터에서 후쿠오카 과거 엿보기.",
+                transport: "지하철 오호리코엔역",
+                tips: "후쿠오카 미술관도 함께 방문 추천. 벚꽃 시즌(3월 말~4월 초) 방문 시 환상적.",
+                menu: "보트 대여 ¥600~1,000/30분 / 미술관 ¥200~500 / 스타벅스 ¥400~600",
+                hours: "공원 24시간 / 성터 09:00-17:00"
+            }
+        },
+        {
+            id: "kushida_shrine_yamakasa",
+            name: "구시다 신사",
+            name_en: "Kushida Shrine & Yamakasa Exhibition",
+            lat: 33.5930, lng: 130.4105,
+            type: "temple", region: "hakata", rating: 4.4,
+            desc: "하카타의 영적인 심장. 화려한 야마카사 축제 장식 수레 상설 전시가 인상적.",
+            photos: [
+                "https://images.unsplash.com/photo-1599579178553-527395634543?w=800",
+                "https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=800"
+            ],
+            details: {
+                info: "정교한 조각과 화려한 장식. 하카타 기온 야마카사 축제(7월) 때 방문 추천.",
+                transport: "카미카와바타마치 1-41, 하카타구",
+                tips: "참배 전 테미즈야에서 손과 입 정화. 오미쿠지(운세뽑기) 체험.",
+                menu: "오미쿠지 ¥100~200 / 오마모리 ¥500~2,000 / 주변 길거리음식 ¥200~500",
+                hours: "신사 09:00-17:00 / 야마카사 전시 24시간 관람 가능"
+            }
+        },
+        {
+            id: "fukuoka_tower_view",
+            name: "후쿠오카 타워",
+            name_en: "Fukuoka Tower",
+            lat: 33.5932, lng: 130.3515,
+            type: "spot", region: "bay", rating: 4.4,
+            desc: "234m 높이의 후쿠오카 랜드마크. 시내와 바다를 한눈에 조망할 수 있는 전망대.",
+            photos: [
+                "https://images.unsplash.com/photo-1558862107-d49ef2a04d72?w=800",
+                "https://images.unsplash.com/photo-1605270960538-420032c2569f?w=800"
+            ],
+            details: {
+                info: "계절마다 바뀌는 일루미네이션. 외국인 여권 제시 시 할인.",
+                transport: "버스 (후쿠오카 타워 남구 하차)",
+                tips: "야경도 멋지지만 맑은 날 낮에 보는 바다 뷰도 환상적. 모모치 해변과 함께 방문 추천.",
+                menu: "전망대 입장 ¥800 (외국인 할인 ¥640) / 기념품 시가",
+                hours: "09:30-22:00 (입장 21:30까지)"
+            }
+        },
+        {
+            id: "momochi_beach",
+            name: "모모치 해변 공원",
+            name_en: "Momochi Seaside Park",
+            lat: 33.5930, lng: 130.3515,
+            type: "spot", region: "bay", rating: 4.5,
+            desc: "이국적인 분위기의 인공 해변. 후쿠오카 타워 바로 앞에 위치. 마리존 예식장이 사진 명소.",
+            photos: [
+                "https://images.unsplash.com/photo-1605270960538-420032c2569f?w=800",
+                "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800"
+            ],
+            details: {
+                info: "유럽풍 건물인 마리존 예식장이 있어 사진 찍기 좋은 명소.",
+                transport: "버스 (후쿠오카 타워 남구 하차)",
+                tips: "해변 모래사장에서 후쿠오카 타워를 배경으로 인생샷. 해질녘 특히 아름다움.",
+                menu: "해변 카페 음료 시가 / 후쿠오카 타워와 함께 방문",
+                hours: "24시간 (타워: 09:30-22:00)"
+            }
+        },
+
+        // =======================================
+        // 🍜 ADDITIONAL RESTAURANTS
+        // =======================================
+        {
+            id: "motsunabe_rakutenchi_tenjin",
+            name: "원조 모츠나베 라쿠텐치 텐진본점",
+            name_en: "Ganso Motsunabe Rakutenchi Tenjin Honten",
+            lat: 33.5920, lng: 130.4000,
+            type: "food", region: "tenjin", rating: 4.7,
+            desc: "후쿠오카 명물 모츠나베의 원조. 신선한 곱창과 채소가 어우러진 진한 국물 전골.",
+            photos: [
+                "https://images.unsplash.com/photo-1569058242253-92a9c755a0ec?w=800",
+                "https://images.unsplash.com/photo-1536768139911-e290a59011e4?w=800"
+            ],
+            details: {
+                info: "북적이는 현지 분위기. 친구들과 함께 즐기기 좋음. 짬뽕면이나 죽 추가 필수.",
+                transport: "텐진 1-1-1, 아크로스 후쿠오카 지하2층",
+                tips: "간장/미소 중 국물 선택. 마지막에 짬뽕면이나 죽으로 국물까지 완벽히 즐기기.",
+                menu: "모츠나베 ¥1,600/인 / 짬뽕면 추가 ¥400 / 죽 추가 ¥400 / 교자 ¥450",
+                hours: "11:00-22:00"
+            }
+        },
+        {
+            id: "daitoen_yakiniku",
+            name: "다이토엔 본점",
+            name_en: "Daitoen Main Store",
+            lat: 33.5935, lng: 130.4080,
+            type: "food", region: "nakasu", rating: 4.3,
+            desc: "프리미엄 야키니쿠 맛집. 세련된 공간에서 최상급 일본 와규 테이블 그릴 체험.",
+            photos: [
+                "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=800",
+                "https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=800"
+            ],
+            details: {
+                info: "놀랍도록 부드럽고 풍미 가득한 고기. 세심하고 전문적인 서비스.",
+                transport: "카미카와바타마치 1-1-1, 하카타구",
+                tips: "저녁 예약 필수. 프라이빗룸 가능. 특별한 날에 추천.",
+                menu: "프리미엄 와규 모듬 ¥7,500 / 스페셜 갈비 ¥2,200 / 하라미 ¥1,800 / 비빔밥 ¥1,200",
+                hours: "월-금 11:30-14:00, 16:00-22:30 / 토-일 11:30-22:30"
+            }
         }
     ];
 
