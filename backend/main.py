@@ -4,46 +4,40 @@ import json
 import os
 from typing import Optional, Dict, Any
 
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
+
+from typing import List
+from pydantic import BaseModel
+import google.generativeai as genai
+
 app = FastAPI(title="JapBong Learning API", version="1.0.0")
 
 # CORS Setup
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Allow all for dev
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# Helper to load data
-DATA_DIR = os.path.join(os.path.dirname(__file__), "data")
+# ... (data loading code)
 
-def load_json(filename: str) -> Dict[str, Any]:
-    filepath = os.path.join(DATA_DIR, filename)
-    if not os.path.exists(filepath):
-        # Fallback if file doesn't exist (e.g. before migration runs properly)
-        return {}
-    with open(filepath, 'r', encoding='utf-8') as f:
-        return json.load(f)
+# Serve Frontend Static Files
+# Mount specialized directories first
+app.mount("/js", StaticFiles(directory="js"), name="js")
+app.mount("/css", StaticFiles(directory="css"), name="css")
+app.mount("/images", StaticFiles(directory="images"), name="images")
 
-# Cache data in memory for now (since it's read-only mostly)
-# In a real dynamic app, we might want to read from DB or reload on change.
-conversations_db = {}
-words_db = {}
-
-@app.on_event("startup")
-async def startup_event():
-    global conversations_db, words_db
-    try:
-        conversations_db = load_json("conversations.json")
-        words_db = load_json("words.json")
-        print(f"Loaded {len(conversations_db)} conversation categories")
-        print(f"Loaded {len(words_db)} word categories")
-    except Exception as e:
-        print(f"Error loading data: {e}")
-
+# Serve index.html at root
 @app.get("/")
-def read_root():
+async def read_root():
+    return FileResponse('index.html')
+
+# Remove the old health check or move it to /api/health
+@app.get("/api/health")
+def health_check():
     return {"status": "ok", "message": "JapBong API is running"}
 
 # --- Conversation Endpoints ---
@@ -124,8 +118,8 @@ def save_progress(data: Dict[str, Any]):
         return {"status": "saved", "user_id": user_id}
         
     except Exception as e:
-# ... existing code ...
-import google.generativeai as genai
+        print(f"Error saving progress: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
 
 # ... existing code ...
 
