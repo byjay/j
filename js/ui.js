@@ -50,52 +50,20 @@ function showTab(tabName) {
         }
     });
 
-    // 탭별 초기화 및 학습 추적 시작
-    if (typeof LearningTracker !== 'undefined' && LearningTracker.stopTracking) {
-        LearningTracker.stopTracking(); // 기존 추적 중지
-    }
-
+    // 탭별 초기화 로직
     if (tabName === 'characters') {
+        if (typeof showCharacterGrid === 'function') showCharacterGrid('hiragana');
         if (typeof LearningTracker !== 'undefined') LearningTracker.startTracking('characters');
-        // alert("DEBUG: showTab('characters') reached"); 
-        if (typeof showCharacterGrid === 'function') {
-            showCharacterGrid('hiragana');
-        } else {
-            console.error("showCharacterGrid function not found!");
-            alert("Error: showCharacterGrid function not found! Check characters.js loading.");
-        }
     } else if (tabName === 'vocabulary') {
+        if (typeof initVocabulary === 'function') initVocabulary();
         if (typeof LearningTracker !== 'undefined') LearningTracker.startTracking('vocabulary');
-        if (typeof initVocabulary === 'function') {
-            initVocabulary();
-        }
-    } else if (tabName === 'word_study') {
-        // word_study는 vocabulary의 일부로 간주하거나 별도 트래킹
-        if (typeof LearningTracker !== 'undefined') LearningTracker.startTracking('vocabulary');
-        if (typeof initWordStudy === 'function') {
-            initWordStudy();
-        }
     } else if (tabName === 'conversation') {
+        if (typeof initConversation === 'function') initConversation();
         if (typeof LearningTracker !== 'undefined') LearningTracker.startTracking('conversation');
-        if (typeof showConversationMode === 'function') {
-            showConversationMode('practical');
-        } else if (typeof initDayConversation === 'function') {
-            initDayConversation();
-        }
     } else if (tabName === 'fukuoka' || tabName === 'japan_travel') {
-        if (typeof initJapanTravel === 'function') {
-            initJapanTravel();
-        } else if (typeof initFukuokaTrip === 'function') {
-            initFukuokaTrip();
-        }
-    } else if (tabName === 'progress') {
-        if (typeof showProgressDashboard === 'function') {
-            showProgressDashboard();
-        }
+        if (typeof initJapanTravel === 'function') initJapanTravel();
     } else if (tabName === 'grammar') {
-        if (typeof GrammarPractice !== 'undefined') {
-            GrammarPractice.init();
-        }
+        if (typeof GrammarPractice !== 'undefined') GrammarPractice.init();
     }
 }
 
