@@ -264,10 +264,17 @@ function renderCard() {
                     </div>
 
                     <!-- 4. 품사 (뱃지) -->
-                    <div class="mt-2">
+                    <div class="mt-2 text-center">
                         <span class="px-3 py-1 bg-gray-200 text-gray-600 rounded-full text-xs font-bold uppercase">
                             ${word.type}
                         </span>
+                    </div>
+
+                    <!-- 5. AI 회화 생성 버튼 (NEW) -->
+                    <div class="mt-4">
+                        <button onclick="event.stopPropagation(); openConversationModal('${word.kanji}')" class="w-full py-3 bg-gradient-to-r from-indigo-500 to-purple-600 text-white rounded-xl font-bold shadow-lg flex items-center justify-center gap-2 hover:shadow-xl transition transform active:scale-95">
+                            <i class="fas fa-magic"></i> 이 단어로 회화 만들기
+                        </button>
                     </div>
 
                 </div>
@@ -351,3 +358,70 @@ function backToWordCategories() {
 }
 
 console.log('word_study.js (Kana Enhanced) 로드 완료');
+
+// ==========================================
+// 8. AI 회화 모달 (NEW)
+// ==========================================
+async function openConversationModal(word) {
+    const modal = document.getElementById('ai-conversation-modal');
+    const content = document.getElementById('ai-conversation-content');
+    const targetText = document.getElementById('ai-modal-word-target');
+
+    if (!modal) return;
+
+    // Reset state
+    modal.classList.remove('hidden');
+    targetText.innerText = `단어: ${word}`;
+    content.innerHTML = `
+        <div class="text-center py-10" id="ai-loading-state">
+            <i class="fas fa-spinner fa-spin text-4xl text-indigo-500 mb-4"></i>
+            <p class="text-gray-500 font-medium">AI가 '${word}'(으)로 회화를 만들고 있어요...</p>
+        </div>
+    `;
+
+    try {
+        const data = await ApiClient.generateWordConversation(word);
+
+        if (!data || !data.dialogue) {
+            throw new Error('데이터 생성 실패');
+        }
+
+        // Render Dialogue
+        let html = `<div class="bg-indigo-50 p-3 rounded-lg text-center mb-4 text-indigo-800 font-bold text-sm border border-indigo-100">${data.title || 'AI 회화'}</div>`;
+        html += '<div class="space-y-4">';
+
+        data.dialogue.forEach(line => {
+            const isA = line.speaker === 'A';
+            html += `
+                <div class="flex ${isA ? 'justify-start' : 'justify-end'}">
+                    <div class="max-w-[85%] ${isA ? 'bg-white border-gray-200 text-gray-800' : 'bg-indigo-600 text-white'} rounded-2xl px-4 py-3 shadow-sm border">
+                        <div class="font-bold text-xs mb-1 opacity-70">${line.speaker}</div>
+                        <div class="text-lg font-bold mb-1 leading-snug">${line.jp}</div>
+                        <div class="text-xs opacity-70 mb-2 font-mono">${line.romaji}</div>
+                        <div class="text-sm font-medium border-t ${isA ? 'border-gray-100' : 'border-indigo-500'} pt-2 opacity-95">${line.kr}</div>
+                    </div>
+                </div>
+             `;
+        });
+
+        html += '</div>';
+        content.innerHTML = html;
+
+    } catch (e) {
+        console.error(e);
+        content.innerHTML = `
+            <div class="text-center py-10 text-red-500">
+                <i class="fas fa-exclamation-triangle text-4xl mb-4"></i>
+                <p>회화 생성에 실패했습니다.<br>잠시 후 다시 시도해주세요.</p>
+            </div>
+        `;
+    }
+}
+
+function closeConversationModal() {
+    document.getElementById('ai-conversation-modal').classList.add('hidden');
+}
+
+// Export logic
+window.openConversationModal = openConversationModal;
+window.closeConversationModal = closeConversationModal;

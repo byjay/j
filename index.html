@@ -655,6 +655,47 @@
         </div>
     </div>
 
+    <!-- AI Conversation Modal (Word Context) -->
+    <div id="ai-conversation-modal"
+        class="fixed inset-0 z-[60] hidden flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
+        <div class="bg-white w-full max-w-lg rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[85vh]">
+            <!-- Header -->
+            <div
+                class="bg-gradient-to-r from-indigo-500 to-purple-600 p-4 text-white flex justify-between items-center shrink-0">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center">
+                        <i class="fas fa-comments text-xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-lg">AI 회화 생성</h3>
+                        <p class="text-xs text-indigo-100" id="ai-modal-word-target">단어: ...</p>
+                    </div>
+                </div>
+                <button onclick="closeConversationModal()"
+                    class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20 transition">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <!-- Content Area -->
+            <div id="ai-conversation-content" class="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50 custom-scrollbar">
+                <!-- Chat bubbles will go here -->
+                <div class="text-center py-10" id="ai-loading-state">
+                    <i class="fas fa-spinner fa-spin text-4xl text-indigo-500 mb-4"></i>
+                    <p class="text-gray-500 font-medium">AI가 회화를 만들고 있어요...</p>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <div class="p-4 border-t border-gray-100 bg-white shrink-0">
+                <button onclick="closeConversationModal()"
+                    class="w-full py-3 bg-gray-100 text-gray-700 font-bold rounded-xl hover:bg-gray-200 transition">
+                    닫기
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- Bottom Navigation -->
     <nav id="bottom-nav" class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 pb-safe z-50 hidden">
         <div class="flex justify-around items-center h-16 max-w-3xl mx-auto px-2">
@@ -674,14 +715,7 @@
                 </div>
                 <span class="text-[10px] font-bold">여행</span>
             </button>
-            <button onclick="showTab('conversation')"
-                class="nav-tab flex-1 flex flex-col items-center justify-center py-1 text-gray-400 hover:text-purple-600 transition-colors group">
-                <div
-                    class="w-12 h-8 flex items-center justify-center rounded-full group-hover:bg-purple-50 transition-colors mb-0.5">
-                    <i class="fas fa-comments text-xl mb-0.5"></i>
-                </div>
-                <span class="text-[10px] font-bold">회화</span>
-            </button>
+
             <button onclick="showTab('vocabulary')"
                 class="nav-tab flex-1 flex flex-col items-center justify-center py-1 text-gray-400 hover:text-green-600 transition-colors group">
                 <div
@@ -698,14 +732,7 @@
                 </div>
                 <span class="text-[10px] font-bold">글자</span>
             </button>
-            <button onclick="showTab('grammar')"
-                class="nav-tab flex-1 flex flex-col items-center justify-center py-1 text-gray-400 hover:text-indigo-600 transition-colors group">
-                <div
-                    class="w-12 h-8 flex items-center justify-center rounded-full group-hover:bg-indigo-50 transition-colors mb-0.5">
-                    <i class="fas fa-robot text-xl mb-0.5"></i>
-                </div>
-                <span class="text-[10px] font-bold">문장</span>
-            </button>
+
         </div>
     </nav>
 

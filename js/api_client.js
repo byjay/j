@@ -74,6 +74,11 @@ const ApiClient = {
         return await this.get(`/dictionary/search?q=${encodeURIComponent(query)}`);
     },
 
+    // Conversation Generation (AI)
+    async generateWordConversation(word) {
+        return await this.post('/generate/conversation', { word });
+    },
+
     // Grammar Practice (AI)
     async transformSentence(sentence, targetForm) {
         return await this.post('/practice/transform', { sentence, target_form: targetForm });

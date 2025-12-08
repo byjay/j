@@ -203,20 +203,36 @@ def check_sentence(req: CheckRequest):
 from routers import scraper
 app.include_router(scraper.router, prefix="/api")
 
-# --- Dynamic Content Generation (Stub) ---
+
+class ConversationGenRequest(BaseModel):
+    word: str
+
 @app.post("/api/generate/conversation")
-def generate_conversation_stub(topic: str, level: str):
-    """
-    Stub for AI-generated conversations.
-    In the future, this will call an LLM.
-    """
-    return {
-        "topic": topic,
-        "level": level,
-        "generated_content": [
-            {
-                "speaker": "AI",
-                "text": f"This is a generated conversation about {topic} at {level} level."
-            }
+def generate_conversation(req: ConversationGenRequest):
+    if not model:
+        raise HTTPException(status_code=503, detail="AI Service Unavailable (Missing Key)")
+        
+    prompt = f"""
+    Create a short, natural Japanese conversation (dialogue between A and B) using the word '{req.word}'.
+    The conversation should be simple, suitable for beginners (JLPT N5-N4 level).
+    
+    Target Word: {req.word}
+    
+    Output JSON format:
+    {{
+        "title": "A short title for the situation",
+        "dialogue": [
+            {{ "speaker": "A", "jp": "Japanese sentence", "kr": "Korean translation", "romaji": "Romaji reading" }},
+            {{ "speaker": "B", "jp": "Japanese sentence", "kr": "Korean translation", "romaji": "Romaji reading" }},
+            {{ "speaker": "A", "jp": "Japanese sentence", "kr": "Korean translation", "romaji": "Romaji reading" }}
         ]
-    }
+    }}
+    """
+    
+    try:
+        response = model.generate_content(prompt)
+        text = response.text.replace("```json", "").replace("```", "").strip()
+        return json.loads(text)
+    except Exception as e:
+        print(f"AI Conversation Error: {e}")
+        raise HTTPException(status_code=500, detail="AI Processing Failed")
