@@ -68,35 +68,35 @@ function showCharacterGrid(type) {
     // 1. 상단 고정 헤더 (탭 + 퀴즈/통계 버튼) - 컴팩트 디자인
     const isHiragana = type === 'hiragana';
     const topHTML = `
-        <div class="sticky top-12 z-30 bg-gray-50/95 backdrop-blur-sm -mx-4 px-4 py-2 border-b border-gray-200 mb-2">
-            <div class="flex gap-1 mb-2">
+        <div class="sticky top-0 z-30 bg-gray-50/95 backdrop-blur-sm -mx-4 px-4 py-2 border-b border-gray-200 mb-2 shadow-sm">
+            <div class="flex gap-1 mb-1.5">
                 <button onclick="showCharacterGrid('hiragana')" 
-                    class="flex-1 py-2 rounded-lg font-bold text-xs transition-colors ${isHiragana ? 'bg-red-500 text-white shadow-sm' : 'bg-white text-gray-500 border border-gray-200'}">
+                    class="flex-1 py-1.5 rounded-lg font-bold text-xs transition-colors ${isHiragana ? 'bg-red-500 text-white shadow-sm' : 'bg-white text-gray-500 border border-gray-200'}">
                     히라가나
                 </button>
                 <button onclick="showCharacterGrid('katakana')" 
-                    class="flex-1 py-2 rounded-lg font-bold text-xs transition-colors ${!isHiragana ? 'bg-blue-500 text-white shadow-sm' : 'bg-white text-gray-500 border border-gray-200'}">
+                    class="flex-1 py-1.5 rounded-lg font-bold text-xs transition-colors ${!isHiragana ? 'bg-blue-500 text-white shadow-sm' : 'bg-white text-gray-500 border border-gray-200'}">
                     가타카나
                 </button>
             </div>
             <div class="flex gap-1">
-                <button onclick="startQuiz('hiragana')" class="flex-1 bg-white text-gray-600 border border-gray-200 py-1.5 rounded-lg text-[10px] font-bold hover:bg-gray-50">
+                <button onclick="startQuiz('hiragana')" class="flex-1 bg-white text-gray-600 border border-gray-200 py-1 rounded-md text-[10px] font-bold hover:bg-gray-50">
                     <i class="fas fa-question-circle text-red-400 mr-1"></i>히라가나
                 </button>
-                <button onclick="startQuiz('katakana')" class="flex-1 bg-white text-gray-600 border border-gray-200 py-1.5 rounded-lg text-[10px] font-bold hover:bg-gray-50">
+                <button onclick="startQuiz('katakana')" class="flex-1 bg-white text-gray-600 border border-gray-200 py-1 rounded-md text-[10px] font-bold hover:bg-gray-50">
                     <i class="fas fa-question-circle text-blue-400 mr-1"></i>가타카나
                 </button>
-                <button onclick="startQuiz('mix')" class="flex-1 bg-white text-gray-600 border border-gray-200 py-1.5 rounded-lg text-[10px] font-bold hover:bg-gray-50">
+                <button onclick="startQuiz('mix')" class="flex-1 bg-white text-gray-600 border border-gray-200 py-1 rounded-md text-[10px] font-bold hover:bg-gray-50">
                     <i class="fas fa-random text-purple-400 mr-1"></i>섞어서
                 </button>
-                <button onclick="showHistory()" class="px-3 bg-gray-800 text-white py-1.5 rounded-lg text-[10px] font-bold hover:bg-gray-900">
+                <button onclick="showHistory()" class="px-3 bg-gray-800 text-white py-1 rounded-md text-[10px] font-bold hover:bg-gray-900">
                     <i class="fas fa-chart-bar text-yellow-400"></i>
                 </button>
             </div>
         </div>
     `;
 
-    // 2. 그리드 내용 (컴팩트)
+    // 2. 그리드 내용 (컴팩트: h-20 -> h-14, text-xl -> text-lg)
     const list = charData[type];
     const cellsHTML = list.map((item, idx) => {
         if (!item.char) {
@@ -109,10 +109,10 @@ function showCharacterGrid(type) {
 
         return `
             <button onclick="selectCharacter(${idx})" 
-                class="relative h-20 flex flex-col items-center justify-center bg-white rounded-lg border border-gray-200 shadow-sm active:scale-95 transition-transform hover:border-red-300 ${isMastered ? 'bg-yellow-50 border-yellow-300' : ''}">
+                class="relative h-11 flex flex-col items-center justify-center bg-white rounded-lg border border-gray-200 shadow-sm active:scale-95 transition-transform hover:border-red-300 ${isMastered ? 'bg-yellow-50 border-yellow-300' : ''}">
                 ${badge}
-                <span class="text-xl font-bold text-gray-800 leading-none mb-1">${item.char}</span>
-                <span class="text-[11px] text-gray-500 font-bold leading-none">${item.pron}</span>
+                <span class="text-base font-bold text-gray-800 leading-none mb-0.5">${item.char}</span>
+                <span class="text-[9px] text-gray-500 font-bold leading-none">${item.pron}</span>
             </button>
         `;
     }).join('');
@@ -310,6 +310,8 @@ function getCharHex(char) {
     return char.charCodeAt(0).toString(16).padStart(5, '0');
 }
 
+const svgCache = {};
+
 async function playStrokeAnimation(char) {
     const container = document.getElementById('stroke-guide-container');
     if (!container) return;
@@ -318,17 +320,23 @@ async function playStrokeAnimation(char) {
     container.innerHTML = '';
     clearCanvas();
 
-    // 로딩 표시 (잠깐)
-    // container.innerHTML = '<div class="animate-spin rounded-full h-8 w-8 border-b-2 border-red-500"></div>';
+    // 로딩 표시
+    container.innerHTML = '<div class="absolute inset-0 flex items-center justify-center"><div class="animate-spin rounded-full h-8 w-8 border-b-2 border-red-500"></div></div>';
 
     try {
         const hex = getCharHex(char);
-        const url = `https://cdn.jsdelivr.net/gh/KanjiVG/kanjivg@master/kanji/${hex}.svg`;
+        let svgText = svgCache[hex];
 
-        const response = await fetch(url);
-        if (!response.ok) throw new Error('SVG fetch failed');
+        if (!svgText) {
+            const url = `https://cdn.jsdelivr.net/gh/KanjiVG/kanjivg@master/kanji/${hex}.svg`;
+            const response = await fetch(url);
+            if (!response.ok) throw new Error('SVG fetch failed');
+            svgText = await response.text();
+            svgCache[hex] = svgText; // 캐싱
+        }
 
-        const svgText = await response.text();
+        // 로딩 제거 후 렌더링
+        container.innerHTML = '';
         const parser = new DOMParser();
         const doc = parser.parseFromString(svgText, 'image/svg+xml');
         const svg = doc.querySelector('svg');

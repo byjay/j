@@ -18,6 +18,7 @@ EXPOSE 8000
 
 # Define environment variable for production
 ENV PORT="8000"
+ENV GEMINI_API_KEY="AIzaSyDut_dCmgDbGIQ64ENq8Ws7uFMC-bwteEg"
 
 # Run app.py when the container launches
 # Note: We run from root /app, so python path needs to know about backend
