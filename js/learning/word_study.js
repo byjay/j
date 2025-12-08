@@ -220,20 +220,21 @@ function renderCard() {
         `;
     } else {
         // [뒷면] 히라가나 -> 한글발음 -> 뜻 -> 품사 순서 배치
+        // 뒷면은 직접 onclick을 제거하고 명시적 버튼으로 처리하여 이벤트 충돌 방지
         contentHtml = `
-            <div class="w-full h-[500px] flex flex-col bg-blue-50 rounded-2xl shadow-xl border-2 border-blue-200 cursor-pointer relative overflow-hidden" onclick="flipCard()">
+            <div class="w-full h-[500px] flex flex-col bg-blue-50 rounded-2xl shadow-xl border-2 border-blue-200 relative overflow-hidden">
                 
                 <!-- 상단: 한자 작게 (참고용) -->
                 <div class="w-full py-4 bg-white/50 border-b border-blue-100 text-center relative">
                     <span class="text-gray-400 text-sm font-bold mr-2">#${String(word.id).padStart(2, '0')}</span>
                     <span class="text-2xl font-bold text-gray-600">${word.kanji}</span>
-                    <button onclick="event.stopPropagation(); playWordAudio('${word.kanji}')" class="absolute right-4 top-1/2 transform -translate-y-1/2 text-blue-400 hover:text-blue-600">
+                    <button onclick="playWordAudio('${word.kanji}')" class="absolute right-4 top-1/2 transform -translate-y-1/2 text-blue-400 hover:text-blue-600">
                         <i class="fas fa-volume-up"></i>
                     </button>
                 </div>
 
                 <!-- 메인 내용 영역 (Flex Column) -->
-                <div class="flex-1 flex flex-col items-center justify-center p-6 space-y-6 overflow-y-auto">
+                <div class="flex-1 flex flex-col items-center justify-center p-6 space-y-4 overflow-y-auto">
                     
                     <!-- 1. 히라가나 (가장 강조) -->
                     <div class="text-center w-full">
@@ -264,21 +265,26 @@ function renderCard() {
                     </div>
 
                     <!-- 4. 품사 (뱃지) -->
-                    <div class="mt-2 text-center">
+                    <div class="text-center">
                         <span class="px-3 py-1 bg-gray-200 text-gray-600 rounded-full text-xs font-bold uppercase">
                             ${word.type}
                         </span>
                     </div>
 
                     <!-- 5. AI 기능 버튼들 -->
-                    <div class="mt-4 space-y-2">
-                        <button onclick="event.stopPropagation(); openConversationModal('${word.kanji}')" class="w-full py-3 bg-gradient-to-r from-indigo-500 to-purple-600 text-white rounded-xl font-bold shadow-lg flex items-center justify-center gap-2 hover:shadow-xl transition transform active:scale-95">
+                    <div class="w-full space-y-2">
+                        <button onclick="openConversationModal('${word.kanji}')" class="w-full py-3 bg-gradient-to-r from-indigo-500 to-purple-600 text-white rounded-xl font-bold shadow-lg flex items-center justify-center gap-2 hover:shadow-xl transition transform active:scale-95">
                             <i class="fas fa-comments"></i> 이 단어로 회화 만들기
                         </button>
-                        <button onclick="event.stopPropagation(); openSentenceModal('${word.kanji}')" class="w-full py-3 bg-gradient-to-r from-emerald-500 to-teal-600 text-white rounded-xl font-bold shadow-lg flex items-center justify-center gap-2 hover:shadow-xl transition transform active:scale-95">
+                        <button onclick="openSentenceModal('${word.kanji}')" class="w-full py-3 bg-gradient-to-r from-emerald-500 to-teal-600 text-white rounded-xl font-bold shadow-lg flex items-center justify-center gap-2 hover:shadow-xl transition transform active:scale-95">
                             <i class="fas fa-pen-fancy"></i> 이 단어로 문장 만들기
                         </button>
                     </div>
+
+                    <!-- 6. 앞면으로 돌아가기 버튼 -->
+                    <button onclick="flipCard()" class="w-full py-2 mt-2 bg-gray-100 text-gray-600 rounded-lg font-medium flex items-center justify-center gap-2 hover:bg-gray-200 transition">
+                        <i class="fas fa-undo"></i> 앞면 보기
+                    </button>
 
                 </div>
             </div>
