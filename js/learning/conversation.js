@@ -15494,7 +15494,7 @@ function updateNavigationButtons() {
 function previousConversation() { AudioController.stopAutoRepeat(); if (currentConversationIndex > 0) { currentConversationIndex--; displayCurrentConversation(); window.scrollTo({ top: 0, behavior: 'smooth' }); } }
 function nextConversation() { AudioController.stopAutoRepeat(); if (currentConversationIndex < conversationModuleData[currentConversationCategory].conversations.length - 1) { currentConversationIndex++; displayCurrentConversation(); window.scrollTo({ top: 0, behavior: 'smooth' }); } }
 
-document.addEventListener('DOMContentLoaded', () => { if (document.getElementById('conversation-content')) initConversation(); });
+document.addEventListener('DOMContentLoaded', () => { if (document.getElementById('conversation-categories')) initConversation(); });
 
 
 
@@ -15577,92 +15577,6 @@ function togglePracticalDay(dayKey) {
         icon.classList.remove('rotate-180');
     }
 }
-
-
-// 2. Situational Conversation Initialization
-function initConversation() {
-    console.log('Initializing Situational Conversation...');
-    const categoryContainer = document.getElementById('conversation-categories');
-    const listContainer = document.getElementById('conversation-list');
-
-    if (!categoryContainer) {
-        console.error('conversation-categories container not found');
-        return;
-    }
-
-    // 리스트 숨기고 카테고리 보이기
-    if (listContainer) listContainer.classList.add('hidden');
-    categoryContainer.classList.remove('hidden');
-
-    // 카테고리 렌더링
-    renderConversationCategories();
-}
-
-function renderConversationCategories() {
-    const container = document.getElementById('conversation-categories');
-    if (!container) return;
-
-    container.innerHTML = Object.keys(conversationModuleData).map(key => {
-        const cat = conversationModuleData[key];
-        return `
-            <div onclick="loadConversationCategory('${key}')" 
-                class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 cursor-pointer hover:shadow-md hover:border-${cat.color}-200 transition-all group">
-                <div class="flex items-center gap-4 mb-3">
-                    <div class="w-12 h-12 rounded-full bg-${cat.color}-50 flex items-center justify-center text-${cat.color}-500 group-hover:scale-110 transition-transform">
-                        <i class="${cat.icon} text-xl"></i>
-                    </div>
-                    <div>
-                        <h3 class="text-lg font-bold text-gray-800">${cat.title}</h3>
-                        <p class="text-xs text-gray-400 font-mono">${cat.conversations.length} Situations</p>
-                    </div>
-                </div>
-                <div class="w-full bg-gray-100 h-1.5 rounded-full overflow-hidden">
-                    <div class="bg-${cat.color}-400 h-full w-0 group-hover:w-full transition-all duration-700 ease-out"></div>
-                </div>
-            </div>
-        `;
-    }).join('');
-}
-
-function loadConversationCategory(category) {
-    currentConversationCategory = category;
-    currentConversationIndex = 0;
-
-    const categoryContainer = document.getElementById('conversation-categories');
-    const listContainer = document.getElementById('conversation-list');
-
-    if (categoryContainer) categoryContainer.classList.add('hidden');
-    if (listContainer) listContainer.classList.remove('hidden');
-
-    displayCurrentConversation();
-}
-
-function displayCurrentConversation() {
-    const listContainer = document.getElementById('conversation-viewer');
-    if (!listContainer) return;
-
-    const convData = conversationModuleData[currentConversationCategory];
-    const conv = convData.conversations[currentConversationIndex];
-
-    // Update Navigation State
-    updateNavigationButtons();
-
-    // Render Card
-    listContainer.innerHTML = createFlipCardHTML(conv, currentConversationIndex);
-
-    // Auto-scroll to top
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-}
-
-// Restore missing functions
-function backToCategories() {
-    if (typeof AudioController !== 'undefined') AudioController.stopAutoRepeat();
-    const listContainer = document.getElementById('conversation-list');
-    const categoryContainer = document.getElementById('conversation-categories');
-    if (listContainer) listContainer.classList.add('hidden');
-    if (categoryContainer) categoryContainer.classList.remove('hidden');
-}
-
 // Alias for compatibility
 const openConversationCategory = loadConversationCategory;
 
