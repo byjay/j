@@ -97,6 +97,16 @@ function showTab(tabName) {
             GrammarPractice.init();
         }
     }
+} else if (tabName === 'grammar') {
+    if (typeof GrammarPractice !== 'undefined') {
+        GrammarPractice.init();
+    }
+}
+}
+
+// Main Menu Button Handler (redirects to showTab)
+function openSection(sectionId) {
+    showTab(sectionId);
 }
 
 // ★ 하단 네비게이션 클릭 핸들러 (로그인 체크)
