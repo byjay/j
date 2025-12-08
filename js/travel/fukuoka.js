@@ -294,24 +294,7 @@ function initFukuokaTrip() {
                 info: "7월 마츠리(축제) 때 사용되는 거대한 가마(야마카사)가 전시되어 있습니다.",
                 transport: "캐널시티 바로 옆",
                 tips: "역사적인 의미를 되새기며 둘러보시길 권합니다."
-            }
-        },
-        {
-            id: "tenjin_underground",
-            name: "텐진 지하상가",
-            lat: 33.5915,
-            lng: 130.4010,
-            type: "spot",
-            region: "tenjin",
-            rating: 4.3,
-            desc: "19세기 유럽 거리를 모티브로 한 규슈 최대의 지하 쇼핑가.",
-            photos: ["https://images.unsplash.com/photo-1519810755548-39cd217da494?w=800"],
-            details: {
-                info: "패션, 잡화, 카페 등 150여 개의 점포가 길게 늘어서 있습니다.",
-                transport: "지하철 텐진역 직결",
-                tips: "유명한 '베이크 치즈 타르트'나 '링고 애플파이'를 간식으로 드셔보세요."
-            }
-        },
+            },
         {
             id: "yakiniku_dinner",
             name: "야키니쿠 타베호다이",
