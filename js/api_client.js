@@ -86,6 +86,11 @@ const ApiClient = {
 
     async checkSentence(words, userSentence) {
         return await this.post('/practice/check', { words, user_sentence: userSentence });
+    },
+
+    // Sentence Generation (AI) - Word to Example Sentences
+    async generateWordSentences(word) {
+        return await this.post('/generate/sentences', { word });
     }
 };
 

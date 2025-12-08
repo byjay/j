@@ -236,3 +236,39 @@ def generate_conversation(req: ConversationGenRequest):
     except Exception as e:
         print(f"AI Conversation Error: {e}")
         raise HTTPException(status_code=500, detail="AI Processing Failed")
+
+class SentenceGenRequest(BaseModel):
+    word: str
+
+@app.post("/api/generate/sentences")
+def generate_sentences(req: SentenceGenRequest):
+    if not model:
+        raise HTTPException(status_code=503, detail="AI Service Unavailable (Missing Key)")
+        
+    prompt = f"""
+    Create 5 simple Japanese example sentences using the word '{req.word}'.
+    The sentences should be practical and suitable for beginners (JLPT N5-N4 level).
+    Each sentence should demonstrate different uses or contexts.
+    
+    Target Word: {req.word}
+    
+    Output JSON format:
+    {{
+        "sentences": [
+            {{ "jp": "Japanese sentence", "kr": "Korean translation", "romaji": "Romaji reading" }},
+            {{ "jp": "Japanese sentence", "kr": "Korean translation", "romaji": "Romaji reading" }},
+            {{ "jp": "Japanese sentence", "kr": "Korean translation", "romaji": "Romaji reading" }},
+            {{ "jp": "Japanese sentence", "kr": "Korean translation", "romaji": "Romaji reading" }},
+            {{ "jp": "Japanese sentence", "kr": "Korean translation", "romaji": "Romaji reading" }}
+        ]
+    }}
+    """
+    
+    try:
+        response = model.generate_content(prompt)
+        text = response.text.replace("```json", "").replace("```", "").strip()
+        return json.loads(text)
+    except Exception as e:
+        print(f"AI Sentences Error: {e}")
+        raise HTTPException(status_code=500, detail="AI Processing Failed")
+

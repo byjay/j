@@ -270,10 +270,13 @@ function renderCard() {
                         </span>
                     </div>
 
-                    <!-- 5. AI 회화 생성 버튼 (NEW) -->
-                    <div class="mt-4">
+                    <!-- 5. AI 기능 버튼들 -->
+                    <div class="mt-4 space-y-2">
                         <button onclick="event.stopPropagation(); openConversationModal('${word.kanji}')" class="w-full py-3 bg-gradient-to-r from-indigo-500 to-purple-600 text-white rounded-xl font-bold shadow-lg flex items-center justify-center gap-2 hover:shadow-xl transition transform active:scale-95">
-                            <i class="fas fa-magic"></i> 이 단어로 회화 만들기
+                            <i class="fas fa-comments"></i> 이 단어로 회화 만들기
+                        </button>
+                        <button onclick="event.stopPropagation(); openSentenceModal('${word.kanji}')" class="w-full py-3 bg-gradient-to-r from-emerald-500 to-teal-600 text-white rounded-xl font-bold shadow-lg flex items-center justify-center gap-2 hover:shadow-xl transition transform active:scale-95">
+                            <i class="fas fa-pen-fancy"></i> 이 단어로 문장 만들기
                         </button>
                     </div>
 
@@ -422,6 +425,79 @@ function closeConversationModal() {
     document.getElementById('ai-conversation-modal').classList.add('hidden');
 }
 
+// ==========================================
+// AI 문장 생성 기능
+// ==========================================
+async function openSentenceModal(word) {
+    const modal = document.getElementById('ai-sentence-modal');
+    const content = document.getElementById('ai-sentence-content');
+    const wordTarget = document.getElementById('ai-sentence-word-target');
+
+    if (!modal || !content) {
+        console.error('Sentence modal not found');
+        alert('문장 생성 모달을 찾을 수 없습니다.');
+        return;
+    }
+
+    modal.classList.remove('hidden');
+    wordTarget.textContent = `단어: ${word}`;
+    content.innerHTML = `
+        <div class="text-center py-10">
+            <i class="fas fa-spinner fa-spin text-4xl text-emerald-500 mb-4"></i>
+            <p class="text-gray-500 font-medium">AI가 '${word}'(으)로 예문을 만들고 있어요...</p>
+        </div>
+    `;
+
+    try {
+        const data = await ApiClient.generateWordSentences(word);
+
+        if (!data || !data.sentences) {
+            throw new Error('데이터 생성 실패');
+        }
+
+        let html = `<div class="bg-emerald-50 p-3 rounded-lg text-center mb-4 text-emerald-800 font-bold text-sm border border-emerald-100">
+            <i class="fas fa-lightbulb mr-2"></i>'${word}' 활용 예문
+        </div>`;
+        html += '<div class="space-y-4">';
+
+        data.sentences.forEach((s, idx) => {
+            html += `
+                <div class="bg-white rounded-xl p-4 shadow-sm border border-gray-100 hover:shadow-md transition">
+                    <div class="flex items-start gap-3">
+                        <div class="w-8 h-8 rounded-full bg-emerald-500 text-white flex items-center justify-center font-bold text-sm flex-shrink-0">${idx + 1}</div>
+                        <div class="flex-1">
+                            <div class="text-lg font-bold text-gray-800 mb-1">${s.jp}</div>
+                            <div class="text-xs text-gray-400 font-mono mb-2">${s.romaji}</div>
+                            <div class="text-sm text-emerald-700 font-medium">${s.kr}</div>
+                        </div>
+                        <button onclick="playWordAudio('${s.jp.replace(/'/g, "\\'")}')" class="w-10 h-10 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center hover:bg-emerald-100 transition">
+                            <i class="fas fa-volume-up"></i>
+                        </button>
+                    </div>
+                </div>
+            `;
+        });
+
+        html += '</div>';
+        content.innerHTML = html;
+
+    } catch (e) {
+        console.error(e);
+        content.innerHTML = `
+            <div class="text-center py-10 text-red-500">
+                <i class="fas fa-exclamation-triangle text-4xl mb-4"></i>
+                <p>문장 생성에 실패했습니다.<br>잠시 후 다시 시도해주세요.</p>
+            </div>
+        `;
+    }
+}
+
+function closeSentenceModal() {
+    document.getElementById('ai-sentence-modal').classList.add('hidden');
+}
+
 // Export logic
 window.openConversationModal = openConversationModal;
 window.closeConversationModal = closeConversationModal;
+window.openSentenceModal = openSentenceModal;
+window.closeSentenceModal = closeSentenceModal;
