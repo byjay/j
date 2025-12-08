@@ -393,6 +393,238 @@ function initFukuokaTrip() {
                 transport: "하카타역 내 도시락 매장",
                 tips: "인기 도시락은 금방 품절되니 미리 구매하세요."
             }
+        },
+
+        // =======================================
+        // 🍽️ DETAILED FUKUOKA RESTAURANT DATA
+        // =======================================
+        {
+            id: "gyukatsu_motomura",
+            name: "규카츠 모토무라 후쿠오카 파르코점",
+            name_en: "Gyukatsu Motomura Fukuoka Parco",
+            lat: 33.5890, lng: 130.4010,
+            type: "food", region: "tenjin", rating: 4.9,
+            desc: "후쿠오카 파르코점 규카츠 모토무라는 환상적인 규카츠 경험을 선사합니다. 미디움레어로 제공되어 개인 화로에서 원하는 굽기로 조리할 수 있습니다.",
+            photos: [
+                "https://images.unsplash.com/photo-1544025162-d76978b8e4ca?w=800",
+                "https://images.unsplash.com/photo-1504973960431-1c467e159aa4?w=800"
+            ],
+            details: {
+                info: "부드럽고 풍미 가득한 소고기는 다양한 소스와 반찬과 어우러져 즐거운 미식 경험을 선사합니다.",
+                transport: "후쿠오카 파르코 신관 B2F",
+                tips: "피크 시간 대기줄 예상. 개인 화로에서 원하는 굽기로 조리 가능.",
+                menu: "규카츠 130g 세트 ¥1,600 / 260g 세트 ¥2,600 / 마 추가 ¥100 / 명란 추가 ¥150",
+                hours: "매일 11:00-22:00"
+            }
+        },
+        {
+            id: "mizutaki_toriden",
+            name: "하카타 미즈타키 토리덴",
+            name_en: "Hakata Mizutaki Toriden",
+            lat: 33.5915, lng: 130.4082,
+            type: "food", region: "nakasu", rating: 4.3,
+            desc: "정통 하카타 미즈타키. 맑으면서도 놀랍도록 진한 닭 육수가 일품입니다. 부드러운 닭고기, 신선한 채소, 수제 닭 완자가 일품.",
+            photos: [
+                "https://images.unsplash.com/photo-1534938665420-4193effeacc4?w=800",
+                "https://images.unsplash.com/photo-1547928576-a4a33237cbc3?w=800"
+            ],
+            details: {
+                info: "우아한 분위기와 세심한 서비스. 후쿠오카 현지 요리를 맛보고 싶은 분들에게 추천.",
+                transport: "시모카와바타마치, 하카타구",
+                tips: "저녁 예약 필수. 마지막에 죽이나 짬뽕면 추가 주문.",
+                menu: "미즈타키 코스 ¥4,000~/인 / 닭튀김 ¥800 / 잡채 ¥500 / 츠쿠네 ¥700",
+                hours: "매일 11:30-23:00"
+            }
+        },
+        {
+            id: "hyotan_sushi",
+            name: "효탄 스시",
+            name_en: "Hyotan Sushi",
+            lat: 33.5895, lng: 130.4012,
+            type: "food", region: "tenjin", rating: 4.2,
+            desc: "합리적인 가격에 신선하고 고품질의 스시로 유명. 정통 일본식 스시 경험을 카운터에서 즐길 수 있습니다.",
+            photos: [
+                "https://images.unsplash.com/photo-1579871494447-9811cf80d66c?w=800",
+                "https://images.unsplash.com/photo-1617196034796-73dfa7b1fd56?w=800"
+            ],
+            details: {
+                info: "숙련된 셰프의 솜씨로 섬세하게 만들어지는 스시. 런치 세트 추천.",
+                transport: "텐진 신텐가쿠빌딩 2층",
+                tips: "점심시간 대기 예상. 오픈 직후 방문 추천. 카운터석에서 셰프 관람 가능.",
+                menu: "니기리 세트 ¥2,000~ / 사시미 모듬 ¥1,800~ / 테마키 ¥500~/개 / 생선구이 ¥1,500~",
+                hours: "매일 11:30-14:30, 17:00-20:30"
+            }
+        },
+        {
+            id: "hakata_issou",
+            name: "하카타 잇소우 본점",
+            name_en: "Hakata Issou Honten",
+            lat: 33.5908, lng: 130.4230,
+            type: "food", region: "hakata", rating: 4.0,
+            desc: "독특한 '거품' 돈코츠 육수로 유명. 믿을 수 없을 정도로 진하고 크리미한 맛이 일품인 하카타 라멘.",
+            photos: [
+                "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?w=800",
+                "https://images.unsplash.com/photo-1557872943-16a5ac26437e?w=800"
+            ],
+            details: {
+                info: "정통 돈코츠 특유의 진한 맛. 면 익힘 정도 선택 가능 (카타메=꼬들꼬들).",
+                transport: "하카타역 히가시 3-1-6",
+                tips: "현금 준비. 점심/저녁 대기 예상. 교자 추가 추천.",
+                menu: "돈코츠라멘 ¥800 / 스페셜라멘 ¥1,100 / 교자 5개 ¥350 / 카에다마 ¥150",
+                hours: "매일 11:00-24:00"
+            }
+        },
+        {
+            id: "tempura_hirao",
+            name: "텐푸라 히라오 본점",
+            name_en: "Tempura Hirao Honten",
+            lat: 33.5750, lng: 130.4350,
+            type: "food", region: "hakata", rating: 4.4,
+            desc: "눈앞에서 바로 튀겨주는 신선한 튀김. 무료 절임 채소와 함께 최고의 바삭함을 즐길 수 있습니다.",
+            photos: [
+                "https://images.unsplash.com/photo-1621996346565-e3dbc646d9a9?w=800",
+                "https://images.unsplash.com/photo-1626776876729-bab4369a5a5a?w=800"
+            ],
+            details: {
+                info: "갓 튀겨져 나오는 바삭한 튀김. 무료 매콤 갓절임 무한리필이 별미.",
+                transport: "히가시히라오 2-4-1, 하카타구",
+                tips: "현금만 가능. 식권자판기에서 구매 후 착석. 기다림 각오.",
+                menu: "히라오세트 ¥1,100 / 새우튀김 ¥200/개 / 오징어튀김 ¥150/개 / 야채튀김 ¥100~/개",
+                hours: "매일 10:30-20:00"
+            }
+        },
+        {
+            id: "yoshizuka_unagi",
+            name: "요시즈카 우나기야",
+            name_en: "Yoshizuka Unagiya",
+            lat: 33.5922, lng: 130.4085,
+            type: "food", region: "nakasu", rating: 4.4,
+            desc: "부드럽게 구워진 장어는 달콤 짭짤한 소스와 완벽하게 어우러져 푹신한 밥 위에. 전통적인 일본식 분위기.",
+            photos: [
+                "https://images.unsplash.com/photo-1619221882220-947b3d3c8861?w=800",
+                "https://images.unsplash.com/photo-1580822184713-fc5400e7fe10?w=800"
+            ],
+            details: {
+                info: "진한 장어 풍미와 부드러운 식감. 세심하고 정중한 서비스.",
+                transport: "나카스 2-8-27, 하카타구",
+                tips: "현금만 가능! 점심/저녁 대기 예상. 인기 많음.",
+                menu: "우나쥬 스탠다드 ¥3,000 / 우나쥬 디럭스 ¥4,500 / 시라야키 ¥2,800 / 키모야키 ¥800",
+                hours: "월,목-일 10:00-21:00 / 화,수 휴무"
+            }
+        },
+        {
+            id: "sushi_kakujuan",
+            name: "스시 카쿠쥬안",
+            name_en: "Sushi Kakujuan",
+            lat: 33.5930, lng: 130.4140,
+            type: "food", region: "hakata", rating: 4.9,
+            desc: "섬세하고 정통적인 스시 경험. 제철 재료와 완벽한 기술로 만들어진 스시 한 점이 예술 작품.",
+            photos: [
+                "https://images.unsplash.com/photo-1553621042-f6e147245754?w=800",
+                "https://images.unsplash.com/photo-1611143669185-af224c5e3252?w=800"
+            ],
+            details: {
+                info: "고요하고 친밀한 분위기. 셰프와의 교감을 통한 오마카세 경험.",
+                transport: "카미고후쿠마치 11-7, 하카타구",
+                tips: "예약 필수! 제한된 좌석으로 인기 많음.",
+                menu: "오마카세 ¥6,000~ / 니기리 모듬 ¥3,000 / 사시미 플레이트 ¥2,500",
+                hours: "월-토 17:30-23:00 / 일요일 휴무"
+            }
+        },
+        {
+            id: "chikae",
+            name: "치카에",
+            name_en: "Chikae",
+            lat: 33.5882, lng: 130.3975,
+            type: "food", region: "tenjin", rating: 4.3,
+            desc: "상징적인 중앙 수조가 돋보이는 웅장한 분위기의 해산물 레스토랑. 점심 정식 가성비 탁월.",
+            photos: [
+                "https://images.unsplash.com/photo-1615141982883-c7ad0e69fd62?w=800",
+                "https://images.unsplash.com/photo-1559339352-11d035aa65de?w=800"
+            ],
+            details: {
+                info: "신선한 재료를 정교하게 준비. 섬세한 사시미부터 완벽한 생선구이까지.",
+                transport: "다이묘 2-2-17, 츄오구",
+                tips: "점심 정식(테이쇼쿠) 추천. 저녁은 예약 권장.",
+                menu: "점심 정식 ¥2,000~3,000 / 카이세키 코스 ¥8,000~15,000 / 사시미 플래터 ¥5,000 / 튀김 모듬 ¥3,000",
+                hours: "월-금 17:00-22:00 / 토,일 11:30-15:00, 17:00-22:00 (일요일은 21:00까지)"
+            }
+        },
+        {
+            id: "sushi_sakai",
+            name: "스시 사카이",
+            name_en: "Sushi Sakai",
+            lat: 33.5925, lng: 130.4050,
+            type: "food", region: "nakasu", rating: 4.7,
+            desc: "일본 요리의 정수를 보여주는 특별한 오마카세 스시. 엄선된 제철 생선과 셰프의 장인정신이 깃든 예술 작품.",
+            photos: [
+                "https://images.unsplash.com/photo-1540648639573-8c848de23f0a?w=800",
+                "https://images.unsplash.com/photo-1583623025817-d180a2221d0a?w=800"
+            ],
+            details: {
+                info: "고요하고 집중된 분위기. 셰프의 기술과 최상급 재료의 조화.",
+                transport: "니시나카스 3-20, 츄오구 LANE라운드빌딩 2F",
+                tips: "사전 예약 필수! 스마트 캐주얼 복장 권장.",
+                menu: "오마카세 런치 ¥15,000~25,000 / 오마카세 디너 ¥30,000~45,000 / 사케 페어링 ¥8,000~15,000",
+                hours: "화,금 18:00-22:30 / 수,목 11:00-15:30, 18:00-22:30 / 토 11:00-15:30, 17:00-21:30 / 월,일 휴무"
+            }
+        },
+        {
+            id: "monja_tamatoya",
+            name: "츠키시마 몬자 타마토야 텐진",
+            name_en: "Tsukishima Monja Tamatoya Tenjin",
+            lat: 33.5905, lng: 130.4000,
+            type: "food", region: "tenjin", rating: 4.8,
+            desc: "맛있는 몬자야키와 상호작용적인 식사 경험. 테이블 그릴에서 직접 요리하는 즐거움.",
+            photos: [
+                "https://images.unsplash.com/photo-1534959545608-6d6619fdce34?w=800",
+                "https://images.unsplash.com/photo-1521133573892-e44906baee46?w=800"
+            ],
+            details: {
+                info: "활기찬 분위기. 친구나 가족과 즐기기 좋음. 친절한 직원이 요리법 안내.",
+                transport: "텐진 1-11-11, 츄오구",
+                tips: "처음이면 직원에게 요리법 문의. 맥주와 함께 추천.",
+                menu: "명란 모치 치즈 몬자 ¥1,500 / 해산물 몬자 ¥1,800 / 돼지김치 몬자 ¥1,400 / 오코노미야키 ¥1,200 / 야끼소바 ¥1,000",
+                hours: "매일 11:00-23:00"
+            }
+        },
+        {
+            id: "miyachiku_steak",
+            name: "미야치쿠 스테이크",
+            name_en: "Miyachiku Steak",
+            lat: 33.5928, lng: 130.4098,
+            type: "food", region: "nakasu", rating: 4.5,
+            desc: "데판야키 스타일의 미야자키 소고기. 입안에서 녹아내리는 환상적인 마블링과 부드러움.",
+            photos: [
+                "https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=800",
+                "https://images.unsplash.com/photo-1558030006-450675393462?w=800"
+            ],
+            details: {
+                info: "숙련된 셰프의 철판 위 예술적 조리. 세련된 분위기와 완벽한 서비스.",
+                transport: "나카스 5-2-1, 하카타구 제이파크나카스빌딩 2F",
+                tips: "테판야키 카운터석 사전 예약 추천. 셰프의 쇼를 즐기세요.",
+                menu: "미야자키규 런치 코스 ¥6,000~ / 디너 코스 ¥12,000~ / 안심 스테이크 ¥7,000~ / 등심 스테이크 ¥6,500~",
+                hours: "매일 11:00-15:00, 17:00-22:00"
+            }
+        },
+        {
+            id: "imuri",
+            name: "이무리",
+            name_en: "Imuri",
+            lat: 33.5850, lng: 130.3920,
+            type: "food", region: "tenjin", rating: 4.4,
+            desc: "창의적인 일본 요리와 테라스 도시 전망. 제철 식재료의 풍미가 섬세하게 살아있는 파인 다이닝.",
+            photos: [
+                "https://images.unsplash.com/photo-1498654896293-37aacf113fd9?w=800",
+                "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=800"
+            ],
+            details: {
+                info: "전통 일본 기술과 현대적 요리 예술의 융합. 특별한 날에 완벽.",
+                transport: "타니 1-3-15, 츄오구",
+                tips: "테라스석 요청 (특히 일몰 시간). 점심/저녁 모두 예약 필수.",
+                menu: "시즌 오마카세 런치 ¥8,000~12,000 / 디너 ¥15,000~25,000 / 규슈 와규 스테이크 시가 / 계절 사시미 시가",
+                hours: "월,수-토 11:30-14:30, 17:00-23:00 / 화 17:00-23:00 / 금-토 점심+17:00-24:00 / 일 11:30-14:30, 17:00-23:00"
+            }
         }
     ];
 
@@ -403,7 +635,7 @@ function initFukuokaTrip() {
         "3": ["sumiyoshi_shrine", "canal_city", "beef_tongue_lunch", "kushida_shrine", "tenjin_underground", "yakiniku_dinner", "don_quijote"],
         "4": ["tanya_hakata", "amu_plaza", "ekiben_lunch"]
     };
-    
+
     let activeDay = 1;
     let map, markers = [];
 
