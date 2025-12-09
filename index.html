@@ -559,68 +559,105 @@
                     <i class="fas fa-times text-2xl"></i>
                 </button>
             </div>
-            <div class="p-6 max-h-[70vh] overflow-y-auto custom-scrollbar space-y-6">
+            <div class="p-6 max-h-[70vh] overflow-y-auto custom-scrollbar space-y-5 text-sm">
 
-                <!-- 개발 동기 (아빠의 마음) -->
+                <!-- 아빠의 마음 -->
                 <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded-r-xl">
                     <h3 class="font-bold text-yellow-800 mb-2 flex items-center gap-2">
                         <i class="fas fa-heart text-red-500"></i> 아빠의 마음
                     </h3>
-                    <p class="text-sm text-gray-700 leading-relaxed italic">
-                        "사랑하는 우리 가족과 함께하는 첫 일본 여행! <br>
-                        설레는 마음으로 아빠가 직접 만들었어요. <br>
-                        즐겁게 공부하고 행복한 추억 많이 만들고 오자! ❤️"
+                    <p class="text-gray-700 leading-relaxed italic">
+                        "우리 가족과 함께하는 첫 일본 여행! 설레는 마음으로 직접 만들었어요. ❤️"
                     </p>
                 </div>
 
-                <div class="space-y-3">
-                    <h3 class="text-lg font-bold text-gray-800 border-b pb-2">🎯 여행지 잠금 해제 (5단계)</h3>
-                    <ul class="space-y-2 text-sm text-gray-600">
-                        <li class="flex items-center justify-between bg-gray-50 p-2 rounded-lg">
-                            <span class="flex items-center gap-2"><span class="text-xl">1️⃣</span>
-                                <strong>후쿠오카/나고야/고베</strong></span>
-                            <span class="text-green-600 font-bold">기본 제공</span>
-                        </li>
-                        <li class="flex items-center justify-between bg-gray-50 p-2 rounded-lg">
-                            <span class="flex items-center gap-2"><span class="text-xl">2️⃣</span>
-                                <strong>오사카/나라/교토</strong></span>
-                            <span class="text-blue-600 font-bold">글자 퀴즈 90점 2회</span>
-                        </li>
-                        <li class="flex items-center justify-between bg-gray-50 p-2 rounded-lg">
-                            <span class="flex items-center gap-2"><span class="text-xl">3️⃣</span>
-                                <strong>요코하마/하코네/센다이</strong></span>
-                            <span class="text-orange-600 font-bold">3일 연속 학습</span>
-                        </li>
-                        <li class="flex items-center justify-between bg-gray-50 p-2 rounded-lg">
-                            <span class="flex items-center gap-2"><span class="text-xl">4️⃣</span>
-                                <strong>삿포로/가나자와</strong></span>
-                            <span class="text-indigo-600 font-bold">학습 시간 10분</span>
-                        </li>
-                        <li class="flex items-center justify-between bg-gray-50 p-2 rounded-lg">
-                            <span class="flex items-center gap-2"><span class="text-xl">5️⃣</span>
-                                <strong>도쿄/오키나와</strong></span>
-                            <span class="text-teal-600 font-bold">총 경험치 500XP</span>
-                        </li>
+                <!-- 1. 홈 탭 -->
+                <div class="border rounded-xl p-4">
+                    <h3 class="font-bold text-gray-800 mb-2">🏠 홈 탭</h3>
+                    <ul class="space-y-1 text-gray-600">
+                        <li>• 4가지 메인 메뉴 (글자, 회화, 단어, 여행) 바로가기</li>
+                        <li>• 앱 설치 버튼 (PWA 지원)</li>
+                        <li>• 도움말 버튼</li>
                     </ul>
                 </div>
 
-                <div class="space-y-3">
-                    <h3 class="text-lg font-bold text-gray-800 border-b pb-2">🎁 특별 보상</h3>
-                    <ul class="space-y-2 text-sm text-gray-600">
-                        <li class="flex items-start gap-2">
-                            <span class="text-red-500 font-bold">💰</span>
-                            <span><strong>용돈 청구:</strong> 1,000 XP를 모을 때마다 아빠에게 <strong>1만원</strong>을 청구할 수 있어요! (시은/하롱
-                                전용)</span>
-                        </li>
-                        <li class="flex items-start gap-2">
-                            <span class="text-red-500 font-bold">💃</span>
-                            <span><strong>춤추는 캐릭터:</strong> 퀴즈에서 100점(만점)을 받으면, 내 캐릭터가 신나게 춤을 춥니다!</span>
-                        </li>
+                <!-- 2. 글자 탭 -->
+                <div class="border rounded-xl p-4">
+                    <h3 class="font-bold text-gray-800 mb-2">📝 글자 탭</h3>
+                    <ul class="space-y-1 text-gray-600">
+                        <li>• <strong>히라가나/가타카나</strong> 전체 글자 그리드</li>
+                        <li>• 글자 클릭 → <strong>쓰기 연습</strong> (획순 애니메이션)</li>
+                        <li>• <strong>퀴즈</strong>: 10문제 랜덤 출제, 90점 이상 2회 시 여행탭 잠금 해제</li>
+                        <li>• <strong>통계</strong>: 취약 글자, 정답률 확인</li>
                     </ul>
                 </div>
 
-                <div class="bg-blue-50 p-4 rounded-xl text-sm text-blue-800">
-                    <strong>💡 팁:</strong> 매일매일 조금씩 공부해서 연속 학습 기록(Streak)을 쌓아보세요!
+                <!-- 3. 회화 탭 -->
+                <div class="border rounded-xl p-4">
+                    <h3 class="font-bold text-gray-800 mb-2">💬 회화 탭</h3>
+                    <ul class="space-y-1 text-gray-600">
+                        <li>• <strong>상황별 회화</strong>: 공항, 식당, 쇼핑 등 상황별 예문</li>
+                        <li>• <strong>실전 회화</strong>: 카드 뒤집기로 일본어↔한국어 학습</li>
+                        <li>• 발음 듣기 버튼 (TTS)</li>
+                    </ul>
+                </div>
+
+                <!-- 4. 단어 탭 -->
+                <div class="border rounded-xl p-4">
+                    <h3 class="font-bold text-gray-800 mb-2">📚 단어 탭</h3>
+                    <ul class="space-y-1 text-gray-600">
+                        <li>• 카테고리별 단어장 (인사, 숫자, 음식 등)</li>
+                        <li>• 단어 카드 뒤집기 학습</li>
+                        <li>• 발음 듣기 및 예문 확인</li>
+                    </ul>
+                </div>
+
+                <!-- 5. 여행 탭 -->
+                <div class="border rounded-xl p-4">
+                    <h3 class="font-bold text-gray-800 mb-2">✈️ 여행 탭</h3>
+                    <ul class="space-y-1 text-gray-600">
+                        <li>• <strong>후쿠오카 4일 일정</strong>: 맛집, 관광지, 쇼핑 정보</li>
+                        <li>• 장소별 상세정보 (영업시간, 메뉴, 팁, 지도)</li>
+                        <li>• <strong>구글맵 사진 링크</strong>: 실제 장소 사진 검색</li>
+                        <li>• 일정 커스터마이징 (장소 추가/삭제)</li>
+                    </ul>
+                </div>
+
+                <!-- 6. 현황 탭 -->
+                <div class="border rounded-xl p-4">
+                    <h3 class="font-bold text-gray-800 mb-2">📊 현황 탭</h3>
+                    <ul class="space-y-1 text-gray-600">
+                        <li>• <strong>연속 학습(Streak)</strong>: 매일 학습 시 +1일</li>
+                        <li>• <strong>레벨 & XP</strong>: 학습 활동마다 경험치 획득</li>
+                        <li>• <strong>주간 차트</strong>: 7일간 학습량 그래프</li>
+                        <li>• <strong>퀴즈 성적</strong>: 최근 10회 성적 그래프</li>
+                        <li>• <strong>용돈 모으기</strong>: 1000XP+공부시간 180분+퀴즈 100점 3회 = 2만원!</li>
+                    </ul>
+                </div>
+
+                <!-- 잠금 해제 조건 -->
+                <div class="border rounded-xl p-4 bg-gray-50">
+                    <h3 class="font-bold text-gray-800 mb-2">🔓 여행지 잠금 해제 조건</h3>
+                    <ul class="space-y-1 text-gray-600">
+                        <li>✅ <strong>후쿠오카</strong>: 기본 제공</li>
+                        <li>🔒 <strong>오사카/교토</strong>: 글자 퀴즈 90점 2회 달성</li>
+                        <li>🔒 <strong>도쿄</strong>: 총 경험치 500XP 달성</li>
+                    </ul>
+                </div>
+
+                <!-- 특별 기능 -->
+                <div class="bg-gradient-to-r from-purple-50 to-pink-50 p-4 rounded-xl">
+                    <h3 class="font-bold text-purple-800 mb-2">🌟 특별 기능</h3>
+                    <ul class="space-y-1 text-gray-600">
+                        <li>💰 <strong>용돈 청구</strong>: 시은/하롱 전용, 조건 달성 시 아빠에게 청구!</li>
+                        <li>💃 <strong>춤추는 캐릭터</strong>: 퀴즈 100점 시 캐릭터 춤 애니메이션</li>
+                        <li>📱 <strong>앱 설치</strong>: 홈 화면에 추가하면 앱처럼 사용</li>
+                        <li>🔔 <strong>iOS 안내</strong>: Safari '공유' → '홈 화면에 추가'</li>
+                    </ul>
+                </div>
+
+                <div class="bg-blue-50 p-4 rounded-xl text-blue-800 text-center">
+                    <strong>💡 팁:</strong> 매일 조금씩 공부해서 연속 학습 기록을 쌓아보세요!
                 </div>
 
             </div>

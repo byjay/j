@@ -137,7 +137,8 @@ def convert_json_to_poi():
                 'menu': item.get('menuInfo', ''),
                 'tips': item.get('travelTips', ''),
                 'essentials': item.get('essentialItems', ''),
-                'mapLink': item.get('mapLink', '')
+                'mapLink': item.get('mapLink', ''),
+                'photoLink': item.get('photoSearchLink', '')
             }
         }
         poi_list.append(poi)
