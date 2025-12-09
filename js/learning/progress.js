@@ -154,7 +154,12 @@ function showProgressDashboard() {
 }
 
 function renderWeeklyChart(history) {
-    const ctx = document.getElementById('weeklyChart').getContext('2d');
+    const canvas = document.getElementById('weeklyChart');
+    if (!canvas || typeof Chart === 'undefined') {
+        console.warn('Chart.js or weeklyChart canvas not available');
+        return;
+    }
+    const ctx = canvas.getContext('2d');
 
     // 최근 7일 날짜 생성
     const labels = [];
@@ -194,7 +199,12 @@ function renderWeeklyChart(history) {
 }
 
 function renderQuizChart(history) {
-    const ctx = document.getElementById('quizChart').getContext('2d');
+    const canvas = document.getElementById('quizChart');
+    if (!canvas || typeof Chart === 'undefined') {
+        console.warn('Chart.js or quizChart canvas not available');
+        return;
+    }
+    const ctx = canvas.getContext('2d');
 
     // 퀴즈 로그만 필터링 (최근 10개)
     const quizLogs = history.filter(h => h.type === 'quiz_score').slice(-10);

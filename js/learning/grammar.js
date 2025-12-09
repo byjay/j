@@ -125,3 +125,6 @@ const GrammarPractice = {
         window.speechSynthesis.speak(utterance);
     }
 };
+
+// 전역 노출
+window.GrammarPractice = GrammarPractice;

@@ -50,4 +50,7 @@ function showStudyMode(mode) {
     }
 }
 
+// 전역 노출
+window.showStudyMode = showStudyMode;
+
 console.log('study.js loaded');
