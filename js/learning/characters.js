@@ -72,8 +72,6 @@ function showCharacterGrid(type) {
         return;
     }
 
-    // 1. 상단 고정 헤더 (탭 + 퀴즈/통계 버튼) - 더욱 컴팩트하게 수정
-    const isHiragana = type === 'hiragana';
     // 1. 상단 고정 헤더 (탭 + 퀴즈/통계 버튼) - 2단 분리 및 디자인 개선
     const isHiragana = type === 'hiragana';
     const topHTML = `
