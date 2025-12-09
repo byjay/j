@@ -583,16 +583,19 @@ function showQuizResult() {
     // 춤추는 캐릭터 (10점 만점 시)
     let celebrationHTML = '';
     if (quizScore === 10) {
-        // 현재 로그인한 사용자 확인 (localStorage 또는 전역 변수)
-        // auth.js의 currentUser 또는 localStorage 'jap_bong_user' 확인
-        let currentUser = 'dad'; // 기본값
-        try {
-            const storedUser = localStorage.getItem('jap_bong_user');
-            if (storedUser) {
-                currentUser = JSON.parse(storedUser).id;
+        // 현재 로그인한 사용자 확인 (전역 window.currentUser 우선 사용)
+        let localUserId = 'dad'; // 기본값
+        if (window.currentUser && window.currentUser.id) {
+            localUserId = window.currentUser.id;
+        } else {
+            try {
+                const storedUserId = localStorage.getItem('currentUser');
+                if (storedUserId) {
+                    localUserId = storedUserId;
+                }
+            } catch (e) {
+                console.error('User check failed', e);
             }
-        } catch (e) {
-            console.error('User check failed', e);
         }
 
         // 이미지 매핑
@@ -609,7 +612,7 @@ function showQuizResult() {
         // 여기서는 일단 매핑대로 출력. 
         // 만약 파일이 없으면 엑박이 뜨므로, onerror 처리를 추가함.
 
-        const dancingImg = dancingImages[currentUser] || dancingImages['dad'];
+        const dancingImg = dancingImages[localUserId] || dancingImages['dad'];
 
         celebrationHTML = `
             <div class="mb-6 relative h-48 flex justify-center items-center">
@@ -617,7 +620,7 @@ function showQuizResult() {
                 <img src="${dancingImg}" 
                      class="h-full object-contain drop-shadow-2xl animate-bounce" 
                      alt="Dancing Character"
-                     onerror="this.src='images/${currentUser}.png'">
+                     onerror="this.src='images/${localUserId}.png'">
                 
                 <!-- Squirrel Trophy -->
                 <img src="images/squirrel.png" 
