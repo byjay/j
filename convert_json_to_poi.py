@@ -1,129 +1,169 @@
+"""
+Fukuoka_Travel_Plan.json → fukuoka_poi_data.js 변환 스크립트
+JSON의 모든 상세정보를 포함하고, Unsplash 이미지 URL 사용
+"""
+
 import json
-import os
-from pathlib import Path
+import re
 
-# JSON 파일 로드
-json_path = Path(r"f:\genmini\japness\변환\fam\Fukuoka_Travel_Plan.json")
-with open(json_path, 'r', encoding='utf-8') as f:
-    data = json.load(f)
+# 카테고리별 Unsplash 이미지 URL 매핑
+CATEGORY_IMAGES = {
+    'Restaurants': [
+        'https://images.unsplash.com/photo-1557872943-16a5ac26437e?w=800',  # 라멘
+        'https://images.unsplash.com/photo-1569718212165-3a8278d5f624?w=800',  # 일본 음식
+        'https://images.unsplash.com/photo-1547928576-b822bc410b52?w=800',  # 고기
+    ],
+    'Shopping': [
+        'https://images.unsplash.com/photo-1555529669-e69e7aa0ba9a?w=800',  # 쇼핑
+        'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=800',  # 매장
+        'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800',  # 쇼핑카트
+    ],
+    'Sightseeing': [
+        'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=800',  # 일본 풍경
+        'https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=800',  # 일본 정원
+        'https://images.unsplash.com/photo-1480796927426-f609979314bd?w=800',  # 일본 도시
+    ],
+    'Temple': [
+        'https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=800',  # 신사
+        'https://images.unsplash.com/photo-1478436127897-769e1b3f0f36?w=800',  # 토리이
+    ]
+}
 
-pois = data.get('data', [])
-print(f"총 POI 개수: {len(pois)}")
-
-# 카테고리 분포 확인
-categories = {}
-for poi in pois:
-    cat = poi.get('category', 'Unknown')
-    categories[cat] = categories.get(cat, 0) + 1
-
-print("\n카테고리 분포:")
-for cat, count in sorted(categories.items()):
-    print(f"  {cat}: {count}개")
-
-# 이미지 폴더 경로 (images 폴더에 이미지가 있다고 가정)
-IMAGE_BASE_URL = "images/fukuoka/"
-
-# JS 형식으로 변환
-def convert_to_js_poi(poi):
-    # 카테고리 매핑
-    cat = poi.get('category', '')
-    if 'Sightseeing' in cat:
-        poi_type = 'spot'
-    elif 'Shopping' in cat:
-        poi_type = 'shop'
-    elif 'Ramen' in cat or 'Restaurant' in cat or 'Food' in cat or 'Cafe' in cat:
-        poi_type = 'food'
+def get_category_type(category):
+    """카테고리를 POI type으로 변환"""
+    cat_lower = category.lower()
+    if 'restaurant' in cat_lower or '맛집' in cat_lower:
+        return 'food'
+    elif 'shopping' in cat_lower or '쇼핑' in cat_lower:
+        return 'shopping'
+    elif 'sightseeing' in cat_lower or '관광' in cat_lower:
+        return 'spot'
     else:
-        poi_type = 'spot'
+        return 'spot'
+
+def get_unsplash_images(category, name_en, index):
+    """카테고리와 이름에 맞는 Unsplash 이미지 URL 반환"""
+    # 특수 장소별 이미지
+    name_lower = name_en.lower()
     
-    # 지역 추출 (location에서)
-    location = poi.get('location', '')
-    if 'Hakata' in location:
-        region = 'hakata'
-    elif 'Tenjin' in location or 'Chuo' in location:
-        region = 'tenjin'
-    elif 'Nakasu' in location:
-        region = 'nakasu'
-    else:
-        region = 'hakata'
+    if 'shrine' in name_lower or 'temple' in name_lower or '신사' in name_lower:
+        return CATEGORY_IMAGES['Temple']
+    elif 'ramen' in name_lower or 'noodle' in name_lower:
+        return CATEGORY_IMAGES['Restaurants'][:2]
+    elif 'tower' in name_lower:
+        return ['https://images.unsplash.com/photo-1480796927426-f609979314bd?w=800', 
+                'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=800']
+    elif 'park' in name_lower or 'garden' in name_lower:
+        return ['https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=800',
+                'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=800']
+    elif 'beach' in name_lower or 'seaside' in name_lower:
+        return ['https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800',
+                'https://images.unsplash.com/photo-1519046904884-53103b34b206?w=800']
+    elif 'airport' in name_lower:
+        return ['https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=800',
+                'https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?w=800']
+    elif 'hotel' in name_lower:
+        return ['https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800',
+                'https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=800']
+    elif 'yakiniku' in name_lower or 'beef' in name_lower or 'meat' in name_lower:
+        return ['https://images.unsplash.com/photo-1544025162-d76694265947?w=800',
+                'https://images.unsplash.com/photo-1529692236671-f1f6cf9683ba?w=800']
+    elif 'yatai' in name_lower:
+        return ['https://images.unsplash.com/photo-1551218808-94e220e084d2?w=800',
+                'https://images.unsplash.com/photo-1580442151529-343f2f6e0e27?w=800']
     
-    # ID 생성 (name_en을 기반)
-    name_en = poi.get('name_en', '')
-    poi_id = name_en.lower().replace(' ', '_').replace("'", '').replace('-', '_')
+    # 일반 카테고리별 이미지
+    cat_key = None
+    for key in CATEGORY_IMAGES:
+        if key.lower() in category.lower():
+            cat_key = key
+            break
     
-    # 이미지 경로
-    image_file = poi.get('imageFileName', '')
-    if image_file:
-        photo_url = f"{IMAGE_BASE_URL}{image_file}"
-    else:
-        photo_url = poi.get('photoSearchLink', '')
+    if cat_key:
+        images = CATEGORY_IMAGES[cat_key]
+        # 인덱스를 사용해 다른 이미지 선택
+        start = index % len(images)
+        return [images[start], images[(start + 1) % len(images)]]
     
-    result = {
-        'id': poi_id,
-        'name': poi.get('name_ko', poi.get('name_en', '')),
-        'name_en': name_en,
-        'lat': 33.5902,  # 기본 좌표 (후쿠오카 중심)
-        'lng': 130.4017,
-        'type': poi_type,
-        'region': region,
-        'rating': float(poi.get('rating', 4.0)),
-        'desc': poi.get('summary_ko', ''),
-        'photos': [photo_url] if photo_url else [],
-        'details': {
-            'address': poi.get('location', ''),
-            'hours': poi.get('operatingHours', ''),
-            'ticket': poi.get('ticketInfo', ''),
-            'menu': poi.get('menuInfo', ''),
-            'tips': poi.get('travelTips', ''),
-            'mapLink': poi.get('mapLink', '')
+    return CATEGORY_IMAGES['Sightseeing'][:2]
+
+def make_id(name_en):
+    """영문 이름을 ID로 변환"""
+    return re.sub(r'[^a-z0-9]+', '_', name_en.lower()).strip('_')
+
+def convert_json_to_poi():
+    # JSON 파일 읽기
+    with open('Fukuoka_Travel_Plan (1).json', 'r', encoding='utf-8') as f:
+        data = json.load(f)
+    
+    poi_list = []
+    
+    for idx, item in enumerate(data['data']):
+        poi = {
+            'id': make_id(item['name_en']),
+            'name': item['name_ko'],
+            'name_en': item['name_en'],
+            'lat': 33.5902 + (idx % 10) * 0.005,  # 기본 좌표 (실제 좌표 없음)
+            'lng': 130.4017 + (idx % 10) * 0.005,
+            'type': get_category_type(item['category']),
+            'region': 'fukuoka',
+            'rating': float(item['rating']) if item['rating'] else 4.0,
+            'desc': item['summary_ko'],
+            'photos': get_unsplash_images(item['category'], item['name_en'], idx),
+            'details': {
+                'address': item.get('location', ''),
+                'hours': item.get('operatingHours', ''),
+                'ticket': item.get('ticketInfo', ''),
+                'menu': item.get('menuInfo', ''),
+                'tips': item.get('travelTips', ''),
+                'essentials': item.get('essentialItems', ''),
+                'mapLink': item.get('mapLink', '')
+            }
         }
-    }
-    return result
-
-# 변환 실행
-js_pois = [convert_to_js_poi(poi) for poi in pois]
-
-# JS 파일 출력
-output_path = Path(r"f:\genmini\japness\변환\fam\js\travel\fukuoka_poi_data.js")
-with open(output_path, 'w', encoding='utf-8') as f:
-    f.write("// 자동 생성된 POI 데이터 - Fukuoka_Travel_Plan.json에서 변환\n")
-    f.write(f"// 총 {len(js_pois)}개 POI\n\n")
-    f.write("const POI_DATABASE = [\n")
+        poi_list.append(poi)
     
-    for i, poi in enumerate(js_pois):
-        f.write("    {\n")
-        f.write(f"        id: '{poi['id']}',\n")
-        f.write(f"        name: '{poi['name']}',\n")
-        f.write(f"        name_en: '{poi['name_en']}',\n")
-        f.write(f"        lat: {poi['lat']},\n")
-        f.write(f"        lng: {poi['lng']},\n")
-        f.write(f"        type: '{poi['type']}',\n")
-        f.write(f"        region: '{poi['region']}',\n")
-        f.write(f"        rating: {poi['rating']},\n")
-        
-        # desc 이스케이프
-        desc = poi['desc'].replace("'", "\\'").replace('\n', ' ')
-        f.write(f"        desc: '{desc}',\n")
-        
-        # photos
-        photos_str = ', '.join([f"'{p}'" for p in poi['photos']])
-        f.write(f"        photos: [{photos_str}],\n")
-        
-        # details
-        f.write("        details: {\n")
-        for key, val in poi['details'].items():
-            val_escaped = str(val).replace("'", "\\'").replace('\n', ' ')
-            f.write(f"            {key}: '{val_escaped}',\n")
-        f.write("        }\n")
-        
-        if i < len(js_pois) - 1:
-            f.write("    },\n")
-        else:
-            f.write("    }\n")
+    # JavaScript 파일로 저장
+    js_content = "// 자동 생성된 POI 데이터 - Fukuoka_Travel_Plan.json에서 변환\n"
+    js_content += f"// 총 {len(poi_list)}개 POI - 모든 상세정보 포함\n\n"
+    js_content += "window.POI_DATABASE = [\n"
     
-    f.write("];\n\n")
-    f.write("// 전역 노출\n")
-    f.write("window.POI_DATABASE = POI_DATABASE;\n")
+    for poi in poi_list:
+        js_content += "    {\n"
+        js_content += f"        id: '{poi['id']}',\n"
+        js_content += f"        name: '{poi['name']}',\n"
+        js_content += f"        name_en: '{poi['name_en']}',\n"
+        js_content += f"        lat: {poi['lat']},\n"
+        js_content += f"        lng: {poi['lng']},\n"
+        js_content += f"        type: '{poi['type']}',\n"
+        js_content += f"        region: '{poi['region']}',\n"
+        js_content += f"        rating: {poi['rating']},\n"
+        # 설명에서 따옴표 이스케이프
+        desc = poi['desc'].replace("'", "\\'").replace('"', '\\"')
+        js_content += f"        desc: '{desc}',\n"
+        js_content += f"        photos: {json.dumps(poi['photos'])},\n"
+        js_content += "        details: {\n"
+        for key, value in poi['details'].items():
+            if value:
+                val = str(value).replace("'", "\\'").replace('"', '\\"')
+                js_content += f"            {key}: '{val}',\n"
+        js_content += "        }\n"
+        js_content += "    },\n"
+    
+    js_content += "];\n"
+    
+    with open('js/travel/fukuoka_poi_data.js', 'w', encoding='utf-8') as f:
+        f.write(js_content)
+    
+    print(f"변환 완료! 총 {len(poi_list)}개 POI 생성")
+    
+    # 카테고리별 통계
+    categories = {}
+    for poi in poi_list:
+        cat = poi['type']
+        categories[cat] = categories.get(cat, 0) + 1
+    
+    for cat, count in categories.items():
+        print(f"  {cat}: {count}개")
 
-print(f"\n변환 완료: {output_path}")
-print(f"총 {len(js_pois)}개 POI가 생성되었습니다.")
+if __name__ == '__main__':
+    convert_json_to_poi()
