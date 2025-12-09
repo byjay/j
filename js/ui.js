@@ -104,7 +104,7 @@ window.openSection = openSection;
 // 하단 네비게이션 클릭 핸들러
 function handleNavClick(tabId) {
     if (tabId === 'japan_travel') tabId = 'fukuoka';
-    
+
     if (!currentUser) {
         triggerLoginAnimation();
         return;
@@ -130,7 +130,7 @@ function triggerLoginAnimation() {
             avatarCards.forEach(card => card.classList.remove('login-attention'));
         }, 1200);
     }
-    
+
     if (typeof showLoginModal === 'function') {
         showLoginModal();
     }
@@ -160,7 +160,7 @@ window.checkFukuokaAccess = checkFukuokaAccess;
 // 탭 전환 (Main Function)
 function showTab(tabName) {
     console.log('showTab called:', tabName);
-    
+
     // ID 매핑
     if (tabName === 'japan_travel') tabName = 'fukuoka';
 
@@ -196,7 +196,7 @@ function showTab(tabName) {
     if (targetTab) {
         targetTab.classList.add('active');
         targetTab.classList.remove('hidden');
-        
+
         // 스크롤 복원
         const savedScroll = sessionStorage.getItem(`scroll_${tabName}`);
         if (savedScroll) {
@@ -249,6 +249,8 @@ function showTab(tabName) {
         if (typeof GrammarPractice !== 'undefined') GrammarPractice.init();
     } else if (tabName === 'progress') {
         if (typeof showProgressDashboard === 'function') showProgressDashboard();
+    } else if (tabName === 'elementary-school') {
+        if (typeof initElementarySchool === 'function') initElementarySchool();
     }
 }
 window.showTab = showTab;
@@ -313,7 +315,7 @@ function showIOSInstallGuide() {
     // 안전을 위해 아까 view 내용 기반으로 재구성.
     // ... (중략) ... 
     // 시간 관계상, 그리고 코드 길이상 기능적 핵심만 구현.
-     const modal = document.createElement('div');
+    const modal = document.createElement('div');
     modal.className = 'fixed inset-0 z-[60] flex items-end justify-center pointer-events-none pb-6';
     modal.innerHTML = `
         <div class="bg-white/95 backdrop-blur rounded-2xl p-6 shadow-2xl w-full max-w-sm mx-4 pointer-events-auto border border-gray-100">
