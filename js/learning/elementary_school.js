@@ -479,8 +479,41 @@ function completeMission() {
         window.addXP(50, 'elementary_mission');
     }
 
+    // 🎉 축하 폭죽 효과
+    triggerConfetti();
+
     // 모달 표시
     document.getElementById('mission-complete-modal').style.display = 'flex';
+}
+
+// 폭죽 효과
+function triggerConfetti() {
+    const colors = ['#ff6b6b', '#feca57', '#48dbfb', '#ff9ff3', '#54a0ff', '#5f27cd', '#00d2d3', '#1dd1a1'];
+    const container = document.createElement('div');
+    container.className = 'particle-container';
+    document.body.appendChild(container);
+
+    for (let i = 0; i < 50; i++) {
+        const piece = document.createElement('div');
+        piece.className = 'confetti-piece';
+        piece.style.left = `${Math.random() * 100}vw`;
+        piece.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+        piece.style.animationDelay = `${Math.random() * 0.5}s`;
+        piece.style.animationDuration = `${2 + Math.random() * 2}s`;
+        container.appendChild(piece);
+    }
+
+    // 3초 후 컨테이너 제거
+    setTimeout(() => container.remove(), 4000);
+}
+
+// XP 플라이업 표시
+function showXPFlyup(amount) {
+    const flyup = document.createElement('div');
+    flyup.className = 'fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-4xl font-black text-yellow-500 animate-xp-flyup z-50';
+    flyup.textContent = `+${amount} XP`;
+    document.body.appendChild(flyup);
+    setTimeout(() => flyup.remove(), 1500);
 }
 
 function closeMissionComplete() {
