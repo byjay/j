@@ -68,7 +68,7 @@ function showCharacterGrid(type) {
     // 1. 상단 고정 헤더 (탭 + 퀴즈/통계 버튼) - 더욱 컴팩트하게 수정
     const isHiragana = type === 'hiragana';
     const topHTML = `
-        <div class="sticky top-12 z-30 bg-gray-50 -mx-4 px-4 py-1.5 border-b border-gray-200 shadow-sm">
+        <div class="sticky top-14 z-30 bg-gray-50 -mx-4 px-4 py-1.5 border-b border-gray-200 shadow-sm">
             <div class="flex gap-1 items-center">
                 <button onclick="showCharacterGrid('hiragana')" 
                     class="flex-1 py-1 rounded-md font-bold text-xs transition-colors ${isHiragana ? 'bg-red-500 text-white' : 'bg-white text-gray-500 border border-gray-200'}">
@@ -157,7 +157,7 @@ function selectCharacter(idx) {
     }).join('');
 
     container.innerHTML = `
-        <div class="fixed top-12 bottom-0 left-0 right-0 z-50 bg-black/90 flex flex-col items-center justify-center p-3 animate-fade-in">
+        <div class="fixed top-14 bottom-0 left-0 right-0 z-40 bg-black/90 flex flex-col items-center justify-center p-3 animate-fade-in">
             <!-- 상단 컨트롤: 닫기 & 행 내비게이션 -->
             <div class="w-full max-w-sm flex justify-between items-center mb-3">
                 <div class="flex gap-1 bg-gray-800/50 p-1 rounded-lg border border-white/10">
@@ -478,7 +478,7 @@ function showQuizModal() {
     const q = quizQuestions[currentQuestionIdx];
     const container = document.getElementById('character-study-container');
     container.innerHTML = `
-        <div class="fixed top-12 bottom-0 left-0 right-0 z-50 bg-white flex flex-col items-center justify-center p-4">
+        <div class="fixed top-14 bottom-0 left-0 right-0 z-40 bg-white flex flex-col items-center justify-center p-4">
             <div class="w-full max-w-sm mb-8">
                 <div class="flex justify-between items-center mb-2 text-gray-500 font-bold">
                     <span>문제 ${currentQuestionIdx + 1} / 10</span>

@@ -135,44 +135,102 @@ function checkAutoLogin() {
     }
 }
 
-// 아빠 비밀번호 입력
+// 커스텀 비밀번호 모달 생성
+function showPasswordModal(userId, userName) {
+    // 기존 모달 제거
+    const existing = document.getElementById('password-modal');
+    if (existing) existing.remove();
+
+    const modal = document.createElement('div');
+    modal.id = 'password-modal';
+    modal.className = 'fixed inset-0 z-[100] bg-black/60 backdrop-blur-sm flex items-center justify-center p-4';
+    modal.innerHTML = `
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-sm overflow-hidden animate-bounce-in">
+            <!-- 헤더 -->
+            <div class="bg-gradient-to-r from-blue-500 to-cyan-500 p-4 text-center">
+                <img src="images/dad.png" class="w-16 h-16 rounded-full mx-auto border-4 border-white shadow-lg mb-2" alt="아빠">
+                <p class="text-white font-bold text-sm">👋 아빠가 보내는 멘트</p>
+                <p class="text-white/80 text-xs mt-1">"${userName}! 비밀번호 입력해줘~ 📱"</p>
+            </div>
+            
+            <!-- 입력 영역 -->
+            <div class="p-6">
+                <label class="block text-gray-600 text-sm font-bold mb-2">
+                    📱 핸드폰 국번 4자리를 입력하세요:
+                </label>
+                <input type="password" id="password-input" maxlength="4" 
+                    class="w-full px-4 py-3 text-center text-2xl font-bold border-2 border-gray-200 rounded-xl focus:border-blue-500 focus:outline-none transition"
+                    placeholder="****" inputmode="numeric" pattern="[0-9]*">
+                
+                <div class="flex gap-3 mt-6">
+                    <button onclick="closePasswordModal()" 
+                        class="flex-1 py-3 bg-gray-100 text-gray-600 rounded-xl font-bold hover:bg-gray-200 transition">
+                        취소
+                    </button>
+                    <button onclick="submitPassword('${userId}')" 
+                        class="flex-1 py-3 bg-blue-600 text-white rounded-xl font-bold hover:bg-blue-700 transition">
+                        확인
+                    </button>
+                </div>
+            </div>
+        </div>
+    `;
+
+    document.body.appendChild(modal);
+
+    // 입력 필드에 포커스
+    setTimeout(() => {
+        const input = document.getElementById('password-input');
+        if (input) input.focus();
+    }, 100);
+
+    // 엔터키 입력 처리
+    const input = document.getElementById('password-input');
+    input.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') submitPassword(userId);
+    });
+}
+
+function closePasswordModal() {
+    const modal = document.getElementById('password-modal');
+    if (modal) modal.remove();
+}
+
+function submitPassword(userId) {
+    const input = document.getElementById('password-input');
+    const password = input?.value;
+
+    if (password === userPasswords[userId]) {
+        closePasswordModal();
+        login(userId);
+    } else if (password) {
+        // 틀렸을 때 흔들림 애니메이션
+        input.classList.add('animate-shake');
+        input.value = '';
+        setTimeout(() => input.classList.remove('animate-shake'), 500);
+
+        // 알림
+        const label = input.previousElementSibling;
+        label.innerHTML = '❌ 비밀번호가 틀렸어요! 다시 입력해주세요:';
+        label.classList.add('text-red-500');
+    }
+}
+
+// 각 사용자별 비밀번호 프롬프트
 function showPasswordPrompt() {
-    const password = prompt('📱 핸드폰 국번 4자리를 입력하세요:');
-    if (password === userPasswords.dad) {
-        login('dad');
-    } else if (password !== null) {
-        alert('비밀번호가 틀렸습니다!');
-    }
+    showPasswordModal('dad', '봉아빠');
 }
 
-// 엄마 비밀번호 입력
 function showMomPasswordPrompt() {
-    const password = prompt('📱 핸드폰 국번 4자리를 입력하세요:');
-    if (password === userPasswords.mom) {
-        login('mom');
-    } else if (password !== null) {
-        alert('비밀번호가 틀렸습니다!');
-    }
+    showPasswordModal('mom', '강엄마');
 }
 
-// 시으니 비밀번호 입력
 function showSieunPasswordPrompt() {
-    const password = prompt('📱 핸드폰 국번 4자리를 입력하세요:');
-    if (password === userPasswords.sieun) {
-        login('sieun');
-    } else if (password !== null) {
-        alert('비밀번호가 틀렸습니다!');
-    }
+    showPasswordModal('sieun', '시으니');
 }
 
-// 하롱이 비밀번호 입력
 function showHarongPasswordPrompt() {
-    const password = prompt('📱 핸드폰 국번 4자리를 입력하세요:');
-    if (password === userPasswords.harong) {
-        login('harong');
-    } else if (password !== null) {
-        alert('비밀번호가 틀렸습니다!');
-    }
+    showPasswordModal('harong', '하롱이');
 }
 
 // 손님 체험하기
@@ -212,6 +270,8 @@ window.showSieunPasswordPrompt = showSieunPasswordPrompt;
 window.showHarongPasswordPrompt = showHarongPasswordPrompt;
 window.loginAsGuest = loginAsGuest;
 window.resetAllProgress = resetAllProgress;
+window.closePasswordModal = closePasswordModal;
+window.submitPassword = submitPassword;
 
 console.log('auth.js loaded');
 
