@@ -1,12 +1,27 @@
 """
 Fukuoka_Travel_Plan.json → fukuoka_poi_data.js 변환 스크립트
-JSON의 모든 상세정보를 포함하고, Unsplash 이미지 URL 사용
+JSON의 모든 상세정보를 포함, Wikimedia Commons 공개 이미지 사용
 """
 
 import json
 import re
 
-# 카테고리별 Unsplash 이미지 URL 매핑
+# 특정 장소별 Wikimedia Commons 이미지 URL (공개 도메인/CC 라이선스)
+SPECIFIC_PLACE_IMAGES = {
+    'fukuoka tower': 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Fukuoka_Tower.JPG/800px-Fukuoka_Tower.JPG',
+    'canal city hakata': 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Canal_city_hakata_fukuoka3.jpg/800px-Canal_city_hakata_fukuoka3.jpg',
+    'kushida shrine': 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5a/Kushida_hakata01.jpg/800px-Kushida_hakata01.jpg',
+    'ohori park': 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d2/Ohori_Koen.jpg/800px-Ohori_Koen.jpg',
+    'dazaifu tenmangu': 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Dazaifu_Tenman-gu_%E5%A4%AA%E5%AE%B0%E5%BA%9C%E5%A4%A9%E6%BB%A1%E5%AE%AE_-_panoramio.jpg/800px-Dazaifu_Tenman-gu_%E5%A4%AA%E5%AE%B0%E5%BA%9C%E5%A4%A9%E6%BB%A1%E5%AE%AE_-_panoramio.jpg',
+    'hakata station': 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b3/Hakata_Station_Building.jpg/800px-Hakata_Station_Building.jpg',
+    'nakasu': 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Nakasu_Yatai.jpg/800px-Nakasu_Yatai.jpg',
+    'tochoji temple': 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/90/Tochoji_Fukuoka.jpg/800px-Tochoji_Fukuoka.jpg',
+    'momochi': 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8f/Momochi_beach_from_the_sea.jpg/800px-Momochi_beach_from_the_sea.jpg',
+    'yufuin': 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/YufuinKinrinko.JPG/800px-YufuinKinrinko.JPG',
+    'beppu': 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/fd/Beppu_Umi_Jigoku01n4272.jpg/800px-Beppu_Umi_Jigoku01n4272.jpg',
+}
+
+# 카테고리별 기본 Unsplash 이미지 URL
 CATEGORY_IMAGES = {
     'Restaurants': [
         'https://images.unsplash.com/photo-1557872943-16a5ac26437e?w=800',  # 라멘
@@ -14,18 +29,18 @@ CATEGORY_IMAGES = {
         'https://images.unsplash.com/photo-1547928576-b822bc410b52?w=800',  # 고기
     ],
     'Shopping': [
-        'https://images.unsplash.com/photo-1555529669-e69e7aa0ba9a?w=800',  # 쇼핑
-        'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=800',  # 매장
-        'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800',  # 쇼핑카트
+        'https://images.unsplash.com/photo-1555529669-e69e7aa0ba9a?w=800',
+        'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=800',
+        'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800',
     ],
     'Sightseeing': [
-        'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=800',  # 일본 풍경
-        'https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=800',  # 일본 정원
-        'https://images.unsplash.com/photo-1480796927426-f609979314bd?w=800',  # 일본 도시
+        'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=800',
+        'https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=800',
+        'https://images.unsplash.com/photo-1480796927426-f609979314bd?w=800',
     ],
     'Temple': [
-        'https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=800',  # 신사
-        'https://images.unsplash.com/photo-1478436127897-769e1b3f0f36?w=800',  # 토리이
+        'https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=800',
+        'https://images.unsplash.com/photo-1478436127897-769e1b3f0f36?w=800',
     ]
 }
 
@@ -42,10 +57,15 @@ def get_category_type(category):
         return 'spot'
 
 def get_unsplash_images(category, name_en, index):
-    """카테고리와 이름에 맞는 Unsplash 이미지 URL 반환"""
-    # 특수 장소별 이미지
+    """카테고리와 이름에 맞는 이미지 URL 반환 - Wikimedia 우선"""
     name_lower = name_en.lower()
     
+    # 1. 특정 장소 Wikimedia 이미지 우선 사용
+    for key, url in SPECIFIC_PLACE_IMAGES.items():
+        if key in name_lower:
+            return [url, CATEGORY_IMAGES['Sightseeing'][0]]
+    
+    # 2. 특수 키워드별 이미지
     if 'shrine' in name_lower or 'temple' in name_lower or '신사' in name_lower:
         return CATEGORY_IMAGES['Temple']
     elif 'ramen' in name_lower or 'noodle' in name_lower:
