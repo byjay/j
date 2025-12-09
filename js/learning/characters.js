@@ -67,28 +67,37 @@ function showCharacterGrid(type) {
 
     // 1. 상단 고정 헤더 (탭 + 퀴즈/통계 버튼) - 더욱 컴팩트하게 수정
     const isHiragana = type === 'hiragana';
+    // 1. 상단 고정 헤더 (탭 + 퀴즈/통계 버튼) - 2단 분리 및 디자인 개선
+    const isHiragana = type === 'hiragana';
     const topHTML = `
-        <div class="sticky top-14 z-30 bg-gray-50 -mx-4 px-4 py-1.5 border-b border-gray-200 shadow-sm">
-            <div class="flex gap-1 items-center">
+        <div class="sticky top-10 z-30 bg-gray-900 border-b border-gray-800 shadow-md transform transition-all">
+            <!-- 1단: 메인 탭 (히라가나/가타카나) -->
+            <div class="flex w-full">
                 <button onclick="showCharacterGrid('hiragana')" 
-                    class="flex-1 py-1 rounded-md font-bold text-xs transition-colors ${isHiragana ? 'bg-red-500 text-white' : 'bg-white text-gray-500 border border-gray-200'}">
+                    class="flex-1 py-3 text-center font-bold text-sm transition-all ${isHiragana ? 'bg-red-600 text-white shadow-inner' : 'bg-gray-800 text-gray-400 hover:bg-gray-700'}">
                     히라가나
                 </button>
                 <button onclick="showCharacterGrid('katakana')" 
-                    class="flex-1 py-1 rounded-md font-bold text-xs transition-colors ${!isHiragana ? 'bg-blue-500 text-white' : 'bg-white text-gray-500 border border-gray-200'}">
+                    class="flex-1 py-3 text-center font-bold text-sm transition-all ${!isHiragana ? 'bg-blue-600 text-white shadow-inner' : 'bg-gray-800 text-gray-400 hover:bg-gray-700'}">
                     가타카나
                 </button>
-                <button onclick="startQuiz('hiragana')" class="px-2 bg-white text-gray-600 border border-gray-200 py-1 rounded-md text-[10px] font-medium hover:bg-gray-50">
-                    <i class="fas fa-question-circle text-red-400"></i> 히라가나
-                </button>
-                <button onclick="startQuiz('katakana')" class="px-2 bg-white text-gray-600 border border-gray-200 py-1 rounded-md text-[10px] font-medium hover:bg-gray-50">
-                    <i class="fas fa-question-circle text-blue-400"></i> 가타카나
-                </button>
-                <button onclick="startQuiz('mix')" class="px-2 bg-white text-gray-600 border border-gray-200 py-1 rounded-md text-[10px] font-medium hover:bg-gray-50">
-                    <i class="fas fa-random text-purple-400"></i> 섞어서
-                </button>
-                <button onclick="showHistory()" class="px-2 bg-gray-800 text-white py-1 rounded-md text-[10px] font-bold hover:bg-gray-900">
-                    <i class="fas fa-chart-bar text-yellow-400"></i>
+            </div>
+            
+            <!-- 2단: 서브 컨트롤 (퀴즈 & 통계) -->
+            <div class="flex justify-between items-center px-4 py-2 bg-gray-900/95 backdrop-blur gap-2 border-t border-gray-800">
+                <div class="flex gap-2 overflow-x-auto no-scrollbar">
+                    <button onclick="startQuiz('hiragana')" class="px-3 py-1.5 bg-gray-800 text-gray-300 rounded-lg text-xs border border-gray-700 hover:bg-gray-700 hover:text-white transition whitespace-nowrap flex items-center gap-1">
+                         <span class="w-2 h-2 rounded-full bg-red-500 inline-block"></span> 퀴즈
+                    </button>
+                    <button onclick="startQuiz('katakana')" class="px-3 py-1.5 bg-gray-800 text-gray-300 rounded-lg text-xs border border-gray-700 hover:bg-gray-700 hover:text-white transition whitespace-nowrap flex items-center gap-1">
+                         <span class="w-2 h-2 rounded-full bg-blue-500 inline-block"></span> 퀴즈
+                    </button>
+                    <button onclick="startQuiz('mix')" class="px-3 py-1.5 bg-gray-800 text-gray-300 rounded-lg text-xs border border-gray-700 hover:bg-gray-700 hover:text-white transition whitespace-nowrap font-bold">
+                         <i class="fas fa-random text-purple-400 mr-1"></i>섞어서
+                    </button>
+                </div>
+                <button onclick="showHistory()" class="px-3 py-1.5 bg-gray-700 text-yellow-400 rounded-lg text-xs font-bold hover:bg-gray-600 border border-gray-600 whitespace-nowrap shadow-sm">
+                    <i class="fas fa-chart-bar mr-1"></i>통계
                 </button>
             </div>
         </div>
@@ -205,34 +214,40 @@ function selectCharacter(idx) {
                     <canvas id="writing-canvas" class="absolute inset-0 w-full h-full z-20"></canvas>
                 </div>
 
-                <!-- 하단 내비게이션 (Compact) -->
-                <div class="flex justify-between items-center w-full gap-2">
-                    <button onclick="prevChar()" class="text-gray-400 hover:text-gray-800 p-2 transition shrink-0 ${currentIndex === 0 ? 'invisible' : ''}">
-                        <i class="fas fa-chevron-left text-lg"></i>
+                <!-- 컨트롤 버튼 -->
+                <div class="flex justify-between items-center mt-6 gap-2">
+                    <button id="prev-btn" class="bg-gray-700 text-white p-3 rounded-xl hover:bg-gray-600 transition flex items-center justify-center min-w-[48px]">
+                        <i class="fas fa-chevron-left"></i>
                     </button>
-                    
-                    <div class="flex flex-1 justify-center items-center gap-2 overflow-x-auto no-scrollbar">
-                        <button onclick="clearCanvas(); playStrokeAnimation('${item.char}');" class="bg-gray-100 text-gray-600 px-2 py-1.5 rounded text-[10px] font-bold hover:bg-gray-200 transition whitespace-nowrap shrink-0">
-                            <i class="fas fa-redo mr-1"></i>다시쓰기
+
+                    <div class="flex gap-2">
+                        <button id="practice-replay-btn" class="bg-gray-700 text-white px-4 py-3 rounded-xl hover:bg-gray-600 transition flex items-center gap-2 text-sm font-bold">
+                            <i class="fas fa-redo"></i> 다시쓰기
                         </button>
-                        <button onclick="clearCanvas()" class="bg-gray-100 text-gray-600 px-2 py-1.5 rounded text-[10px] font-bold hover:bg-gray-200 transition whitespace-nowrap shrink-0">
-                            <i class="fas fa-eraser mr-1"></i>지우기
+                        <button id="practice-clear-btn" class="bg-gray-700 text-white px-4 py-3 rounded-xl hover:bg-gray-600 transition flex items-center gap-2 text-sm font-bold">
+                            <i class="fas fa-eraser"></i> 지우기
                         </button>
-                         <div class="text-[9px] text-gray-400 font-medium bg-gray-50 px-2 py-1 rounded-full flex items-center whitespace-nowrap shrink-0">
-                            <span class="mr-1">따라쓰기</span>✍️
-                        </div>
                     </div>
 
-                    <button onclick="nextChar()" class="bg-red-500 text-white px-3 py-1.5 rounded-lg font-bold shadow hover:bg-red-600 active:scale-95 transition flex items-center gap-1 text-xs whitespace-nowrap shrink-0">
-                        다음 <i class="fas fa-chevron-right text-[10px]"></i>
-                    </button>
+                    <div class="flex gap-2 items-center">
+                        <span class="text-xs text-gray-400 mr-1" id="tracing-guide-text">따라쓰기 👉</span>
+                        <button id="next-btn" class="bg-red-600 text-white px-5 py-3 rounded-xl hover:bg-red-700 transition flex items-center gap-2 font-bold shadow-lg shadow-red-900/20">
+                            다음 <i class="fas fa-chevron-right"></i>
+                        </button>
+                    </div>
                 </div>
-            </div>
         </div>
     `;
 
     container.classList.remove('hidden');
     setTimeout(initCanvas, 50);
+
+    // 버튼 이벤트 연결
+    document.getElementById('prev-btn').onclick = prevChar;
+    document.getElementById('next-btn').onclick = nextChar;
+    document.getElementById('practice-replay-btn').onclick = () => { clearCanvas(); playStrokeAnimation(item.char); };
+    document.getElementById('practice-clear-btn').onclick = clearCanvas;
+
     playAudio(item.char);
     saveStudyLog('view', item.char);
 
@@ -366,19 +381,57 @@ async function playStrokeAnimation(char) {
         });
         container.appendChild(bgLayer);
 
-        // 2. 애니메이션 레이어 (빨간 점선)
-        const animLayer = svg.cloneNode(true);
+        // 2. 애니메이션 레이어 (빨간 점선) - Mask 사용
+        // 원리: 빨간 점선 패스(A) 위에, 마스크(B)를 씌운다.
+        // 마스크(B)는 처음엔 검정(숨김)이고, 흰색 실선이 그려지면서 A를 보여준다.
+
+        const animLayer = document.createElementNS("http://www.w3.org/2000/svg", "g");
         animLayer.setAttribute('id', 'anim-layer');
-        const animPaths = animLayer.querySelectorAll('path');
-        animPaths.forEach(path => {
-            path.style.fill = 'none';
-            path.style.stroke = '#ef4444'; // red-500
-            path.style.strokeWidth = '4';
-            path.style.strokeLinecap = 'round';
-            path.style.strokeLinejoin = 'round';
-            path.style.strokeDasharray = '10, 10'; // 점선
-            path.style.opacity = '0'; // 처음에 숨김
+
+        const originalPaths = svg.querySelectorAll('path');
+        const defs = document.createElementNS("http://www.w3.org/2000/svg", "defs");
+        animLayer.appendChild(defs);
+
+        const animPaths = []; // 애니메이션 대상 (마스크 내부의 패스들)
+
+        originalPaths.forEach((p, idx) => {
+            // 1. 실제 보여질 빨간 점선 패스
+            const redDashedPath = p.cloneNode(true);
+            redDashedPath.style.fill = 'none';
+            redDashedPath.style.stroke = '#ef4444'; // red-500
+            redDashedPath.style.strokeWidth = '6';   // 굵게
+            redDashedPath.style.strokeLinecap = 'round';
+            redDashedPath.style.strokeLinejoin = 'round';
+            redDashedPath.style.strokeDasharray = '15, 15'; // 명확한 점선
+            redDashedPath.style.opacity = '1';
+
+            // 마스크 적용
+            const maskId = `mask-stroke-${idx}`;
+            redDashedPath.setAttribute('mask', `url(#${maskId})`);
+            animLayer.appendChild(redDashedPath);
+
+            // 2. 마스크 정의 (실선으로 그려짐)
+            const mask = document.createElementNS("http://www.w3.org/2000/svg", "mask");
+            mask.setAttribute('id', maskId);
+
+            const maskPath = p.cloneNode(true);
+            maskPath.style.fill = 'none';
+            maskPath.style.stroke = 'white'; // 마스크는 흰색이 보이는 영역
+            maskPath.style.strokeWidth = '8'; // 본체보다 약간 굵게 커버
+            maskPath.style.strokeLinecap = 'round';
+            maskPath.style.strokeLinejoin = 'round';
+            // 초기 상태: 숨김 (length만큼 offset)
+            const len = maskPath.getTotalLength();
+            maskPath.style.strokeDasharray = len;
+            maskPath.style.strokeDashoffset = len;
+
+            mask.appendChild(maskPath);
+            defs.appendChild(mask);
+
+            // 애니메이션을 위해 마스크 패스 저장
+            animPaths.push(maskPath);
         });
+
         container.appendChild(animLayer);
 
         // 애니메이션 시작
@@ -386,40 +439,32 @@ async function playStrokeAnimation(char) {
 
     } catch (e) {
         console.error("Stroke animation failed:", e);
-        // 실패 시 텍스트 폴백
         container.innerHTML = `<span class="text-[180px] text-gray-100 font-bold" style="font-family: 'Noto Sans JP', sans-serif;">${char}</span>`;
     }
 }
 
-function animateStrokes(paths) {
+function animateStrokes(maskPaths) {
     return new Promise(async (resolve) => {
-        for (let i = 0; i < paths.length; i++) {
-            const path = paths[i];
+        // 순차적으로 그리기
+        for (let i = 0; i < maskPaths.length; i++) {
+            const path = maskPaths[i];
             const length = path.getTotalLength();
 
-            // 초기 설정
-            path.style.strokeDasharray = length; // 점선 효과를 위해 dasharray 조절 필요하지만, draw 애니메이션을 위해 length로 설정
-            // 점선 효과를 유지하면서 그리려면 mask를 써야 하는데 복잡함.
-            // 여기서는 점선 스타일 대신 '빨간 실선'으로 천천히 그리는 것으로 타협하거나,
-            // stroke-dasharray를 애니메이션 하는 방식이 아니라 stroke-dashoffset만 함.
-            // 점선을 원하면 stroke-dasharray='10, 10'을 유지해야 하는데, 
-            // 그리기 애니메이션(stroke-dashoffset)과 충돌함.
-            // 사용자 요청: "점선으로 빨강으로 보여주게하고"
-            // 해결: mask를 쓰거나, 그냥 붉은색 실선으로 보여주는게 깔끔함. 
-            // 일단 붉은색 실선으로 구현 (점선 애니메이션은 SVG에서 까다로움)
-
+            // 초기화 (이미 위에서 했지만 확실하게)
             path.style.strokeDasharray = length;
             path.style.strokeDashoffset = length;
-            path.style.opacity = '1';
 
-            // 애니메이션 (빠르게)
+            // 애니메이션 진행
             await new Promise(r => {
-                const duration = 800; // 0.8초 (빠르게)
+                const duration = 600; // 0.6초 (경쾌하게)
                 const start = performance.now();
 
                 function step(timestamp) {
                     const progress = Math.min((timestamp - start) / duration, 1);
-                    path.style.strokeDashoffset = length * (1 - progress);
+                    // easeOutCubic
+                    const ease = 1 - Math.pow(1 - progress, 3);
+
+                    path.style.strokeDashoffset = length * (1 - ease);
 
                     if (progress < 1) {
                         requestAnimationFrame(step);
@@ -431,18 +476,18 @@ function animateStrokes(paths) {
             });
         }
 
-        // 완료 후 페이드 아웃
+        // 완료 후 1초 뒤 페이드 아웃
         setTimeout(() => {
             const animLayer = document.getElementById('anim-layer');
             if (animLayer) {
                 animLayer.style.transition = 'opacity 0.5s';
                 animLayer.style.opacity = '0';
                 setTimeout(() => {
-                    animLayer.remove(); // DOM에서 제거
-                }, 300);
+                    animLayer.remove();
+                }, 500);
             }
             resolve();
-        }, 200);
+        }, 1000);
     });
 }
 

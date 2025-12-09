@@ -81,6 +81,24 @@ function login(userId) {
         adminSection.style.display = userId === 'dad' ? 'block' : 'none';
     }
 
+    // [손님 전용] 메인 화면 하단 고정 광고 제어
+    const guestAdContainer = document.getElementById('guest-fixed-ad-container');
+    if (guestAdContainer) {
+        if (userId === 'guest') {
+            guestAdContainer.classList.remove('hidden');
+            // 광고 로드 (숨겨져 있던 상태에서 드러날 때 렌더링 시도)
+            setTimeout(() => {
+                try {
+                    (adsbygoogle = window.adsbygoogle || []).push({});
+                } catch (e) {
+                    console.log('AdSense push error (ignored):', e);
+                }
+            }, 100);
+        } else {
+            guestAdContainer.classList.add('hidden');
+        }
+    }
+
     if (loginCallback) {
         loginCallback();
         loginCallback = null;
@@ -128,6 +146,12 @@ function logout() {
     const mainMenu = document.getElementById('main-menu');
     if (mainMenu) {
         mainMenu.style.display = 'none';
+    }
+
+    // [손님 전용] 고정 광고 숨기기
+    const guestAdContainer = document.getElementById('guest-fixed-ad-container');
+    if (guestAdContainer) {
+        guestAdContainer.classList.add('hidden');
     }
 
     // 모든 탭 숨기기

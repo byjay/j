@@ -86,42 +86,56 @@ function showTab(tabName) {
 }
 
 // ★ 손님용 광고 표시 함수 (AdSense)
+// ★ 손님용 광고 표시 함수 (AdSense) - 하단 배너 스타일
 function showGuestAd() {
-    // 이미 광고 모달이 표시 중이면 스킵
+    // 이미 광고가 표시 중이면 스킵
     if (document.getElementById('guest-ad-modal')) return;
 
-    // 3회에 1번 광고 표시 (너무 자주 보여주지 않도록)
+    // 3회에 1번 광고 표시
     const adCount = parseInt(sessionStorage.getItem('guest_ad_count') || '0');
     sessionStorage.setItem('guest_ad_count', adCount + 1);
+    // 빈도 조정: 너무 자주는 아니지만 테스트를 위해 2회로 잠깐 변경하거나 3회 유지
     if (adCount % 3 !== 0) return;
 
+    // 하단 네비게이션(약 60~70px) 위에 뜨도록 bottom 조정
+    // 모달 배경(bg-black/70) 제거하고 하단 배너 형태로 변경
     const adHtml = `
-        <div id="guest-ad-modal" class="fixed inset-0 z-[100] bg-black/70 flex items-center justify-center p-4 animate-fade-in">
-            <div class="bg-white rounded-2xl w-full max-w-sm overflow-hidden shadow-2xl">
-                <div class="p-4 bg-gray-100 flex justify-between items-center">
-                    <span class="text-xs text-gray-500">광고</span>
-                    <button onclick="closeGuestAd()" id="ad-close-btn" class="text-gray-400 hover:text-gray-600 hidden">
-                        <i class="fas fa-times"></i>
-                    </button>
+        <!-- 투명 백드롭: 클릭 시 닫기 위한 오버레이 -->
+        <div id="guest-ad-backdrop" class="fixed inset-0 z-[89] bg-transparent" onclick="closeGuestAd()"></div>
+
+        <div id="guest-ad-modal" class="fixed bottom-[70px] left-0 right-0 z-[90] flex justify-center animate-slide-up" onclick="event.stopPropagation()">
+            <div class="bg-white/95 backdrop-blur shadow-2xl border-t border-gray-200 w-full max-w-md mx-auto relative">
+                <!-- 닫기 버튼 (오른쪽 상단) -->
+                <button onclick="closeGuestAd()" id="ad-close-btn" class="absolute -top-3 right-2 bg-gray-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs shadow-md hidden hover:bg-gray-800 transition">
+                    <i class="fas fa-times"></i>
+                </button>
+                
+                <div class="p-1 flex flex-col items-center justify-center min-h-[100px]">
+                    <div class="w-full flex justify-center overflow-hidden">
+                        <!-- AdSense 광고 삽입: 높이를 줄여서 하단 배너처럼 보이게 함 -->
+                         <ins class="adsbygoogle"
+                             style="display:inline-block;width:320px;height:100px"
+                             data-ad-client="ca-pub-5240158357882882"
+                             data-ad-slot="3669700543"></ins>
+                    </div>
                 </div>
-                <div class="p-4 min-h-[250px] flex items-center justify-center bg-gray-50">
-                    <!-- AdSense 광고 삽입 (최소 크기 지정) -->
-                    <ins class="adsbygoogle"
-                         style="display:block; min-width: 250px; min-height: 250px;"
-                         data-ad-client="ca-pub-5240158357882882"
-                         data-ad-slot="3669700543"
-                         data-ad-format="auto"
-                         data-full-width-responsive="true"></ins>
-                </div>
-                <div class="p-3 text-center">
-                    <p id="ad-timer" class="text-sm text-gray-500">3초 후 닫기 가능</p>
+                
+                <!-- 카운트다운 텍스트 -->
+                <div class="bg-gray-50 py-1 text-center">
+                    <p id="ad-timer" class="text-[10px] text-gray-400">광고 3초 후 닫기 가능</p>
                 </div>
             </div>
         </div>
     `;
     document.body.insertAdjacentHTML('beforeend', adHtml);
 
-    // AdSense 광고 렌더링 (약간의 지연을 주어 DOM 인식 보장)
+    // ★ 정책 준수: 광고가 콘텐츠를 가리지 않도록 하단 여백 확보
+    document.body.style.paddingBottom = '200px';
+
+    // ESC 키로 닫기
+    document.addEventListener('keydown', handleEscClose);
+
+    // AdSense 광고 렌더링
     setTimeout(() => {
         try {
             (adsbygoogle = window.adsbygoogle || []).push({});
@@ -136,19 +150,33 @@ function showGuestAd() {
         countdown--;
         const timerEl = document.getElementById('ad-timer');
         if (timerEl) {
-            timerEl.textContent = countdown > 0 ? `${countdown}초 후 닫기 가능` : '닫기 가능';
+            timerEl.textContent = countdown > 0 ? `광고 ${countdown}초 후 닫기 가능` : '닫기 버튼을 눌러주세요';
         }
         if (countdown <= 0) {
             clearInterval(timer);
             const closeBtn = document.getElementById('ad-close-btn');
             if (closeBtn) closeBtn.classList.remove('hidden');
+
+            // 3초 지나면 백드롭 클릭으로도 닫을 수 있게 안내 문구 변경 가능하지만 생략
         }
     }, 1000);
+}
+
+function handleEscClose(e) {
+    if (e.key === 'Escape') closeGuestAd();
 }
 
 function closeGuestAd() {
     const modal = document.getElementById('guest-ad-modal');
     if (modal) modal.remove();
+    const backdrop = document.getElementById('guest-ad-backdrop');
+    if (backdrop) backdrop.remove();
+
+    // ★ 정책 준수: 광고 닫으면 하단 여백 원상복구 (기본 80px)
+    document.body.style.paddingBottom = '80px';
+
+    // 이벤트 리스너 제거
+    document.removeEventListener('keydown', handleEscClose);
 }
 window.closeGuestAd = closeGuestAd;
 
