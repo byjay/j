@@ -273,6 +273,12 @@ function initFukuokaTrip() {
 
                     ${menu ? `<div class="bg-orange-50 px-3 py-2 rounded-lg text-xs text-orange-800 mb-4 line-clamp-1"><i class="fas fa-utensils mr-1"></i>${menu}</div>` : ''}
 
+                    <!-- 구글 이미지 검색 (실제 사진 보기) -->
+                    ${place.details?.photoLink ?
+                    `<a href="${place.details.photoLink}" target="_blank" onclick="event.stopPropagation()" class="block w-full mb-3 py-2 rounded-xl bg-white border border-gray-200 text-xs font-bold text-gray-600 hover:bg-gray-50 text-center transition shadow-sm">
+                            <i class="fab fa-google text-red-500 mr-1"></i> 구글에서 실제 사진 더보기
+                        </a>` : ''}
+
                     <!-- 액션 버튼 -->
                     <div class="flex gap-2">
                         ${isAdded ?

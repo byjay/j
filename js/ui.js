@@ -36,13 +36,17 @@ function showTab(tabName) {
         console.error('Tab not found:', tabName);
     }
 
-    // 홈이 아닌 탭에서는 메인 메뉴(4개 카드) 숨기기
+    // 홈이 아닌 탭에서는 메인 메뉴(4개 카드) 숨기기 & 뒤로가기 버튼 표시
     const mainMenu = document.getElementById('main-menu');
+    const backBtn = document.getElementById('back-to-home-btn'); // 뒤로가기 버튼
+
     if (mainMenu) {
         if (tabName === 'home') {
             mainMenu.style.display = 'grid';
+            if (backBtn) backBtn.classList.add('hidden'); // 홈에서는 숨김
         } else {
             mainMenu.style.display = 'none';
+            if (backBtn) backBtn.classList.remove('hidden'); // 하위 탭에서는 표시
         }
     }
 

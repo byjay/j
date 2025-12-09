@@ -187,20 +187,30 @@
     </div>
 
     <div class="app-container">
-        <header
-            class="bg-gradient-to-r from-red-600 via-red-500 to-orange-500 shadow-lg sticky top-0 z-50 h-14 flex-none">
+        <header id="app-header"
+            class="sticky top-0 z-50 bg-gradient-to-r from-red-600 to-red-500 shadow-md h-14 transition-all duration-300">
             <div class="h-full px-4 flex justify-between items-center">
-                <!-- 로고 영역 -->
-                <div class="flex items-center gap-2 cursor-pointer" onclick="showTab('home')">
-                    <img src="images/app_icon.png" alt="JAP-BONG" class="w-9 h-9 rounded-lg shadow-md bg-white p-0.5">
-                    <div class="flex flex-col leading-tight">
-                        <span class="text-white font-black text-lg tracking-tight">JAP-BONG</span>
-                        <span class="text-white/70 text-[10px] font-medium -mt-0.5">가족 일본어 학습</span>
+                <!-- 로고 및 뒤로가기 영역 -->
+                <div class="flex items-center gap-3">
+                    <!-- 뒤로가기 버튼 (홈이 아닐 때 표시) -->
+                    <button id="back-to-home-btn" onclick="showTab('home')"
+                        class="hidden text-white hover:bg-white/20 p-2 rounded-full transition">
+                        <i class="fas fa-chevron-left text-lg"></i>
+                    </button>
+
+                    <!-- 로고 영역 -->
+                    <div class="flex items-center gap-2 cursor-pointer" onclick="showTab('home')">
+                        <img src="images/app_icon.png" alt="JAP-BONG"
+                            class="w-9 h-9 rounded-lg shadow-md bg-white p-0.5">
+                        <div class="flex flex-col leading-tight">
+                            <span class="text-white font-black text-lg tracking-tight">JAP-BONG</span>
+                            <span class="text-white/70 text-[10px] font-medium -mt-0.5">가족 일본어 학습</span>
+                        </div>
                     </div>
                 </div>
 
                 <!-- 사용자 영역 -->
-                <div class="flex items-center gap-2">
+                <div id="user-profile-icon" class="hidden items-center gap-2">
                     <button id="header-install-btn" onclick="triggerInstallPrompt()"
                         class="hidden bg-white/20 hover:bg-white/30 text-white p-2 rounded-lg transition">
                         <i class="fas fa-download text-sm"></i>

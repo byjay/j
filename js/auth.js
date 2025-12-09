@@ -115,10 +115,31 @@ function logout() {
     currentUser = null;
     localStorage.removeItem('currentUser');
 
+    // 세션 스토리지 초기화 (광고 카운트 등)
+    sessionStorage.removeItem('guest_ad_count');
+
     // 하단 네비게이션 숨기기
     const bottomNav = document.getElementById('bottom-nav');
     if (bottomNav) {
         bottomNav.classList.add('hidden');
+    }
+
+    // 메인 메뉴 숨기기
+    const mainMenu = document.getElementById('main-menu');
+    if (mainMenu) {
+        mainMenu.style.display = 'none';
+    }
+
+    // 모든 탭 숨기기
+    document.querySelectorAll('.tab-content').forEach(tab => {
+        tab.classList.remove('active');
+        tab.classList.add('hidden');
+    });
+
+    // 헤더 뒤로가기 버튼 숨기기
+    const backBtn = document.getElementById('back-to-home-btn');
+    if (backBtn) {
+        backBtn.classList.add('hidden');
     }
 
     showLoginModal();
