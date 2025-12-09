@@ -64,6 +64,8 @@ function showTab(tabName) {
         if (typeof initJapanTravel === 'function') initJapanTravel();
     } else if (tabName === 'grammar') {
         if (typeof GrammarPractice !== 'undefined') GrammarPractice.init();
+    } else if (tabName === 'progress') {
+        if (typeof showProgressDashboard === 'function') showProgressDashboard();
     }
 }
 
