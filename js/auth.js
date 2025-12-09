@@ -99,6 +99,13 @@ function login(userId) {
         }
     }
 
+    // 헤더 사용자 프로필/로그아웃 버튼 표시
+    const profileIcon = document.getElementById('user-profile-icon');
+    if (profileIcon) {
+        profileIcon.classList.remove('hidden');
+        profileIcon.classList.add('flex');
+    }
+
     if (loginCallback) {
         loginCallback();
         loginCallback = null;
@@ -140,6 +147,13 @@ function logout() {
     const bottomNav = document.getElementById('bottom-nav');
     if (bottomNav) {
         bottomNav.classList.add('hidden');
+    }
+
+    // 헤더 사용자 프로필/로그아웃 버튼 숨기기
+    const profileIcon = document.getElementById('user-profile-icon');
+    if (profileIcon) {
+        profileIcon.classList.add('hidden');
+        profileIcon.classList.remove('flex');
     }
 
     // 메인 메뉴 숨기기
