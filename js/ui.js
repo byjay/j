@@ -104,10 +104,10 @@ function showGuestAd() {
                         <i class="fas fa-times"></i>
                     </button>
                 </div>
-                <div class="p-4 min-h-[200px] flex items-center justify-center">
-                    <!-- AdSense 광고 삽입 -->
+                <div class="p-4 min-h-[250px] flex items-center justify-center bg-gray-50">
+                    <!-- AdSense 광고 삽입 (최소 크기 지정) -->
                     <ins class="adsbygoogle"
-                         style="display:block"
+                         style="display:block; min-width: 250px; min-height: 250px;"
                          data-ad-client="ca-pub-5240158357882882"
                          data-ad-slot="3669700543"
                          data-ad-format="auto"
@@ -121,12 +121,14 @@ function showGuestAd() {
     `;
     document.body.insertAdjacentHTML('beforeend', adHtml);
 
-    // AdSense 광고 렌더링
-    try {
-        (adsbygoogle = window.adsbygoogle || []).push({});
-    } catch (e) {
-        console.log('AdSense not loaded');
-    }
+    // AdSense 광고 렌더링 (약간의 지연을 주어 DOM 인식 보장)
+    setTimeout(() => {
+        try {
+            (adsbygoogle = window.adsbygoogle || []).push({});
+        } catch (e) {
+            console.error('AdSense load error:', e);
+        }
+    }, 100);
 
     // 3초 후 닫기 버튼 활성화
     let countdown = 3;
