@@ -111,9 +111,16 @@ function login(userId) {
         loginCallback = null;
     }
 
-    // 로그인 후에는 홈 탭을 누른 것처럼 바로 홈 화면을 보여준다
+    // 로그인 후에는 저장된 마지막 탭으로 이동 (없으면 홈)
     if (typeof showTab === 'function') {
-        showTab('home');
+        const lastTab = localStorage.getItem('lastTab');
+        // 'home' 탭은 기본값이므로 굳이 복원할 필요 없거나, 복원해도 무방
+        if (lastTab) {
+            console.log('Restoring last tab:', lastTab);
+            showTab(lastTab);
+        } else {
+            showTab('home');
+        }
     }
 }
 
@@ -139,6 +146,10 @@ function updateUserDisplay() {
 function logout() {
     currentUser = null;
     localStorage.removeItem('currentUser');
+
+    // [New] 저장된 탭 상태 초기화 (로그아웃 후 재로그인 시에는 항상 홈으로)
+    localStorage.removeItem('lastTab');
+    localStorage.removeItem('lastCharMode'); // 글자 모드도 초기화할지 선택사항 (일단 초기화가 깔끔)
 
     // 세션 스토리지 초기화 (광고 카운트 등)
     sessionStorage.removeItem('guest_ad_count');

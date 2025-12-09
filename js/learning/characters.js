@@ -56,6 +56,13 @@ function showCharacterGrid(type) {
     // alert(`DEBUG: showCharacterGrid called with type: ${type}`); // 디버깅용 알림
     console.log(`showCharacterGrid called with type: ${type}`);
 
+    // [New] 현재 모드 저장
+    if (type) {
+        localStorage.setItem('lastCharMode', type);
+    } else {
+        type = localStorage.getItem('lastCharMode') || 'hiragana';
+    }
+
     currentMode = type;
     const container = document.getElementById('character-grid-container');
 
