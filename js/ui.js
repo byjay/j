@@ -202,8 +202,8 @@ function checkFukuokaAccess() {
         return;
     }
 
-    // 2. 아빠인지 확인 (아빠는 바로 통과)
-    if (currentUser.id === 'dad') {
+    // 2. 아빠 또는 손님인지 확인 (바로 통과)
+    if (currentUser.id === 'dad' || currentUser.id === 'guest') {
         showTab('fukuoka');
         return;
     }
