@@ -75,7 +75,7 @@ function showCharacterGrid(type) {
     // 1. 상단 고정 헤더 (탭 + 퀴즈/통계 버튼) - 2단 분리 및 디자인 개선
     const isHiragana = type === 'hiragana';
     const topHTML = `
-        <div class="sticky top-14 z-30 bg-gray-900 border-b border-gray-800 shadow-md transform transition-all">
+        <div class="sticky top-0 z-30 bg-gray-900 border-b border-gray-800 shadow-md transform transition-all">
             <!-- 1단: 메인 탭 (히라가나/가타카나) -->
             <div class="flex w-full">
                 <button onclick="showCharacterGrid('hiragana')" 
@@ -89,19 +89,19 @@ function showCharacterGrid(type) {
             </div>
             
             <!-- 2단: 서브 컨트롤 (퀴즈 & 통계) -->
-            <div class="flex justify-between items-center px-4 py-2 bg-gray-900/95 backdrop-blur gap-2 border-t border-gray-800">
+            <div class="flex justify-between items-center px-3 py-2 bg-gray-900/95 backdrop-blur gap-2 border-t border-gray-800">
                 <div class="flex gap-2 overflow-x-auto no-scrollbar">
-                    <button onclick="startQuiz('hiragana')" class="px-3 py-1.5 bg-gray-800 text-gray-300 rounded-lg text-xs border border-gray-700 hover:bg-gray-700 hover:text-white transition whitespace-nowrap flex items-center gap-1">
-                         <span class="w-2 h-2 rounded-full bg-red-500 inline-block"></span> 퀴즈
+                    <button onclick="startQuiz('hiragana')" class="px-3 py-1.5 bg-pink-600/20 text-pink-300 rounded-lg text-xs border border-pink-600/50 hover:bg-pink-600/40 transition whitespace-nowrap flex items-center gap-1 font-bold">
+                         <span class="w-2 h-2 rounded-full bg-pink-500 inline-block"></span> ひらがな 퀴즈
                     </button>
-                    <button onclick="startQuiz('katakana')" class="px-3 py-1.5 bg-gray-800 text-gray-300 rounded-lg text-xs border border-gray-700 hover:bg-gray-700 hover:text-white transition whitespace-nowrap flex items-center gap-1">
-                         <span class="w-2 h-2 rounded-full bg-blue-500 inline-block"></span> 퀴즈
+                    <button onclick="startQuiz('katakana')" class="px-3 py-1.5 bg-cyan-600/20 text-cyan-300 rounded-lg text-xs border border-cyan-600/50 hover:bg-cyan-600/40 transition whitespace-nowrap flex items-center gap-1 font-bold">
+                         <span class="w-2 h-2 rounded-full bg-cyan-500 inline-block"></span> カタカナ 퀴즈
                     </button>
-                    <button onclick="startQuiz('mix')" class="px-3 py-1.5 bg-gray-800 text-gray-300 rounded-lg text-xs border border-gray-700 hover:bg-gray-700 hover:text-white transition whitespace-nowrap font-bold">
-                         <i class="fas fa-random text-purple-400 mr-1"></i>섞어서
+                    <button onclick="startQuiz('mix')" class="px-3 py-1.5 bg-purple-600/20 text-purple-300 rounded-lg text-xs border border-purple-600/50 hover:bg-purple-600/40 transition whitespace-nowrap font-bold">
+                         <i class="fas fa-random mr-1"></i>섞어서
                     </button>
                 </div>
-                <button onclick="showHistory()" class="px-3 py-1.5 bg-gray-700 text-yellow-400 rounded-lg text-xs font-bold hover:bg-gray-600 border border-gray-600 whitespace-nowrap shadow-sm">
+                <button onclick="showHistory()" class="px-3 py-1.5 bg-yellow-600/20 text-yellow-300 rounded-lg text-xs font-bold hover:bg-yellow-600/40 border border-yellow-600/50 whitespace-nowrap shadow-sm">
                     <i class="fas fa-chart-bar mr-1"></i>통계
                 </button>
             </div>
@@ -171,13 +171,16 @@ function selectCharacter(idx) {
     }).join('');
 
     container.innerHTML = `
-        <div class="fixed top-14 bottom-0 left-0 right-0 z-40 bg-black/90 flex flex-col items-center justify-center p-3 animate-fade-in">
-            <!-- 상단 컨트롤: 닫기 & 행 내비게이션 -->
+        <div class="fixed top-0 bottom-0 left-0 right-0 z-[55] bg-black/95 flex flex-col items-center justify-center p-3 animate-fade-in">
+            <!-- 상단 컨트롤: 뒤로가기, 행 내비게이션, 닫기 -->
             <div class="w-full max-w-sm flex justify-between items-center mb-3">
+                <button onclick="closeModal(); showCharacterGrid(currentMode);" class="bg-red-600 px-3 py-2 flex items-center gap-2 rounded-lg text-white hover:bg-red-700 transition font-bold text-sm">
+                    <i class="fas fa-chevron-left"></i> 목록
+                </button>
                 <div class="flex gap-1 bg-gray-800/50 p-1 rounded-lg border border-white/10">
                     ${rowNavHTML}
                 </div>
-                <button onclick="closeModal()" class="bg-white/20 w-8 h-8 flex items-center justify-center rounded-full text-white hover:bg-white/30 transition ml-2">
+                <button onclick="closeModal()" class="bg-white/20 w-8 h-8 flex items-center justify-center rounded-full text-white hover:bg-white/30 transition">
                     <i class="fas fa-times text-sm"></i>
                 </button>
             </div>
