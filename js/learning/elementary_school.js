@@ -73,26 +73,64 @@ function injectElementaryHTML() {
     if (!container) return;
 
     container.innerHTML = `
-        <!-- 학년 선택 화면 -->
+        <!-- 🎓 환영 가이드 모달 -->
+        <div id="elementary-welcome-modal" class="fixed inset-0 bg-black/70 flex items-center justify-center z-50" style="display: none;">
+            <div class="bg-white rounded-3xl p-6 mx-4 max-w-md w-full text-center shadow-2xl animate-bounce-in">
+                <div class="text-6xl mb-4 animate-bounce-character">🏫</div>
+                <h3 class="text-2xl font-black text-gray-800 mb-3">일본 초등학교 입학을 환영합니다! 🎉</h3>
+                
+                <div class="bg-gradient-to-r from-yellow-50 to-orange-50 rounded-2xl p-4 mb-4 text-left">
+                    <h4 class="font-bold text-orange-600 mb-2">📚 이 과정에서 배우게 됩니다:</h4>
+                    <ul class="text-sm text-gray-700 space-y-1">
+                        <li>✅ 일본어 기초 조사 (は, が, を, に, で, の)</li>
+                        <li>✅ 기본 문장 구조와 문법</li>
+                        <li>✅ 1학년~6학년 필수 한자 1,026자</li>
+                        <li>✅ 2,000개 이상의 필수 어휘</li>
+                    </ul>
+                </div>
+
+                <div class="bg-gradient-to-r from-blue-50 to-purple-50 rounded-2xl p-4 mb-4 text-left">
+                    <h4 class="font-bold text-blue-600 mb-2">🎮 미션 시스템:</h4>
+                    <ul class="text-sm text-gray-700 space-y-1">
+                        <li>🔑 각 미션을 <b>완료</b>하면 다음 미션이 <b>자동 해금</b>됩니다!</li>
+                        <li>⭐ 미션 클리어 시 <b class="text-yellow-600">+50 XP</b> 획득!</li>
+                        <li>🏆 학년을 모두 끝내면 다음 학년이 열려요!</li>
+                        <li>🎯 1학년부터 차근차근 도전하세요!</li>
+                    </ul>
+                </div>
+
+                <button onclick="closeWelcomeModal()" class="w-full py-4 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-xl font-bold shadow-lg hover:shadow-xl transition transform hover:scale-105">
+                    📖 학습 시작하기!
+                </button>
+            </div>
+        </div>
+
+        <!-- 학년 선택 화면 (계단/피라미드 스타일) -->
         <div id="elementary-grades" class="container mx-auto px-4 pb-24">
-            <div class="text-center mb-6">
-                <h2 class="text-2xl font-bold text-gray-900 mb-2">🏫 일본 초등학교 입학하기</h2>
-                <p class="text-gray-500 text-sm">1~6학년 과정을 단계별로 정복하세요!</p>
+            <div class="text-center mb-4">
+                <h2 class="text-2xl font-bold text-gray-900 mb-1">🏫 일본 초등학교 입학하기</h2>
+                <p class="text-gray-500 text-sm">계단을 올라 일본어 마스터가 되세요!</p>
+                <button onclick="showWelcomeModal()" class="mt-2 text-blue-500 text-xs underline">
+                    <i class="fas fa-info-circle mr-1"></i>과정 안내 보기
+                </button>
             </div>
             
-            <!-- 전체 진도 표시 -->
-            <div class="bg-gradient-to-r from-blue-500 to-purple-600 rounded-2xl p-4 text-white mb-6">
+            <!-- 전체 진도 + XP 표시 -->
+            <div class="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-2xl p-4 text-white mb-6 shadow-lg">
                 <div class="flex justify-between items-center mb-2">
-                    <span class="font-bold">📊 전체 진행률</span>
-                    <span id="total-progress-text" class="text-sm">0%</span>
+                    <span class="font-bold flex items-center gap-2">
+                        <span class="animate-sparkle">⭐</span> 모험 진행률
+                    </span>
+                    <span id="total-progress-text" class="text-sm bg-white/20 px-2 py-1 rounded-full">0%</span>
                 </div>
-                <div class="bg-white/30 rounded-full h-3">
-                    <div id="total-progress-bar" class="bg-white rounded-full h-3 transition-all" style="width: 0%"></div>
+                <div class="bg-white/30 rounded-full h-4 overflow-hidden">
+                    <div id="total-progress-bar" class="bg-gradient-to-r from-yellow-300 to-yellow-500 rounded-full h-4 transition-all animate-progress-fill" style="width: 0%"></div>
                 </div>
+                <p class="text-white/80 text-xs mt-2 text-center">🎯 미션을 완료하여 XP를 모으고 다음 학년을 해금하세요!</p>
             </div>
             
-            <!-- 학년 그리드 -->
-            <div id="grade-grid" class="grid grid-cols-2 gap-4"></div>
+            <!-- 🏔️ 계단식 학년 피라미드 -->
+            <div id="grade-pyramid" class="relative"></div>
         </div>
         
         <!-- 미션 선택 화면 -->
@@ -204,50 +242,118 @@ function injectElementaryHTML() {
 }
 
 // ==========================================
-// 학년 그리드 렌더링
+// 학년 피라미드/계단 렌더링 (게임 스타일)
 // ==========================================
 function renderGradeGrid() {
-    const grid = document.getElementById('grade-grid');
-    if (!grid) return;
+    const pyramid = document.getElementById('grade-pyramid');
+    if (!pyramid) return;
 
     const gradeInfo = [
-        { grade: 1, kanji: 80, vocab: 200, icon: '🌸', color: 'from-pink-400 to-pink-500' },
-        { grade: 2, kanji: 160, vocab: 300, icon: '🌷', color: 'from-purple-400 to-purple-500' },
-        { grade: 3, kanji: 200, vocab: 400, icon: '🌻', color: 'from-yellow-400 to-yellow-500' },
-        { grade: 4, kanji: 202, vocab: 450, icon: '🍀', color: 'from-green-400 to-green-500' },
-        { grade: 5, kanji: 193, vocab: 500, icon: '🌊', color: 'from-blue-400 to-blue-500' },
-        { grade: 6, kanji: 191, vocab: 550, icon: '🌟', color: 'from-indigo-400 to-indigo-500' }
+        { grade: 1, kanji: 80, vocab: 200, icon: '🌸', color: 'from-pink-400 to-rose-500', xp: 500 },
+        { grade: 2, kanji: 160, vocab: 300, icon: '🌷', color: 'from-purple-400 to-violet-500', xp: 800 },
+        { grade: 3, kanji: 200, vocab: 400, icon: '🌻', color: 'from-amber-400 to-yellow-500', xp: 1200 },
+        { grade: 4, kanji: 202, vocab: 450, icon: '🍀', color: 'from-emerald-400 to-green-500', xp: 1500 },
+        { grade: 5, kanji: 193, vocab: 500, icon: '🌊', color: 'from-cyan-400 to-blue-500', xp: 2000 },
+        { grade: 6, kanji: 191, vocab: 550, icon: '🌟', color: 'from-indigo-400 to-purple-500', xp: 2500 }
     ];
 
-    grid.innerHTML = gradeInfo.map(info => {
+    // 역순으로 표시 (6학년이 위, 1학년이 아래)
+    const reversedGrades = [...gradeInfo].reverse();
+
+    pyramid.innerHTML = `
+        <div class="flex flex-col items-center space-y-3">
+            <!-- 정상 (졸업) -->
+            <div class="text-center mb-2">
+                <div class="text-4xl animate-bounce-character">🎓</div>
+                <p class="text-xs text-gray-500 font-bold">졸업!</p>
+            </div>
+            
+            <!-- 계단식 학년 카드 -->
+            ${reversedGrades.map((info, index) => {
         const progress = elementaryProgress[info.grade];
         const isUnlocked = progress && progress.unlocked;
         const completedMissions = progress ? Object.values(progress.missions).filter(s => s === 'completed').length : 0;
         const totalMissions = getMissionCount(info.grade);
         const progressPercent = totalMissions > 0 ? Math.round((completedMissions / totalMissions) * 100) : 0;
+        const isCompleted = progressPercent === 100;
+        const prevGrade = info.grade - 1;
 
         return `
-            <div onclick="${isUnlocked ? `selectGrade(${info.grade})` : 'showLockedAlert()'}" 
-                 class="relative rounded-2xl overflow-hidden shadow-lg cursor-pointer transform transition hover:-translate-y-1 hover:shadow-xl ${!isUnlocked ? 'opacity-60' : ''}">
-                <div class="bg-gradient-to-br ${info.color} p-5 text-white">
-                    <div class="text-3xl mb-2">${info.icon}</div>
-                    <h3 class="text-xl font-bold mb-1">${info.grade}학년</h3>
-                    <p class="text-white/80 text-xs">한자 ${info.kanji}자 · ${info.vocab}+ 단어</p>
-                    
-                    ${!isUnlocked ? `
-                        <div class="absolute top-3 right-3">
-                            <i class="fas fa-lock text-white/50 text-xl"></i>
+                    <div class="relative w-full" style="max-width: ${300 + (5 - index) * 20}px;">
+                        <!-- 연결선 (이전 학년으로) -->
+                        ${info.grade < 6 ? `
+                            <div class="absolute left-1/2 -top-3 w-1 h-3 bg-gradient-to-b ${isUnlocked ? 'from-green-400 to-green-300' : 'from-gray-300 to-gray-200'}"></div>
+                        ` : ''}
+                        
+                        <!-- 학년 카드 -->
+                        <div onclick="${isUnlocked ? `selectGrade(${info.grade})` : `showLockedGradeAlert(${info.grade})`}"
+                             class="relative rounded-2xl overflow-hidden shadow-lg cursor-pointer transform transition-all duration-300 
+                                    ${isUnlocked ? 'hover:-translate-y-1 hover:shadow-xl hover:scale-105' : 'opacity-50 grayscale'} 
+                                    ${isCompleted ? 'ring-4 ring-yellow-400 ring-offset-2' : ''}">
+                            
+                            <div class="bg-gradient-to-r ${info.color} p-4 text-white">
+                                <div class="flex items-center justify-between">
+                                    <!-- 왼쪽: 아이콘 + 학년 정보 -->
+                                    <div class="flex items-center gap-3">
+                                        <div class="text-4xl ${isUnlocked ? 'animate-bounce-character' : ''}" style="animation-delay: ${index * 0.1}s;">
+                                            ${isCompleted ? '✅' : info.icon}
+                                        </div>
+                                        <div>
+                                            <h3 class="text-xl font-black">${info.grade}학년</h3>
+                                            <p class="text-white/80 text-xs">한자 ${info.kanji}자 · ${info.vocab}+ 단어</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- 오른쪽: 상태 표시 -->
+                                    <div class="text-right">
+                                        ${!isUnlocked ? `
+                                            <div class="flex flex-col items-center">
+                                                <i class="fas fa-lock text-2xl text-white/60 lock-shake"></i>
+                                                <span class="text-xs text-white/60 mt-1">${prevGrade}학년 완료 필요</span>
+                                            </div>
+                                        ` : isCompleted ? `
+                                            <div class="flex flex-col items-center">
+                                                <span class="text-2xl animate-sparkle">🏆</span>
+                                                <span class="text-xs text-white/80">완료!</span>
+                                            </div>
+                                        ` : `
+                                            <div class="flex flex-col items-center">
+                                                <span class="text-lg font-bold">${progressPercent}%</span>
+                                                <span class="text-xs text-white/80">진행중</span>
+                                            </div>
+                                        `}
+                                    </div>
+                                </div>
+                                
+                                <!-- 진행 바 -->
+                                ${isUnlocked ? `
+                                    <div class="mt-3 bg-white/20 rounded-full h-2 overflow-hidden">
+                                        <div class="bg-white rounded-full h-2 transition-all" style="width: ${progressPercent}%"></div>
+                                    </div>
+                                ` : ''}
+                                
+                                <!-- XP 보상 표시 -->
+                                <div class="mt-2 flex justify-between items-center">
+                                    <span class="text-xs text-white/70">
+                                        ${totalMissions > 0 ? `${completedMissions}/${totalMissions} 미션` : '준비중...'}
+                                    </span>
+                                    <span class="text-xs bg-yellow-400/30 text-yellow-100 px-2 py-0.5 rounded-full flex items-center gap-1">
+                                        <span class="animate-sparkle">⭐</span> ${info.xp} XP
+                                    </span>
+                                </div>
+                            </div>
                         </div>
-                    ` : `
-                        <div class="mt-3 bg-white/20 rounded-full h-2">
-                            <div class="bg-white rounded-full h-2" style="width: ${progressPercent}%"></div>
-                        </div>
-                        <p class="text-white/80 text-xs mt-1">${progressPercent}% 완료</p>
-                    `}
-                </div>
+                    </div>
+                `;
+    }).join('')}
+            
+            <!-- 시작점 -->
+            <div class="text-center mt-2">
+                <div class="text-3xl">🚀</div>
+                <p class="text-xs text-gray-500 font-bold">시작!</p>
             </div>
-        `;
-    }).join('');
+        </div>
+    `;
 
     updateTotalProgress();
 }
@@ -553,6 +659,53 @@ function showLockedAlert() {
     alert('이전 단계를 먼저 완료해주세요! 🔒');
 }
 
+// 학년 잠금 알림 (상세 버전)
+function showLockedGradeAlert(grade) {
+    const prevGrade = grade - 1;
+    const modal = document.createElement('div');
+    modal.className = 'fixed inset-0 bg-black/70 flex items-center justify-center z-50';
+    modal.innerHTML = `
+        <div class="bg-white rounded-2xl p-6 mx-4 max-w-sm w-full text-center shadow-2xl animate-bounce-in">
+            <div class="text-5xl mb-4 lock-shake">🔒</div>
+            <h3 class="text-xl font-bold text-gray-800 mb-2">${grade}학년은 아직 잠겨있어요!</h3>
+            <p class="text-gray-600 mb-4">
+                먼저 <b class="text-pink-500">${prevGrade}학년 과정</b>을 모두 완료해주세요.
+            </p>
+            <div class="bg-yellow-50 rounded-xl p-3 mb-4">
+                <p class="text-sm text-yellow-700">
+                    💡 <b>팁:</b> ${prevGrade}학년의 모든 미션을 클리어하면<br>
+                    자동으로 ${grade}학년이 해금됩니다!
+                </p>
+            </div>
+            <button onclick="this.closest('.fixed').remove()" 
+                    class="w-full py-3 bg-gradient-to-r from-pink-500 to-rose-500 text-white rounded-xl font-bold shadow-lg">
+                알겠어요! 🚀
+            </button>
+        </div>
+    `;
+    document.body.appendChild(modal);
+
+    // 배경 클릭시 닫기
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) modal.remove();
+    });
+}
+
+// 환영 모달 표시
+function showWelcomeModal() {
+    const modal = document.getElementById('elementary-welcome-modal');
+    if (modal) modal.style.display = 'flex';
+}
+
+// 환영 모달 닫기
+function closeWelcomeModal() {
+    const modal = document.getElementById('elementary-welcome-modal');
+    if (modal) modal.style.display = 'none';
+
+    // 첫 방문 표시 저장
+    localStorage.setItem('elementary_welcomed', 'true');
+}
+
 // ==========================================
 // 초기화
 // ==========================================
@@ -560,6 +713,13 @@ async function initElementarySchool() {
     await loadElementaryData();
     injectElementaryHTML();
     renderGradeGrid();
+
+    // 첫 방문시 환영 모달 표시
+    const hasVisited = localStorage.getItem('elementary_welcomed');
+    if (!hasVisited) {
+        setTimeout(() => showWelcomeModal(), 500);
+    }
+
     console.log('[Elementary School] 모듈 초기화 완료');
 }
 
@@ -576,5 +736,9 @@ window.markAsKnown = markAsKnown;
 window.playElementaryAudio = playElementaryAudio;
 window.closeMissionComplete = closeMissionComplete;
 window.showLockedAlert = showLockedAlert;
+window.showLockedGradeAlert = showLockedGradeAlert;
+window.showWelcomeModal = showWelcomeModal;
+window.closeWelcomeModal = closeWelcomeModal;
+window.triggerConfetti = triggerConfetti;
 
 console.log('elementary_school.js loaded');
