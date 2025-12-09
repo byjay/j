@@ -242,8 +242,6 @@ function selectCharacter(idx) {
     playStrokeAnimation(item.char);
 }
 
-// ... (이하 closeModal, nextChar, prevChar, initCanvas 등 기존 로직 유지) ...
-
 function closeModal() {
     document.getElementById('character-study-container').classList.add('hidden');
 }
@@ -765,7 +763,6 @@ window.clearCanvas = clearCanvas;
 window.playAudio = playAudio;
 window.startQuiz = startQuiz;
 window.submitAnswer = submitAnswer;
-window.showHistory = showHistory;
 window.showHistory = showHistory;
 window.resetAllData = resetAllData;
 window.playStrokeAnimation = playStrokeAnimation;
