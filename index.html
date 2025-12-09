@@ -186,9 +186,9 @@
         </div>
     </div>
 
-    <div class="app-container">
+    <div class="app-container pt-14">
         <header id="app-header"
-            class="sticky top-0 z-50 bg-gradient-to-r from-red-600 to-red-500 shadow-md h-14 transition-all duration-300">
+            class="fixed top-0 left-0 right-0 z-50 bg-gradient-to-r from-red-600 to-red-500 shadow-lg h-14 transition-all duration-300">
             <div class="h-full px-4 flex justify-between items-center">
                 <!-- 로고 및 뒤로가기 영역 -->
                 <div class="flex items-center gap-3">
@@ -983,9 +983,14 @@
                 checkAutoLogin();
             }
 
-            // 2. 기본 탭 활성화: 항상 홈부터 시작
+            // 2. 기본 탭 활성화: lastTab 복원 또는 home
             if (typeof showTab === 'function') {
-                showTab('home');
+                const lastTab = localStorage.getItem('lastTab');
+                if (lastTab && lastTab !== 'home') {
+                    showTab(lastTab);
+                } else {
+                    showTab('home');
+                }
             }
 
             // 3. 모듈 초기 준비 (필요한 것만 가볍게)

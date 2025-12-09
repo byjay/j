@@ -175,9 +175,18 @@ function showTab(tabName) {
         if (typeof showGuestAd === 'function') showGuestAd();
     }
 
-    // 상태 저장
+    // 상태 저장 및 브라우저 히스토리 추가
     if (tabName !== 'home') {
         localStorage.setItem('lastTab', tabName);
+        // 브라우저 뒤로가기 지원
+        if (history.state?.tab !== tabName) {
+            history.pushState({ tab: tabName }, '', `#${tabName}`);
+        }
+    } else {
+        localStorage.removeItem('lastTab');
+        if (history.state?.tab) {
+            history.pushState({ tab: 'home' }, '', window.location.pathname);
+        }
     }
 
     // 모든 탭 숨기기
@@ -254,6 +263,15 @@ function showTab(tabName) {
     }
 }
 window.showTab = showTab;
+
+// 브라우저 뒤로가기 핸들러
+window.addEventListener('popstate', (event) => {
+    if (event.state && event.state.tab) {
+        showTab(event.state.tab);
+    } else {
+        showTab('home');
+    }
+});
 
 // PWA 설치 및 모달 관련
 let deferredPrompt;

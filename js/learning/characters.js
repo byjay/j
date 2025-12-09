@@ -527,9 +527,22 @@ function startQuiz(mode) {
 function showQuizModal() {
     const q = quizQuestions[currentQuestionIdx];
     const container = document.getElementById('character-study-container');
+
+    // 퀴즈 타입 라벨 결정
+    const quizTypeLabel = currentMode === 'hiragana' ? '히라가나 퀴즈 🌸' :
+        currentMode === 'katakana' ? '가타카나 퀴즈 ⚡' : '혼합 퀴즈 🎯';
+    const quizTypeColor = currentMode === 'hiragana' ? 'bg-pink-100 text-pink-600' :
+        currentMode === 'katakana' ? 'bg-blue-100 text-blue-600' : 'bg-purple-100 text-purple-600';
+
     container.innerHTML = `
         <div class="fixed top-14 bottom-0 left-0 right-0 z-40 bg-white flex flex-col items-center justify-center p-4">
-            <div class="w-full max-w-sm mb-8">
+            <div class="w-full max-w-sm mb-6">
+                <!-- 퀴즈 타입 표시 -->
+                <div class="text-center mb-3">
+                    <span class="px-4 py-1.5 ${quizTypeColor} rounded-full text-sm font-bold">
+                        ${quizTypeLabel}
+                    </span>
+                </div>
                 <div class="flex justify-between items-center mb-2 text-gray-500 font-bold">
                     <span>문제 ${currentQuestionIdx + 1} / 10</span>
                     <button onclick="closeModal()"><i class="fas fa-times"></i></button>
