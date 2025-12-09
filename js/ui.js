@@ -10,6 +10,11 @@ function openSection(tabName) {
 function showTab(tabName) {
     console.log('showTab called:', tabName);
 
+    // ★ 손님(guest) 로그인 시 탭 전환마다 광고 표시
+    if (typeof currentUser !== 'undefined' && currentUser && currentUser.id === 'guest') {
+        showGuestAd();
+    }
+
     // 모든 탭 숨기기
     document.querySelectorAll('.tab-content').forEach(tab => {
         tab.classList.remove('active');
@@ -61,13 +66,85 @@ function showTab(tabName) {
         if (typeof initConversation === 'function') initConversation();
         if (typeof LearningTracker !== 'undefined') LearningTracker.startTracking('conversation');
     } else if (tabName === 'fukuoka' || tabName === 'japan_travel') {
-        if (typeof initJapanTravel === 'function') initJapanTravel();
+        // ★ 여행탭 초기화 - 약간의 지연으로 DOM 준비 보장
+        setTimeout(() => {
+            if (typeof initFukuokaTrip === 'function') {
+                initFukuokaTrip();
+            } else if (typeof initJapanTravel === 'function') {
+                initJapanTravel();
+            }
+        }, 100);
     } else if (tabName === 'grammar') {
         if (typeof GrammarPractice !== 'undefined') GrammarPractice.init();
     } else if (tabName === 'progress') {
         if (typeof showProgressDashboard === 'function') showProgressDashboard();
     }
 }
+
+// ★ 손님용 광고 표시 함수 (AdSense)
+function showGuestAd() {
+    // 이미 광고 모달이 표시 중이면 스킵
+    if (document.getElementById('guest-ad-modal')) return;
+
+    // 3회에 1번 광고 표시 (너무 자주 보여주지 않도록)
+    const adCount = parseInt(sessionStorage.getItem('guest_ad_count') || '0');
+    sessionStorage.setItem('guest_ad_count', adCount + 1);
+    if (adCount % 3 !== 0) return;
+
+    const adHtml = `
+        <div id="guest-ad-modal" class="fixed inset-0 z-[100] bg-black/70 flex items-center justify-center p-4 animate-fade-in">
+            <div class="bg-white rounded-2xl w-full max-w-sm overflow-hidden shadow-2xl">
+                <div class="p-4 bg-gray-100 flex justify-between items-center">
+                    <span class="text-xs text-gray-500">광고</span>
+                    <button onclick="closeGuestAd()" id="ad-close-btn" class="text-gray-400 hover:text-gray-600 hidden">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="p-4 min-h-[200px] flex items-center justify-center">
+                    <!-- AdSense 광고 삽입 -->
+                    <ins class="adsbygoogle"
+                         style="display:block"
+                         data-ad-client="ca-pub-5240158357882882"
+                         data-ad-slot="3669700543"
+                         data-ad-format="auto"
+                         data-full-width-responsive="true"></ins>
+                </div>
+                <div class="p-3 text-center">
+                    <p id="ad-timer" class="text-sm text-gray-500">3초 후 닫기 가능</p>
+                </div>
+            </div>
+        </div>
+    `;
+    document.body.insertAdjacentHTML('beforeend', adHtml);
+
+    // AdSense 광고 렌더링
+    try {
+        (adsbygoogle = window.adsbygoogle || []).push({});
+    } catch (e) {
+        console.log('AdSense not loaded');
+    }
+
+    // 3초 후 닫기 버튼 활성화
+    let countdown = 3;
+    const timer = setInterval(() => {
+        countdown--;
+        const timerEl = document.getElementById('ad-timer');
+        if (timerEl) {
+            timerEl.textContent = countdown > 0 ? `${countdown}초 후 닫기 가능` : '닫기 가능';
+        }
+        if (countdown <= 0) {
+            clearInterval(timer);
+            const closeBtn = document.getElementById('ad-close-btn');
+            if (closeBtn) closeBtn.classList.remove('hidden');
+        }
+    }, 1000);
+}
+
+function closeGuestAd() {
+    const modal = document.getElementById('guest-ad-modal');
+    if (modal) modal.remove();
+}
+window.closeGuestAd = closeGuestAd;
 
 // Main Menu Button Handler (redirects to showTab)
 function openSection(sectionId) {
