@@ -6,7 +6,16 @@ const users = {
     dad: { id: 'dad', name: '봉아빠', avatar: 'images/dad.png' },
     mom: { id: 'mom', name: '강엄마', avatar: 'images/mom_orig.png' },
     sieun: { id: 'sieun', name: '시으니', avatar: 'images/sieun.png' },
-    harong: { id: 'harong', name: '하롱이', avatar: 'images/harong.png' }
+    harong: { id: 'harong', name: '하롱이', avatar: 'images/harong.png' },
+    guest: { id: 'guest', name: '손님', avatar: 'images/sieun_dancing.png' }
+};
+
+// 가족별 비밀번호 (국번)
+const userPasswords = {
+    dad: '1435',
+    mom: '8535',
+    sieun: '8534',
+    harong: '7657'
 };
 
 let currentUser = null;
@@ -128,12 +137,47 @@ function checkAutoLogin() {
 
 // 아빠 비밀번호 입력
 function showPasswordPrompt() {
-    const password = prompt('아빠 비밀번호를 입력하세요:');
-    if (password === '1435') {
+    const password = prompt('📱 핸드폰 국번 4자리를 입력하세요:');
+    if (password === userPasswords.dad) {
         login('dad');
     } else if (password !== null) {
         alert('비밀번호가 틀렸습니다!');
     }
+}
+
+// 엄마 비밀번호 입력
+function showMomPasswordPrompt() {
+    const password = prompt('📱 핸드폰 국번 4자리를 입력하세요:');
+    if (password === userPasswords.mom) {
+        login('mom');
+    } else if (password !== null) {
+        alert('비밀번호가 틀렸습니다!');
+    }
+}
+
+// 시으니 비밀번호 입력
+function showSieunPasswordPrompt() {
+    const password = prompt('📱 핸드폰 국번 4자리를 입력하세요:');
+    if (password === userPasswords.sieun) {
+        login('sieun');
+    } else if (password !== null) {
+        alert('비밀번호가 틀렸습니다!');
+    }
+}
+
+// 하롱이 비밀번호 입력
+function showHarongPasswordPrompt() {
+    const password = prompt('📱 핸드폰 국번 4자리를 입력하세요:');
+    if (password === userPasswords.harong) {
+        login('harong');
+    } else if (password !== null) {
+        alert('비밀번호가 틀렸습니다!');
+    }
+}
+
+// 손님 체험하기
+function loginAsGuest() {
+    login('guest');
 }
 // 전체 학습진도 리셋 (아빠 계정 전용)
 function resetAllProgress() {
@@ -163,6 +207,10 @@ window.login = login;
 window.logout = logout;
 window.checkAutoLogin = checkAutoLogin;
 window.showPasswordPrompt = showPasswordPrompt;
+window.showMomPasswordPrompt = showMomPasswordPrompt;
+window.showSieunPasswordPrompt = showSieunPasswordPrompt;
+window.showHarongPasswordPrompt = showHarongPasswordPrompt;
+window.loginAsGuest = loginAsGuest;
 window.resetAllProgress = resetAllProgress;
 
 console.log('auth.js loaded');

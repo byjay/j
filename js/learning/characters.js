@@ -65,31 +65,29 @@ function showCharacterGrid(type) {
         return;
     }
 
-    // 1. 상단 고정 헤더 (탭 + 퀴즈/통계 버튼) - 컴팩트 디자인
+    // 1. 상단 고정 헤더 (탭 + 퀴즈/통계 버튼) - 더욱 컴팩트하게 수정
     const isHiragana = type === 'hiragana';
     const topHTML = `
-        <div class="sticky top-0 z-30 bg-gray-50/95 backdrop-blur-sm -mx-4 px-4 py-2 border-b border-gray-200 mb-2 shadow-sm">
-            <div class="flex gap-1 mb-1.5">
+        <div class="sticky top-12 z-30 bg-gray-50 -mx-4 px-4 py-1.5 border-b border-gray-200 shadow-sm">
+            <div class="flex gap-1 items-center">
                 <button onclick="showCharacterGrid('hiragana')" 
-                    class="flex-1 py-1.5 rounded-lg font-bold text-xs transition-colors ${isHiragana ? 'bg-red-500 text-white shadow-sm' : 'bg-white text-gray-500 border border-gray-200'}">
+                    class="flex-1 py-1 rounded-md font-bold text-xs transition-colors ${isHiragana ? 'bg-red-500 text-white' : 'bg-white text-gray-500 border border-gray-200'}">
                     히라가나
                 </button>
                 <button onclick="showCharacterGrid('katakana')" 
-                    class="flex-1 py-1.5 rounded-lg font-bold text-xs transition-colors ${!isHiragana ? 'bg-blue-500 text-white shadow-sm' : 'bg-white text-gray-500 border border-gray-200'}">
+                    class="flex-1 py-1 rounded-md font-bold text-xs transition-colors ${!isHiragana ? 'bg-blue-500 text-white' : 'bg-white text-gray-500 border border-gray-200'}">
                     가타카나
                 </button>
-            </div>
-            <div class="flex gap-1">
-                <button onclick="startQuiz('hiragana')" class="flex-1 bg-white text-gray-600 border border-gray-200 py-1 rounded-md text-[10px] font-bold hover:bg-gray-50">
-                    <i class="fas fa-question-circle text-red-400 mr-1"></i>히라가나
+                <button onclick="startQuiz('hiragana')" class="px-2 bg-white text-gray-600 border border-gray-200 py-1 rounded-md text-[10px] font-medium hover:bg-gray-50">
+                    <i class="fas fa-question-circle text-red-400"></i> 히라가나
                 </button>
-                <button onclick="startQuiz('katakana')" class="flex-1 bg-white text-gray-600 border border-gray-200 py-1 rounded-md text-[10px] font-bold hover:bg-gray-50">
-                    <i class="fas fa-question-circle text-blue-400 mr-1"></i>가타카나
+                <button onclick="startQuiz('katakana')" class="px-2 bg-white text-gray-600 border border-gray-200 py-1 rounded-md text-[10px] font-medium hover:bg-gray-50">
+                    <i class="fas fa-question-circle text-blue-400"></i> 가타카나
                 </button>
-                <button onclick="startQuiz('mix')" class="flex-1 bg-white text-gray-600 border border-gray-200 py-1 rounded-md text-[10px] font-bold hover:bg-gray-50">
-                    <i class="fas fa-random text-purple-400 mr-1"></i>섞어서
+                <button onclick="startQuiz('mix')" class="px-2 bg-white text-gray-600 border border-gray-200 py-1 rounded-md text-[10px] font-medium hover:bg-gray-50">
+                    <i class="fas fa-random text-purple-400"></i> 섞어서
                 </button>
-                <button onclick="showHistory()" class="px-3 bg-gray-800 text-white py-1 rounded-md text-[10px] font-bold hover:bg-gray-900">
+                <button onclick="showHistory()" class="px-2 bg-gray-800 text-white py-1 rounded-md text-[10px] font-bold hover:bg-gray-900">
                     <i class="fas fa-chart-bar text-yellow-400"></i>
                 </button>
             </div>

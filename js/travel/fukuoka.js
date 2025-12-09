@@ -294,7 +294,8 @@ function initFukuokaTrip() {
                 info: "7월 마츠리(축제) 때 사용되는 거대한 가마(야마카사)가 전시되어 있습니다.",
                 transport: "캐널시티 바로 옆",
                 tips: "역사적인 의미를 되새기며 둘러보시길 권합니다."
-            },
+            }
+        },
         {
             id: "yakiniku_dinner",
             name: "야키니쿠 타베호다이",

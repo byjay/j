@@ -74,10 +74,15 @@ const transportationData = {
 };
 
 function initTransportationGuide() {
-    const container = document.getElementById('japan-travel-container');
-    if (!container) return;
+    // Hide region selection and show region detail
+    const regionSelection = document.getElementById('region-selection');
+    const regionDetail = document.getElementById('region-detail');
 
-    container.innerHTML = `
+    if (regionSelection) regionSelection.style.display = 'none';
+    if (!regionDetail) return;
+
+    regionDetail.style.display = 'block';
+    regionDetail.innerHTML = `
         <div class="max-w-4xl mx-auto pb-20 animate-fade-in">
             <!-- Header -->
             <div class="sticky top-0 bg-gray-50 z-10 py-4 mb-6 border-b border-gray-200 flex items-center justify-between">

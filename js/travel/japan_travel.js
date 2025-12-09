@@ -431,15 +431,17 @@ function selectRegion(regionId, isPreview = false) {
     currentRegion = regionId;
     updateTravelHeader(region.name); // 헤더 업데이트
 
-    // 지역 스크립트 로드
-    loadRegionScript(region).then(() => {
+    // 해당 지역 초기화 함수 이름 생성
+    const initFuncName = `init${regionId.charAt(0).toUpperCase() + regionId.slice(1)}Trip`;
+
+    // 이미 함수가 정의되어 있는지 확인 (정적으로 로드된 경우)
+    const initializeRegion = () => {
         // 지역 선택 숨기고 상세 정보 표시
         document.getElementById('region-selection').style.display = 'none';
         const detailView = document.getElementById('region-detail');
         detailView.style.display = 'block';
 
         // 뒤로가기 버튼 주입 (항상 상단에 표시)
-        // 기존에 버튼이 있다면 제거 후 다시 추가 (중복 방지)
         const existingBackBtn = document.getElementById('travel-back-btn');
         if (existingBackBtn) existingBackBtn.remove();
 
@@ -452,17 +454,11 @@ function selectRegion(regionId, isPreview = false) {
         `;
         detailView.insertAdjacentHTML('afterbegin', backBtnHtml);
 
-
         // 해당 지역 초기화 함수 호출
-        const initFuncName = `init${regionId.charAt(0).toUpperCase() + regionId.slice(1)}Trip`;
         if (typeof window[initFuncName] === 'function') {
             window[initFuncName]();
         } else {
             console.error(`Initialization function ${initFuncName} not found for ${regionId}`);
-            // 후쿠오카는 예외적으로 initFukuokaTrip일 수 있음 (위에서 처리됨)
-            if (regionId === 'fukuoka' && typeof initFukuokaTrip === 'function') {
-                initFukuokaTrip();
-            }
         }
 
         // Preview 모드일 경우: 1.5초 후 모달 표시
@@ -471,7 +467,14 @@ function selectRegion(regionId, isPreview = false) {
                 showPreviewModal(region);
             }, 1500);
         }
-    });
+    };
+
+    // 함수가 이미 있으면 바로 실행, 없으면 스크립트 로드 후 실행
+    if (typeof window[initFuncName] === 'function') {
+        initializeRegion();
+    } else {
+        loadRegionScript(region).then(initializeRegion);
+    }
 }
 
 // 맛보기 모드 종료 모달
