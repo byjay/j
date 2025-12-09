@@ -75,7 +75,7 @@ function showCharacterGrid(type) {
     // 1. 상단 고정 헤더 (탭 + 퀴즈/통계 버튼) - 2단 분리 및 디자인 개선
     const isHiragana = type === 'hiragana';
     const topHTML = `
-        <div class="sticky top-10 z-30 bg-gray-900 border-b border-gray-800 shadow-md transform transition-all">
+        <div class="sticky top-14 z-30 bg-gray-900 border-b border-gray-800 shadow-md transform transition-all">
             <!-- 1단: 메인 탭 (히라가나/가타카나) -->
             <div class="flex w-full">
                 <button onclick="showCharacterGrid('hiragana')" 
