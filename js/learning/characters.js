@@ -131,7 +131,13 @@ function showCharacterGrid(type) {
 
     container.innerHTML = `
         ${topHTML}
-        <div id="character-grid" class="grid grid-cols-5 gap-1 pb-20 px-1 pt-[88px]">
+        <div class="pt-[88px] px-2">
+            <div class="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-lg px-3 py-2 mb-2 flex items-center gap-2">
+                <span class="text-lg">👆</span>
+                <span class="text-sm text-blue-800 font-medium">글자를 터치하면 <b>쓰기연습</b>이 시작됩니다!</span>
+            </div>
+        </div>
+        <div id="character-grid" class="grid grid-cols-5 gap-1 pb-20 px-1">
             ${cellsHTML}
         </div>
     `;
