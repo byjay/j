@@ -899,7 +899,6 @@
 
     <!-- Data & Modules -->
     <script src="js/learning/characters.js"></script>
-    <script src="js/learning/stroke_animation.js"></script>
     <script src="js/learning/words_data.js"></script>
     <script src="js/learning/vocabulary.js"></script>
     <script src="js/learning/word_study.js"></script>
@@ -1016,6 +1015,9 @@
             }, 800); // 0.8초 후 페이드아웃 시작
         });
     </script>
+
+    <!-- Stroke Animation - MUST load LAST to override characters.js -->
+    <script src="js/learning/stroke_animation.js"></script>
 
 </body>
 
