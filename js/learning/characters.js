@@ -219,7 +219,7 @@ function selectCharacter(idx) {
                     <canvas id="writing-canvas" class="absolute inset-0 w-full h-full z-20"></canvas>
                 </div>
                 
-                <!-- 컨트롤 버튼 (캔버스 바로 아래) -->
+                <!-- 모든 버튼 (캔버스 바로 아래) -->
                 <div class="flex gap-2 mt-2">
                     <button onclick="playAudio('${item.char}')" class="bg-blue-600 text-white px-3 py-2 rounded-lg text-sm font-bold flex items-center gap-1">
                         <i class="fas fa-volume-up"></i> 듣기
@@ -231,16 +231,15 @@ function selectCharacter(idx) {
                         <i class="fas fa-eraser"></i> 지우기
                     </button>
                 </div>
-            </div>
-
-            <!-- 하단 네비게이션 -->
-            <div class="flex-shrink-0 bg-gray-800 border-t border-gray-700 px-4 py-2 flex justify-between safe-area-bottom">
-                <button id="prev-btn" class="bg-gray-700 text-white px-5 py-2.5 rounded-xl font-bold flex items-center gap-1">
-                    <i class="fas fa-chevron-left"></i> 이전
-                </button>
-                <button id="next-btn" class="bg-red-600 text-white px-5 py-2.5 rounded-xl font-bold flex items-center gap-1 shadow-lg">
-                    다음 <i class="fas fa-chevron-right"></i>
-                </button>
+                <!-- 이전/다음 버튼 -->
+                <div class="flex gap-4 mt-2 w-full max-w-[280px] justify-between">
+                    <button id="prev-btn" class="flex-1 bg-gray-700 text-white py-2.5 rounded-xl font-bold flex items-center justify-center gap-1">
+                        <i class="fas fa-chevron-left"></i> 이전
+                    </button>
+                    <button id="next-btn" class="flex-1 bg-red-600 text-white py-2.5 rounded-xl font-bold flex items-center justify-center gap-1">
+                        다음 <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
             </div>
         </div>
     `;
