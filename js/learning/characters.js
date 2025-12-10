@@ -72,37 +72,37 @@ function showCharacterGrid(type) {
         return;
     }
 
-    // 1. 상단 고정 헤더 (탭 + 퀴즈/통계 버튼) - 2단 분리 및 디자인 개선
+    // 1. 상단 고정 헤더 (탭 + 퀴즈/통계 버튼) - fixed position 헤더 바로 아래
     const isHiragana = type === 'hiragana';
     const topHTML = `
-        <div class="sticky top-0 z-30 bg-gray-900 border-b border-gray-800 shadow-md transform transition-all">
+        <div class="fixed top-14 left-0 right-0 z-40 bg-gray-900 border-b border-gray-800 shadow-lg">
             <!-- 1단: 메인 탭 (히라가나/가타카나) -->
             <div class="flex w-full">
                 <button onclick="showCharacterGrid('hiragana')" 
-                    class="flex-1 py-3 text-center font-bold text-sm transition-all ${isHiragana ? 'bg-red-600 text-white shadow-inner' : 'bg-gray-800 text-gray-400 hover:bg-gray-700'}">
+                    class="flex-1 py-2.5 text-center font-bold text-sm transition-all ${isHiragana ? 'bg-red-600 text-white shadow-inner' : 'bg-gray-800 text-gray-400 hover:bg-gray-700'}">
                     히라가나
                 </button>
                 <button onclick="showCharacterGrid('katakana')" 
-                    class="flex-1 py-3 text-center font-bold text-sm transition-all ${!isHiragana ? 'bg-blue-600 text-white shadow-inner' : 'bg-gray-800 text-gray-400 hover:bg-gray-700'}">
+                    class="flex-1 py-2.5 text-center font-bold text-sm transition-all ${!isHiragana ? 'bg-blue-600 text-white shadow-inner' : 'bg-gray-800 text-gray-400 hover:bg-gray-700'}">
                     가타카나
                 </button>
             </div>
             
             <!-- 2단: 서브 컨트롤 (퀴즈 & 통계) -->
-            <div class="flex justify-between items-center px-3 py-2 bg-gray-900/95 backdrop-blur gap-2 border-t border-gray-800">
-                <div class="flex gap-2 overflow-x-auto no-scrollbar">
-                    <button onclick="startQuiz('hiragana')" class="px-3 py-1.5 bg-pink-600/20 text-pink-300 rounded-lg text-xs border border-pink-600/50 hover:bg-pink-600/40 transition whitespace-nowrap flex items-center gap-1 font-bold">
-                         <span class="w-2 h-2 rounded-full bg-pink-500 inline-block"></span> ひらがな 퀴즈
+            <div class="flex justify-between items-center px-2 py-1.5 bg-gray-900 gap-1 border-t border-gray-800">
+                <div class="flex gap-1 overflow-x-auto no-scrollbar">
+                    <button onclick="startQuiz('hiragana')" class="px-2 py-1 bg-pink-600/20 text-pink-300 rounded text-xs border border-pink-600/50 whitespace-nowrap flex items-center gap-1 font-bold">
+                         <span class="w-1.5 h-1.5 rounded-full bg-pink-500"></span> ひらがな
                     </button>
-                    <button onclick="startQuiz('katakana')" class="px-3 py-1.5 bg-cyan-600/20 text-cyan-300 rounded-lg text-xs border border-cyan-600/50 hover:bg-cyan-600/40 transition whitespace-nowrap flex items-center gap-1 font-bold">
-                         <span class="w-2 h-2 rounded-full bg-cyan-500 inline-block"></span> カタカナ 퀴즈
+                    <button onclick="startQuiz('katakana')" class="px-2 py-1 bg-cyan-600/20 text-cyan-300 rounded text-xs border border-cyan-600/50 whitespace-nowrap flex items-center gap-1 font-bold">
+                         <span class="w-1.5 h-1.5 rounded-full bg-cyan-500"></span> カタカナ
                     </button>
-                    <button onclick="startQuiz('mix')" class="px-3 py-1.5 bg-purple-600/20 text-purple-300 rounded-lg text-xs border border-purple-600/50 hover:bg-purple-600/40 transition whitespace-nowrap font-bold">
-                         <i class="fas fa-random mr-1"></i>섞어서
+                    <button onclick="startQuiz('mix')" class="px-2 py-1 bg-purple-600/20 text-purple-300 rounded text-xs border border-purple-600/50 whitespace-nowrap font-bold">
+                         <i class="fas fa-random"></i> 섞어서
                     </button>
                 </div>
-                <button onclick="showHistory()" class="px-3 py-1.5 bg-yellow-600/20 text-yellow-300 rounded-lg text-xs font-bold hover:bg-yellow-600/40 border border-yellow-600/50 whitespace-nowrap shadow-sm">
-                    <i class="fas fa-chart-bar mr-1"></i>통계
+                <button onclick="showHistory()" class="px-2 py-1 bg-yellow-600/20 text-yellow-300 rounded text-xs font-bold border border-yellow-600/50 whitespace-nowrap">
+                    <i class="fas fa-chart-bar"></i> 통계
                 </button>
             </div>
         </div>
@@ -131,7 +131,7 @@ function showCharacterGrid(type) {
 
     container.innerHTML = `
         ${topHTML}
-        <div id="character-grid" class="grid grid-cols-5 gap-1 pb-20 px-1">
+        <div id="character-grid" class="grid grid-cols-5 gap-1 pb-20 px-1 pt-[88px]">
             ${cellsHTML}
         </div>
     `;
