@@ -348,6 +348,45 @@ function showIOSInstallGuide() {
 }
 window.showIOSInstallGuide = showIOSInstallGuide;
 
+// 다운로드 버튼 클릭시 호출되는 설치 가이드
+function showInstallGuide() {
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+
+    if (isIOS) {
+        showIOSInstallGuide();
+    } else if (deferredPrompt) {
+        // Android/Desktop - trigger install prompt
+        triggerInstallPrompt();
+    } else {
+        // Already installed or not supported
+        const modal = document.createElement('div');
+        modal.className = 'fixed inset-0 z-[60] flex items-center justify-center bg-black/50';
+        modal.onclick = (e) => { if (e.target === modal) modal.remove(); };
+        modal.innerHTML = `
+            <div class="bg-white rounded-2xl p-6 shadow-2xl w-full max-w-sm mx-4">
+                <div class="text-center">
+                    <div class="text-5xl mb-3">📱</div>
+                    <h3 class="font-bold text-lg mb-2">앱 설치 안내</h3>
+                    <p class="text-sm text-gray-600 mb-4">
+                        이 앱은 이미 설치되었거나,<br>
+                        현재 브라우저에서 설치를 지원하지 않습니다.
+                    </p>
+                    <p class="text-xs text-gray-400 mb-4">
+                        Chrome 또는 Samsung Internet에서<br>
+                        "홈 화면에 추가"를 사용해주세요.
+                    </p>
+                    <button onclick="this.closest('.fixed').remove()" 
+                        class="bg-blue-600 text-white px-6 py-2 rounded-full font-bold">
+                        확인
+                    </button>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(modal);
+    }
+}
+window.showInstallGuide = showInstallGuide;
+
 function openHelpModal() {
     const modal = document.getElementById('help-modal');
     if (modal) {
