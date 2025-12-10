@@ -1,4 +1,4 @@
-const CACHE_NAME = 'jap-bong-fam-v18';
+const CACHE_NAME = 'jap-bong-fam-v19';
 const ASSETS_TO_CACHE = [
     './',
     './index.html',

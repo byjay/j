@@ -334,7 +334,7 @@ function getCharHex(char) {
 
 const svgCache = {};
 
-async function _legacyPlayStrokeAnimation(char) {
+async function playStrokeAnimation(char) {
     const container = document.getElementById('stroke-guide-container');
     if (!container) return;
 
@@ -856,7 +856,7 @@ window.startQuiz = startQuiz;
 window.submitAnswer = submitAnswer;
 window.showHistory = showHistory;
 window.resetAllData = resetAllData;
-// window.playStrokeAnimation is now defined in stroke_animation.js
+window.playStrokeAnimation = playStrokeAnimation;
 
 // 주간 활동 HTML 생성 헬퍼
 function getWeeklyActivityHTML(logs) {
