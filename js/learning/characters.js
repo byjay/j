@@ -336,194 +336,110 @@ const svgCache = {};
 
 async function playStrokeAnimation(char) {
     const container = document.getElementById('stroke-guide-container');
-    if (!container) return;
+    if (!container) {
+        console.error('[Stroke] No container');
+        return;
+    }
 
-    // 초기화
+    // 1. 초기화
     container.innerHTML = '';
-    clearCanvas();
+    if (typeof clearCanvas === 'function') clearCanvas();
 
-    // 로딩 표시
-    container.innerHTML = '<div class="absolute inset-0 flex items-center justify-center"><div class="animate-spin rounded-full h-8 w-8 border-b-2 border-red-500"></div></div>';
+    // 2. 로딩 스피너
+    container.innerHTML = '<div class="absolute inset-0 flex items-center justify-center"><div class="animate-spin rounded-full h-12 w-12 border-4 border-red-500 border-t-transparent"></div></div>';
 
     try {
-        const hex = getCharHex(char);
-        console.log(`[StrokeAnim] Loading stroke for: ${char} (hex: ${hex})`);
+        // 3. SVG 가져오기
+        const hex = char.charCodeAt(0).toString(16).padStart(5, '0');
+        const url = `https://cdn.jsdelivr.net/gh/KanjiVG/kanjivg@master/kanji/${hex}.svg`;
 
         let svgText = svgCache[hex];
-
         if (!svgText) {
-            const url = `https://cdn.jsdelivr.net/gh/KanjiVG/kanjivg@master/kanji/${hex}.svg`;
-            console.log(`[StrokeAnim] Fetching: ${url}`);
-
-            const response = await fetch(url);
-            console.log(`[StrokeAnim] Response status: ${response.status}`);
-
-            if (!response.ok) {
-                throw new Error(`SVG fetch failed: HTTP ${response.status}`);
-            }
-            svgText = await response.text();
+            const res = await fetch(url);
+            if (!res.ok) throw new Error(`HTTP ${res.status}`);
+            svgText = await res.text();
             svgCache[hex] = svgText;
-            console.log(`[StrokeAnim] SVG loaded successfully (${svgText.length} chars)`);
-        } else {
-            console.log(`[StrokeAnim] Using cached SVG`);
         }
 
-        // 로딩 제거 후 렌더링
-        container.innerHTML = '';
+        // 4. SVG 파싱
         const parser = new DOMParser();
         const doc = parser.parseFromString(svgText, 'image/svg+xml');
         const svg = doc.querySelector('svg');
+        if (!svg) throw new Error('Invalid SVG');
 
-        // 스타일 설정
-        svg.style.width = '100%';
-        svg.style.height = '100%';
-        svg.style.position = 'absolute';
-        svg.style.top = '0';
-        svg.style.left = '0';
+        // 5. 컨테이너 클리어
+        container.innerHTML = '';
 
-        // 숫자 제거
-        const numbers = svg.querySelector('g[id^="kvg:StrokeNumbers"]');
-        if (numbers) numbers.remove();
+        // 6. SVG 설정
+        svg.setAttribute('viewBox', '0 0 109 109');
+        svg.style.cssText = 'width:100%;height:100%;position:absolute;top:0;left:0;';
 
-        // 1. 배경 레이어 (회색 가이드) - 항상 표시 (따라쓰기용)
-        const bgLayer = svg.cloneNode(true);
-        bgLayer.setAttribute('id', 'bg-layer');
-        const bgPaths = bgLayer.querySelectorAll('path');
-        bgPaths.forEach(path => {
-            path.style.fill = 'none';
-            path.style.stroke = '#e5e7eb'; // gray-200 (연한 회색)
-            path.style.strokeWidth = '6'; // 두께 줄임 (10 -> 6)
-            path.style.strokeLinecap = 'round';
-            path.style.strokeLinejoin = 'round';
-            path.style.opacity = '1';
-        });
-        container.appendChild(bgLayer);
+        // 7. 숫자 제거
+        const nums = svg.querySelector('g[id^="kvg:StrokeNumbers"]');
+        if (nums) nums.remove();
 
-        // 2. 애니메이션 레이어 (빨간 점선) - Mask 사용
-        // 원리: 빨간 점선 패스(A) 위에, 마스크(B)를 씌운다.
-        // 마스크(B)는 처음엔 검정(숨김)이고, 흰색 실선이 그려지면서 A를 보여준다.
+        // 8. 모든 패스 찾기
+        const paths = Array.from(svg.querySelectorAll('path'));
+        if (paths.length === 0) throw new Error('No paths');
 
-        const animLayer = document.createElementNS("http://www.w3.org/2000/svg", "g");
-        animLayer.setAttribute('id', 'anim-layer');
-
-        const originalPaths = svg.querySelectorAll('path');
-        const defs = document.createElementNS("http://www.w3.org/2000/svg", "defs");
-        animLayer.appendChild(defs);
-
-        // SVG를 먼저 DOM에 추가해야 getTotalLength()가 작동함
-        container.appendChild(animLayer);
-
-        const animPaths = []; // 애니메이션 대상 (마스크 내부의 패스들)
-
-        // requestAnimationFrame으로 레이아웃 계산 후 실행
-        await new Promise(resolve => requestAnimationFrame(resolve));
-
-        originalPaths.forEach((p, idx) => {
-            // 1. 실제 보여질 빨간 점선 패스
-            const redDashedPath = p.cloneNode(true);
-            redDashedPath.style.fill = 'none';
-            redDashedPath.style.stroke = '#ef4444'; // red-500
-            redDashedPath.style.strokeWidth = '6';   // 굵게
-            redDashedPath.style.strokeLinecap = 'round';
-            redDashedPath.style.strokeLinejoin = 'round';
-            redDashedPath.style.strokeDasharray = '15, 15'; // 명확한 점선
-            redDashedPath.style.opacity = '1';
-
-            // 마스크 적용
-            const maskId = `mask-stroke-${idx}`;
-            redDashedPath.setAttribute('mask', `url(#${maskId})`);
-            animLayer.appendChild(redDashedPath);
-
-            // 2. 마스크 정의 (실선으로 그려짐)
-            const mask = document.createElementNS("http://www.w3.org/2000/svg", "mask");
-            mask.setAttribute('id', maskId);
-
-            const maskPath = p.cloneNode(true);
-            maskPath.style.fill = 'none';
-            maskPath.style.stroke = 'white'; // 마스크는 흰색이 보이는 영역
-            maskPath.style.strokeWidth = '8'; // 본체보다 약간 굵게 커버
-            maskPath.style.strokeLinecap = 'round';
-            maskPath.style.strokeLinejoin = 'round';
-
-            // DOM에 임시 추가하여 getTotalLength 호출
-            animLayer.appendChild(maskPath);
-            const len = maskPath.getTotalLength();
-            animLayer.removeChild(maskPath);
-
-            // 초기 상태: 숨김 (length만큼 offset)
-            maskPath.style.strokeDasharray = len;
-            maskPath.style.strokeDashoffset = len;
-
-            mask.appendChild(maskPath);
-            defs.appendChild(mask);
-
-            // 애니메이션을 위해 마스크 패스 저장
-            animPaths.push(maskPath);
+        // 9. 배경 가이드 생성 (연한 회색)
+        paths.forEach(p => {
+            const bg = p.cloneNode(true);
+            bg.removeAttribute('id');
+            bg.style.cssText = 'fill:none;stroke:#d1d5db;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;opacity:0.6;';
+            svg.insertBefore(bg, p);
         });
 
-        console.log(`[StrokeAnim] Created ${animPaths.length} animation paths`);
+        // 10. 애니메이션 패스 스타일 (빨간 실선)
+        paths.forEach(p => {
+            p.style.cssText = 'fill:none;stroke:#ef4444;stroke-width:5;stroke-linecap:round;stroke-linejoin:round;';
+        });
 
-        // 애니메이션 시작
-        await animateStrokes(animPaths);
+        // 11. DOM에 추가 (getTotalLength 작동 위해)
+        container.appendChild(svg);
+
+        // 12. 약간 대기 후 길이 계산
+        await new Promise(r => setTimeout(r, 100));
+
+        // 13. 순차 애니메이션
+        for (const path of paths) {
+            const len = path.getTotalLength();
+            if (len <= 0) continue;
+
+            // 초기: 숨김
+            path.style.strokeDasharray = len;
+            path.style.strokeDashoffset = len;
+
+            // 애니메이션: 0.4초
+            await new Promise(done => {
+                const dur = 400;
+                const t0 = performance.now();
+
+                function frame(t) {
+                    const p = Math.min((t - t0) / dur, 1);
+                    path.style.strokeDashoffset = len * (1 - p);
+                    if (p < 1) requestAnimationFrame(frame);
+                    else done();
+                }
+                requestAnimationFrame(frame);
+            });
+
+            // 획 사이 짧은 대기
+            await new Promise(r => setTimeout(r, 80));
+        }
+
+        console.log('[Stroke] Done');
 
     } catch (e) {
-        console.error("[StrokeAnim] FAILED:", e.message, e);
-        // 획순 데이터 없음 - 따라쓰기 가이드 표시
+        console.error('[Stroke] Error:', e);
+        // 폴백: 연한 글자
         container.innerHTML = `
             <div class="absolute inset-0 flex flex-col items-center justify-center">
-                <span class="text-[120px] text-gray-300 font-bold opacity-40" style="font-family: 'Noto Sans JP', sans-serif;">${char}</span>
-                <span class="text-xs text-gray-400 mt-2">따라 써보세요</span>
+                <span class="text-[90px] font-bold" style="color:#d1d5db;font-family:'Noto Sans JP',sans-serif;">${char}</span>
+                <span class="text-xs text-gray-400 mt-1">따라 써보세요</span>
             </div>
         `;
     }
-}
-
-function animateStrokes(maskPaths) {
-    return new Promise(async (resolve) => {
-        // 순차적으로 그리기
-        for (let i = 0; i < maskPaths.length; i++) {
-            const path = maskPaths[i];
-            const length = path.getTotalLength();
-
-            // 초기화 (이미 위에서 했지만 확실하게)
-            path.style.strokeDasharray = length;
-            path.style.strokeDashoffset = length;
-
-            // 애니메이션 진행
-            await new Promise(r => {
-                const duration = 600; // 0.6초 (경쾌하게)
-                const start = performance.now();
-
-                function step(timestamp) {
-                    const progress = Math.min((timestamp - start) / duration, 1);
-                    // easeOutCubic
-                    const ease = 1 - Math.pow(1 - progress, 3);
-
-                    path.style.strokeDashoffset = length * (1 - ease);
-
-                    if (progress < 1) {
-                        requestAnimationFrame(step);
-                    } else {
-                        r();
-                    }
-                }
-                requestAnimationFrame(step);
-            });
-        }
-
-        // 완료 후 1초 뒤 페이드 아웃
-        setTimeout(() => {
-            const animLayer = document.getElementById('anim-layer');
-            if (animLayer) {
-                animLayer.style.transition = 'opacity 0.5s';
-                animLayer.style.opacity = '0';
-                setTimeout(() => {
-                    animLayer.remove();
-                }, 500);
-            }
-            resolve();
-        }, 1000);
-    });
 }
 
 // 퀴즈 로직
