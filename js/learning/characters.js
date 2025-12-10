@@ -387,7 +387,8 @@ async function playStrokeAnimation(char) {
             const bg = p.cloneNode(true);
             bg.removeAttribute('id');
             bg.style.cssText = 'fill:none;stroke:#d1d5db;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;opacity:0.6;';
-            svg.insertBefore(bg, p);
+            // p.parentNode 사용 - paths가 <g> 안에 있을 수 있음
+            p.parentNode.insertBefore(bg, p);
         });
 
         // 10. 애니메이션 패스 스타일 (빨간 실선)
