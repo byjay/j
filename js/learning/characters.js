@@ -180,40 +180,33 @@ function selectCharacter(idx) {
 
     container.innerHTML = `
         <div class="fixed inset-0 z-[55] bg-gray-900 flex flex-col">
-            <!-- 상단 고정 헤더: 모든 컨트롤 -->
+            <!-- 상단 고정 헤더: 컴팩트 -->
             <div class="flex-shrink-0 bg-gray-800 border-b border-gray-700 safe-area-top">
-                <!-- 1행: 목록/행 네비/닫기 -->
-                <div class="flex justify-between items-center px-3 py-2">
-                    <button onclick="closeModal(); showCharacterGrid(currentMode);" class="bg-red-600 px-3 py-1.5 flex items-center gap-1 rounded-lg text-white text-sm font-bold">
+                <!-- 1행: 목록/글자정보/닫기 -->
+                <div class="flex justify-between items-center px-2 py-1.5">
+                    <button onclick="closeModal(); showCharacterGrid(currentMode);" class="bg-red-600 px-2 py-1 flex items-center gap-1 rounded text-white text-xs font-bold">
                         <i class="fas fa-chevron-left text-xs"></i> 목록
                     </button>
-                    <div class="flex gap-1 bg-gray-700/50 p-0.5 rounded-lg">
-                        ${rowNavHTML}
+                    <div class="flex items-center gap-2">
+                        <span class="text-2xl font-black text-white">${item.char}</span>
+                        <span class="text-sm font-bold text-red-400">${item.pron}</span>
+                        <span class="text-xs text-gray-400">[${item.romaji}]</span>
                     </div>
-                    <button onclick="closeModal()" class="bg-gray-700 w-8 h-8 flex items-center justify-center rounded-full text-white">
-                        <i class="fas fa-times text-sm"></i>
+                    <button onclick="closeModal()" class="bg-gray-700 w-7 h-7 flex items-center justify-center rounded-full text-white">
+                        <i class="fas fa-times text-xs"></i>
                     </button>
                 </div>
-                <!-- 2행: 글자 정보 + 컨트롤 버튼 -->
-                <div class="flex justify-between items-center px-3 py-2 bg-gray-900">
-                    <div class="flex items-center gap-2">
-                        <span class="text-4xl font-black text-white">${item.char}</span>
-                        <div class="flex flex-col">
-                            <span class="text-lg font-bold text-red-400">${item.pron}</span>
-                            <span class="text-xs text-gray-400">[${item.romaji}]</span>
-                        </div>
-                    </div>
-                    <div class="flex gap-1">
-                        <button onclick="playAudio('${item.char}')" class="bg-blue-600 text-white px-2 py-1.5 rounded text-xs font-bold"><i class="fas fa-volume-up"></i></button>
-                        <button id="practice-replay-btn" class="bg-yellow-600 text-white px-2 py-1.5 rounded text-xs font-bold"><i class="fas fa-eye"></i> 획순</button>
-                        <button id="practice-clear-btn" class="bg-gray-600 text-white px-2 py-1.5 rounded text-xs font-bold"><i class="fas fa-eraser"></i></button>
+                <!-- 2행: 행 네비게이션 -->
+                <div class="flex justify-center px-2 pb-1.5">
+                    <div class="flex gap-0.5 bg-gray-700/50 p-0.5 rounded">
+                        ${rowNavHTML}
                     </div>
                 </div>
             </div>
 
-            <!-- 캔버스 영역 (가운데 꽉 채움) -->
-            <div class="flex-1 flex items-center justify-center p-3">
-                <div class="relative w-full max-w-sm aspect-square bg-white rounded-xl border-4 border-gray-300 overflow-hidden cursor-crosshair touch-none shadow-2xl">
+            <!-- 캔버스 영역 (상단에 바로 시작) -->
+            <div class="flex-1 flex flex-col items-center px-2 pt-2 pb-1 overflow-hidden">
+                <div class="relative w-full max-w-[280px] aspect-square bg-white rounded-xl border-4 border-gray-300 overflow-hidden cursor-crosshair touch-none shadow-xl">
                     <!-- 획순 가이드 컨테이너 -->
                     <div id="stroke-guide-container" class="absolute inset-0 z-10 pointer-events-none flex items-center justify-center"></div>
                     
@@ -227,14 +220,27 @@ function selectCharacter(idx) {
 
                     <canvas id="writing-canvas" class="absolute inset-0 w-full h-full z-20"></canvas>
                 </div>
+                
+                <!-- 컨트롤 버튼 (캔버스 바로 아래) -->
+                <div class="flex gap-2 mt-2">
+                    <button onclick="playAudio('${item.char}')" class="bg-blue-600 text-white px-3 py-2 rounded-lg text-sm font-bold flex items-center gap-1">
+                        <i class="fas fa-volume-up"></i> 듣기
+                    </button>
+                    <button id="practice-replay-btn" class="bg-yellow-600 text-white px-3 py-2 rounded-lg text-sm font-bold flex items-center gap-1">
+                        <i class="fas fa-play"></i> 획순
+                    </button>
+                    <button id="practice-clear-btn" class="bg-gray-600 text-white px-3 py-2 rounded-lg text-sm font-bold flex items-center gap-1">
+                        <i class="fas fa-eraser"></i> 지우기
+                    </button>
+                </div>
             </div>
 
             <!-- 하단 네비게이션 -->
-            <div class="flex-shrink-0 bg-gray-800 border-t border-gray-700 px-4 py-3 flex justify-between safe-area-bottom">
-                <button id="prev-btn" class="bg-gray-700 text-white px-6 py-3 rounded-xl font-bold flex items-center gap-2">
+            <div class="flex-shrink-0 bg-gray-800 border-t border-gray-700 px-4 py-2 flex justify-between safe-area-bottom">
+                <button id="prev-btn" class="bg-gray-700 text-white px-5 py-2.5 rounded-xl font-bold flex items-center gap-1">
                     <i class="fas fa-chevron-left"></i> 이전
                 </button>
-                <button id="next-btn" class="bg-red-600 text-white px-6 py-3 rounded-xl font-bold flex items-center gap-2 shadow-lg">
+                <button id="next-btn" class="bg-red-600 text-white px-5 py-2.5 rounded-xl font-bold flex items-center gap-1 shadow-lg">
                     다음 <i class="fas fa-chevron-right"></i>
                 </button>
             </div>
