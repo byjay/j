@@ -24,7 +24,11 @@ function showProgressDashboard() {
     // 데이터 로드
     const historyKey = `jap_bong_history_v1_${currentUser.id}`;
     const history = JSON.parse(localStorage.getItem(historyKey) || '[]');
-    const gamificationState = Gamification.state;
+
+    // Gamification 방어 체크
+    const gamificationState = (typeof Gamification !== 'undefined' && Gamification.state)
+        ? Gamification.state
+        : { streak: 0, level: 1, totalXP: 0 };
 
     // HTML 구조 생성
     container.innerHTML = `
@@ -142,6 +146,26 @@ function showProgressDashboard() {
                 </h3>
                 <div id="allowance-list" class="space-y-3">
                     ${getAllowanceListHTML()}
+                </div>
+            </div>
+            ` : ''}
+
+            <!-- 캐시 삭제 버튼 -->
+            <div class="bg-white rounded-3xl p-4 shadow-lg">
+                <button onclick="clearAppCache()" class="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold py-3 rounded-xl flex items-center justify-center gap-2 transition">
+                    <i class="fas fa-trash-alt text-red-500"></i> 앱 캐시 삭제
+                </button>
+                <p class="text-xs text-gray-400 text-center mt-2">앱이 제대로 작동하지 않을 때 사용하세요</p>
+            </div>
+
+            <!-- 접속 로그 (아빠용) -->
+            ${currentUser.id === 'dad' ? `
+            <div class="bg-white rounded-3xl p-6 shadow-lg border-2 border-blue-400">
+                <h3 class="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
+                    <i class="fas fa-users text-blue-500"></i> 사용자 접속 로그
+                </h3>
+                <div id="access-log-list" class="space-y-2 max-h-64 overflow-y-auto">
+                    ${getAccessLogHTML()}
                 </div>
             </div>
             ` : ''}
@@ -271,5 +295,82 @@ window.approveAllowance = function (claimId) {
     }
 };
 
+// 앱 캐시 삭제
+window.clearAppCache = async function () {
+    if (!confirm('앱 캐시를 삭제하시겠습니까?\n페이지가 새로고침됩니다.')) return;
+
+    try {
+        // Service Worker 캐시 삭제
+        if ('caches' in window) {
+            const cacheNames = await caches.keys();
+            await Promise.all(cacheNames.map(name => caches.delete(name)));
+        }
+
+        // Service Worker 등록 해제
+        if ('serviceWorker' in navigator) {
+            const registrations = await navigator.serviceWorker.getRegistrations();
+            await Promise.all(registrations.map(reg => reg.unregister()));
+        }
+
+        alert('캐시가 삭제되었습니다. 페이지를 새로고침합니다.');
+        location.reload(true);
+    } catch (e) {
+        console.error('Cache clear error:', e);
+        alert('캐시 삭제 중 오류가 발생했습니다.');
+    }
+};
+
+// 접속 로그 기록
+window.logUserAccess = function (userId, userName) {
+    const logs = JSON.parse(localStorage.getItem('user_access_logs') || '[]');
+
+    // 기기 정보 수집
+    const isMobile = /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent);
+    const deviceType = isMobile ? '모바일' : 'PC';
+    const browser = navigator.userAgent.includes('Chrome') ? 'Chrome'
+        : navigator.userAgent.includes('Safari') ? 'Safari'
+            : navigator.userAgent.includes('Firefox') ? 'Firefox' : 'Other';
+
+    logs.push({
+        userId,
+        userName,
+        timestamp: new Date().toISOString(),
+        deviceType,
+        browser,
+        userAgent: navigator.userAgent.substring(0, 100)
+    });
+
+    // 최근 100개만 유지
+    while (logs.length > 100) logs.shift();
+
+    localStorage.setItem('user_access_logs', JSON.stringify(logs));
+};
+
+// 접속 로그 HTML 생성
+function getAccessLogHTML() {
+    const logs = JSON.parse(localStorage.getItem('user_access_logs') || '[]');
+    if (logs.length === 0) return '<p class="text-gray-400 text-center text-sm">접속 기록이 없습니다.</p>';
+
+    return logs.slice().reverse().slice(0, 20).map(log => {
+        const date = new Date(log.timestamp);
+        const dateStr = `${date.getMonth() + 1}/${date.getDate()} ${date.getHours()}:${String(date.getMinutes()).padStart(2, '0')}`;
+        const icon = log.deviceType === '모바일' ? '📱' : '💻';
+        const userColor = log.userId === 'guest' ? 'text-gray-500' : 'text-blue-600';
+
+        return `
+            <div class="flex items-center justify-between py-2 border-b border-gray-100 text-sm">
+                <div class="flex items-center gap-2">
+                    <span>${icon}</span>
+                    <span class="font-bold ${userColor}">${log.userName || log.userId}</span>
+                </div>
+                <div class="text-xs text-gray-400">
+                    ${dateStr} · ${log.browser}
+                </div>
+            </div>
+        `;
+    }).join('');
+}
+
 // 전역 노출
 window.showProgressDashboard = showProgressDashboard;
+window.getAccessLogHTML = getAccessLogHTML;

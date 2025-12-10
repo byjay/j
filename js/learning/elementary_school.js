@@ -257,21 +257,23 @@ function renderGradeGrid() {
         { grade: 6, kanji: 191, vocab: 550, icon: '🌟', color: 'from-indigo-400 to-purple-500', xp: 2500 }
     ];
 
-    // 역순으로 표시 (6학년이 위, 1학년이 아래)
-    const reversedGrades = [...gradeInfo].reverse();
+    // 순서대로 표시 (1학년이 위, 6학년이 아래)
+    // reversedGrades 삭제하고 gradeInfo 직접 사용
 
     pyramid.innerHTML = `
         <div class="flex flex-col items-center space-y-3">
-            <!-- 정상 (졸업) -->
+            <!-- 시작 (입학) -->
             <div class="text-center mb-2">
-                <div class="text-4xl animate-bounce-character">🎓</div>
-                <p class="text-xs text-gray-500 font-bold">졸업!</p>
+                <div class="text-4xl animate-bounce-character">�</div>
+                <p class="text-xs text-gray-500 font-bold">입학!</p>
             </div>
             
-            <!-- 계단식 학년 카드 -->
-            ${reversedGrades.map((info, index) => {
+            <!-- 순서대로 학년 카드 -->
+            ${gradeInfo.map((info, index) => {
         const progress = elementaryProgress[info.grade];
-        const isUnlocked = progress && progress.unlocked;
+        // 아빠(dad)는 모든 학년 잠금 해제
+        const isDad = (typeof currentUser !== 'undefined' && currentUser && currentUser.id === 'dad');
+        const isUnlocked = isDad || (progress && progress.unlocked);
         const completedMissions = progress ? Object.values(progress.missions).filter(s => s === 'completed').length : 0;
         const totalMissions = getMissionCount(info.grade);
         const progressPercent = totalMissions > 0 ? Math.round((completedMissions / totalMissions) * 100) : 0;
