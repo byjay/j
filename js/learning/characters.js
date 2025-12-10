@@ -396,40 +396,48 @@ async function playStrokeAnimation(char) {
             p.style.cssText = 'fill:none;stroke:#ef4444;stroke-width:5;stroke-linecap:round;stroke-linejoin:round;';
         });
 
-        // 11. DOM에 추가 (getTotalLength 작동 위해)
+        // 11. DOM에 추가
         container.appendChild(svg);
 
-        // 12. 약간 대기 후 길이 계산
-        await new Promise(r => setTimeout(r, 100));
+        // 12. 강제 레이아웃 및 대기
+        svg.getBoundingClientRect();
+        await new Promise(r => setTimeout(r, 50));
 
-        // 13. 순차 애니메이션
-        for (const path of paths) {
-            const len = path.getTotalLength();
-            if (len <= 0) continue;
+        // 13. 순차 애니메이션 (CSS transition 사용)
+        for (let i = 0; i < paths.length; i++) {
+            const path = paths[i];
 
-            // 초기: 숨김
-            path.style.strokeDasharray = len;
-            path.style.strokeDashoffset = len;
+            // SVG가 DOM에 있는 상태에서 길이 계산
+            let len = 0;
+            try {
+                len = path.getTotalLength();
+            } catch (e) {
+                console.warn('[Stroke] getTotalLength failed:', e);
+            }
 
-            // 애니메이션: 0.4초
-            await new Promise(done => {
-                const dur = 400;
-                const t0 = performance.now();
+            if (!len || len <= 0) {
+                // fallback: 경로가 복잡한 경우 추정값 사용
+                len = 200;
+            }
 
-                function frame(t) {
-                    const p = Math.min((t - t0) / dur, 1);
-                    path.style.strokeDashoffset = len * (1 - p);
-                    if (p < 1) requestAnimationFrame(frame);
-                    else done();
-                }
-                requestAnimationFrame(frame);
-            });
+            console.log(`[Stroke] Path ${i}: len=${len}`);
 
-            // 획 사이 짧은 대기
-            await new Promise(r => setTimeout(r, 80));
+            // 초기 상태: 완전히 숨김
+            path.style.strokeDasharray = `${len}`;
+            path.style.strokeDashoffset = `${len}`;
+
+            // 약간 대기 후 transition 적용
+            await new Promise(r => setTimeout(r, 30));
+
+            // CSS transition으로 애니메이션
+            path.style.transition = 'stroke-dashoffset 0.5s ease-out';
+            path.style.strokeDashoffset = '0';
+
+            // 애니메이션 완료 대기
+            await new Promise(r => setTimeout(r, 550));
         }
 
-        console.log('[Stroke] Done');
+        console.log('[Stroke] Animation complete!');
 
     } catch (e) {
         console.error('[Stroke] Error:', e);
