@@ -142,9 +142,11 @@ function showCharacterGrid(type) {
 // ==========================================
 
 function selectCharacter(idx) {
+    console.log('[SelectChar] Called with idx:', idx);
     currentIndex = idx;
     const item = charData[currentMode][idx];
     if (!item || !item.char) return;
+    console.log('[SelectChar] Item:', item.char);
 
     const container = document.getElementById('character-study-container');
 
@@ -246,7 +248,9 @@ function selectCharacter(idx) {
     saveStudyLog('view', item.char);
 
     // 획순 애니메이션 자동 재생 (즉시 시작)
+    console.log('[SelectChar] Calling playStrokeAnimation for:', item.char);
     playStrokeAnimation(item.char);
+    console.log('[SelectChar] playStrokeAnimation called successfully');
 }
 
 function closeModal() {
