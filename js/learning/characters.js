@@ -334,14 +334,25 @@ async function playStrokeAnimation(char) {
 
     try {
         const hex = getCharHex(char);
+        console.log(`[StrokeAnim] Loading stroke for: ${char} (hex: ${hex})`);
+
         let svgText = svgCache[hex];
 
         if (!svgText) {
             const url = `https://cdn.jsdelivr.net/gh/KanjiVG/kanjivg@master/kanji/${hex}.svg`;
+            console.log(`[StrokeAnim] Fetching: ${url}`);
+
             const response = await fetch(url);
-            if (!response.ok) throw new Error('SVG fetch failed');
+            console.log(`[StrokeAnim] Response status: ${response.status}`);
+
+            if (!response.ok) {
+                throw new Error(`SVG fetch failed: HTTP ${response.status}`);
+            }
             svgText = await response.text();
-            svgCache[hex] = svgText; // 캐싱
+            svgCache[hex] = svgText;
+            console.log(`[StrokeAnim] SVG loaded successfully (${svgText.length} chars)`);
+        } else {
+            console.log(`[StrokeAnim] Using cached SVG`);
         }
 
         // 로딩 제거 후 렌더링
@@ -432,7 +443,7 @@ async function playStrokeAnimation(char) {
         await animateStrokes(animPaths);
 
     } catch (e) {
-        console.error("Stroke animation failed:", e);
+        console.error("[StrokeAnim] FAILED:", e.message, e);
         // 획순 데이터 없음 - 따라쓰기 가이드 표시
         container.innerHTML = `
             <div class="absolute inset-0 flex flex-col items-center justify-center">
