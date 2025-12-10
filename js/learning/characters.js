@@ -401,7 +401,13 @@ async function playStrokeAnimation(char) {
         const defs = document.createElementNS("http://www.w3.org/2000/svg", "defs");
         animLayer.appendChild(defs);
 
+        // SVG를 먼저 DOM에 추가해야 getTotalLength()가 작동함
+        container.appendChild(animLayer);
+
         const animPaths = []; // 애니메이션 대상 (마스크 내부의 패스들)
+
+        // requestAnimationFrame으로 레이아웃 계산 후 실행
+        await new Promise(resolve => requestAnimationFrame(resolve));
 
         originalPaths.forEach((p, idx) => {
             // 1. 실제 보여질 빨간 점선 패스
@@ -429,8 +435,13 @@ async function playStrokeAnimation(char) {
             maskPath.style.strokeWidth = '8'; // 본체보다 약간 굵게 커버
             maskPath.style.strokeLinecap = 'round';
             maskPath.style.strokeLinejoin = 'round';
-            // 초기 상태: 숨김 (length만큼 offset)
+
+            // DOM에 임시 추가하여 getTotalLength 호출
+            animLayer.appendChild(maskPath);
             const len = maskPath.getTotalLength();
+            animLayer.removeChild(maskPath);
+
+            // 초기 상태: 숨김 (length만큼 offset)
             maskPath.style.strokeDasharray = len;
             maskPath.style.strokeDashoffset = len;
 
@@ -441,7 +452,7 @@ async function playStrokeAnimation(char) {
             animPaths.push(maskPath);
         });
 
-        container.appendChild(animLayer);
+        console.log(`[StrokeAnim] Created ${animPaths.length} animation paths`);
 
         // 애니메이션 시작
         await animateStrokes(animPaths);
