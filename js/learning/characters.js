@@ -222,27 +222,24 @@ function selectCharacter(idx) {
                     <canvas id="writing-canvas" class="absolute inset-0 w-full h-full z-20"></canvas>
                 </div>
 
-                <!-- 컨트롤 버튼 -->
-                <div class="flex justify-between items-center mt-6 gap-2">
-                    <button id="prev-btn" class="bg-gray-700 text-white p-3 rounded-xl hover:bg-gray-600 transition flex items-center justify-center min-w-[48px]">
-                        <i class="fas fa-chevron-left"></i>
+                <!-- 컨트롤 버튼 (컴팩트) -->
+                <div class="flex justify-between items-center mt-3 gap-1">
+                    <button id="prev-btn" class="bg-gray-700 text-white p-2.5 rounded-lg hover:bg-gray-600 transition flex items-center justify-center">
+                        <i class="fas fa-chevron-left text-sm"></i>
                     </button>
 
-                    <div class="flex gap-2">
-                        <button id="practice-replay-btn" class="bg-gray-700 text-white px-4 py-3 rounded-xl hover:bg-gray-600 transition flex items-center gap-2 text-sm font-bold">
-                            <i class="fas fa-redo"></i> 다시쓰기
+                    <div class="flex gap-1">
+                        <button id="practice-replay-btn" class="bg-gray-700 text-white px-3 py-2 rounded-lg hover:bg-gray-600 transition flex items-center gap-1 text-xs font-bold">
+                            <i class="fas fa-redo text-xs"></i> 다시
                         </button>
-                        <button id="practice-clear-btn" class="bg-gray-700 text-white px-4 py-3 rounded-xl hover:bg-gray-600 transition flex items-center gap-2 text-sm font-bold">
-                            <i class="fas fa-eraser"></i> 지우기
+                        <button id="practice-clear-btn" class="bg-gray-700 text-white px-3 py-2 rounded-lg hover:bg-gray-600 transition flex items-center gap-1 text-xs font-bold">
+                            <i class="fas fa-eraser text-xs"></i> 지우기
                         </button>
                     </div>
 
-                    <div class="flex gap-2 items-center">
-                        <span class="text-xs text-gray-400 mr-1" id="tracing-guide-text">따라쓰기 👉</span>
-                        <button id="next-btn" class="bg-red-600 text-white px-5 py-3 rounded-xl hover:bg-red-700 transition flex items-center gap-2 font-bold shadow-lg shadow-red-900/20">
-                            다음 <i class="fas fa-chevron-right"></i>
-                        </button>
-                    </div>
+                    <button id="next-btn" class="bg-red-600 text-white px-4 py-2.5 rounded-lg hover:bg-red-700 transition flex items-center gap-1 font-bold text-sm shadow-lg">
+                        다음 <i class="fas fa-chevron-right text-xs"></i>
+                    </button>
                 </div>
         </div>
     `;
