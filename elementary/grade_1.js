@@ -103,7 +103,7 @@ const grade1_data = {
     { "id": "1-v083", "category": "한자-행동", "kanji": "入", "kana": "はい", "romaji": "hai", "korean": "들어감", "english": "Entrance", "part_of_speech": "명사", "image_path": "images/vocabulary/grade_1/1-v083.png" },
     { "id": "1-v084", "category": "한자-행동", "kanji": "立", "kana": "た", "romaji": "ta", "korean": "섬", "english": "Standing", "part_of_speech": "명사", "image_path": "images/vocabulary/grade_1/1-v084.png" },
     { "id": "1-v085", "category": "한자-행동", "kanji": "休", "kana": "やす", "romaji": "yasu", "korean": "쉼", "english": "Rest", "part_of_speech": "명사", "image_path": "images/vocabulary/grade_1/1-v085.png" },
-    
+
     // --- 3. 주제별 어휘 확장 ---
     // 음식 (Food)
     { "id": "1-v101", "category": "음식", "kanji": "ごはん", "kana": "ごはん", "romaji": "gohan", "korean": "밥", "english": "Rice, meal", "part_of_speech": "명사", "image_path": "images/vocabulary/grade_1/1-v101.png" },
@@ -211,3 +211,6 @@ const grade1_data = {
     }
   ]
 };
+
+// 전역 노출
+window.grade1_data = grade1_data;

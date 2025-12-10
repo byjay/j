@@ -177,7 +177,7 @@ function selectCharacter(idx) {
     }).join('');
 
     container.innerHTML = `
-        <div class="fixed inset-0 z-[55] bg-gray-900 flex flex-col">
+        <div class="fixed top-14 left-0 right-0 bottom-0 z-[55] bg-gray-900 flex flex-col">
             <!-- 상단 고정 헤더: 컴팩트 -->
             <div class="flex-shrink-0 bg-gray-800 border-b border-gray-700 safe-area-top">
                 <!-- 1행: 목록/글자정보/닫기 -->
@@ -334,7 +334,7 @@ function getCharHex(char) {
 
 const svgCache = {};
 
-async function playStrokeAnimation(char) {
+async function _legacyPlayStrokeAnimation(char) {
     const container = document.getElementById('stroke-guide-container');
     if (!container) return;
 
@@ -856,7 +856,7 @@ window.startQuiz = startQuiz;
 window.submitAnswer = submitAnswer;
 window.showHistory = showHistory;
 window.resetAllData = resetAllData;
-window.playStrokeAnimation = playStrokeAnimation;
+// window.playStrokeAnimation is now defined in stroke_animation.js
 
 // 주간 활동 HTML 생성 헬퍼
 function getWeeklyActivityHTML(logs) {
