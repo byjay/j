@@ -163,6 +163,7 @@ function showTab(tabName) {
 
     // ID 매핑
     if (tabName === 'japan_travel') tabName = 'fukuoka';
+    if (tabName === 'elementary') tabName = 'elementary-school';
 
     // 스크롤 위치 저장
     const activeTab = document.querySelector('.tab-content.active');
@@ -264,12 +265,24 @@ function showTab(tabName) {
 }
 window.showTab = showTab;
 
-// 브라우저 뒤로가기 핸들러
+// 브라우저 뒤로가기 핸들러 - 앱 종료 방지
 window.addEventListener('popstate', (event) => {
     if (event.state && event.state.tab) {
         showTab(event.state.tab);
     } else {
+        // 홈에서 뒤로가기 시 앱 종료 방지 - 다시 히스토리에 추가
+        history.pushState({ tab: 'home' }, '', window.location.pathname);
         showTab('home');
+    }
+});
+
+// 페이지 떠날 때 확인
+window.addEventListener('beforeunload', (e) => {
+    // 로그인 상태면 경고
+    if (typeof currentUser !== 'undefined' && currentUser) {
+        e.preventDefault();
+        e.returnValue = '앱을 종료하시겠습니까?';
+        return e.returnValue;
     }
 });
 
