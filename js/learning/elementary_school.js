@@ -28,36 +28,36 @@ let elementaryProgress = {};
 // ==========================================
 // 데이터 로드
 // ==========================================
-async function loadElementaryData() {
-    try {
-        // 각 학년 데이터 로드 (이미 window에 노출되어 있다고 가정)
-        if (typeof grade1_data !== 'undefined') elementaryData.grade1 = grade1_data;
-        if (typeof grade2_data !== 'undefined') elementaryData.grade2 = grade2_data;
-        if (typeof grade3_data !== 'undefined') elementaryData.grade3 = grade3_data;
-        if (typeof grade4_data !== 'undefined') elementaryData.grade4 = grade4_data;
-        if (typeof grade5_data !== 'undefined') elementaryData.grade5 = grade5_data;
-        if (typeof grade6_data !== 'undefined') elementaryData.grade6 = grade6_data;
+function loadElementaryData() {
+    console.log('[Elementary] Loading data...');
 
-        // 저장된 진도 로드
-        const savedProgress = localStorage.getItem('elementary_progress');
-        if (savedProgress) {
-            elementaryProgress = JSON.parse(savedProgress);
-        } else {
-            // 초기화 - 1학년 1번 미션만 해금
-            elementaryProgress = {
-                1: { unlocked: true, missions: { 0: 'available' } },
-                2: { unlocked: false, missions: {} },
-                3: { unlocked: false, missions: {} },
-                4: { unlocked: false, missions: {} },
-                5: { unlocked: false, missions: {} },
-                6: { unlocked: false, missions: {} }
-            };
-        }
+    // 각 학년 데이터 로드 (window에서 직접 가져옴)
+    elementaryData.grade1 = window.grade1_data || null;
+    elementaryData.grade2 = window.grade2_data || null;
+    elementaryData.grade3 = window.grade3_data || null;
+    elementaryData.grade4 = window.grade4_data || null;
+    elementaryData.grade5 = window.grade5_data || null;
+    elementaryData.grade6 = window.grade6_data || null;
 
-        console.log('[Elementary] 데이터 로드 완료');
-    } catch (error) {
-        console.error('[Elementary] 데이터 로드 실패:', error);
+    console.log('[Elementary] grade1_data:', elementaryData.grade1 ? 'loaded' : 'NOT FOUND');
+
+    // 저장된 진도 로드
+    const savedProgress = localStorage.getItem('elementary_progress');
+    if (savedProgress) {
+        elementaryProgress = JSON.parse(savedProgress);
+    } else {
+        // 초기화 - 1학년 1번 미션만 해금
+        elementaryProgress = {
+            1: { unlocked: true, missions: { 0: 'available' } },
+            2: { unlocked: false, missions: {} },
+            3: { unlocked: false, missions: {} },
+            4: { unlocked: false, missions: {} },
+            5: { unlocked: false, missions: {} },
+            6: { unlocked: false, missions: {} }
+        };
     }
+
+    console.log('[Elementary] Data load complete');
 }
 
 // 진도 저장

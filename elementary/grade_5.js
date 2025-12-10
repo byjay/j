@@ -59,3 +59,6 @@ const grade5_data = {
     }
   ]
 };
+
+// 전역 노출
+window.grade5_data = grade5_data;

@@ -80,3 +80,6 @@ const grade2_data = {
     }
   ]
 };
+
+// 전역 노출
+window.grade2_data = grade2_data;
