@@ -403,38 +403,46 @@ async function playStrokeAnimation(char) {
         svg.getBoundingClientRect();
         await new Promise(r => setTimeout(r, 50));
 
-        // 13. 순차 애니메이션 (CSS transition 사용)
+        // 13. 순차 애니메이션 (setInterval 사용)
         for (let i = 0; i < paths.length; i++) {
             const path = paths[i];
 
-            // SVG가 DOM에 있는 상태에서 길이 계산
-            let len = 0;
+            // 길이 계산
+            let len = 200;
             try {
-                len = path.getTotalLength();
-            } catch (e) {
-                console.warn('[Stroke] getTotalLength failed:', e);
-            }
-
-            if (!len || len <= 0) {
-                // fallback: 경로가 복잡한 경우 추정값 사용
-                len = 200;
-            }
+                const calcLen = path.getTotalLength();
+                if (calcLen > 0) len = calcLen;
+            } catch (e) { }
 
             console.log(`[Stroke] Path ${i}: len=${len}`);
 
-            // 초기 상태: 완전히 숨김
-            path.style.strokeDasharray = `${len}`;
-            path.style.strokeDashoffset = `${len}`;
+            // 초기 상태 설정 (setAttribute 사용)
+            path.setAttribute('stroke-dasharray', len);
+            path.setAttribute('stroke-dashoffset', len);
 
-            // 약간 대기 후 transition 적용
-            await new Promise(r => setTimeout(r, 30));
+            // setInterval로 애니메이션
+            await new Promise(done => {
+                const duration = 400;
+                const steps = 20;
+                const stepTime = duration / steps;
+                let step = 0;
 
-            // CSS transition으로 애니메이션
-            path.style.transition = 'stroke-dashoffset 0.5s ease-out';
-            path.style.strokeDashoffset = '0';
+                const timer = setInterval(() => {
+                    step++;
+                    const progress = step / steps;
+                    const offset = len * (1 - progress);
+                    path.setAttribute('stroke-dashoffset', offset);
 
-            // 애니메이션 완료 대기
-            await new Promise(r => setTimeout(r, 550));
+                    if (step >= steps) {
+                        clearInterval(timer);
+                        path.setAttribute('stroke-dashoffset', 0);
+                        done();
+                    }
+                }, stepTime);
+            });
+
+            // 획 사이 대기
+            await new Promise(r => setTimeout(r, 100));
         }
 
         console.log('[Stroke] Animation complete!');
