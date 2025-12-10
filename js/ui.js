@@ -358,25 +358,31 @@ function showInstallGuide() {
         // Android/Desktop - trigger install prompt
         triggerInstallPrompt();
     } else {
-        // Already installed or not supported
+        // Show manual installation guide for Android
         const modal = document.createElement('div');
         modal.className = 'fixed inset-0 z-[60] flex items-center justify-center bg-black/50';
         modal.onclick = (e) => { if (e.target === modal) modal.remove(); };
         modal.innerHTML = `
-            <div class="bg-white rounded-2xl p-6 shadow-2xl w-full max-w-sm mx-4">
+            <div class="bg-white rounded-2xl p-5 shadow-2xl w-full max-w-sm mx-4">
                 <div class="text-center">
-                    <div class="text-5xl mb-3">📱</div>
-                    <h3 class="font-bold text-lg mb-2">앱 설치 안내</h3>
-                    <p class="text-sm text-gray-600 mb-4">
-                        이 앱은 이미 설치되었거나,<br>
-                        현재 브라우저에서 설치를 지원하지 않습니다.
-                    </p>
-                    <p class="text-xs text-gray-400 mb-4">
-                        Chrome 또는 Samsung Internet에서<br>
-                        "홈 화면에 추가"를 사용해주세요.
-                    </p>
+                    <div class="text-4xl mb-2">📲</div>
+                    <h3 class="font-bold text-lg mb-3">홈 화면에 추가하기</h3>
+                    <div class="text-left bg-gray-50 rounded-xl p-4 mb-4 text-sm">
+                        <div class="flex items-start gap-2 mb-2">
+                            <span class="bg-blue-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs shrink-0">1</span>
+                            <span>Chrome 우측 상단 <b>⋮</b> 메뉴 클릭</span>
+                        </div>
+                        <div class="flex items-start gap-2 mb-2">
+                            <span class="bg-blue-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs shrink-0">2</span>
+                            <span><b>"홈 화면에 추가"</b> 선택</span>
+                        </div>
+                        <div class="flex items-start gap-2">
+                            <span class="bg-blue-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs shrink-0">3</span>
+                            <span><b>"추가"</b> 버튼 터치</span>
+                        </div>
+                    </div>
                     <button onclick="this.closest('.fixed').remove()" 
-                        class="bg-blue-600 text-white px-6 py-2 rounded-full font-bold">
+                        class="bg-blue-600 text-white px-6 py-2.5 rounded-full font-bold w-full">
                         확인
                     </button>
                 </div>
