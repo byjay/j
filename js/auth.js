@@ -218,9 +218,9 @@ function showPasswordModal(userId, userName) {
         <div class="bg-white rounded-2xl shadow-2xl w-full max-w-sm overflow-hidden animate-bounce-in">
             <!-- 헤더 -->
             <div class="bg-gradient-to-r from-blue-500 to-cyan-500 p-4 text-center">
-                <img src="images/dad.png" class="w-16 h-16 rounded-full mx-auto border-4 border-white shadow-lg mb-2" alt="아빠">
-                <p class="text-white font-bold text-sm">👋 아빠가 보내는 멘트</p>
-                <p class="text-white/80 text-xs mt-1">"${userName}! 비밀번호 입력해줘~ 📱"</p>
+                <img src="${users[userId]?.avatar || 'images/dad.png'}" class="w-16 h-16 rounded-full mx-auto border-4 border-white shadow-lg mb-2" alt="${userName}">
+                <p class="text-white font-bold text-sm">👋 ${userName}님, 안녕하세요!</p>
+                <p class="text-white/80 text-xs mt-1">"비밀번호 입력해줘~ 📱"</p>
             </div>
             
             <!-- 입력 영역 -->

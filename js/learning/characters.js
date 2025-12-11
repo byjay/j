@@ -261,6 +261,9 @@ function selectCharacter(idx) {
     console.log('[SelectChar] Calling playStrokeAnimation for:', item.char);
     playStrokeAnimation(item.char);
     console.log('[SelectChar] playStrokeAnimation called successfully');
+
+    // 다음/이전 글자 SVG 미리 로드 (속도 개선)
+    preloadAdjacentSVGs(currentIndex, currentMode);
 }
 
 function closeModal() {
@@ -335,6 +338,31 @@ function getCharHex(char) {
 
 const svgCache = {};
 
+// 다음/이전 글자 SVG 미리 로드 (백그라운드)
+function preloadAdjacentSVGs(currentIdx, mode) {
+    const list = charData[mode];
+    if (!list) return;
+
+    // 다음 2개, 이전 1개 미리 로드
+    const indicesToPreload = [currentIdx + 1, currentIdx + 2, currentIdx - 1];
+
+    indicesToPreload.forEach(idx => {
+        if (idx >= 0 && idx < list.length && list[idx]?.char) {
+            const char = list[idx].char;
+            const hex = char.charCodeAt(0).toString(16).padStart(5, '0');
+
+            // 이미 캐시에 있으면 스킵
+            if (svgCache[hex]) return;
+
+            // 백그라운드에서 조용히 로드
+            const url = `https://cdn.jsdelivr.net/gh/KanjiVG/kanjivg@master/kanji/${hex}.svg`;
+            fetch(url)
+                .then(res => res.ok ? res.text() : null)
+                .then(text => { if (text) svgCache[hex] = text; })
+                .catch(() => { }); // 에러 무시
+        }
+    });
+}
 async function playStrokeAnimation(char) {
     const container = document.getElementById('stroke-guide-container');
     if (!container) {
@@ -719,12 +747,17 @@ function resetAllData() {
         });
 
         // 글자별 마스터 상태 삭제 (히라가나/가타카나 개별 문자들)
+        // 주의: 루프 중 삭제하면 인덱스가 변하므로 먼저 키 수집
+        const keysToDelete = [];
         for (let i = 0; i < localStorage.length; i++) {
             const key = localStorage.key(i);
-            if (key && (key.startsWith('char_mastered_') || key.startsWith('char_practice_'))) {
-                localStorage.removeItem(key);
+            if (key && (key.startsWith('char_mastered_') || key.startsWith('char_practice_') ||
+                key.startsWith('jap_bong_') || key.startsWith('elementary_') ||
+                key.startsWith('progress_') || key.startsWith('fukuoka_'))) {
+                keysToDelete.push(key);
             }
         }
+        keysToDelete.forEach(key => localStorage.removeItem(key));
 
         alert('모든 사용자의 학습 데이터가 초기화되었습니다!');
         location.reload();
