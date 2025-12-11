@@ -90,7 +90,8 @@ function showCharacterGrid(type) {
             
             <!-- 2단: 서브 컨트롤 (퀴즈 & 통계) -->
             <div class="flex justify-between items-center px-2 py-1.5 bg-gray-900 gap-1 border-t border-gray-800">
-                <div class="flex gap-1 overflow-x-auto no-scrollbar">
+                <div class="flex gap-1 overflow-x-auto no-scrollbar items-center">
+                    <span class="px-2 py-1 bg-red-600 text-white rounded text-xs font-bold whitespace-nowrap">퀴즈</span>
                     <button onclick="startQuiz('hiragana')" class="px-2 py-1 bg-pink-600/20 text-pink-300 rounded text-xs border border-pink-600/50 whitespace-nowrap flex items-center gap-1 font-bold">
                          <span class="w-1.5 h-1.5 rounded-full bg-pink-500"></span> ひらがな
                     </button>
@@ -391,12 +392,16 @@ async function playStrokeAnimation(char) {
             p.parentNode.insertBefore(bg, p);
         });
 
-        // 10. 애니메이션 패스 스타일 (빨간 실선)
+        // 10. 애니메이션 패스 스타일 (빨간 실선) - 처음엔 숨김!
         paths.forEach(p => {
+            // 스타일 설정
             p.style.cssText = 'fill:none;stroke:#ef4444;stroke-width:5;stroke-linecap:round;stroke-linejoin:round;';
+            // DOM 추가 전에 숨김 처리 (길이 추정값 사용)
+            p.setAttribute('stroke-dasharray', '1000');
+            p.setAttribute('stroke-dashoffset', '1000');
         });
 
-        // 11. DOM에 추가
+        // 11. DOM에 추가 (빨간 획은 이미 숨겨짐)
         container.appendChild(svg);
 
         // 12. 강제 레이아웃 및 대기
