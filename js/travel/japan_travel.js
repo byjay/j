@@ -669,11 +669,6 @@ window.renderRegionSelection = renderRegionSelection;
 window.selectRegion = selectRegion;
 window.backToRegionSelection = backToRegionSelection;
 window.handleRegionClick = handleRegionClick;
-
-window.renderRegionSelection = renderRegionSelection;
-window.selectRegion = selectRegion;
-window.backToRegionSelection = backToRegionSelection;
-window.handleRegionClick = handleRegionClick;
 window.closeLevelUpModal = closeLevelUpModal;
 window.showEssentialApps = showEssentialApps;
 window.openShopping = openShopping;
