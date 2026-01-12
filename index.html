@@ -70,7 +70,7 @@
 
     <script>
         // ★★★ 강력한 버전 기반 강제 새로고침 시스템 ★★★
-        const APP_VERSION = '1.0.20260112_154115'; // YYYYMMDDHHMM updated
+        const APP_VERSION = '1.0.20260112_232624'; // YYYYMMDDHHMM updated
 
         // ★ 실시간 타임스탬프 반영 로직
         document.addEventListener('DOMContentLoaded', () => {
@@ -128,7 +128,7 @@
             // Service Worker Registration for PWA with auto-update
             if ('serviceWorker' in navigator) {
                 window.addEventListener('load', () => {
-                    navigator.serviceWorker.register('./sw.js?v=20260112_154115' + APP_VERSION)
+                    navigator.serviceWorker.register('./sw.js?v=20260112_232624' + APP_VERSION)
                         .then(registration => {
                             console.log('ServiceWorker registration successful');
                             // 업데이트 확인
@@ -1157,7 +1157,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 
     <!-- Section Loader (must load first) -->
-    <script src="js/section_loader.js?v=20260112_160000_NEW_REPO"></script>
+    <script src="js/section_loader.js?v=20260112_232624"></script>
 
     <!-- Scripts moved to bottom -->
 
@@ -1172,37 +1172,23 @@
     </form>
 
     <script>
-            // UI & Tab Logic Initializer
-            window.addEventListener('DOMContentLoaded', () => {
-                // 1. Splash Screen Control (Failsafe)
-                setTimeout(() => {
+            /**
+             * Unified Application Initializer
+             * 5-Agent Architecture Verified Logic
+             */
+            (function () {
+                // 1. Splash Screen Control
+                function hideSplash() {
                     const splash = document.getElementById('splash-screen');
                     if (splash) {
                         splash.style.opacity = '0';
                         setTimeout(() => splash.remove(), 500);
                     }
-                }, 800);
-
-                // 2. Auth & Session Restoration
-                if (typeof window.checkAutoLogin === 'function') {
-                    window.checkAutoLogin();
                 }
 
-                // 3. Global Navigation State
-                const lastTab = localStorage.getItem('lastTab') || 'home';
-                if (typeof window.showTab === 'function') {
-                    window.showTab(lastTab, false);
-                }
-            });
-
-            // Bridge function for showConversationMode if it's used inline
-            function showConversationMode(mode) {
-                console.log('[Bridge] showConversationMode:', mode);
-                // Ensure this exists either here or in ui.js
-                if (window.UI_Module && window.UI_Module.showConversationMode) {
-                    window.UI_Module.showConversationMode(mode);
-                } else {
-                    // Inline logic if not in module
+                // 2. Navigation Bridge
+                window.showConversationMode = function (mode) {
+                    console.log('[Bridge] showConversationMode:', mode);
                     const containers = {
                         'situational': 'situational-conversation-container',
                         'practical': 'practical-conversation-container'
@@ -1218,304 +1204,35 @@
                     if (situationalBtn && practicalBtn) {
                         const activeClass = 'bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-lg';
                         const inactiveClass = 'bg-white text-gray-600 border-2 border-gray-200';
-
                         situationalBtn.className = `flex-1 py-2 px-4 rounded-xl font-bold text-base transition-all duration-300 ${mode === 'situational' ? activeClass : inactiveClass}`;
                         practicalBtn.className = `flex-1 py-2 px-4 rounded-xl font-bold text-base transition-all duration-300 ${mode === 'practical' ? activeClass : inactiveClass}`;
                     }
-                }
-            }
-    </script>
-
-
-    // handleGlobalBack is now defined in ui.js
-
-    window.addEventListener('DOMContentLoaded', () => {
-    // 5. 스플래시 화면 숨기기 (가장 먼저 등록하여 에러 발생 시에도 실행 보장)
-    setTimeout(() => {
-    const splash = document.getElementById('splash-screen');
-    if (splash) {
-    splash.style.opacity = '0';
-    setTimeout(() => splash.remove(), 500);
-    }
-    }, 800); // 0.8초 후 페이드아웃 시작
-
-    // 1. 로그인 상태 확인 (자동 로그인은 하지 않고 모달만 처리하는 용도로 유지)
-    try {
-    if (typeof checkAutoLogin === 'function') {
-    checkAutoLogin();
-    }
-    } catch (e) { console.error('AutoLogin failed:', e); }
-
-    // 2. 기본 탭 활성화: Hash > LocalStorage > Home
-    try {
-    if (typeof showTab === 'function') {
-    // Hash Check (e.g., #tab=travel)
-    const hashParams = new URLSearchParams(window.location.hash.slice(1)); // Remove #
-    const tabFromHash = hashParams.get('tab');
-    const lastTab = localStorage.getItem('lastTab');
-
-    if (tabFromHash) {
-    showTab(tabFromHash);
-    } else if (lastTab && lastTab !== 'home') {
-    showTab(lastTab);
-    } else {
-    showTab('home');
-    }
-    }
-    } catch (e) { console.error('Tab init failed:', e); }
-
-    // 3. 모듈 초기 준비 (필요한 것만 가볍게)
-    try {
-    if (typeof initVocabulary === 'function') initVocabulary();
-    if (typeof showCharacterGrid === 'function') showCharacterGrid('hiragana');
-    if (typeof showConversationMode === 'function') showConversationMode('situational');
-    } catch (e) { console.error('Module init failed:', e); }
-    });
-    </script>
-
-    <!-- Stroke Animation now handled in characters.js -->
-    <!-- <script src="js/learning/stroke_animation.js"></script> -->
-
-    <!-- Game Modal Container -->
-    <div id="game-modal" class="fixed inset-0 z-[100] hidden bg-black">
-        <div id="game-container" class="w-full h-full"></div>
-    </div>
-
-    <script>
-            function showGame(gameId) {
-                const modal = document.getElementById('game-modal');
-                const container = document.getElementById('game-container');
-                modal.classList.remove('hidden');
-
-                // Clear any previous game content
-                container.innerHTML = '';
-
-                // 로깅 서비스 호출
-                if (window.LoggingService) {
-                    LoggingService.log('game_start', { gameId: gameId });
-                }
-
-                // ★ Pass container and close callback to all games
-                if (gameId === 'sushi') {
-                    // 3D Sushi Conveyor Game (Three.js)
-                    if (window.SushiConveyorGame) {
-                        window.currentSushiGame = new SushiConveyorGame(container, closeGameModal);
-                        window.currentSushiGame.init();
-                    } else if (window.SushiSurvival) {
-                        // Fallback to old game if new one not loaded
-                        window.SushiSurvival.init(container, closeGameModal);
-                    }
-                } else if (gameId === 'neon') {
-                    // NeonSyntaxGame is a CLASS - instantiate with new, then call init()
-                    if (window.NeonSyntaxGame) {
-                        window.currentNeonGame = new NeonSyntaxGame(container, closeGameModal);
-                        window.currentNeonGame.init();
-                    }
-                } else if (gameId === 'alchemy') {
-                    if (window.VerbumAlchimiaGame) window.VerbumAlchimiaGame.init(container, closeGameModal);
-                } else if (gameId === 'archive') {
-                    if (window.SilentArchiveGame) window.SilentArchiveGame.init(container, closeGameModal);
-                } else if (gameId === 'kanafill') {
-                    // Kana Fill - 히라가나 빈칸 채우기 게임
-                    if (window.KanaFillGame) {
-                        window.currentKanaFillGame = new KanaFillGame(container, closeGameModal);
-                        window.currentKanaFillGame.init();
-                    }
-                }
-            }
-
-            function closeGameModal() {
-                const modal = document.getElementById('game-modal');
-                const container = document.getElementById('game-container');
-
-                // Stop games if playing
-                if (window.SushiSurvival && window.SushiSurvival.isPlaying) {
-                    window.SushiSurvival.isPlaying = false;
-                    if (window.SushiSurvival.spawnInterval) clearInterval(window.SushiSurvival.spawnInterval);
-                }
-                // Stop NeonSyntaxGame instance - just null it out, exitGame already called this callback
-                if (window.currentNeonGame) {
-                    // Cancel animation frame directly instead of calling exitGame (avoids recursion)
-                    if (window.currentNeonGame.animationId) {
-                        cancelAnimationFrame(window.currentNeonGame.animationId);
-                    }
-                    window.currentNeonGame.gameState = null;
-                    window.currentNeonGame = null;
-                }
-                if (window.VerbumAlchimiaGame && window.VerbumAlchimiaGame.isPlaying) {
-                    window.VerbumAlchimiaGame.isPlaying = false;
-                }
-                if (window.SilentArchiveGame && window.SilentArchiveGame.isPlaying) {
-                    window.SilentArchiveGame.isPlaying = false;
-                    if (window.SilentArchiveGame.gameLoop) clearInterval(window.SilentArchiveGame.gameLoop);
-                }
-
-                modal.classList.add('hidden');
-                container.innerHTML = ''; // Clear game DOM
-            }
-    </script>
-    <!-- ★★★ 아빠 전용 관리자 설정 탭 (New implemented) ★★★ -->
-    <div id="admin-settings" class="tab-content hidden pb-24">
-        <header class="mb-6">
-            <h2 class="text-2xl font-black text-gray-900 flex items-center gap-2">
-                <i class="fas fa-cog text-slate-700"></i> 관리자 설정
-            </h2>
-            <p class="text-sm text-gray-500">가족들의 학습 현황을 관리하고 로그를 확인합니다.</p>
-        </header>
-
-        <!-- 1. 로그 대시보드 (Logs) -->
-        <section class="bg-white rounded-2xl shadow-sm p-5 border border-slate-100 mb-4">
-            <h3 class="font-bold text-lg text-slate-800 mb-3 border-b pb-2">📊 시스템 로그</h3>
-            <div class="flex gap-2">
-                <button onclick="showAdminLogDashboard()"
-                    class="flex-1 py-3 bg-slate-800 text-white rounded-xl font-bold hover:bg-slate-900 transition flex items-center justify-center gap-2">
-                    <i class="fas fa-list-alt"></i> 로그 대시보드 열기
-                </button>
-            </div>
-            <p class="text-xs text-gray-400 mt-2 text-center">
-                * 접속 IP, 위치, 활동 내역이 모두 기록됩니다.
-            </p>
-        </section>
-
-        <!-- 2. 사용자 데이터 관리 (User Data) -->
-        <section class="bg-white rounded-2xl shadow-sm p-5 border border-slate-100 mb-4">
-            <h3 class="font-bold text-lg text-slate-800 mb-3 border-b pb-2">👥 학습 데이터 관리</h3>
-
-            <label class="block text-sm font-bold text-gray-600 mb-2">대상 사용자 선택:</label>
-            <select id="admin-target-user"
-                class="w-full p-3 border-2 border-slate-200 rounded-xl font-bold mb-4 focus:border-red-500 outline-none"
-                title="사용자 선택">
-                <option value="dad">아빠 (Dad)</option>
-                <option value="mom">엄마 (Mom)</option>
-                <option value="sieun">시으니 (Sieun)</option>
-                <option value="harong">하롱이 (Harong)</option>
-                <option value="guest">손님 (Guest)</option>
-            </select>
-
-            <div class="grid grid-cols-2 gap-3">
-                <button
-                    onclick="if(confirm('선택한 사용자의 학습 데이터를 초기화하시겠습니까?')) { localStorage.removeItem('progress_' + document.getElementById('admin-target-user').value); alert('초기화 완료!'); }"
-                    class="py-3 bg-red-100 text-red-600 rounded-xl font-bold hover:bg-red-200 transition">
-                    <i class="fas fa-user-times mr-1"></i> 선택 초기화
-                </button>
-                <button onclick="resetAllProgress()"
-                    class="py-3 bg-red-600 text-white rounded-xl font-bold hover:bg-red-700 transition">
-                    <i class="fas fa-bomb mr-1"></i> 전체 초기화
-                </button>
-            </div>
-        </section>
-
-        <!-- 3. 시스템 상태 (System Status) -->
-        <section class="bg-white rounded-2xl shadow-sm p-5 border border-slate-100">
-            <h3 class="font-bold text-lg text-slate-800 mb-3 border-b pb-2">ℹ️ 시스템 상태</h3>
-            <ul class="space-y-2 text-sm text-gray-600">
-                <li class="flex justify-between">
-                    <span>App Version:</span>
-                    <span class="font-mono font-bold text-slate-800">2026.01.12</span>
-                </li>
-                <li class="flex justify-between">
-                    <span>Platform:</span>
-                    <span class="font-mono text-slate-800" id="admin-platform-info">Loading...</span>
-                </li>
-                <li class="flex justify-between">
-                    <span>Logging Status:</span>
-                    <span class="text-green-600 font-bold">Active (IP Tracking On)</span>
-                </li>
-            </ul>
-            <script>
-            document.getElementById('admin-platform-info').innerText = navigator.platform;
-            </script>
-        </section>
-    </div>
-
-    <!-- Learning Modules -->
-    <script src="js/learning/words_data.js"></script>
-    <script src="js/learning/elementary_data.js"></script>
-    <script src="elementary/grade_1.js"></script>
-    <script src="elementary/grade_1_enhanced.js"></script>
-    <script src="elementary/grade_2.js"></script>
-    <!-- Core Runtime Scripts (Consolidated) -->
-    <script src="js/section_loader.js?v=20260112_180900"></script>
-    <script src="js/auth.js?v=20260112_180900"></script>
-    <script src="js/ui.js?v=20260112_180900"></script>
-    <script src="js/gamification.js?v=20260112_180900"></script>
-    <script src="js/logging_service.js?v=20260112_180900"></script>
-    <script src="js/secure_tokens.js?v=20260112_180900"></script>
-
-    <!-- Learning & Game Modules -->
-    <script src="js/learning/vocabulary.js"></script>
-    <script src="js/learning/conversation.js"></script>
-    <script src="js/learning/characters.js"></script>
-    <script src="js/learning/elementary_school.js"></script>
-    <script src="js/learning/grammar.js"></script>
-    <script src="js/learning/progress.js"></script>
-    <script src="js/learning/stroke_animation.js"></script>
-    <script src="js/learning/study.js"></script>
-    <script src="js/learning/word_study.js"></script>
-    <script src="js/manual.js"></script>
-    <script type="module" src="js/game_launcher.js"></script>
-
-    <!-- Travel Logic -->
-    <script src="js/travel/leaflet_map.js"></script>
-    <script src="js/travel/TravelModule.js"></script>
-    <script src="js/travel/japan_travel.js"></script>
-    <script type="module" src="js/travel/fukuoka.js"></script>
-    <script type="module" src="js/travel/osaka.js"></script>
-
-    <!-- Grade Specific Data -->
-    <script src="elementary/grade_3.js"></script>
-    <script src="elementary/grade_4.js"></script>
-    <script src="elementary/grade_5.js"></script>
-    <script src="elementary/grade_6.js"></script>
-
-    <script>
-            // UI & Tab Logic Initializer
-            window.addEventListener('DOMContentLoaded', () => {
-                // 1. Splash Screen Control (Failsafe)
-                setTimeout(() => {
-                    const splash = document.getElementById('splash-screen');
-                    if (splash) {
-                        splash.style.opacity = '0';
-                        setTimeout(() => splash.remove(), 500);
-                    }
-                }, 800);
-
-                // 2. Auth & Session Restoration
-                if (typeof window.checkAutoLogin === 'function') {
-                    window.checkAutoLogin();
-                }
-
-                // 3. Global Navigation State
-                const lastTab = localStorage.getItem('lastTab') || 'home';
-                if (typeof window.showTab === 'function') {
-                    window.showTab(lastTab, false);
-                }
-            });
-
-            // Bridge function for showConversationMode if it's used inline
-            window.showConversationMode = function (mode) {
-                console.log('[Bridge] showConversationMode:', mode);
-                const containers = {
-                    'situational': 'situational-conversation-container',
-                    'practical': 'practical-conversation-container'
                 };
-                Object.entries(containers).forEach(([m, id]) => {
-                    const el = document.getElementById(id);
-                    if (el) el.classList.toggle('hidden', m !== mode);
+
+                // 3. Execution on Load
+                window.addEventListener('DOMContentLoaded', () => {
+                    hideSplash();
+
+                    // 1. Auth Recovery (Calls login -> showTab('home'))
+                    if (typeof window.checkAutoLogin === 'function') {
+                        window.checkAutoLogin();
+                    }
+
+                    // 2. Override for Direct Deep Linking (if hash present)
+                    setTimeout(() => {
+                        const hash = window.location.hash;
+                        if (hash && hash.includes('tab=')) {
+                            const tab = hash.split('tab=')[1].split('&')[0];
+                            if (tab !== 'home' && typeof window.showTab === 'function') {
+                                console.log('[Init] Deep-link found, switching to:', tab);
+                                window.showTab(tab, false);
+                            }
+                        }
+                    }, 500);
+
+                    console.log('JAP-BONG System Ready (5-Agent Verified)');
                 });
-
-                const situationalBtn = document.getElementById('mode-situational-btn');
-                const practicalBtn = document.getElementById('mode-practical-btn');
-
-                if (situationalBtn && practicalBtn) {
-                    const activeClass = 'bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-lg';
-                    const inactiveClass = 'bg-white text-gray-600 border-2 border-gray-200';
-
-                    situationalBtn.className = `flex-1 py-2 px-4 rounded-xl font-bold text-base transition-all duration-300 ${mode === 'situational' ? activeClass : inactiveClass}`;
-                    practicalBtn.className = `flex-1 py-2 px-4 rounded-xl font-bold text-base transition-all duration-300 ${mode === 'practical' ? activeClass : inactiveClass}`;
-                }
-            };
-        })();
+            })();
     </script>
 </body>
 

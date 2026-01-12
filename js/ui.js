@@ -77,7 +77,7 @@ window.showTab = async function (tabName, addToHistory = true) {
     // 뒤로가기 버튼 표시/숨김
     const backBtn = document.getElementById('global-back-btn');
     if (backBtn) {
-        tabName === 'home' ? backBtn.classList.add('hidden') : backBtn.classList.remove('hidden');
+        (targetId === 'home' || targetId === 'sections/home.html') ? backBtn.classList.add('hidden') : backBtn.classList.remove('hidden');
     }
 
     // 마지막 탭 저장

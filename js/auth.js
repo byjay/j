@@ -64,7 +64,7 @@ function hideLoginModal() {
     }
 }
 
-function login(userId) {
+async function login(userId) {
     if (!users[userId]) {
         console.error('Invalid user:', userId);
         return;
@@ -178,29 +178,27 @@ function login(userId) {
     try {
         if (typeof showTab === 'function') {
             const lastTab = localStorage.getItem('lastTab');
-            // 'home' 탭은 기본값이므로 굳이 복원할 필요 없거나, 복원해도 무방
             if (lastTab && lastTab !== 'undefined') {
                 console.log('Restoring last tab:', lastTab);
-                // [Modified] Always go to home for better UX on login, unless specific need
-                // user requested "not previous menu", so let's default to home
-                showTab('home');
-                // showTab(lastTab); // Previous behavior
+            }
+            // [Modified] Always go to home for better UX on login
+            if (window.SectionLoader) {
+                await showTab('home');
             } else {
                 showTab('home');
             }
         } else {
-            throw new Error("showTab is not defined");
+            console.warn("showTab is not defined, attempting fallback");
+            const homeTab = document.getElementById('home');
+            if (homeTab) {
+                homeTab.classList.remove('hidden');
+                homeTab.classList.add('active');
+            }
+            const mainMenu = document.getElementById('main-menu');
+            if (mainMenu) mainMenu.style.display = 'grid';
         }
     } catch (e) {
         console.error("Tab restoration failed:", e);
-        // Fallback: Force show home tab
-        const homeTab = document.getElementById('home');
-        if (homeTab) {
-            homeTab.classList.remove('hidden');
-            homeTab.classList.add('active');
-        }
-        const mainMenu = document.getElementById('main-menu');
-        if (mainMenu) mainMenu.style.display = 'grid';
     }
 }
 
@@ -458,11 +456,14 @@ function showGuestLoginModal() {
         grid.innerHTML = '';
         guestCharacters.forEach(char => {
             const btn = document.createElement('button');
-            btn.className = "flex flex-col items-center gap-2 p-2 rounded-xl hover:bg-orange-50 transition border border-transparent hover:border-orange-200";
+            btn.className = "guest-avatar-option flex flex-col items-center gap-2 p-2 rounded-xl hover:bg-orange-50 transition border border-transparent hover:border-orange-200 active:scale-95";
             btn.onclick = () => selectGuestAvatar(char);
             btn.innerHTML = `
-                <img src="${char.img}" class="w-14 h-14 rounded-full bg-white shadow-sm object-cover" onerror="this.src='images/app_icon.png'">
-                <span class="text-[10px] font-bold text-gray-600">${char.name}</span>
+                <div class="relative group">
+                    <img src="${char.img}" class="w-14 h-14 rounded-full bg-white shadow-sm object-cover border-2 border-transparent group-hover:border-orange-300" onerror="this.src='images/app_icon.png'">
+                    <div class="absolute inset-0 bg-orange-500/0 group-hover:bg-orange-500/10 rounded-full transition-colors"></div>
+                </div>
+                <span class="text-[10px] font-black text-gray-700">${char.name}</span>
             `;
             grid.appendChild(btn);
         });
