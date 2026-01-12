@@ -27,10 +27,36 @@ window.initFukuokaTrip = async function () {
             window.RegionalTravelGuide = RegionalTravelGuide;
         }
 
-        // Fetch POI Data Asynchronously
-        const response = await fetch('data/fukuoka_poi.json');
-        if (!response.ok) throw new Error('Data fetch failed');
-        const poiDB = await response.json();
+        // Fetch POI Data (Use Preloaded or Fetch)
+        let poiDB = [];
+        if (window.FUKUOKA_POI_DATABASE) {
+            poiDB = window.FUKUOKA_POI_DATABASE;
+        } else if (window.fukuokaDataPromise) {
+            poiDB = await window.fukuokaDataPromise;
+        } else {
+            // Fallback Fetch
+            const response = await fetch('data/fukuoka_poi.json');
+            if (!response.ok) throw new Error('Data fetch failed');
+            poiDB = await response.json();
+        }
+
+        if (!poiDB || poiDB.length === 0) {
+            console.warn('[Fukuoka] POI Database is empty or failed to load. Using backup data.');
+            // Emergency Backup Data (Hardcoded to ensure display)
+            poiDB = [
+                { id: "fukuoka_airport", name: "후쿠오카 공항", type: "Transport", desc: "시내와 가까운 편리한 공항", photos: ["https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Fukuoka_Airport_International_Terminal_Building_20160521.jpg/1200px-Fukuoka_Airport_International_Terminal_Building_20160521.jpg"] },
+                { id: "hakata_station", name: "하카타역", type: "Hub", desc: "규슈 여행의 중심지", photos: ["https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Hakata_Station_201108.jpg/1200px-Hakata_Station_201108.jpg"] },
+                { id: "canal_city_hakata", name: "캐널시티 하카타", type: "Shopping", desc: "운하가 흐르는 복합 쇼핑몰", photos: ["https://upload.wikimedia.org/wikipedia/commons/thumb/5/5a/Canal_City_Hakata_20150607.jpg/1200px-Canal_City_Hakata_20150607.jpg"] },
+                { id: "nakasu_yatai", name: "나카스 포장마차", type: "Food", desc: "낭만적인 강변 포장마차 거리", photos: ["https://upload.wikimedia.org/wikipedia/commons/thumb/d/d7/Nakasu_Yatai_2015.jpg/1200px-Nakasu_Yatai_2015.jpg"] },
+                { id: "dazaifu_tenmangu_shrine", name: "다자이후 텐만구", type: "Culture", desc: "학문의 신을 모시는 신사", photos: ["https://upload.wikimedia.org/wikipedia/commons/thumb/9/90/Dazaifu_Tenmangu_Honden.jpg/1200px-Dazaifu_Tenmangu_Honden.jpg"] },
+                { id: "starbucks_dazaifu", name: "스타벅스 다자이후", type: "Cafe", desc: "쿠마 켄고가 디자인한 독특한 건축", photos: ["https://upload.wikimedia.org/wikipedia/commons/thumb/1/1d/Starbucks_Coffee_Dazaifu_Tenmangu_Omotesando_Store.jpg/1200px-Starbucks_Coffee_Dazaifu_Tenmangu_Omotesando_Store.jpg"] },
+                { id: "momochi_beach", name: "모모치 해변", type: "Nature", desc: "도심 속 인공 해변", photos: ["https://upload.wikimedia.org/wikipedia/commons/thumb/8/8f/Momochi_Seaside_Park_2016.jpg/1200px-Momochi_Seaside_Park_2016.jpg"] },
+                { id: "fukuoka_tower", name: "후쿠오카 타워", type: "View", desc: "해변에 우뚝 솟은 랜드마크", photos: ["https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/Fukuoka_Tower_2016.jpg/1200px-Fukuoka_Tower_2016.jpg"] },
+                { id: "ohori_park", name: "오호리 공원", type: "Park", desc: "시민들의 휴식처 호수 공원", photos: ["https://upload.wikimedia.org/wikipedia/commons/thumb/4/47/Ohori_Park_Fukuoka.jpg/1200px-Ohori_Park_Fukuoka.jpg"] },
+                { id: "tenjin_underground", name: "텐진 지하상가", type: "Shopping", desc: "유럽풍의 세련된 지하 쇼핑가", photos: ["https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Tenjin_Chikagai.jpg/1200px-Tenjin_Chikagai.jpg"] },
+                { id: "parco_fukuoka", name: "파르코 후쿠오카", type: "Shopping", desc: "트렌디한 패션과 잡화", photos: ["https://upload.wikimedia.org/wikipedia/commons/thumb/8/8c/Fukuoka_Parco.jpg/1200px-Fukuoka_Parco.jpg"] }
+            ];
+        }
 
         console.log(`[Fukuoka] Loaded ${poiDB.length} POI items.`);
 
