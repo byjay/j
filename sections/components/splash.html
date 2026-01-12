@@ -1,0 +1,19 @@
+<!-- 🎬 로딩 스플래시 화면 -->
+<div id="splash-screen"
+    class="fixed inset-0 z-[100] bg-gradient-to-br from-red-600 via-red-500 to-orange-500 flex flex-col items-center justify-center transition-opacity duration-500">
+    <img src="images/app_icon.png" alt="JAP-BONG" class="w-28 h-28 rounded-3xl shadow-2xl mb-6 animate-bounce">
+    <h1 class="text-white text-3xl font-black tracking-tight mb-2">JAP-BONG</h1>
+    <p class="text-white/80 text-sm mb-8">가족 일본어 학습</p>
+    <div class="flex gap-2">
+        <div class="w-3 h-3 bg-white rounded-full animate-pulse" style="animation-delay: 0s;"></div>
+        <div class="w-3 h-3 bg-white rounded-full animate-pulse" style="animation-delay: 0.2s;"></div>
+        <div class="w-3 h-3 bg-white rounded-full animate-pulse" style="animation-delay: 0.4s;"></div>
+    </div>
+</div>
+<!-- 🛡️ Failsafe: Force remove splash screen after 3 seconds regardless of JS errors -->
+<script>
+    setTimeout(() => {
+        const splash = document.getElementById('splash-screen');
+        if (splash) splash.remove();
+    }, 3000);
+</script>

@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>JAP'BONG Fukuoka Guide</title>
+    <meta name="description" content="후쿠오카 3박 4일 스마트 일정 가이드 - 모바일 전용">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap"
+        rel="stylesheet">
+    <!-- Google AdSense (Restored from Dec 15 History) -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5240158357882882"
+        crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <style>
+        html,
+        body {
+            width: 100%;
+            position: relative;
+        }
+
+        /* Desktop Background for "Mobile Frame" look */
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: #111;
+            /* Dark gray desktop background */
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            overflow-y: scroll;
+            /* Browser scrollbar */
+        }
+
+        /* The App Frame */
+        #app-frame {
+            width: 100%;
+            max-width: 480px;
+            min-height: 100vh;
+            background-color: #000;
+            background-image:
+                radial-gradient(at 0% 0%, hsla(253, 16%, 7%, 1) 0, transparent 50%),
+                radial-gradient(at 50% 0%, hsla(225, 39%, 30%, 1) 0, transparent 50%),
+                radial-gradient(at 100% 0%, hsla(339, 49%, 30%, 1) 0, transparent 50%);
+            position: relative;
+            box-shadow: 0 0 50px rgba(0, 0, 0, 0.7);
+            overflow: hidden;
+            /* Internal overflow handled by main or body scroll */
+        }
+
+        .dark-card {
+            background: linear-gradient(145deg, rgba(30, 30, 45, 0.9), rgba(20, 20, 35, 0.95));
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(10px);
+        }
+
+        .dark-card:hover {
+            border-color: rgba(99, 102, 241, 0.4);
+            box-shadow: 0 8px 32px rgba(99, 102, 241, 0.15);
+        }
+
+        .glow-text {
+            text-shadow: 0 0 20px rgba(99, 102, 241, 0.5);
+        }
+
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+
+        .scrollbar-hide {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        .grid-compact {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            perspective: 1000px;
+        }
+
+        #map {
+            filter: grayscale(0.2) brightness(0.9) contrast(1.1);
+            transition: all 0.5s ease;
+        }
+
+        .leaflet-popup-content-wrapper {
+            background: #1a1a2e !important;
+            color: #fff !important;
+            border-radius: 12px !important;
+        }
+
+        .leaflet-popup-tip {
+            background: #1a1a2e !important;
+        }
+
+        /* Game-like Animations */
+        @keyframes cardEntrance {
+            from {
+                opacity: 0;
+                transform: translateY(30px) scale(0.9) rotateX(-10deg);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1) rotateX(0);
+            }
+        }
+
+        /* Mobile Title Fix */
+        .header-title-text {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 200px;
+        }
+
+        /* Perfect Mobile Frame Setup */
+        html {
+            height: 100%;
+            overscroll-behavior-y: none;
+            /* Prevent browser bounce */
+        }
+
+        body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            background-color: #111;
+            /* Desktop bg */
+            display: flex;
+            justify-content: center;
+            /* Center the frame */
+            overflow: hidden;
+            /* Hide body scrollbar */
+        }
+
+        /* Flexbox App Layout (Rock Solid) */
+        #app-frame {
+            width: 100%;
+            max-width: 480px;
+            height: 100%;
+            background-color: #000;
+            background-image:
+                radial-gradient(at 0% 0%, hsla(253, 16%, 7%, 1) 0, transparent 50%),
+                radial-gradient(at 50% 0%, hsla(225, 39%, 30%, 1) 0, transparent 50%),
+                radial-gradient(at 100% 0%, hsla(339, 49%, 30%, 1) 0, transparent 50%);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            /* Stack Header -> Main -> Nav */
+            box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
+            margin: 0 auto;
+            /* Center horizontally */
+        }
+
+        /* Child Layout */
+        header,
+        nav {
+            flex-shrink: 0;
+            /* Never shrink */
+            width: 100%;
+            z-index: 50;
+        }
+
+        main {
+            flex: 1;
+            /* Take remaining space */
+            width: 100%;
+            overflow-y: auto;
+            /* Scroll internally */
+            overflow-x: hidden;
+            -webkit-overflow-scrolling: touch;
+            padding: 0;
+            /* Remove padding as header/nav are distinct blocks */
+            position: relative;
+        }
+
+        /* Hide Scrollbar */
+        main::-webkit-scrollbar {
+            display: none;
+        }
+
+        main {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        .animate-card {
+            animation: cardEntrance 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+        }
+
+        .active-step {
+            border-color: #6366f1 !important;
+            box-shadow: 0 0 25px rgba(99, 102, 241, 0.4) !important;
+            transform: scale(1.05) !important;
+            z-index: 10;
+        }
+
+        .step-badge {
+            position: absolute;
+            top: -6px;
+            left: -6px;
+            width: 24px;
+            height: 24px;
+            background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            font-weight: 900;
+            color: white;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            z-index: 20;
+        }
+    </style>
+</head>
+
+<body class="text-white">
+
+    <!-- App Frame Wrapper -->
+    <div id="app-frame">
+
+        <!-- Compact Header (Standard App Style) -->
+        <header class="bg-gradient-to-r from-red-600 to-red-500 shadow-lg border-b border-red-700">
+            <div class="flex items-center justify-between px-4 h-14">
+                <button onclick="goBack()"
+                    class="w-10 h-10 flex items-center justify-center text-white/90 hover:text-white hover:bg-white/10 rounded-full transition-colors active:scale-95">
+                    <i class="fas fa-arrow-left text-lg"></i>
+                </button>
+                <div class="flex flex-col items-center">
+                    <h1 class="text-lg font-black text-white tracking-tight drop-shadow-md">후쿠오카 3박 4일</h1>
+                    <p class="text-[9px] text-red-100 font-medium -mt-1 opacity-90">JAP-BONG Trip Guide</p>
+                </div>
+                <button onclick="location.href='index.html'"
+                    class="w-10 h-10 flex items-center justify-center text-white/90 hover:text-white hover:bg-white/10 rounded-full transition-colors active:scale-95">
+                    <i class="fas fa-home text-lg"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Content (Scrollable Area) -->
+        <main class="bg-[#111]">
+
+            <!-- AdSense Placeholder (Restored Position) -->
+            <!-- AdSense Unit (Restored) -->
+            <div
+                class="w-full h-auto min-h-[100px] flex items-center justify-center border-b border-white/5 bg-[#0a0a0a] overflow-hidden shadow-inner">
+                <ins class="adsbygoogle" style="display:inline-block;width:320px;height:100px"
+                    data-ad-client="ca-pub-5240158357882882" data-ad-slot="1239812477"></ins>
+                <script>
+                    (adsbygoogle = window.adsbygoogle || []).push({});
+                </script>
+            </div>
+
+            <!-- Day Tabs (Sticky inside Main) -->
+            <div
+                class="sticky top-0 z-[100] py-2 bg-[#111]/95 backdrop-blur px-3 shadow-lg shrink-0 border-b border-white/5">
+                <div id="day-tabs" class="grid grid-cols-4 gap-2"></div>
+            </div>
+
+            <div class="px-4 py-4 pb-20"> <!-- Added padding for content -->
+
+                <!-- Map (Smaller) -->
+                <div class="dark-card rounded-xl p-1 mb-4 relative shrink-0 shadow-lg border border-white/10">
+                    <div id="map" class="w-full h-40 rounded-lg bg-gray-800"></div>
+                    <button
+                        onclick="window.LeafletMap && window.LeafletMap.map && window.LeafletMap.map.locate({setView: true, maxZoom: 16})"
+                        class="absolute bottom-2 right-2 bg-indigo-600/90 px-3 py-1.5 rounded-lg text-[10px] font-bold text-white backdrop-blur-sm hover:bg-indigo-500 transition-colors shadow-lg border border-indigo-400">
+                        <i class="fas fa-crosshairs mr-1"></i>내 위치
+                    </button>
+                </div>
+
+                <!-- Places Grid (2x2) -->
+                <div id="itinerary-content" class="grid-compact">
+                    <div class="col-span-2 text-center py-12 text-gray-500">
+                        <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-500 mx-auto mb-3"></div>
+                        <p class="text-xs font-mono">여행 일정을 불러오는 중입니다...</p>
+                    </div>
+                </div>
+
+            </div> <!-- End Content Padding -->
+
+            <!-- Modal Container -->
+            <div id="app-modal" class="hidden"></div>
+        </main>
+
+        <!-- Standard Bottom Nav (7 Buttons) -->
+        <nav class="bg-white border-t border-gray-200 pb-safe z-50">
+            <div class="flex justify-around items-center h-14 px-1 max-w-full overflow-x-auto no-scrollbar">
+                <!-- Home -->
+                <button onclick="location.href='index.html#tab=home'"
+                    class="flex-1 min-w-[50px] flex flex-col items-center justify-center py-1 text-gray-400 hover:text-red-600 transition-colors group">
+                    <div
+                        class="w-10 h-7 flex items-center justify-center rounded-full group-hover:bg-red-50 transition-colors mb-0.5">
+                        <i class="fas fa-home text-xl mb-0.5"></i>
+                    </div>
+                    <span class="text-[9px] font-bold">홈</span>
+                </button>
+
+                <!-- Travel (Active) -->
+                <button onclick="location.href='index.html#tab=japan_travel'"
+                    class="flex-1 min-w-[50px] flex flex-col items-center justify-center py-1 text-blue-600 transition-colors group relative">
+                    <div
+                        class="w-10 h-7 flex items-center justify-center rounded-full bg-blue-50 transition-colors mb-0.5">
+                        <i class="fas fa-plane-departure text-xl mb-0.5"></i>
+                    </div>
+                    <span class="text-[9px] font-bold">여행</span>
+                    <!-- Active Indicator -->
+                    <div class="absolute top-0 w-8 h-0.5 bg-blue-600 rounded-b-full"></div>
+                </button>
+
+                <!-- Conversation -->
+                <button onclick="location.href='index.html#tab=conversation'"
+                    class="flex-1 min-w-[50px] flex flex-col items-center justify-center py-1 text-gray-400 hover:text-purple-600 transition-colors group">
+                    <div
+                        class="w-10 h-7 flex items-center justify-center rounded-full group-hover:bg-purple-50 transition-colors mb-0.5">
+                        <i class="fas fa-comments text-xl mb-0.5"></i>
+                    </div>
+                    <span class="text-[9px] font-bold">회화</span>
+                </button>
+
+                <!-- Word -->
+                <button onclick="location.href='index.html#tab=vocabulary'"
+                    class="flex-1 min-w-[50px] flex flex-col items-center justify-center py-1 text-gray-400 hover:text-green-600 transition-colors group">
+                    <div
+                        class="w-10 h-7 flex items-center justify-center rounded-full group-hover:bg-green-50 transition-colors mb-0.5">
+                        <i class="fas fa-book text-xl mb-0.5"></i>
+                    </div>
+                    <span class="text-[9px] font-bold">단어</span>
+                </button>
+
+                <!-- Character -->
+                <button onclick="location.href='index.html#tab=characters'"
+                    class="flex-1 min-w-[50px] flex flex-col items-center justify-center py-1 text-gray-400 hover:text-yellow-600 transition-colors group">
+                    <div
+                        class="w-10 h-7 flex items-center justify-center rounded-full group-hover:bg-yellow-50 transition-colors mb-0.5">
+                        <i class="fas fa-font text-xl mb-0.5"></i>
+                    </div>
+                    <span class="text-[9px] font-bold">글자</span>
+                </button>
+
+                <!-- Progress -->
+                <button onclick="location.href='index.html#tab=progress'"
+                    class="flex-1 min-w-[50px] flex flex-col items-center justify-center py-1 text-gray-400 hover:text-indigo-600 transition-colors group">
+                    <div
+                        class="w-10 h-7 flex items-center justify-center rounded-full group-hover:bg-indigo-50 transition-colors mb-0.5">
+                        <i class="fas fa-chart-line text-xl mb-0.5"></i>
+                    </div>
+                    <span class="text-[9px] font-bold">현황</span>
+                </button>
+
+                <!-- Quiz/Arcade -->
+                <button onclick="location.href='index.html#tab=arcade'"
+                    class="flex-1 min-w-[50px] flex flex-col items-center justify-center py-1 text-gray-400 hover:text-indigo-600 transition-colors group">
+                    <div
+                        class="w-10 h-7 flex items-center justify-center rounded-full group-hover:bg-indigo-50 transition-colors mb-0.5">
+                        <i class="fas fa-gamepad text-xl mb-0.5"></i>
+                    </div>
+                    <span class="text-[9px] font-bold">퀴즈</span>
+                </button>
+            </div>
+        </nav>
+
+        <!-- Time Marker (Last Updated) -->
+        <div class="absolute bottom-16 w-full text-center pb-2 z-40 pointer-events-none">
+            <span class="text-[10px] text-white/30 font-mono">Last Updated: 2025-11-09 16:05:00</span>
+        </div>
+
+    </div><!-- End App Frame -->
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="js/travel/fukuoka_poi_data.js"></script>
+    <script src="js/travel/leaflet_map.js"></script>
+    <script src="js/travel/route_helper.js"></script>
+    <script src="js/travel/TravelModule.js"></script>
+    <script src="js/travel/fukuoka.js"></script>
+
+    <script>
+        // Override layout to grid
+        document.addEventListener('DOMContentLoaded', () => {
+            // Force grid layout
+            if (typeof fukuokaConfig !== 'undefined') {
+                fukuokaConfig.layout = 'grid';
+                fukuokaConfig.theme = 'dark';
+            }
+
+            if (typeof initFukuokaTrip === 'function') {
+                initFukuokaTrip();
+            }
+        });
+
+        function goBack() {
+            if (document.referrer && document.referrer.indexOf(window.location.host) !== -1) {
+                history.back();
+            } else {
+                location.href = 'index.html';
+            }
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,102 @@
+<!-- Help Modal -->
+<div id="help-modal" class="fixed inset-0 bg-black/50 z-50 hidden flex items-center justify-center p-4 backdrop-blur-sm"
+    onclick="closeHelpModal()">
+    <div class="bg-white rounded-3xl w-full max-w-lg max-h-[85vh] overflow-hidden flex flex-col shadow-2xl animate-fade-in-up"
+        onclick="event.stopPropagation()">
+        <!-- Header -->
+        <div class="bg-gradient-to-r from-blue-600 to-indigo-600 p-5 flex justify-between items-center shrink-0">
+            <h2 class="text-xl font-black text-white flex items-center gap-2">
+                <i class="fas fa-question-circle"></i> 앱 사용 가이드
+            </h2>
+            <button onclick="closeHelpModal()" class="text-white/80 hover:text-white transition-colors">
+                <i class="fas fa-times text-2xl"></i>
+            </button>
+        </div>
+
+        <!-- Content -->
+        <div class="p-6 overflow-y-auto space-y-6 custom-scrollbar">
+            <!-- 아빠의 마음 -->
+            <div class="bg-gradient-to-br from-red-50 to-pink-50 border-l-4 border-red-400 p-5 rounded-r-2xl shadow-sm">
+                <h3 class="font-black text-red-800 mb-3 flex items-center gap-2 text-lg">
+                    <i class="fas fa-heart text-red-500 animate-pulse"></i> 아빠의 자랑 & 만든 취지
+                </h3>
+                <div class="space-y-3 text-gray-700 leading-relaxed font-medium text-sm">
+                    <p>
+                        "이 앱은 <strong>15년 경력의 시니어 전략 컨설턴트 아빠</strong>가 사랑하는 아내와 두 딸(시은, 하롱)의 첫 일본 여행을 위해 밤새워 만든 세상에
+                        하나뿐인 선물입니다."
+                    </p>
+                    <p>
+                        단순한 학습기가 아니라, 우리 가족이 낯선 곳에서 당황하지 않고 <strong>가장 맛있는 라멘</strong>을 먹고, <strong>가장 멋진
+                            풍경</strong>을 즐기길 바라는 아빠의 철저한 기획과 사랑이 담겨 있습니다.
+                    </p>
+                    <p class="text-red-600 font-bold shrink-0">
+                        "사랑한다 우리 가족! 아빠가 항상 응원해! ❤️"
+                    </p>
+                </div>
+            </div>
+
+            <!-- 1. 글자 연습 -->
+            <div class="flex gap-4">
+                <div
+                    class="w-12 h-12 rounded-2xl bg-purple-100 text-purple-600 flex items-center justify-center flex-shrink-0">
+                    <i class="fas fa-pen-nib text-2xl"></i>
+                </div>
+                <div>
+                    <h3 class="font-bold text-gray-800 mb-1">글자 연습</h3>
+                    <p class="text-sm text-gray-600 leading-relaxed">
+                        히라가나와 가타카나를 직접 써보며 익힐 수 있습니다. 획순 가이드와 발음 듣기 기능이 제공됩니다.
+                    </p>
+                </div>
+            </div>
+
+            <!-- 4. 일본 여행 -->
+            <div class="flex gap-4">
+                <div
+                    class="w-12 h-12 rounded-2xl bg-orange-100 text-orange-600 flex items-center justify-center flex-shrink-0">
+                    <i class="fas fa-plane text-2xl"></i>
+                </div>
+                <div>
+                    <h3 class="font-bold text-gray-800 mb-1">일본 여행 가이드</h3>
+                    <p class="text-sm text-gray-600 leading-relaxed">
+                        후쿠오카, 도쿄 등 주요 도시별 여행 정보와 돈키호테/드럭스토어 쇼핑 꿀팁, 교통 이용법을 제공합니다.<br>
+                        <span class="text-red-500 font-bold text-xs mt-1 block">
+                            <i class="fas fa-lock mr-1"></i>미션: 글자 퀴즈 90점 이상 2회 달성 시 잠금 해제!
+                        </span>
+                    </p>
+                </div>
+            </div>
+
+            <!-- 5. 학습 현황 -->
+            <div class="flex gap-4">
+                <div
+                    class="w-12 h-12 rounded-2xl bg-red-100 text-red-600 flex items-center justify-center flex-shrink-0">
+                    <i class="fas fa-chart-line text-2xl"></i>
+                </div>
+                <div>
+                    <h3 class="font-bold text-gray-800 mb-1">나의 학습 현황</h3>
+                    <p class="text-sm text-gray-600 leading-relaxed">
+                        나의 학습 진도와 퀴즈 점수, 연속 학습일(Streak)을 확인하고 동기부여를 받으세요!
+                    </p>
+                </div>
+            </div>
+
+            <!-- 잠금 해제 조건 -->
+            <div class="border rounded-xl p-4 bg-gray-50">
+                <h3 class="font-bold text-gray-800 mb-2">🔓 여행지 잠금 해제 조건</h3>
+                <ul class="space-y-1 text-gray-600 text-sm">
+                    <li>✅ <strong>후쿠오카</strong>: 기본 제공</li>
+                    <li>🔒 <strong>오사카/교토</strong>: 글자 퀴즈 90점 2회 달성</li>
+                    <li>🔒 <strong>도쿄</strong>: 총 경험치 500XP 달성</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="p-4 border-t border-gray-100 bg-gray-50 text-center shrink-0">
+            <button onclick="closeHelpModal()"
+                class="w-full py-3 bg-blue-600 text-white rounded-xl font-bold shadow-lg hover:bg-blue-700 transition-colors">
+                알겠습니다!
+            </button>
+        </div>
+    </div>
+</div>

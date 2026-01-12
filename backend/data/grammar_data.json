@@ -1,0 +1,66 @@
+{
+  "metadata": {
+    "version": "1.0.0",
+    "last_updated": "2026-01-03T13:43:22.510753",
+    "total_patterns": 3
+  },
+  "grammar_list": [
+    {
+      "pattern": "~は ~です",
+      "meaning": "~은/는 ~입니다",
+      "formation": "명사 + は + 명사 + です",
+      "explanation": "가장 기본적인 주어와 술어를 나타내는 문형입니다. '은/는'에 해당하는 조사는 'は'를 사용하지만 발음은 '와(wa)'로 합니다.",
+      "level": "N5",
+      "examples": [
+        {
+          "jp": "私は学生です。",
+          "kr": "저는 학생입니다.",
+          "romaji": "watashi wa gakusei desu"
+        },
+        {
+          "jp": "これは本です。",
+          "kr": "이것은 책입니다.",
+          "romaji": "kore wa hon desu"
+        }
+      ]
+    },
+    {
+      "pattern": "~てください",
+      "meaning": "~해 주세요",
+      "formation": "동사 て형 + ください",
+      "explanation": "상대방에게 정중하게 부탁하거나 지시할 때 사용합니다.",
+      "level": "N5",
+      "examples": [
+        {
+          "jp": "見てください。",
+          "kr": "봐 주세요.",
+          "romaji": "mite kudasai"
+        },
+        {
+          "jp": "食べてください。",
+          "kr": "먹어 주세요.",
+          "romaji": "tabete kudasai"
+        }
+      ]
+    },
+    {
+      "pattern": "~ています",
+      "meaning": "~하고 있습니다 / ~해 있습니다",
+      "formation": "동사 て형 + います",
+      "explanation": "동작의 진행 상황이나 상태의 지속을 나타냅니다.",
+      "level": "N5",
+      "examples": [
+        {
+          "jp": "本を読んでいます。",
+          "kr": "책을 읽고 있습니다.",
+          "romaji": "hon wo yonde imasu"
+        },
+        {
+          "jp": "ドアが開いています。",
+          "kr": "문이 열려 있습니다.",
+          "romaji": "doa ga aite imasu"
+        }
+      ]
+    }
+  ]
+}

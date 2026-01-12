@@ -1,0 +1,1016 @@
+[
+  {
+    "id": "hakata_station",
+    "name": "하카타역 (Hakata Station)",
+    "name_en": "Hakata Station",
+    "lat": 33.5898,
+    "lng": 130.4207,
+    "type": "transport",
+    "region": "fukuoka",
+    "desc": "규슈 교통의 중심지이자 거대한 쇼핑/맛집 천국. 아뮤플라자, 한큐백화점 등이 연결됨.",
+    "photos": [
+      "images/travel/fukuoka/hakata_station.webp"
+    ],
+    "rating": 4.7,
+    "details": {
+      "hours": "05:00 - 24:00",
+      "tips": "크로아상 맛집 '일 포르노 델 미뇽'에서 간식 사기. 옥상 정원에서 전망 감상 가능."
+    }
+  },
+  {
+    "id": "starbucks_dazaifu",
+    "name": "스타벅스 다자이후 오모테산도점",
+    "name_en": "Starbucks Dazaifu",
+    "lat": 33.5205,
+    "lng": 130.5335,
+    "type": "cafe",
+    "region": "fukuoka",
+    "desc": "쿠마 켄고가 디자인한 독특한 목조 건축의 스타벅스. 다자이후 필수 포토 스팟.",
+    "photos": [
+      "images/travel/fukuoka/dazaifu_tenmangu_8k.webp"
+    ],
+    "rating": 4.6,
+    "details": {
+      "hours": "08:00 - 20:00",
+      "tips": "사람이 많으니 테이크아웃 추천. 가게 앞 목조 구조물 배경으로 사진 찍기."
+    }
+  },
+  {
+    "id": "parco_fukuoka",
+    "name": "후쿠오카 파르코 (PARCO)",
+    "name_en": "Fukuoka PARCO",
+    "lat": 33.5905,
+    "lng": 130.3995,
+    "type": "shopping",
+    "region": "fukuoka",
+    "desc": "텐진의 젊은 감성 쇼핑몰. 키디랜드, 원피스샵, 캐릭터 굿즈 샵이 많음.",
+    "photos": [
+      "images/travel/fukuoka/tenjin_underground_8k.webp"
+    ],
+    "rating": 4.5,
+    "details": {
+      "hours": "10:00 - 20:30",
+      "tips": "지하 1층 '키와미야 함바그'는 항상 대기가 기니 오픈런 추천."
+    }
+  },
+  {
+    "id": "fukuoka_airport",
+    "name": "후쿠오카 공항 (Fukuoka Airport)",
+    "name_en": "Fukuoka Airport",
+    "lat": 33.5859,
+    "lng": 130.4506,
+    "type": "transport",
+    "region": "fukuoka",
+    "desc": "규슈의 관문. 도심과 매우 가까운 국제공항.",
+    "photos": [
+      "images/travel/fukuoka/fukuoka_airport_8k.webp"
+    ],
+    "rating": 4.5,
+    "details": {
+      "hours": "05:30 - 22:30",
+      "transport": "하카타역에서 지하철 2정거장 (5분)",
+      "tips": "국제선 터미널에서 셔틀버스를 타고 국내선으로 이동해야 지하철 탑승 가능."
+    }
+  },
+  {
+    "id": "montan_hakata",
+    "name": "몬탄 하카타 (Montan Hakata)",
+    "name_en": "Montan Hakata",
+    "lat": 33.5895,
+    "lng": 130.4262,
+    "type": "hotel",
+    "region": "fukuoka",
+    "desc": "가족 여행객에게 최적화된 호스텔형 호텔. 조식 제공.",
+    "photos": [
+      "images/fukuoka/momochi/1766212129243-EFFECTS.webp",
+      "images/fukuoka/momochi/20240603_192347.webp",
+      "images/fukuoka/momochi/20240603_192350.webp",
+      "images/fukuoka/momochi/20240603_200628.webp",
+      "images/fukuoka/momochi/20251216_170634.webp"
+    ],
+    "rating": 4.6,
+    "details": {
+      "hours": "Check-in 15:00 / Check-out 10:00",
+      "transport": "하카타역 치쿠시 출구 도보 8분",
+      "tips": "1층 라운지에서 무료 커피와 조식(빵, 샐러드)을 즐길 수 있음. 자전거 대여 가능."
+    }
+  },
+  {
+    "id": "hakata_issou",
+    "name": "하카타 잇소 본점 (Hakata Issou)",
+    "name_en": "Hakata Issou",
+    "lat": 33.5878,
+    "lng": 130.4245,
+    "type": "food",
+    "region": "fukuoka",
+    "desc": "현지인이 줄 서서 먹는 '돼지 뼈 카푸치노' 라멘 맛집.",
+    "photos": [
+      "images/travel/fukuoka/hakata_issou_8k.webp"
+    ],
+    "rating": 4.4,
+    "details": {
+      "hours": "11:00 - 24:00",
+      "menu": "돈코츠 라멘, 교자, 차슈덮밥",
+      "tips": "오픈 30분 전 도착 추천. 국물이 매우 진함."
+    }
+  },
+  {
+    "id": "nakasu_yatai",
+    "name": "나카스 야타이 (포장마차 거리)",
+    "name_en": "Nakasu Yatai Street",
+    "lat": 33.5912,
+    "lng": 130.405,
+    "type": "food",
+    "region": "fukuoka",
+    "desc": "150여 개의 포장마차가 밤마다 펼쳐지는 후쿠오카 명물 먹자골목.",
+    "photos": [
+      "images/travel/fukuoka/fukuoka_yatai_yaki_ramen_real_1768161557311.png",
+      "images/travel/fukuoka/nakasu_yatai_8k.webp"
+    ],
+    "rating": 4.6,
+    "details": {
+      "hours": "18:00 - 02:00 (날씨/요일에 따라 변동)",
+      "menu": "라멘, 오뎅, 야키토리, 교자",
+      "tips": "금요일/토요일은 매우 혼잡. 가격은 다소 비쌈. 현금 준비 필수."
+    }
+  },
+  {
+    "id": "hakata_menkaido",
+    "name": "하카타 멘카이도 (라멘 거리)",
+    "name_en": "Hakata Menkaido",
+    "lat": 33.5900,
+    "lng": 130.4206,
+    "type": "food",
+    "region": "fukuoka",
+    "desc": "하카타역 내 위치한 라멘 맛집 거리. 유명 라멘 브랜드를 한곳에서 정복 가능.",
+    "photos": [
+      "images/travel/fukuoka/fukuoka_menkaido_real_1768161427429.png"
+    ],
+    "rating": 4.5,
+    "details": {
+      "hours": "11:00 - 23:00",
+      "menu": "신신라멘, 잇코샤 등",
+      "tips": "데이토스 건물 2층. 점심시간엔 대기가 긺."
+    }
+  },
+  {
+    "id": "tochoji",
+    "name": "도초지 (동장사)",
+    "name_en": "Tochoji Temple",
+    "lat": 33.5955,
+    "lng": 130.4144,
+    "type": "temple",
+    "region": "fukuoka",
+    "desc": "일본 최대 크기의 목조 좌불상이 있는 사찰.",
+    "photos": [
+      "images/travel/fukuoka/fukuoka_tochoji_real_1768161442527.png"
+    ],
+    "rating": 4.4,
+    "details": {
+      "hours": "09:00 - 17:00",
+      "transport": "기온역 바로 앞",
+      "tips": "대불 관람 가능. 하카타역에서 도보 이동 가능."
+    }
+  },
+  {
+    "id": "ichiran_mori",
+    "name": "이치란의 숲 (공장)",
+    "name_en": "Ichiran Forest",
+    "lat": 33.5850,
+    "lng": 130.2150,
+    "type": "spot",
+    "region": "itoshima",
+    "desc": "세계적인 라멘 브랜드 이치란의 생산 공장 겸 박물관. 갓 만든 면 시식 가능.",
+    "photos": [
+      "images/travel/fukuoka/fukuoka_ichiran_mori_real_1768161460198.png"
+    ],
+    "rating": 4.7,
+    "details": {
+      "hours": "10:00 - 16:00",
+      "transport": "이토시마 (차량/셔틀 필요)",
+      "tips": "라멘 제조 공정을 볼 수 있음. 한정판 기념품 구매 필수."
+    }
+  },
+  {
+    "id": "futamigaura",
+    "name": "후타미가우라 부부바위",
+    "name_en": "Futamigaura Meoto Iwa",
+    "lat": 33.6420,
+    "lng": 130.1448,
+    "type": "spot",
+    "region": "itoshima",
+    "desc": "바다 위의 하얀 도리이와 두 개의 바위가 어우러진 절경.",
+    "photos": [
+      "images/travel/fukuoka/fukuoka_futamigaura_real_1768161478307.png"
+    ],
+    "rating": 4.6,
+    "details": {
+      "hours": "24시간",
+      "transport": "이토시마 드라이브 코스",
+      "tips": "석양 명소. 팜 비치 카페와 함께 방문 추천."
+    }
+  },
+  {
+    "id": "ramen_stadium",
+    "name": "라멘 스타디움",
+    "name_en": "Ramen Stadium",
+    "lat": 33.5898,
+    "lng": 130.4107,
+    "type": "food",
+    "region": "fukuoka",
+    "desc": "캐널시티 5층에 위치한 전국의 유명 라멘 맛집 집합소.",
+    "photos": [
+      "images/travel/fukuoka/fukuoka_ramen_stadium_real_1768161507492.png"
+    ],
+    "rating": 4.3,
+    "details": {
+      "hours": "11:00 - 23:00",
+      "menu": "전국 각지 라멘",
+      "tips": "캐널시티 분수쇼 보고 식사하기 좋음."
+    }
+  },
+  {
+    "id": "udon_wasuke",
+    "name": "우동 와스케",
+    "name_en": "Udon Wasuke",
+    "lat": 33.5780,
+    "lng": 130.3950,
+    "type": "food",
+    "region": "fukuoka",
+    "desc": "후쿠오카 우동의 정석. 거대한 우엉 튀김이 올라간 고보텐 우동.",
+    "photos": [
+      "images/travel/fukuoka/fukuoka_udon_wasuke_real_1768161523611.png"
+    ],
+    "rating": 4.5,
+    "details": {
+      "hours": "11:00 - 16:00",
+      "menu": "고보텐(우엉튀김) 우동",
+      "tips": "점심 시간에만 영업하므로 주의. 면발이 매우 부드러움."
+    }
+  },
+  {
+    "id": "lopia_hakata",
+    "name": "로피아 마트 (컵라면 쇼핑)",
+    "name_en": "LOPIA Hakata Yodobashi Shop",
+    "lat": 33.5895,
+    "lng": 130.42,
+    "type": "shopping",
+    "region": "fukuoka",
+    "desc": "가성비 뛰어난 일본의 대형 마트. 지역 한정판 컵라면 쇼핑의 성지.",
+    "photos": [
+      "images/travel/fukuoka/fukuoka_cup_noodle_real_1768161543025.png",
+      "images/fukuoka/lopia/KakaoTalk_20260109_134248122.webp"
+    ],
+    "rating": 4.2,
+    "details": {
+      "hours": "10:00 - 21:00",
+      "tips": "돈코츠 라멘, 닛신 등 컵라면 코너 필수 방문. 현금만 가능!"
+    }
+  },
+  {
+    "id": "dazaifu_tenmangu_shrine",
+    "name": "다자이후 텐만구 (Dazaifu Tenmangu)",
+    "name_en": "Dazaifu Tenmangu",
+    "lat": 33.5215,
+    "lng": 130.5349,
+    "type": "temple",
+    "region": "fukuoka",
+    "desc": "학문의 신을 모신 신사. 소 머리를 만지면 머리가 좋아진다는 전설.",
+    "photos": [
+      "images/travel/fukuoka/dazaifu_tenmangu_8k.webp"
+    ],
+    "rating": 4.7,
+    "details": {
+      "hours": "06:00 - 19:00",
+      "transport": "하카타 버스터미널에서 '다자이후 라이너' 탑승 (40분)",
+      "tips": "참배길(오모테산도)에서 '우메가에 모치(매화떡)'를 꼭 사 먹을 것."
+    }
+  },
+  {
+    "id": "yufuin_village",
+    "name": "유후인 플로럴 빌리지 (Yufuin Floral Village)",
+    "name_en": "Yufuin Floral Village",
+    "lat": 33.2657,
+    "lng": 131.3605,
+    "type": "spot",
+    "region": "oita",
+    "desc": "동화 속 마을 같은 아기자기한 상점가. 지브리 샵 등 볼거리 가득.",
+    "photos": [
+      "images/travel/fukuoka/yufuin_village_8k.webp",
+      "images/travel/fukuoka/kinrin_lake_8k.webp"
+    ],
+    "rating": 4.5,
+    "details": {
+      "hours": "09:30 - 17:30",
+      "transport": "유후인역에서 도보 15분",
+      "tips": "사람이 많으니 아침 일찍 방문 추천. 근처 킨린 호수와 함께 코스로 잡기."
+    }
+  },
+  {
+    "id": "donki_nakasu",
+    "name": "돈키호테 나카수점",
+    "name_en": "Don Quijote Nakasu",
+    "lat": 33.5932,
+    "lng": 130.4078,
+    "type": "shopping",
+    "region": "fukuoka",
+    "desc": "24시간 영업하는 만물 잡화점. 의약품, 간식, 기념품 쇼핑의 성지.",
+    "photos": [
+      "images/travel/fukuoka/donki_nakasu_8k.webp"
+    ],
+    "rating": 4.3,
+    "details": {
+      "hours": "24시간 영업",
+      "tips": "할인 쿠폰(카카오톡 채널 등) 미리 준비. 의약품 계산대는 별도."
+    }
+  },
+  {
+    "id": "motsunabe_oyama",
+    "name": "모츠나베 오야마",
+    "name_en": "Motsunabe Oyama",
+    "lat": 33.59,
+    "lng": 130.4206,
+    "type": "food",
+    "region": "fukuoka",
+    "desc": "후쿠오카 3대 명물 모츠나베(곱창전골) 맛집. 된장 베이스가 인기.",
+    "photos": [
+      "images/travel/fukuoka/motsunabe_rakutenchi.webp"
+    ],
+    "rating": 4.4,
+    "details": {
+      "hours": "11:00 - 23:00",
+      "menu": "미소 모츠나베, 말사시미",
+      "tips": "점심 런치 세트 가성비가 좋음. 하카타역 내에도 지점 있음."
+    }
+  },
+  {
+    "id": "ohori_park",
+    "name": "오호리 공원 & 스타벅스",
+    "name_en": "Ohori Park",
+    "lat": 33.5861,
+    "lng": 130.3764,
+    "type": "spot",
+    "region": "fukuoka",
+    "desc": "후쿠오카 시민들의 휴식처. 호수를 바라보며 즐기는 스타벅스 커피.",
+    "photos": [
+      "images/fukuoka/ohori/20240603_125118.webp",
+      "images/fukuoka/ohori/20240603_125125.webp"
+    ],
+    "rating": 4.6,
+    "details": {
+      "hours": "24시간 개방",
+      "transport": "지하철 오호리공원역 하차",
+      "tips": "오리배를 탈 수 있음. 공원 내 스타벅스는 항상 붐비니 자리 먼저 잡을 것."
+    }
+  },
+  {
+    "id": "fukuoka_tower",
+    "name": "후쿠오카 타워",
+    "name_en": "Fukuoka Tower",
+    "lat": 33.5933,
+    "lng": 130.3515,
+    "type": "spot",
+    "region": "fukuoka",
+    "desc": "해변가에 위치한 234m 높이의 타워. 야경 명소.",
+    "photos": [
+      "images/fukuoka/tower/1766212129091.webp",
+      "images/fukuoka/tower/20251216_173722.webp",
+      "images/fukuoka/tower/20251216_173724.webp"
+    ],
+    "rating": 4.5,
+    "details": {
+      "hours": "09:30 - 22:00",
+      "transport": "하카타역에서 버스 306번 탑승 (25분)",
+      "tips": "여권 제시 시 입장료 할인. 모모치 해변과 함께 방문."
+    }
+  },
+  {
+    "id": "canal_city_hakata",
+    "name": "캐널시티 하카타",
+    "name_en": "Canal City Hakata",
+    "lat": 33.5898,
+    "lng": 130.4107,
+    "type": "shopping",
+    "region": "fukuoka",
+    "desc": "운하가 흐르는 대형 복합 쇼핑몰. 분수쇼가 유명함.",
+    "photos": [
+      "images/fukuoka/canal/1766211977461.webp",
+      "images/fukuoka/canal/20251214_143013.webp",
+      "images/fukuoka/canal/20251214_143018.webp"
+    ],
+    "rating": 4.4,
+    "details": {
+      "hours": "10:00 - 21:00",
+      "transport": "하카타역 도보 10분, 100엔 버스 이용",
+      "tips": "매시 정각 음악 분수쇼 관람 필수. 라멘 스타디움 5층에 위치."
+    }
+  },
+  {
+    "id": "ichiran_ramen",
+    "name": "이치란 라멘 본점",
+    "name_en": "Ichiran Ramen Honten",
+    "lat": 33.5904,
+    "lng": 130.4096,
+    "type": "food",
+    "region": "fukuoka",
+    "desc": "세계적으로 유명한 하카타 돈코츠 라멘 체인의 본점.",
+    "photos": [
+      "images/travel/fukuoka/ichiran_ramen_8k.webp"
+    ],
+    "rating": 4.5,
+    "details": {
+      "hours": "24시간 영업",
+      "menu": "돈코츠 라멘, 추가 면",
+      "tips": "개인 칸막이 좌석이 특징. 본점에서만 먹을 수 있는 한정 메뉴 확인."
+    }
+  },
+  {
+    "id": "shinshin_ramen",
+    "name": "신신 라멘",
+    "name_en": "Shinshin Ramen",
+    "lat": 33.5892,
+    "lng": 130.4012,
+    "type": "food",
+    "region": "fukuoka",
+    "desc": "하카타 사람들이 사랑하는 진한 돈코츠 라멘의 대표 맛집.",
+    "photos": [
+      "images/travel/fukuoka/shinshin_ramen.webp"
+    ],
+    "rating": 4.3,
+    "details": {
+      "hours": "09:00 - 03:00",
+      "menu": "돈코츠 라멘, 교자",
+      "tips": "텐진점, 하카타역점 등 여러 지점 있음. 면 굵기/기름 양 조절 가능."
+    }
+  },
+  {
+    "id": "kinrin_lake",
+    "name": "킨린 호수 (Kinrin Lake)",
+    "name_en": "Kinrin Lake",
+    "lat": 33.2683,
+    "lng": 131.3618,
+    "type": "spot",
+    "region": "oita",
+    "desc": "유후인의 상징. 아침 안개가 피어오르는 신비로운 분위기.",
+    "photos": [
+      "images/travel/fukuoka/kinrin_lake_8k.webp"
+    ],
+    "rating": 4.6,
+    "details": {
+      "hours": "24시간",
+      "transport": "유후인역에서 도보 20분",
+      "tips": "이른 아침에 방문하면 물안개 사진을 찍을 수 있음."
+    }
+  },
+  {
+    "id": "yunohana",
+    "name": "유노하나 유황재배지",
+    "name_en": "Yunohana (Sulfur Cultivation)",
+    "lat": 33.3146,
+    "lng": 131.4697,
+    "type": "spot",
+    "region": "oita",
+    "desc": "초가지붕 아래서 유황 결정(유노하나)을 재배하는 독특한 풍경.",
+    "photos": [
+      "images/travel/fukuoka/yunohana_8k.webp"
+    ],
+    "rating": 4.4,
+    "details": {
+      "hours": "08:30 - 17:30",
+      "transport": "유투어버스 투어 코스",
+      "tips": "유황 냄새가 강함. 입욕제 선물용으로 좋음."
+    }
+  },
+  {
+    "id": "kamado_jigoku",
+    "name": "가마도 지옥 (Kamado Jigoku)",
+    "name_en": "Cooking Pot Hell",
+    "lat": 33.315,
+    "lng": 131.468,
+    "type": "spot",
+    "region": "oita",
+    "desc": "벳푸 지옥 순례 중 가장 인기 있는 곳. 다양한 색의 온천이 모여있음.",
+    "photos": [
+      "images/travel/fukuoka/kamado_jigoku_8k.webp"
+    ],
+    "rating": 4.5,
+    "details": {
+      "hours": "08:00 - 17:00",
+      "transport": "유투어버스 투어 코스",
+      "tips": "족욕 체험 가능(수건 지참). 온천 달걀과 라무네 사이다 필수."
+    }
+  },
+  {
+    "id": "momochi_beach",
+    "name": "시사이드 모모치 해변공원",
+    "name_en": "Momochi Seaside Park",
+    "lat": 33.593,
+    "lng": 130.351,
+    "type": "spot",
+    "region": "fukuoka",
+    "desc": "후쿠오카 타워 앞 인공 해변. 이국적인 마리존 예식장이 포토 스팟.",
+    "photos": [
+      "images/fukuoka/momochi/1766212129243-EFFECTS.webp",
+      "images/fukuoka/momochi/20240603_192347.webp",
+      "images/fukuoka/momochi/20240603_192350.webp",
+      "images/fukuoka/momochi/20240603_200628.webp",
+      "images/fukuoka/momochi/20251216_170634.webp"
+    ],
+    "rating": 4.5,
+    "details": {
+      "hours": "24시간",
+      "transport": "후쿠오카 타워 바로 앞",
+      "tips": "해질녘 노을이 매우 아름다움. 해변 산책 추천."
+    }
+  },
+  {
+    "id": "sumiyoshi_shrine",
+    "name": "스미요시 신사",
+    "name_en": "Sumiyoshi Shrine",
+    "lat": 33.5845,
+    "lng": 130.4098,
+    "type": "temple",
+    "region": "fukuoka",
+    "desc": "후쿠오카에서 가장 오래된 신사 중 하나. 항해와 어업의 신을 모심.",
+    "photos": [
+      "images/travel/fukuoka/sumiyoshi_shrine.webp"
+    ],
+    "rating": 4.2,
+    "details": {
+      "hours": "06:00 - 18:00",
+      "transport": "하카타역에서 도보 15분",
+      "tips": "하카타 돈타쿠 축제 때 방문하면 특별한 행사를 볼 수 있음."
+    }
+  },
+  {
+    "id": "tenjin_area",
+    "name": "텐진 쇼핑거리",
+    "name_en": "Tenjin Shopping Area",
+    "lat": 33.592,
+    "lng": 130.399,
+    "type": "shopping",
+    "region": "fukuoka",
+    "desc": "후쿠오카 최대의 번화가. 백화점, 쇼핑몰, 맛집이 밀집.",
+    "photos": [
+      "images/travel/fukuoka/tenjin_underground_8k.webp"
+    ],
+    "rating": 4.4,
+    "details": {
+      "hours": "10:00 - 21:00 (점포별 상이)",
+      "transport": "텐진역 하차",
+      "tips": "지하상가와 연결되어 비 오는 날에도 쇼핑 가능."
+    }
+  },
+  {
+    "id": "amu_plaza",
+    "name": "아뮤 플라자 하카타",
+    "name_en": "AMU Plaza Hakata",
+    "lat": 33.5897,
+    "lng": 130.4207,
+    "type": "shopping",
+    "region": "fukuoka",
+    "desc": "하카타역에 직결된 대형 쇼핑몰. 레스토랑, 패션, 기념품 가게 다양.",
+    "photos": [
+      "images/travel/fukuoka/amu_plaza.webp"
+    ],
+    "rating": 4.3,
+    "details": {
+      "hours": "10:00 - 21:00",
+      "transport": "하카타역 내",
+      "tips": "옥상에서 미니 신사와 기차 조형물 볼 수 있음."
+    }
+  },
+  {
+    "id": "hakata_bento",
+    "name": "하카타역 에키벤 (도시락)",
+    "name_en": "Hakata Ekiben",
+    "lat": 33.5897,
+    "lng": 130.42,
+    "type": "food",
+    "region": "fukuoka",
+    "desc": "일본 기차여행의 필수품, 지역 특색이 담긴 도시락을 구매할 수 있는 곳.",
+    "photos": [
+      "images/travel/fukuoka/hakata_bento.webp"
+    ],
+    "rating": 4.1,
+    "details": {
+      "hours": "06:00 - 22:00",
+      "menu": "명란젓 도시락, 규탄 도시락, 치킨 난반",
+      "tips": "신칸센 타기 전 구매 추천. 계절 한정 도시락 확인."
+    }
+  },
+  {
+    "id": "nakasu_river",
+    "name": "나카스 리버뷰",
+    "name_en": "Nakasu River View",
+    "lat": 33.5925,
+    "lng": 130.4055,
+    "type": "spot",
+    "region": "fukuoka",
+    "desc": "나카가와 강변의 야경 명소. 네온사인과 야타이 불빛이 어우러져 아름다움.",
+    "photos": [
+      "images/travel/fukuoka/nakasu_river.webp"
+    ],
+    "rating": 4.4,
+    "details": {
+      "hours": "24시간",
+      "tips": "해질녘~밤에 산책하기 좋음. 강변 벤치에서 휴식 가능."
+    }
+  },
+  {
+    "id": "udon_taira",
+    "name": "우동 타이라",
+    "name_en": "Udon Taira",
+    "lat": 33.5885,
+    "lng": 130.418,
+    "type": "food",
+    "region": "fukuoka",
+    "desc": "하카타 스타일의 말랑한 우동. 저렴하고 맛있는 서민 음식.",
+    "photos": [
+      "images/travel/fukuoka/udon_taira.webp"
+    ],
+    "rating": 4.2,
+    "details": {
+      "hours": "11:00 - 21:00",
+      "menu": "고보텐 우동, 니쿠 우동",
+      "tips": "면의 쫄깃함보다 부드러움을 중시하는 하카타 스타일."
+    }
+  },
+  {
+    "id": "cafe_del_sol",
+    "name": "카페 델 솔",
+    "name_en": "Cafe del SOL",
+    "lat": 33.5905,
+    "lng": 130.405,
+    "type": "cafe",
+    "region": "fukuoka",
+    "desc": "팬케이크로 유명한 후쿠오카의 인기 카페.",
+    "photos": [
+      "images/travel/fukuoka/cafe_del_sol.webp"
+    ],
+    "rating": 4.5,
+    "details": {
+      "hours": "09:00 - 22:00",
+      "menu": "수플레 팬케이크, 라떼",
+      "tips": "주말에는 대기 시간이 길 수 있음. 오픈런 추천."
+    }
+  },
+  {
+    "id": "lopia_hakata",
+    "name": "로피아 마트 하카타 요도바시점",
+    "name_en": "LOPIA Hakata Yodobashi Shop",
+    "lat": 33.5895,
+    "lng": 130.42,
+    "type": "shopping",
+    "region": "fukuoka",
+    "desc": "가성비 뛰어난 일본의 대형 마트. 신선한 육류와 다양한 델리(도시락) 제품이 인기가 많음.",
+    "photos": [
+      "images/fukuoka/lopia/KakaoTalk_20260109_134248122.webp",
+      "images/fukuoka/lopia/KakaoTalk_20260109_134248122_01.webp",
+      "images/fukuoka/lopia/KakaoTalk_20260109_134248122_02.webp",
+      "images/fukuoka/lopia/KakaoTalk_20260109_134248122_03.webp",
+      "images/fukuoka/lopia/KakaoTalk_20260109_134248122_04.webp",
+      "images/fukuoka/lopia/KakaoTalk_20260109_134248122_05.webp"
+    ],
+    "rating": 4.2,
+    "details": {
+      "hours": "10:00 - 21:00",
+      "tips": "저녁식사는 여기서 사서 몬탄 하카타 호텔에서 먹을 수 있으니 참조하세요. 마트는 현금만 가능하므로 현금 지참 필수!"
+    }
+  },
+  {
+    "id": "yufumabushi_shin",
+    "name": "유후마부시 신(心) 본점",
+    "name_en": "Yufumabushi Shin",
+    "lat": 33.2662,
+    "lng": 131.3556,
+    "type": "food",
+    "region": "oita",
+    "desc": "유후인의 명물 덮밥 맛집. 소고기, 장어, 닭고기 덮밥을 즐길 수 있음.",
+    "photos": [
+      "images/travel/fukuoka/yufuin_village_8k.webp"
+    ],
+    "rating": 4.1,
+    "details": {
+      "hours": "11:00 - 18:30",
+      "tips": "웨이팅이 길 수 있음. 마지막에 오차즈케로 먹는 것이 별미."
+    }
+  },
+  {
+    "id": "senke",
+    "name": "센케 (Senke)",
+    "name_en": "Senke Cafe",
+    "lat": 33.2668,
+    "lng": 131.356,
+    "type": "cafe",
+    "region": "oita",
+    "desc": "유후인의 아늑한 카페. 포토 스팟으로 유명함.",
+    "photos": [
+      "images/travel/fukuoka/cafe_del_sol.webp"
+    ],
+    "rating": 4.4,
+    "details": {
+      "hours": "10:00 - 17:00",
+      "tips": "카페 분위기가 좋아 휴식하기 좋음."
+    }
+  },
+  {
+    "id": "inakaan",
+    "name": "이나카안 (Inakaan)",
+    "name_en": "Inakaan Udon",
+    "lat": 33.265,
+    "lng": 131.35,
+    "type": "food",
+    "region": "oita",
+    "desc": "유후인의 전통 우동 맛집.",
+    "photos": [
+      "images/travel/fukuoka/udon_taira.webp"
+    ],
+    "rating": 3.9,
+    "details": {
+      "hours": "11:00 - 18:00",
+      "tips": "담백한 육수와 쫄깃한 면발이 특징."
+    }
+  },
+  {
+    "id": "koharu_udon",
+    "name": "코하루 우동",
+    "name_en": "Koharu Udon",
+    "lat": 33.2655,
+    "lng": 131.351,
+    "type": "food",
+    "region": "oita",
+    "desc": "유후인의 로컬 우동 전문점.",
+    "photos": [
+      "images/travel/fukuoka/udon_taira.webp"
+    ],
+    "rating": 4.1,
+    "details": {
+      "hours": "11:00 - 17:00",
+      "tips": "가격이 저렴하고 양이 푸짐함."
+    }
+  },
+  {
+    "id": "tenjin_underground",
+    "name": "텐진 지하상가",
+    "name_en": "Tenjin Chikagai",
+    "lat": 33.5912,
+    "lng": 130.3985,
+    "type": "shopping",
+    "region": "fukuoka",
+    "desc": "19세기 유럽 풍경을 재현한 대형 지하 쇼핑몰.",
+    "photos": [
+      "images/travel/fukuoka/tenjin_underground_8k.webp"
+    ],
+    "rating": 4.1,
+    "details": {
+      "hours": "10:00 - 20:00",
+      "tips": "비 오는 날 쇼핑하기 최적. 베이크 치즈 타르트 등 간식거리 많음."
+    }
+  },
+  {
+    "id": "ramen_samurai",
+    "name": "라멘 사무라이",
+    "name_en": "Ramen Samurai",
+    "lat": 33.266,
+    "lng": 131.355,
+    "type": "food",
+    "region": "oita",
+    "desc": "유후인의 인기 라멘집.",
+    "photos": [
+      "images/travel/fukuoka/hakata_issou_8k.webp"
+    ],
+    "rating": 4.3,
+    "details": {
+      "hours": "11:00 - 18:00",
+      "tips": "다양한 종류의 라멘을 맛볼 수 있음."
+    }
+  },
+  {
+    "id": "hanamizuki",
+    "name": "하나미즈키 (폐업)",
+    "name_en": "Hanamizuki (Closed)",
+    "lat": 33.2661,
+    "lng": 131.3551,
+    "type": "cafe",
+    "region": "oita",
+    "desc": "현재 폐업한 유후인의 카페입니다.",
+    "photos": [
+      "images/travel/fukuoka/cafe_del_sol.webp"
+    ],
+    "rating": 4.4,
+    "details": {
+      "hours": "영업 종료",
+      "tips": "역사적인 장소로 참조만 하세요."
+    }
+  },
+  {
+    "id": "teamlab_forest",
+    "name": "팀랩 포레스트 후쿠오카",
+    "name_en": "teamLab Forest Fukuoka",
+    "lat": 33.5954,
+    "lng": 130.3622,
+    "type": "spot",
+    "region": "fukuoka",
+    "desc": "BOSS E-ZO FUKUOKA 내에 위치한 디지털 아트 전시관. 환상적인 조명과 상호작용하는 예술 작품들이 가득함.",
+    "photos": [
+      "images/fukuoka/tower/1766212129091.webp",
+      "images/fukuoka/tower/20251216_173722.webp",
+      "images/fukuoka/tower/20251216_173724.webp"
+    ],
+    "rating": 4.8,
+    "details": {
+      "hours": "11:00 - 20:00 (평일) / 10:00 - 20:00 (주말)",
+      "tips": "앱을 미리 설치하면 작품들과 상호작용 가능. 바닥이 거울인 구간이 있으니 복장에 유의."
+    }
+  },
+  {
+    "id": "kushida_shrine",
+    "name": "구시다 신사",
+    "name_en": "Kushida Shrine",
+    "lat": 33.5928,
+    "lng": 130.4084,
+    "type": "temple",
+    "region": "fukuoka",
+    "desc": "하카타의 수호신을 모시는 신사. 매년 7월 기온 야마카사 축제의 중심지로 유명함.",
+    "photos": [
+      "images/travel/fukuoka/sumiyoshi_shrine.webp"
+    ],
+    "rating": 4.5,
+    "details": {
+      "hours": "04:00 - 22:00",
+      "tips": "거대한 가마(야마카사)가 상설 전시되어 있음. 캐널시티 근처라 함께 보기 좋음."
+    }
+  },
+  {
+    "id": "rakusuien",
+    "name": "라쿠스이엔 (일본 정원)",
+    "name_en": "Rakusuien Garden",
+    "lat": 33.5855,
+    "lng": 130.4103,
+    "type": "spot",
+    "region": "fukuoka",
+    "desc": "메이지 시대 상인의 별장을 개조한 도심 속 일본 정원. 말차 체험이 가능함.",
+    "photos": [
+      "images/fukuoka/ohori/20240603_125118.webp",
+      "images/fukuoka/ohori/20240603_125125.webp"
+    ],
+    "rating": 4.4,
+    "details": {
+      "hours": "09:00 - 17:00",
+      "tips": "입장료와 별도로 일정 금액을 내면 다실에서 말차와 다과를 즐길 수 있음."
+    }
+  },
+  {
+    "id": "lalaport_fukuoka",
+    "name": "라라포트 후쿠오카 (건담)",
+    "name_en": "Lalaport Fukuoka",
+    "lat": 33.5658,
+    "lng": 130.4378,
+    "type": "shopping",
+    "region": "fukuoka",
+    "desc": "실물 크기의 뉴 건담 입상이 있는 거대 쇼핑몰. 다양한 브랜드와 맛집 입점.",
+    "photos": [
+      "images/fukuoka/canal/1766211977461.webp",
+      "images/fukuoka/canal/20251214_143013.webp",
+      "images/fukuoka/canal/20251214_143018.webp"
+    ],
+    "rating": 4.6,
+    "details": {
+      "hours": "10:00 - 21:00",
+      "tips": "특정 시간마다 건담이 움직이는 퍼포먼스를 하니 시간표 확인 필수."
+    }
+  },
+  {
+    "id": "goushou",
+    "name": "고쇼 (海鮮丼 ごうしょう)",
+    "name_en": "Goushou Seafood",
+    "lat": 33.5905,
+    "lng": 130.415,
+    "type": "food",
+    "region": "fukuoka",
+    "desc": "신선한 해산물이 듬뿍 올라간 카이센동 맛집.",
+    "photos": [
+      "images/travel/fukuoka/motsunabe_rakutenchi.webp"
+    ],
+    "rating": 4.4,
+    "details": {
+      "hours": "11:30 - 14:00 / 17:30 - 22:00",
+      "tips": "점심 한정 메뉴가 가성비 좋음. 하카타역 인근."
+    }
+  },
+  {
+    "id": "hakata_menkaido",
+    "name": "하카타 멘카이도 (라멘 거리)",
+    "name_en": "Hakata Menkaido",
+    "lat": 33.5900,
+    "lng": 130.4206,
+    "type": "food",
+    "region": "fukuoka",
+    "desc": "하카타역 내 위치한 라멘 맛집 거리. 유명 라멘 브랜드를 한곳에서 정복 가능.",
+    "photos": [
+      "images/travel/fukuoka/hakata_issou_8k.webp"
+    ],
+    "rating": 4.5,
+    "details": {
+      "hours": "11:00 - 23:00",
+      "menu": "신신라멘, 잇코샤 등",
+      "tips": "데이토스 건물 2층. 점심시간엔 대기가 긺."
+    }
+  },
+  {
+    "id": "tochoji",
+    "name": "도초지 (동장사)",
+    "name_en": "Tochoji Temple",
+    "lat": 33.5955,
+    "lng": 130.4144,
+    "type": "temple",
+    "region": "fukuoka",
+    "desc": "일본 최대 크기의 목조 좌불상이 있는 사찰.",
+    "photos": [
+      "images/travel/fukuoka/sumiyoshi_shrine.webp"
+    ],
+    "rating": 4.4,
+    "details": {
+      "hours": "09:00 - 17:00",
+      "transport": "기온역 바로 앞",
+      "tips": "대불 관람 가능. 하카타역에서 도보 이동 가능."
+    }
+  },
+  {
+    "id": "ichiran_mori",
+    "name": "이치란의 숲 (공장)",
+    "name_en": "Ichiran Forest",
+    "lat": 33.5850,
+    "lng": 130.2150,
+    "type": "spot",
+    "region": "itoshima",
+    "desc": "세계적인 라멘 브랜드 이치란의 생산 공장 겸 박물관. 갓 만든 면 시식 가능.",
+    "photos": [
+      "images/travel/fukuoka/ichiran_ramen_8k.webp"
+    ],
+    "rating": 4.7,
+    "details": {
+      "hours": "10:00 - 16:00",
+      "transport": "이토시마 (차량/셔틀 필요)",
+      "tips": "라멘 제조 공정을 볼 수 있음. 한정판 기념품 구매 필수."
+    }
+  },
+  {
+    "id": "futamigaura",
+    "name": "후타미가우라 부부바위",
+    "name_en": "Futamigaura Meoto Iwa",
+    "lat": 33.6420,
+    "lng": 130.1448,
+    "type": "spot",
+    "region": "itoshima",
+    "desc": "바다 위의 하얀 도리이와 두 개의 바위가 어우러진 절경.",
+    "photos": [
+      "images/fukuoka/momochi/20240603_192347.webp"
+    ],
+    "rating": 4.6,
+    "details": {
+      "hours": "24시간",
+      "transport": "이토시마 드라이브 코스",
+      "tips": "석양 명소. 팜 비치 카페와 함께 방문 추천."
+    }
+  },
+  {
+    "id": "ramen_stadium",
+    "name": "라멘 스타디움",
+    "name_en": "Ramen Stadium",
+    "lat": 33.5898,
+    "lng": 130.4107,
+    "type": "food",
+    "region": "fukuoka",
+    "desc": "캐널시티 5층에 위치한 전국의 유명 라멘 맛집 집합소.",
+    "photos": [
+      "images/fukuoka/canal/1766211977461.webp"
+    ],
+    "rating": 4.3,
+    "details": {
+      "hours": "11:00 - 23:00",
+      "menu": "전국 각지 라멘",
+      "tips": "캐널시티 분수쇼 보고 식사하기 좋음."
+    }
+  },
+  {
+    "id": "udon_wasuke",
+    "name": "우동 와스케",
+    "name_en": "Udon Wasuke",
+    "lat": 33.5780,
+    "lng": 130.3950,
+    "type": "food",
+    "region": "fukuoka",
+    "desc": "후쿠오카 우동의 정석. 거대한 우엉 튀김이 올라간 고보텐 우동.",
+    "photos": [
+      "images/travel/fukuoka/udon_taira.webp"
+    ],
+    "rating": 4.5,
+    "details": {
+      "hours": "11:00 - 16:00",
+      "menu": "고보텐(우엉튀김) 우동",
+      "tips": "점심 시간에만 영업하므로 주의. 면발이 매우 부드러움."
+    }
+  }
+]

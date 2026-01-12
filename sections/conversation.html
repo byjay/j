@@ -1,0 +1,41 @@
+<!-- Mode Toggle -->
+<!-- Mode Toggle (Unified Segmented Control) -->
+<div class="flex gap-2 mb-6 p-1 bg-gray-100/80 rounded-2xl border border-gray-200 backdrop-blur-sm">
+    <button id="mode-all-btn" onclick="showConversationMode('all')"
+        class="flex-1 py-3 px-4 rounded-xl font-black text-sm transition-all duration-300 bg-white text-gray-800 shadow-sm border border-gray-100">
+        전체
+    </button>
+    <button id="mode-situational-btn" onclick="showConversationMode('situational')"
+        class="flex-1 py-3 px-4 rounded-xl font-bold text-sm transition-all duration-300 text-gray-500 hover:bg-white/50">
+        상황별
+    </button>
+    <button id="mode-practical-btn" onclick="showConversationMode('practical')"
+        class="flex-1 py-3 px-4 rounded-xl font-bold text-sm transition-all duration-300 text-gray-500 hover:bg-white/50">
+        실용
+    </button>
+</div>
+
+<!-- Situational Container (Categories) -->
+<div id="situational-conversation-container">
+    <div id="conversation-categories" class="grid grid-cols-2 md:grid-cols-3 gap-6">
+        <!-- Injected by JS -->
+    </div>
+</div>
+
+<!-- Conversation List (Card View) -->
+<div id="conversation-list" class="hidden">
+    <button onclick="backToCategories()"
+        class="mb-4 flex items-center gap-2 text-gray-500 hover:text-gray-800 font-bold transition-colors">
+        <i class="fas fa-arrow-left"></i> 카테고리 목록으로
+    </button>
+    <div id="conversation-viewer">
+        <!-- Cards injected by JS -->
+    </div>
+</div>
+
+<!-- Practical Container -->
+<div id="practical-conversation-container" class="hidden">
+    <div id="practical-list" class="space-y-4">
+        <!-- Practical items injected by JS -->
+    </div>
+</div>

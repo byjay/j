@@ -1,0 +1,759 @@
+[
+  {
+    "id": "kix",
+    "name": "간사이 국제공항 (KIX)",
+    "name_en": "Kansai International Airport",
+    "lat": 34.432,
+    "lng": 135.2304,
+    "type": "transport",
+    "region": "airport",
+    "rating": 4.4,
+    "desc": "오사카 여행의 시작! 바다 위의 거대한 인공섬 공항.",
+    "photos": [
+      "https://images.unsplash.com/photo-1574844327092-2cc351c4423e?w=800",
+      "https://images.unsplash.com/photo-1542646696-67a685cb6239?w=800"
+    ],
+    "reviews": [
+      {
+        "user": "아빠",
+        "date": "2024-12",
+        "text": "라피트 타러 가는 길이 2층 구름다리로 연결돼서 편해요."
+      },
+      {
+        "user": "시으니",
+        "date": "2024-12",
+        "text": "포켓몬 스토어가 있어서 도착하자마자 신남!"
+      }
+    ],
+    "details": {
+      "address": "Izumisano, Osaka 549-0001",
+      "hours": "24시간",
+      "ticket": "무료",
+      "info": "입국 심사 후 닌텐도 체크인도 잊지 마세요!",
+      "transport": "난카이 라피트 (34분 소요)",
+      "tips": "도착 로비 1층에 포켓와이파이 수령 카운터가 있어요.",
+      "themes": [
+        "공항",
+        "시작",
+        "설렘"
+      ],
+      "recommend": [
+        "라피트",
+        "포켓몬스토어"
+      ]
+    }
+  },
+  {
+    "id": "dotonbori",
+    "name": "도톤보리 & 글리코상",
+    "name_en": "Dotonbori",
+    "lat": 34.6687,
+    "lng": 135.5013,
+    "type": "spot",
+    "region": "namba",
+    "rating": 4.9,
+    "desc": "오사카의 심장! 화려한 네온사인과 글리코상이 반겨주는 곳.",
+    "photos": [
+      "https://images.unsplash.com/photo-1590559899731-a382839e5549?w=800",
+      "https://images.unsplash.com/photo-1599834415891-b9560a80d466?w=800"
+    ],
+    "reviews": [
+      {
+        "user": "하롱이",
+        "date": "2024-12",
+        "text": "사람 진짜 많아요! 글리코 아저씨랑 포즈 똑같이 하고 사진 찍음!"
+      },
+      {
+        "user": "엄마",
+        "date": "2024-12",
+        "text": "밤에 리버크루즈 타니까 시원하고 좋네요."
+      }
+    ],
+    "details": {
+      "address": "Dotonbori, Chuo-ku, Osaka",
+      "hours": "24시간",
+      "ticket": "무료 (크루즈 별도)",
+      "info": "다리 위가 최고의 포토존. 소매치기 조심하세요!",
+      "transport": "난바역 14번 출구 도보 3분",
+      "tips": "돈키호테 관람차도 특이해요 (타원형으로 돌아감).",
+      "themes": [
+        "야경",
+        "랜드마크",
+        "포토존"
+      ],
+      "recommend": [
+        "글리코상",
+        "리버크루즈",
+        "돈키호테"
+      ]
+    }
+  },
+  {
+    "id": "kani_doraku",
+    "name": "카니도라쿠 (움직이는 게)",
+    "name_en": "Kani Doraku",
+    "lat": 34.6685,
+    "lng": 135.502,
+    "type": "food",
+    "region": "namba",
+    "rating": 4.5,
+    "desc": "다리가 움직이는 거대한 게 간판! 게 숯불구이 냄새가 솔솔.",
+    "photos": [
+      "https://images.unsplash.com/photo-1696226903264-b04505372332?w=800",
+      "https://images.unsplash.com/photo-1559339352-11d035aa65de?w=800"
+    ],
+    "reviews": [
+      {
+        "user": "아빠",
+        "date": "2024-12",
+        "text": "가게 앞에서 파는 게 숯불구이(¥900)가 간식으로 딱!"
+      },
+      {
+        "user": "시으니",
+        "date": "2024-12",
+        "text": "게 다리가 진짜 움직여서 신기해요."
+      }
+    ],
+    "details": {
+      "address": "1-6-18 Dotonbori, Osaka",
+      "hours": "11:00 - 22:00",
+      "ticket": "구이 ¥900~ / 코스 ¥5,000~",
+      "info": "예약 안 했다면 밖에서 구이만 사 먹어도 충분히 맛있어요.",
+      "transport": "도톤보리 메인 스트리트",
+      "tips": "저녁엔 대기가 기니까 점심 시간 전후를 노리세요.",
+      "themes": [
+        "맛집",
+        "길거리음식",
+        "게"
+      ],
+      "recommend": [
+        "게숯불구이",
+        "게만두"
+      ]
+    }
+  },
+  {
+    "id": "ichiran_dotonbori",
+    "name": "이치란 라멘 (별관)",
+    "name_en": "Ichiran Ramen",
+    "lat": 34.669,
+    "lng": 135.5015,
+    "type": "food",
+    "region": "namba",
+    "rating": 4.7,
+    "desc": "독서실 같은 칸막이에서 오로지 라멘 맛에만 집중!",
+    "photos": [
+      "https://images.unsplash.com/photo-1552611052-33e04de081de?w=800",
+      "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?w=800"
+    ],
+    "reviews": [
+      {
+        "user": "엄마",
+        "date": "2024-12",
+        "text": "비밀 소스 3단계가 딱 한국인 입맛! 국물이 진해요."
+      },
+      {
+        "user": "하롱이",
+        "date": "2024-12",
+        "text": "반숙 계란 추가는 필수! 밥 말아 먹어도 맛있음."
+      }
+    ],
+    "details": {
+      "address": "7-18 Soemoncho, Chuo-ku, Osaka",
+      "hours": "24시간",
+      "ticket": "¥980~",
+      "info": "본관보다 별관이 줄이 조금 더 짧을 때가 많아요.",
+      "transport": "도톤보리 강가",
+      "tips": "주문 용지 뒷면에 한국어도 있어요. 파는 실파 추천!",
+      "themes": [
+        "라멘",
+        "혼밥",
+        "필수코스"
+      ],
+      "recommend": [
+        "돈코츠라멘",
+        "반숙계란",
+        "말차푸딩"
+      ]
+    }
+  },
+  {
+    "id": "swissotel",
+    "name": "스위소텔 난카이 오사카",
+    "name_en": "Swissotel Nankai",
+    "lat": 34.6644,
+    "lng": 135.502,
+    "type": "hotel",
+    "region": "namba",
+    "rating": 4.8,
+    "desc": "난카이 난바역 바로 위! 공항 접근성 1등 호텔.",
+    "photos": [
+      "https://images.unsplash.com/photo-1618773928121-c32242e63f39?w=800",
+      "https://images.unsplash.com/photo-1596394516093-501ba68a0ba6?w=800"
+    ],
+    "reviews": [
+      {
+        "user": "아빠",
+        "date": "2024-12",
+        "text": "비 와도 우산 없이 공항 갈 수 있어서 최고."
+      },
+      {
+        "user": "엄마",
+        "date": "2024-12",
+        "text": "조식 먹으러 가는 뷰가 너무 예뻐요."
+      }
+    ],
+    "details": {
+      "address": "5-1-60 Namba, Chuo-ku, Osaka",
+      "hours": "Check-in 15:00",
+      "ticket": "숙박객 전용",
+      "info": "36층 타보36 레스토랑의 조식 뷰가 환상적입니다.",
+      "transport": "난카이 난바역 직결",
+      "tips": "고층 객실 요청하면 야경이 끝내줘요.",
+      "themes": [
+        "호텔",
+        "럭셔리",
+        "편리함"
+      ],
+      "recommend": [
+        "조식",
+        "시티뷰"
+      ]
+    }
+  },
+  {
+    "id": "pokemon_cafe_osaka",
+    "name": "포켓몬 카페 & 센터 DX",
+    "name_en": "Pokemon Cafe Osaka",
+    "lat": 34.671,
+    "lng": 135.501,
+    "type": "food",
+    "region": "shinsaibashi",
+    "rating": 5,
+    "desc": "피카츄 쉐프가 요리해주는 꿈의 카페! (예약 전쟁 필수)",
+    "photos": [
+      "https://images.unsplash.com/photo-1605333396915-47ed630fbf71?w=800",
+      "https://images.unsplash.com/photo-1615560594373-c40d7c58c303?w=800"
+    ],
+    "reviews": [
+      {
+        "user": "하롱이",
+        "date": "2024-12",
+        "text": "피카츄가 춤출 때 같이 춤췄어요! 너무 귀여워 ㅠㅠ"
+      },
+      {
+        "user": "시으니",
+        "date": "2024-12",
+        "text": "이브이 플레이트 아까워서 못 먹을 뻔..."
+      }
+    ],
+    "details": {
+      "address": "Shinsaibashi PARCO 9F",
+      "hours": "10:00 - 20:00",
+      "ticket": "예약 필수 (1인 1메뉴)",
+      "info": "한 달 전 14시에 예약 오픈. 1분 만에 매진되니 광클 필수!",
+      "transport": "신사이바시역 4번 출구 직결",
+      "tips": "예약 실패했다면 굿즈샵(포켓몬센터)이라도 꼭 가보세요.",
+      "themes": [
+        "카페",
+        "캐릭터",
+        "아이들천국"
+      ],
+      "recommend": [
+        "피카츄플레이트",
+        "잠만보덮밥",
+        "코스터"
+      ]
+    }
+  },
+  {
+    "id": "umeda_sky",
+    "name": "우메다 스카이 빌딩",
+    "name_en": "Umeda Sky Building",
+    "lat": 34.7059,
+    "lng": 135.4904,
+    "type": "spot",
+    "region": "umeda",
+    "rating": 4.6,
+    "desc": "공중 에스컬레이터를 타고 하늘로! 360도 파노라마 야경.",
+    "photos": [
+      "https://images.unsplash.com/photo-1578330364969-95a298816c4f?w=800",
+      "https://images.unsplash.com/photo-1536732488320-aa8bd9722363?w=800"
+    ],
+    "reviews": [
+      {
+        "user": "아빠",
+        "date": "2024-12",
+        "text": "건물 자체가 예술 작품. 에스컬레이터 탈 때 짜릿함."
+      },
+      {
+        "user": "커플",
+        "date": "2024-12",
+        "text": "바람이 많이 부니 모자 조심하세요!"
+      }
+    ],
+    "details": {
+      "address": "1-1-88 Oyodonaka, Kita-ku, Osaka",
+      "hours": "09:30 - 22:30",
+      "ticket": "성인 ¥1,500 / 어린이 ¥700",
+      "info": "일몰 30분 전에 올라가서 해 지는 것부터 야경까지 보세요.",
+      "transport": "오사카역 도보 10분",
+      "tips": "지하 1층에 레트로 식당가 '타키미코지'도 가볼 만해요.",
+      "themes": [
+        "전망대",
+        "야경",
+        "건축"
+      ],
+      "recommend": [
+        "공중정원",
+        "하트자물쇠"
+      ]
+    }
+  },
+  {
+    "id": "hep_five",
+    "name": "HEP FIVE 관람차",
+    "name_en": "HEP FIVE Ferris Wheel",
+    "lat": 34.7035,
+    "lng": 135.5,
+    "type": "spot",
+    "region": "umeda",
+    "rating": 4.4,
+    "desc": "도심 빌딩 숲 사이를 누비는 새빨간 관람차.",
+    "photos": [
+      "https://images.unsplash.com/photo-1504970425946-4993809623dc?w=800",
+      "https://images.unsplash.com/photo-1518659170295-8857ccdc9907?w=800"
+    ],
+    "reviews": [
+      {
+        "user": "시으니",
+        "date": "2024-12",
+        "text": "안에 스피커가 있어서 폰 연결해서 노래 들을 수 있어요!"
+      },
+      {
+        "user": "엄마",
+        "date": "2024-12",
+        "text": "쇼핑하다가 다리 아플 때 쉬어가기 딱 좋음."
+      }
+    ],
+    "details": {
+      "address": "5-15 Kakudacho, Kita-ku, Osaka",
+      "hours": "11:00 - 22:45",
+      "ticket": "¥600 (주유패스 무료)",
+      "info": "7층에서 탑승합니다. 한 바퀴 도는 데 약 15분.",
+      "transport": "우메다역 도보 5분",
+      "tips": "블루투스 스피커로 좋아하는 노래 틀고 낭만 즐기기!",
+      "themes": [
+        "관람차",
+        "데이트",
+        "휴식"
+      ],
+      "recommend": [
+        "일몰타임",
+        "음악감상"
+      ]
+    }
+  },
+  {
+    "id": "osaka_castle",
+    "name": "오사카성 (천수각)",
+    "name_en": "Osaka Castle",
+    "lat": 34.6873,
+    "lng": 135.5262,
+    "type": "spot",
+    "region": "osaka_castle",
+    "rating": 4.7,
+    "desc": "봄에는 벚꽃, 가을엔 단풍. 오사카의 상징적인 역사 유적.",
+    "photos": [
+      "https://images.unsplash.com/photo-1590253230532-a67f6bc61c9e?w=800",
+      "https://images.unsplash.com/photo-1558983802-a160ce39763c?w=800"
+    ],
+    "reviews": [
+      {
+        "user": "아빠",
+        "date": "2024-12",
+        "text": "천수각 올라가는 엘리베이터 줄이 기니 계단 추천."
+      },
+      {
+        "user": "가족",
+        "date": "2024-12",
+        "text": "해자에서 타는 고자부네 뱃놀이가 운치 있어요."
+      }
+    ],
+    "details": {
+      "address": "1-1 Osakajo, Chuo-ku, Osaka",
+      "hours": "09:00 - 17:00",
+      "ticket": "성인 ¥600 (주유패스 무료)",
+      "info": "8층 전망대에서 보는 공원 뷰가 시원합니다.",
+      "transport": "다니마치욘초메역 9번 출구",
+      "tips": "공원 안 로드트레인을 타면 덜 걸을 수 있어요.",
+      "themes": [
+        "역사",
+        "산책",
+        "꽃구경"
+      ],
+      "recommend": [
+        "천수각",
+        "고자부네놀잇배",
+        "말차아이스크림"
+      ]
+    }
+  },
+  {
+    "id": "teamlab_osaka",
+    "name": "팀랩 보태니컬 가든",
+    "name_en": "TeamLab Botanical Garden",
+    "lat": 34.612,
+    "lng": 135.518,
+    "type": "spot",
+    "region": "tennoji",
+    "rating": 4.8,
+    "desc": "밤이 되면 빛의 숲으로 변하는 나가이 식물원.",
+    "photos": [
+      "https://images.unsplash.com/photo-1579969695662-3860d5bfa780?w=800",
+      "https://images.unsplash.com/photo-1510253687831-0f98be10e1bd?w=800"
+    ],
+    "reviews": [
+      {
+        "user": "시으니",
+        "date": "2024-12",
+        "text": "알을 건드리면 소리도 나고 색깔도 바껴요! 마법 같음."
+      },
+      {
+        "user": "엄마",
+        "date": "2024-12",
+        "text": "산책하기 너무 좋은데 모기 기피제는 필수."
+      }
+    ],
+    "details": {
+      "address": "1-23 Nagaikoen, Osaka",
+      "hours": "18:00 - 21:30",
+      "ticket": "성인 ¥1,800 / 초등생 ¥500",
+      "info": "야외 전시라 편한 신발을 신으세요. 비 오면 운영 중단될 수도.",
+      "transport": "나가이역 도보 10분",
+      "tips": "온라인 예매하면 QR코드로 바로 입장 가능!",
+      "themes": [
+        "전시",
+        "야경",
+        "예술"
+      ],
+      "recommend": [
+        "호수라이팅",
+        "빛의알"
+      ]
+    }
+  },
+  {
+    "id": "abeno_harukas",
+    "name": "아베노 하루카스 300",
+    "name_en": "Abeno Harukas 300",
+    "lat": 34.6458,
+    "lng": 135.5139,
+    "type": "spot",
+    "region": "tennoji",
+    "rating": 4.9,
+    "desc": "300m 상공에서 헬리포트 투어! 가슴이 뻥 뚫리는 뷰.",
+    "photos": [
+      "https://images.unsplash.com/photo-1552550186-b48227b312ce?w=800",
+      "https://images.unsplash.com/photo-1594917631333-e18e6b128c68?w=800"
+    ],
+    "reviews": [
+      {
+        "user": "아빠",
+        "date": "2024-12",
+        "text": "화장실 뷰가 이렇게 좋을 일인지... 꼭 가보세요."
+      },
+      {
+        "user": "하롱이",
+        "date": "2024-12",
+        "text": "파인애플 아이스크림 맛있어요!"
+      }
+    ],
+    "details": {
+      "address": "1-1-43 Abenosuji, Abeno-ku, Osaka",
+      "hours": "09:00 - 22:00",
+      "ticket": "성인 ¥1,800",
+      "info": "매일 저녁 3D 프로젝션 맵핑 쇼도 있습니다.",
+      "transport": "텐노지구역 직결",
+      "tips": "500엔 추가하고 헬리포트 투어 강추! 바람을 직접 맞을 수 있어요.",
+      "themes": [
+        "전망대",
+        "최고층",
+        "카페"
+      ],
+      "recommend": [
+        "헬리포트투어",
+        "파인애플아이스크림",
+        "화장실"
+      ]
+    }
+  },
+  {
+    "id": "shinsekai",
+    "name": "신세카이 & 츠텐카쿠",
+    "name_en": "Shinsekai",
+    "lat": 34.652,
+    "lng": 135.5063,
+    "type": "spot",
+    "region": "tennoji",
+    "rating": 4.3,
+    "desc": "레트로 감성 폭발! 화려한 간판과 쿠시카츠의 거리.",
+    "photos": [
+      "https://images.unsplash.com/photo-1544473244-f6895e672d1a?w=800",
+      "https://images.unsplash.com/photo-1628043697921-996ff6af2ec4?w=800"
+    ],
+    "reviews": [
+      {
+        "user": "엄마",
+        "date": "2024-12",
+        "text": "옛날 일본 영화 세트장 같아요. 사진 찍기 좋음."
+      },
+      {
+        "user": "아빠",
+        "date": "2024-12",
+        "text": "쿠시카츠(꼬치튀김)에 맥주 한잔! 소스는 두 번 찍기 금지!"
+      }
+    ],
+    "details": {
+      "address": "Ebisuhigashi, Naniwa-ku, Osaka",
+      "hours": "24시간",
+      "ticket": "무료 (전망대 별도)",
+      "info": "츠텐카쿠 전망대 슬라이드가 새로 생겼어요.",
+      "transport": "에비스초역 3번 출구",
+      "tips": "빌리켄 발바닥을 만지면 행운이 온대요.",
+      "themes": [
+        "레트로",
+        "맛집",
+        "사진"
+      ],
+      "recommend": [
+        "쿠시카츠",
+        "빌리켄",
+        "타워슬라이드"
+      ]
+    }
+  },
+  {
+    "id": "usj",
+    "name": "유니버설 스튜디오 재팬",
+    "name_en": "Universal Studios Japan",
+    "lat": 34.6654,
+    "lng": 135.4323,
+    "type": "spot",
+    "region": "bayarea",
+    "rating": 5,
+    "desc": "설명이 필요 없는 최고의 테마파크. 마리오와 해리포터!",
+    "photos": [
+      "https://images.unsplash.com/photo-1624601618667-217156942099?w=800",
+      "https://images.unsplash.com/photo-1534270830467-34ff9d9f59f6?w=800"
+    ],
+    "reviews": [
+      {
+        "user": "가족",
+        "date": "2024-12",
+        "text": "닌텐도 월드 들어가는 순간 게임 속에 들어온 줄!"
+      },
+      {
+        "user": "시으니",
+        "date": "2024-12",
+        "text": "버터맥주 입에 묻히고 사진 찍어야 함."
+      }
+    ],
+    "details": {
+      "address": "2-1-33 Sakurajima, Osaka",
+      "hours": "08:00 - 22:00 (날마다 다름)",
+      "ticket": "1일권 ¥8,600~ (익스프레스 별도)",
+      "info": "공식 앱 설치 필수. 닌텐도 월드는 확약권 있어야 입장 가능.",
+      "transport": "유니버설시티역 도보 5분",
+      "tips": "오픈런보다 익스프레스 패스를 사는 게 정신 건강에 좋습니다...",
+      "themes": [
+        "테마파크",
+        "마리오",
+        "해리포터"
+      ],
+      "recommend": [
+        "마리오카트",
+        "해리포터앤드더포비든저니",
+        "미니언즈"
+      ]
+    }
+  },
+  {
+    "id": "park_front",
+    "name": "더 파크 프론트 호텔",
+    "name_en": "The Park Front Hotel",
+    "lat": 34.666,
+    "lng": 135.431,
+    "type": "hotel",
+    "region": "bayarea",
+    "rating": 4.7,
+    "desc": "USJ 정문에서 제일 가까운 호텔. 놀다 지치면 바로 눕기 가능.",
+    "photos": [
+      "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800",
+      "https://images.unsplash.com/photo-1582719508461-905c673771fd?w=800"
+    ],
+    "reviews": [
+      {
+        "user": "아빠",
+        "date": "2024-12",
+        "text": "위치가 깡패. 편의점도 1층에 있어서 편해요."
+      },
+      {
+        "user": "하롱이",
+        "date": "2024-12",
+        "text": "호텔 로비도 놀이공원 같아요!"
+      }
+    ],
+    "details": {
+      "address": "6-2-52 Shimaya, Konohana-ku, Osaka",
+      "hours": "Check-in 15:00",
+      "ticket": "숙박객 전용",
+      "info": "USJ 공식 호텔 혜택으로 티켓 부스 줄 안 서고 티켓 구매 가능.",
+      "transport": "유니버설시티역 도보 1분",
+      "tips": "파크 뷰 객실에선 밤에 USJ 야경이 보입니다.",
+      "themes": [
+        "호텔",
+        "USJ",
+        "편리함"
+      ],
+      "recommend": [
+        "파크뷰",
+        "어메니티"
+      ]
+    }
+  },
+  {
+    "id": "kaiyukan",
+    "name": "가이유칸 수족관",
+    "name_en": "Kaiyukan Aquarium",
+    "lat": 34.6545,
+    "lng": 135.429,
+    "type": "spot",
+    "region": "bayarea",
+    "rating": 4.6,
+    "desc": "엄청난 크기의 고래상어가 헤엄치는 세계 최대급 수족관.",
+    "photos": [
+      "https://images.unsplash.com/photo-1559825481-12a05cc00344?w=800",
+      "https://images.unsplash.com/photo-1551323331-57d343468753?w=800"
+    ],
+    "reviews": [
+      {
+        "user": "엄마",
+        "date": "2024-12",
+        "text": "물개랑 눈 마주침. 힐링되는 시간."
+      },
+      {
+        "user": "하롱이",
+        "date": "2024-12",
+        "text": "고래상어 진짜 커요! 펭귄 냄새는 좀 남..."
+      }
+    ],
+    "details": {
+      "address": "1-1-10 Kaigandori, Minato-ku, Osaka",
+      "hours": "10:00 - 20:00",
+      "ticket": "성인 ¥2,700 / 어린이 ¥1,400",
+      "info": "위에서부터 나선형으로 내려오며 관람하는 구조.",
+      "transport": "오사카코역 도보 5분",
+      "tips": "다 보고 나와서 덴포잔 관람차 타면 딱 좋아요.",
+      "themes": [
+        "수족관",
+        "고래상어",
+        "가족여행"
+      ],
+      "recommend": [
+        "고래상어",
+        "개복치",
+        "물개쇼"
+      ]
+    }
+  },
+  {
+    "id": "kuromon",
+    "name": "구로몬 시장",
+    "name_en": "Kuromon Market",
+    "lat": 34.665,
+    "lng": 135.507,
+    "type": "food",
+    "region": "namba",
+    "rating": 4.2,
+    "desc": "오사카의 부엌. 신선한 참치회와 와규 꼬치를 그 자리에서!",
+    "photos": [
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/Kuromon_Ichiba_by_pokpok313_in_Osaka.jpg/800px-Kuromon_Ichiba_by_pokpok313_in_Osaka.jpg",
+      "https://images.unsplash.com/photo-1534081333815-ae5019106622?w=800"
+    ],
+    "reviews": [
+      {
+        "user": "아빠",
+        "date": "2024-12",
+        "text": "참치 뱃살 입에서 녹음. 가격은 좀 비싼데 맛은 인정."
+      },
+      {
+        "user": "엄마",
+        "date": "2024-12",
+        "text": "딸기 모찌가 맛있어요."
+      }
+    ],
+    "details": {
+      "address": "2-4-1 Nipponbashi, Osaka",
+      "hours": "09:00 - 18:00",
+      "ticket": "개별 구매",
+      "info": "관광객이 많아서 좀 붐비지만 활기찬 분위기.",
+      "transport": "닛폰바시역 10번 출구",
+      "tips": "현금(엔화) 두둑이 챙겨가세요. 카드는 안 받는 곳도 있음.",
+      "themes": [
+        "시장",
+        "먹방",
+        "해산물"
+      ],
+      "recommend": [
+        "참치회",
+        "와규꼬치",
+        "딸기모찌"
+      ]
+    }
+  },
+  {
+    "id": "midosuji_illumination",
+    "name": "미도스지 일루미네이션",
+    "name_en": "Midosuji Illumination",
+    "lat": 34.686,
+    "lng": 135.5,
+    "type": "spot",
+    "region": "namba",
+    "rating": 4.8,
+    "desc": "겨울 오사카의 낭만. 4km에 달하는 빛의 거리.",
+    "photos": [
+      "https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=800",
+      "https://images.unsplash.com/photo-1576073719676-aa95576db207?w=800"
+    ],
+    "reviews": [
+      {
+        "user": "커플",
+        "date": "2024-12",
+        "text": "그냥 걷기만 해도 로맨틱해요."
+      },
+      {
+        "user": "가족",
+        "date": "2024-12",
+        "text": "나무마다 색깔이 달라서 예쁨."
+      }
+    ],
+    "details": {
+      "address": "Midosuji Street, Osaka",
+      "hours": "17:00 - 23:00 (겨울 한정)",
+      "ticket": "무료",
+      "info": "기네스북에 등재된 세계 최대 규모의 가로수 일루미네이션.",
+      "transport": "우메다~난바 대로변",
+      "tips": "2층 오픈탑 버스를 타면 더 가까이서 즐길 수 있어요.",
+      "themes": [
+        "야경",
+        "겨울",
+        "산책"
+      ],
+      "recommend": [
+        "오픈탑버스",
+        "사진촬영"
+      ]
+    }
+  }
+]

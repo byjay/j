@@ -1,0 +1,15 @@
+[build]
+builder = "NIXPACKS"
+
+[deploy]
+startCommand = "cd backend && python -m uvicorn main:app --host 0.0.0.0 --port $PORT"
+healthcheckPath = "/api/health"
+healthcheckTimeout = 100
+restartPolicyType = "ON_FAILURE"
+restartPolicyMaxRetries = 3
+
+# 매일 12시(KST = 03:00 UTC)에 단어 수집 작업 실행
+# Railway Cron Job 설정
+[[cron]]
+schedule = "0 3 * * *"
+command = "cd backend && python -c 'from word_collector import daily_collection_job; daily_collection_job()'"

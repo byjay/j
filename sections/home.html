@@ -1,0 +1,98 @@
+<!-- 관리자 전용: 사용 로그 보기 버튼 -->
+<button id="admin-log-btn" onclick="showAdminLogDashboard()" style="display: none;"
+    class="w-full mb-4 py-3 bg-gradient-to-r from-red-600 to-red-500 text-white font-bold rounded-xl shadow-md hover:shadow-lg transition-all items-center justify-center gap-2">
+    <i class="fas fa-chart-line mr-2"></i>📊 사용 로그 보기 (관리자 전용)
+</button>
+<div id="main-menu" class="grid grid-cols-2 gap-4 mb-6 pt-2">
+    <button onclick="openSection('characters')"
+        class="user-card group bg-white p-4 rounded-2xl shadow-md hover:shadow-xl border-2 border-transparent hover:border-purple-400 flex flex-col items-center cursor-pointer transition-all duration-200 transform hover:-translate-y-1">
+        <div
+            class="w-14 h-14 mb-2 rounded-full overflow-hidden border-3 border-gray-100 group-hover:border-purple-100 transition-colors bg-purple-50 flex items-center justify-center relative">
+            <i
+                class="fas fa-pen-nib text-purple-500 text-2xl group-hover:scale-110 transition-transform duration-300"></i>
+        </div>
+        <h3 class="text-sm font-bold text-gray-800 group-hover:text-purple-600">글자 연습</h3>
+        <p class="text-[10px] text-gray-400 font-medium">히라가나 / 가타카나</p>
+    </button>
+
+
+    <button onclick="openSection('vocabulary')"
+        class="user-card group bg-white p-4 rounded-2xl shadow-md hover:shadow-xl border-2 border-transparent hover:border-green-400 flex flex-col items-center cursor-pointer transition-all duration-200 transform hover:-translate-y-1">
+        <div
+            class="w-14 h-14 mb-2 rounded-full overflow-hidden border-3 border-gray-100 group-hover:border-green-100 transition-colors bg-green-50 flex items-center justify-center relative">
+            <i class="fas fa-book text-green-500 text-2xl group-hover:scale-110 transition-transform duration-300"></i>
+        </div>
+        <h3 class="text-sm font-bold text-gray-800 group-hover:text-green-600">단어 학습</h3>
+        <p class="text-[10px] text-gray-400 font-medium">주제별 필수 단어</p>
+    </button>
+
+    <button onclick="openSection('conversation')"
+        class="user-card group bg-white p-4 rounded-2xl shadow-md hover:shadow-xl border-2 border-transparent hover:border-blue-400 flex flex-col items-center cursor-pointer transition-all duration-200 transform hover:-translate-y-1">
+        <div
+            class="w-14 h-14 mb-2 rounded-full overflow-hidden border-3 border-gray-100 group-hover:border-blue-100 transition-colors bg-blue-50 flex items-center justify-center relative">
+            <i
+                class="fas fa-comments text-blue-500 text-2xl group-hover:scale-110 transition-transform duration-300"></i>
+        </div>
+        <h3 class="text-sm font-bold text-gray-800 group-hover:text-blue-600">실전 회화</h3>
+        <p class="text-[10px] text-gray-400 font-medium">상황별 / 여행 회화</p>
+    </button>
+
+    <button onclick="openSection('japan_travel')"
+        class="user-card group bg-white p-4 rounded-2xl shadow-md hover:shadow-xl border-2 border-transparent hover:border-red-400 flex flex-col items-center cursor-pointer transition-all duration-200 transform hover:-translate-y-1">
+        <div
+            class="w-14 h-14 mb-2 rounded-full overflow-hidden border-3 border-gray-100 group-hover:border-red-100 transition-colors bg-red-50 flex items-center justify-center relative">
+            <i
+                class="fas fa-plane-departure text-red-500 text-2xl group-hover:-translate-y-1 group-hover:translate-x-1 transition-transform duration-500"></i>
+        </div>
+        <h3 class="text-sm font-bold text-gray-800 group-hover:text-red-600">일본 여행</h3>
+        <p class="text-[10px] text-gray-400 font-medium">도시별 가이드</p>
+    </button>
+
+    <button onclick="showTab('elementary')"
+        class="user-card group bg-white p-4 rounded-2xl shadow-md hover:shadow-xl border-2 border-transparent hover:border-yellow-400 flex flex-col items-center cursor-pointer transition-all duration-200 transform hover:-translate-y-1">
+        <div
+            class="w-14 h-14 mb-2 rounded-full overflow-hidden border-3 border-gray-100 group-hover:border-yellow-100 transition-colors bg-yellow-50 flex items-center justify-center relative">
+            <i
+                class="fas fa-school text-yellow-500 text-2xl group-hover:scale-110 transition-transform duration-300"></i>
+        </div>
+        <h3 class="text-sm font-bold text-gray-800 group-hover:text-yellow-600">초등학교 입학</h3>
+        <p class="text-[10px] text-gray-400 font-medium">1~6학년 문법 과정</p>
+    </button>
+
+    <button onclick="showTab('arcade')"
+        class="user-card group bg-white p-4 rounded-2xl shadow-md hover:shadow-xl border-2 border-transparent hover:border-indigo-400 flex flex-col items-center cursor-pointer transition-all duration-200 transform hover:-translate-y-1">
+        <div
+            class="w-14 h-14 mb-2 rounded-full overflow-hidden border-3 border-gray-100 group-hover:border-indigo-100 transition-colors bg-indigo-50 flex items-center justify-center relative">
+            <i
+                class="fas fa-gamepad text-indigo-500 text-2xl group-hover:scale-110 transition-transform duration-300"></i>
+        </div>
+        <h3 class="text-sm font-bold text-gray-800 group-hover:text-indigo-600">JAP-BONG 아케이드</h3>
+        <p class="text-[10px] text-gray-400 font-medium">4종 미니게임 모음</p>
+    </button>
+</div>
+
+<!-- 손님 전용 하단 고정 광고 (초기엔 숨김) -->
+<!-- 손님 전용 하단 고정 광고 (초기엔 숨김) -->
+<div id="guest-fixed-ad-container" class="hidden mt-8 mb-8 flex justify-center w-full">
+    <div class="text-center bg-white/50 backdrop-blur rounded-xl p-2 border border-gray-100/50">
+        <p class="text-[9px] text-gray-300 mb-1 tracking-widest font-medium">SPONSORED</p>
+        <!-- 320x100 배너 광고 (고정 크기) -->
+        <ins class="adsbygoogle" style="display:inline-block;width:320px;height:100px"
+            data-ad-client="ca-pub-5240158357882882" data-ad-slot="1239812477"></ins>
+    </div>
+</div>
+
+<!-- 관리자 메뉴 (아빠 계정만 표시) -->
+<div id="admin-reset-section" style="display: none;"
+    class="mt-6 p-6 bg-red-50 rounded-3xl border-2 border-red-200 shadow-sm">
+    <h3 class="text-lg font-bold text-red-700 mb-3 flex items-center">
+        <i class="fas fa-shield-alt mr-2"></i>관리자 메뉴
+    </h3>
+    <p class="text-sm text-red-600 mb-4">
+        ⚠️ 모든 사용자의 학습 진도를 초기화합니다.
+    </p>
+    <button onclick="resetAllProgress()"
+        class="w-full py-3 bg-red-600 text-white font-bold rounded-xl hover:bg-red-700 active:scale-95 transition-all shadow-md">
+        <i class="fas fa-trash-alt mr-2"></i>전체 학습진도 리셋
+    </button>
+</div>

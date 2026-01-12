@@ -1,0 +1,38 @@
+<div class="max-w-4xl mx-auto">
+    <h2 class="text-2xl font-black text-gray-800 mb-6 text-center">📖 단어 학습</h2>
+
+    <!-- Categories -->
+    <div id="vocab-category-list" class="grid grid-cols-2 md:grid-cols-3 gap-4 mb-8"></div>
+
+    <!-- Word List (Hidden by default) -->
+    <div id="vocab-word-list" class="hidden">
+        <div class="flex items-center justify-between mb-4">
+            <button onclick="backToVocabularyCategories()"
+                class="flex items-center gap-2 text-gray-500 hover:text-gray-800 font-bold transition-colors">
+                <i class="fas fa-arrow-left mr-2"></i>목록으로
+            </button>
+            <h3 id="current-category-title" class="text-xl font-bold text-gray-800"></h3>
+            <button id="vocab-autoplay-btn" onclick="startVocabularyAutoPlay()"
+                class="px-4 py-2 bg-green-500 text-white rounded-lg shadow-md hover:bg-green-600 transition-colors font-bold text-sm">
+                <i class="fas fa-play mr-2"></i>자동 재생
+            </button>
+        </div>
+
+        <!-- Card Container -->
+        <div id="vocab-card-container" class="bg-white rounded-2xl shadow-xl p-8 text-center border border-gray-100">
+            <!-- Content injected by JS -->
+        </div>
+
+        <!-- Navigation -->
+        <div class="flex justify-between items-center mt-6">
+            <button id="vocab-prev-btn" onclick="previousVocabulary()"
+                class="text-gray-400 hover:text-green-500 transition-colors text-lg p-2">
+                <i class="fas fa-chevron-left"></i> 이전
+            </button>
+            <button id="vocab-next-btn" onclick="nextVocabulary()"
+                class="text-gray-400 hover:text-green-500 transition-colors text-lg p-2">
+                다음 <i class="fas fa-chevron-right"></i>
+            </button>
+        </div>
+    </div>
+</div>

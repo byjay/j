@@ -1,0 +1,1713 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <!-- DEPLOY_CHECK: 2026-01-04 10:00 KST -->
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover">
+
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="JAP-BONG">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#ffffff">
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/png" href="images/app_icon.png">
+    <link rel="apple-touch-icon" href="images/app_icon.png">
+    <!-- Cache Busting (Aggressive) -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+
+
+    <!-- Force SW Unregistration -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.getRegistrations().then(function (registrations) {
+                for (let registration of registrations) { registration.unregister(); }
+            });
+        }
+        // ★ Inject Secure Tokens for Client-Side Demo
+        window.SECURE_TOKENS = {
+            dad: 'MTQzNQ==',    // 1435
+            mom: 'MTIzNA==',    // 1234
+            sieun: 'MTIzNA==',  // 1234
+            harong: 'MTIzNA==', // 1234
+        };
+    </script>
+
+    <title>JAP-BONG 아빠가 만든 가족 일본어 앱</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Noto+Sans+JP:wght@300;400;500;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+
+    <!-- Google AdSense (손님 광고용) -->
+    <!-- Google AdSense Removed by User Request -->
+    <script
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDkmhTzFKcxxfQIrYlkcFjXAgIDdTZMdvU&callback=initJapanTravel&libraries=places,directions,geometry&v=weekly"
+        defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js" defer></script>
+
+    <!-- Core Modules (Phase 1 Refactoring) -->
+    <script type="module" src="js/config.js"></script>
+    <script type="module" src="js/utils.js"></script>
+    <script type="module">
+        import { Config } from './js/config.js';
+        import { Utils } from './js/utils.js';
+
+        // Expose to window for legacy compatibility during refactoring
+        window.JAP_BONG = {
+            Config,
+            Utils
+        };
+        console.log(`[Init] Loaded ${Config.app.name} v${Config.app.version}`);
+    </script>
+
+    <script>
+        // ★★★ 강력한 버전 기반 강제 새로고침 시스템 ★★★
+        const APP_VERSION = '1.0.20260112_154115'; // YYYYMMDDHHMM updated
+
+        // ★ 실시간 타임스탬프 반영 로직
+        document.addEventListener('DOMContentLoaded', () => {
+            const v = APP_VERSION;
+            const fmt = `${v.slice(0, 4)}.${v.slice(4, 6)}.${v.slice(6, 8)} ${v.slice(8, 10)}:${v.slice(10, 12)}`;
+            const el = document.getElementById('def-build-time');
+            if (el) el.innerText = fmt;
+
+            // Login Component가 나중에 로드될 수 있으므로 MutationObserver 사용
+            new MutationObserver((mutations, obs) => {
+                const el = document.getElementById('def-build-time');
+                if (el) { el.innerText = fmt; obs.disconnect(); }
+            }).observe(document.body, { childList: true, subtree: true });
+        }); 버전
+        const STORED_VERSION = localStorage.getItem('app_version');
+
+        // 버전이 다르면 강제 새로고침
+        if (STORED_VERSION && STORED_VERSION !== APP_VERSION) {
+            console.log('🔄 새 버전 감지! 강제 새로고침 중...');
+            localStorage.setItem('app_version', APP_VERSION);
+
+            // 모든 캐시 삭제
+            if ('caches' in window) {
+                caches.keys().then(names => {
+                    names.forEach(name => caches.delete(name));
+                });
+            }
+
+            // Service Worker 갱신
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.getRegistrations().then(registrations => {
+                    registrations.forEach(reg => reg.update());
+                });
+            }
+
+            // 강제 새로고침 (캐시 무시)
+            location.reload(true);
+        } else if (!STORED_VERSION) {
+            localStorage.setItem('app_version', APP_VERSION);
+        }
+
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Noto Sans KR', 'Noto Sans JP', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: '#FF4B4B',
+                        secondary: '#1E88E5',
+                    }
+                }
+            }
+        }
+
+        // Service Worker Registration for PWA with auto-update
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js?v=20260112_154115' + APP_VERSION)
+                    .then(registration => {
+                        console.log('ServiceWorker registration successful');
+                        // 업데이트 확인
+                        registration.update();
+                    })
+                    .catch(err => {
+                        console.log('ServiceWorker registration failed: ', err);
+                    });
+            });
+        }
+    </script>
+
+    <!-- Emergency Style Block Removed to Restore Fixed Layout -->
+</head>
+
+<body class="bg-gray-50 text-gray-900">
+
+    <!-- 🎬 로딩 스플래시 화면 -->
+    <div id="splash-screen"
+        class="fixed inset-0 z-[100] bg-gradient-to-br from-red-600 via-red-500 to-orange-500 flex flex-col items-center justify-center transition-opacity duration-500">
+        <img src="images/app_icon.png" alt="JAP-BONG" class="w-28 h-28 rounded-3xl shadow-2xl mb-6 animate-bounce">
+        <h1 class="text-white text-3xl font-black tracking-tight mb-2">JAP-BONG</h1>
+        <p class="text-white/80 text-sm mb-8">가족 일본어 학습</p>
+        <div class="flex gap-2">
+            <div class="w-3 h-3 bg-white rounded-full animate-pulse" style="animation-delay: 0s;"></div>
+            <div class="w-3 h-3 bg-white rounded-full animate-pulse" style="animation-delay: 0.2s;"></div>
+            <div class="w-3 h-3 bg-white rounded-full animate-pulse" style="animation-delay: 0.4s;"></div>
+        </div>
+        <!-- 날짜 표시 삭제됨 (로그인 화면으로 이동) -->
+    </div>
+    <!-- 🛡️ Failsafe: Force remove splash screen after 3 seconds regardless of JS errors -->
+    <script>
+        setTimeout(() => {
+            const splash = document.getElementById('splash-screen');
+            if (splash) splash.remove();
+        }, 3000);
+    </script>
+
+    <div id="login-screen"
+        class="fixed inset-0 z-50 flex flex-col items-center justify-center p-4 transition-opacity duration-300"
+        style="background-image: url('images/BACK.png'); background-size: contain; background-repeat: no-repeat; background-position: center; background-color: #000;">
+
+        <div class="bg-white/80 backdrop-blur-sm p-6 rounded-3xl shadow-2xl w-full max-w-md border border-white/50">
+            <!-- 로고 영역: 세로 중앙 정렬 -->
+            <div class="text-center mb-6">
+                <img src="images/app_icon.png" alt="JAP-BONG" class="w-16 h-16 mx-auto rounded-2xl shadow-lg mb-3">
+                <h1 class="text-2xl font-black text-red-600 tracking-tight">JAP-BONG</h1>
+                <p class="text-sm text-gray-500 mt-1">아빠가 만든 가족 일본어 앱 🍌</p>
+            </div>
+
+            <!-- Family Login Grid -->
+            <div class="grid grid-cols-2 gap-4">
+                <div class="user-card group bg-white p-3 rounded-2xl shadow-md hover:shadow-xl border-2 border-transparent hover:border-red-400 flex flex-col items-center cursor-pointer transition-all duration-200 transform hover:-translate-y-1"
+                    onclick="showPasswordPrompt()">
+                    <!-- (Rest of family login code remains conceptually here, just removing hidden) -->
+                    <div
+                        class="w-16 h-16 mb-2 rounded-full overflow-hidden border-4 border-gray-100 group-hover:border-red-100 transition-colors">
+                        <img src="images/dad.png" alt="아빠" class="w-full h-full object-cover">
+                    </div>
+                    <h3 class="text-lg font-bold text-gray-800 group-hover:text-red-600">아빠</h3>
+                </div>
+                <div class="user-card group bg-white p-3 rounded-2xl shadow-md hover:shadow-xl border-2 border-transparent hover:border-pink-400 flex flex-col items-center cursor-pointer transition-all duration-200 transform hover:-translate-y-1"
+                    onclick="showMomPasswordPrompt()">
+                    <div
+                        class="w-16 h-16 mb-2 rounded-full overflow-hidden border-4 border-gray-100 group-hover:border-pink-100 transition-colors">
+                        <img src="images/mom_orig.png" alt="엄마" class="w-full h-full object-cover">
+                    </div>
+                    <h3 class="text-lg font-bold text-gray-800 group-hover:text-pink-600">엄마</h3>
+                </div>
+                <div class="user-card group bg-white p-3 rounded-2xl shadow-md hover:shadow-xl border-2 border-transparent hover:border-purple-400 flex flex-col items-center cursor-pointer transition-all duration-200 transform hover:-translate-y-1"
+                    onclick="showSieunPasswordPrompt()">
+                    <div
+                        class="w-16 h-16 mb-2 rounded-full overflow-hidden border-4 border-gray-100 group-hover:border-purple-100 transition-colors">
+                        <img src="images/sieun.png" alt="시으니" class="w-full h-full object-cover">
+                    </div>
+                    <h3 class="text-lg font-bold text-gray-800 group-hover:text-purple-600">시으니</h3>
+                </div>
+                <div class="user-card group bg-white p-3 rounded-2xl shadow-md hover:shadow-xl border-2 border-transparent hover:border-blue-400 flex flex-col items-center cursor-pointer transition-all duration-200 transform hover:-translate-y-1"
+                    onclick="showHarongPasswordPrompt()">
+                    <div
+                        class="w-16 h-16 mb-2 rounded-full overflow-hidden border-4 border-gray-100 group-hover:border-blue-100 transition-colors">
+                        <img src="images/harong.png" alt="하롱이" class="w-full h-full object-cover">
+                    </div>
+                    <h3 class="text-lg font-bold text-gray-800 group-hover:text-blue-600">하롱이</h3>
+                </div>
+            </div>
+
+            <!-- 손님 체험하기 버튼 -->
+            <div class="mt-4">
+                <button onclick="showGuestLoginModal()"
+                    class="w-full bg-gradient-to-r from-amber-400 to-orange-500 text-white p-3 rounded-2xl shadow-md hover:shadow-lg transition-all duration-200 flex items-center justify-center gap-3 group">
+                    <span class="text-2xl">🐿️</span>
+                    <div class="text-left">
+                        <span class="font-bold text-base">손님 체험하기</span>
+                        <p class="text-xs text-amber-100">이름과 캐릭터를 선택하세요</p>
+                    </div>
+                </button>
+            </div>
+
+            <div class="mt-4 text-center">
+                <p class="text-[10px] text-gray-400 mt-4 font-mono">Build: 2026-01-12 05:56:20</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ★★★ 손님 로그인 모달 (캐릭터 먼저 선택) ★★★ -->
+    <div id="guest-login-modal"
+        class="fixed inset-0 z-[200] bg-black/70 backdrop-blur-sm hidden items-center justify-center p-4">
+        <div class="bg-white rounded-3xl shadow-2xl w-full max-w-md max-h-[90vh] overflow-hidden flex flex-col">
+            <!-- Header -->
+            <div class="bg-gradient-to-r from-amber-500 to-orange-500 p-4 text-white text-center relative">
+                <button onclick="closeGuestLoginModal()" class="absolute top-4 right-4 text-white/80 hover:text-white">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+                <h2 class="text-xl font-black">🎉 손님으로 시작하기</h2>
+                <p class="text-sm text-amber-100">캐릭터를 선택하세요!</p>
+            </div>
+
+            <!-- Duplicate Guest Modal Code Removed -->
+
+
+
+        </div>
+    </div>
+
+    <div class="app-container pt-14">
+        <header id="app-header"
+            class="fixed top-0 left-0 right-0 z-[999] bg-gradient-to-r from-red-600 to-red-500 shadow-lg h-14 transition-all duration-300">
+            <div class="h-full px-2 md:px-4 flex justify-between items-center">
+                <!-- 로고 및 뒤로가기 영역 -->
+                <div class="flex items-center gap-3">
+                    <!-- Global Back Button (Controlled by JS) -->
+                    <button id="global-back-btn" onclick="handleGlobalBack()"
+                        class="hidden bg-white/10 hover:bg-white/20 text-white w-10 h-10 rounded-full transition flex items-center justify-center backdrop-blur-md border border-white/10 active:scale-95">
+                        <i class="fas fa-chevron-left text-lg"></i>
+                    </button>
+
+                    <!-- 로고 영역 - 아이콘 클릭 = 홈 -->
+                    <div class="flex items-center gap-1 cursor-pointer" onclick="showTab('home')" title="홈으로">
+                        <img src="images/app_icon.png" alt="홈"
+                            class="w-9 h-9 rounded-xl shadow-lg bg-white p-0.5 flex-shrink-0 hover:scale-105 active:scale-95 transition-transform">
+                        <span
+                            class="text-white/70 font-bold text-[7px] tracking-tight whitespace-nowrap hidden sm:inline">JAP-BONG</span>
+                    </div>
+                </div>
+
+                <!-- 사용자 영역 -->
+                <div id="user-profile-icon" class="hidden items-center gap-2">
+                    <!-- Manual Button -->
+                    <button onclick="openManual()"
+                        class="bg-yellow-400 text-red-900 px-3 py-1.5 rounded-full text-xs font-bold shadow-md hover:bg-yellow-300 active:scale-95 transition flex items-center gap-1 animate-pulse-slow ml-1">
+                        <i class="fas fa-book-open"></i> <span class="hidden sm:inline">매뉴얼</span>
+                    </button>
+
+                    <button id="header-install-btn" onclick="triggerInstallPrompt()"
+                        class="hidden bg-white/20 hover:bg-white/30 text-white p-2 rounded-lg transition">
+                        <i class="fas fa-download text-sm"></i>
+                    </button>
+                    <div class="flex items-center bg-white/20 backdrop-blur-sm rounded-full px-3 py-1.5 gap-2">
+                        <span id="current-user-avatar" class="flex-shrink-0"></span>
+                        <span id="current-user-name" class="text-white text-xs font-bold truncate max-w-[60px]"></span>
+                    </div>
+                    <button onclick="logout()" class="bg-white/20 hover:bg-red-800 text-white p-3 rounded-lg transition"
+                        title="로그아웃">
+                        <i class="fas fa-sign-out-alt text-lg"></i>
+                    </button>
+                    <button onclick="if(confirm('앱을 종료하시겠습니까?')) window.close()"
+                        class="bg-white/20 hover:bg-gray-800 text-white p-3 rounded-lg transition ml-1" title="앱 종료">
+                        <i class="fas fa-times text-lg"></i>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <main class="content-scroll bg-gray-50">
+            <div class="max-w-3xl mx-auto p-4 pb-24">
+
+                <div id="home" class="tab-content active">
+                    <!-- Premium Header Section -->
+                    <section class="mb-8 mt-2 animate-fade-in">
+                        <div class="flex items-center justify-between mb-2">
+                            <h2 class="text-2xl font-black text-slate-800 tracking-tight">반가워요! 👋</h2>
+                            <div
+                                class="bg-white/50 backdrop-blur-md px-3 py-1 rounded-full border border-white/50 shadow-sm">
+                                <span id="current-date-display" class="text-xs font-bold text-slate-500"></span>
+                            </div>
+                        </div>
+                        <p class="text-slate-500 text-sm font-medium">오늘도 즐겁게 일본어 공부해볼까요?</p>
+                    </section>
+
+                    <!-- Main Feature Grid (Premium Cards) -->
+                    <div class="grid grid-cols-2 gap-4 mb-8">
+                        <div onclick="showTab('characters')"
+                            class="vocab-item bg-gradient-to-br from-white to-red-50 cursor-pointer group hover:border-red-400 flex flex-col items-center justify-center text-center p-4">
+                            <div
+                                class="bg-red-500 text-white p-3 rounded-2xl shadow-lg shadow-red-200 group-hover:scale-110 transition-transform mb-3">
+                                <i class="fas fa-font text-2xl"></i>
+                            </div>
+                            <span
+                                class="bg-red-100 text-red-600 px-2 py-0.5 rounded-full text-[10px] font-black mb-2">기초</span>
+                            <h3 class="text-lg font-black text-slate-800 mb-1">글자 연습</h3>
+                            <p class="text-xs text-slate-500 font-medium">히라가나/가타카나 완성</p>
+                        </div>
+
+                        <div onclick="showTab('vocabulary')"
+                            class="vocab-item bg-gradient-to-br from-white to-blue-50 cursor-pointer group hover:border-blue-400 flex flex-col items-center justify-center text-center p-4">
+                            <div
+                                class="bg-blue-500 text-white p-3 rounded-2xl shadow-lg shadow-blue-200 group-hover:scale-110 transition-transform mb-3">
+                                <i class="fas fa-book text-2xl"></i>
+                            </div>
+                            <span
+                                class="bg-blue-100 text-blue-600 px-2 py-0.5 rounded-full text-[10px] font-black mb-2">필수</span>
+                            <h3 class="text-lg font-black text-slate-800 mb-1">단어 열공</h3>
+                            <p class="text-xs text-slate-500 font-medium">상황별 필수 단어 암기</p>
+                        </div>
+
+                        <div onclick="showTab('conversation')"
+                            class="vocab-item bg-gradient-to-br from-white to-purple-50 cursor-pointer group hover:border-purple-400 flex flex-col items-center justify-center text-center p-4">
+                            <div
+                                class="bg-purple-500 text-white p-3 rounded-2xl shadow-lg shadow-purple-200 group-hover:scale-110 transition-transform mb-3">
+                                <i class="fas fa-comments text-2xl"></i>
+                            </div>
+                            <span
+                                class="bg-purple-100 text-purple-600 px-2 py-0.5 rounded-full text-[10px] font-black mb-2">실전</span>
+                            <h3 class="text-lg font-black text-slate-800 mb-1">회화 연습</h3>
+                            <p class="text-xs text-slate-500 font-medium">원어민 발음으로 배우기</p>
+                        </div>
+
+                        <div onclick="showTab('japan_travel')"
+                            class="vocab-item bg-gradient-to-br from-white to-emerald-50 cursor-pointer group hover:border-emerald-400 flex flex-col items-center justify-center text-center p-4">
+                            <div
+                                class="bg-emerald-500 text-white p-3 rounded-2xl shadow-lg shadow-emerald-200 group-hover:scale-110 transition-transform mb-3">
+                                <i class="fas fa-plane-departure text-2xl"></i>
+                            </div>
+                            <span
+                                class="bg-emerald-100 text-emerald-600 px-2 py-0.5 rounded-full text-[10px] font-black mb-2">여행</span>
+                            <h3 class="text-lg font-black text-slate-800 mb-1">일본 여행</h3>
+                            <p class="text-xs text-slate-500 font-medium">후쿠오카 완벽 가이드</p>
+                        </div>
+
+                        <div onclick="showTab('elementary')"
+                            class="vocab-item bg-gradient-to-br from-white to-amber-50 cursor-pointer group hover:border-amber-400 flex flex-col items-center justify-center text-center p-4">
+                            <div
+                                class="bg-amber-500 text-white p-3 rounded-2xl shadow-lg shadow-amber-200 group-hover:scale-110 transition-transform mb-3">
+                                <i class="fas fa-school text-2xl"></i>
+                            </div>
+                            <span
+                                class="bg-amber-100 text-amber-600 px-2 py-0.5 rounded-full text-[10px] font-black mb-2">교과</span>
+                            <h3 class="text-lg font-black text-slate-800 mb-1">초등 일본어</h3>
+                            <p class="text-xs text-slate-500 font-medium">학년별 문법 마스터</p>
+                        </div>
+
+                        <div onclick="showTab('arcade')"
+                            class="vocab-item bg-gradient-to-br from-white to-indigo-50 cursor-pointer group hover:border-indigo-400 flex flex-col items-center justify-center text-center p-4">
+                            <div
+                                class="bg-indigo-500 text-white p-3 rounded-2xl shadow-lg shadow-indigo-200 group-hover:scale-110 transition-transform mb-3">
+                                <i class="fas fa-gamepad text-2xl"></i>
+                            </div>
+                            <span
+                                class="bg-indigo-100 text-indigo-600 px-2 py-0.5 rounded-full text-[10px] font-black mb-2">놀이</span>
+                            <h3 class="text-lg font-black text-slate-800 mb-1">아케이드</h3>
+                            <p class="text-xs text-slate-500 font-medium">재미있는 미니게임</p>
+                        </div>
+                    </div>
+
+                    <!-- 손님 전용 하단 고정 광고 (초기엔 숨김) -->
+                    <!-- 손님 전용 하단 고정 광고 (초기엔 숨김) -->
+                    <div id="guest-fixed-ad-container" class="hidden mt-8 mb-8 flex justify-center w-full">
+                        <div class="text-center bg-white/50 backdrop-blur rounded-xl p-2 border border-gray-100/50">
+                            <p class="text-[9px] text-gray-300 mb-1 tracking-widest font-medium">SPONSORED</p>
+                            <!-- 320x100 배너 광고 (고정 크기) -->
+                            <ins class="adsbygoogle" style="display:inline-block;width:320px;height:100px"
+                                data-ad-client="ca-pub-5240158357882882" data-ad-slot="1239812477"></ins>
+                        </div>
+                    </div>
+
+                    <!-- 관리자 메뉴 (아빠 계정만 표시) -->
+                    <div id="admin-reset-section" style="display: none;"
+                        class="mt-6 p-6 bg-red-50 rounded-3xl border-2 border-red-200 shadow-sm animate-fade-in">
+                        <h3 class="text-lg font-bold text-red-700 mb-4 flex items-center">
+                            <i class="fas fa-user-shield mr-2"></i> 아빠 전용 관리자 설정
+                        </h3>
+
+                        <!-- 3x3 Grid Admin Menu -->
+                        <div class="grid grid-cols-3 gap-3 mb-6">
+                            <!-- 로그 확인 -->
+                            <button onclick="showAdminLogDashboard()"
+                                class="flex flex-col items-center justify-center p-3 bg-white rounded-2xl border border-red-100 shadow-sm hover:bg-red-100 transition-colors">
+                                <i class="fas fa-clipboard-list text-red-500 text-lg mb-1"></i>
+                                <span class="text-[9px] font-bold text-gray-600">사용 로그</span>
+                            </button>
+                            <!-- 분석 통계 -->
+                            <button onclick="alert('통계 분석 기능 준비 중')"
+                                class="flex flex-col items-center justify-center p-3 bg-white rounded-2xl border border-red-100 shadow-sm hover:bg-red-100 transition-colors">
+                                <i class="fas fa-chart-line text-red-500 text-lg mb-1"></i>
+                                <span class="text-[9px] font-bold text-gray-600">학습 통계</span>
+                            </button>
+                            <!-- 백업/복구 -->
+                            <button onclick="alert('백업 기능 준비 중')"
+                                class="flex flex-col items-center justify-center p-3 bg-white rounded-2xl border border-red-100 shadow-sm hover:bg-red-100 transition-colors">
+                                <i class="fas fa-database text-red-500 text-lg mb-1"></i>
+                                <span class="text-[9px] font-bold text-gray-600">DB 백업</span>
+                            </button>
+                        </div>
+
+                        <!-- Reset Button at Bottom -->
+                        <div class="pt-4 border-t border-red-200">
+                            <p class="text-[11px] text-red-600 mb-2 font-bold px-1">
+                                <i class="fas fa-exclamation-triangle mr-1"></i> 위험 구역
+                            </p>
+                            <button onclick="resetAllProgress()"
+                                class="w-full py-3 bg-red-600 text-white font-black rounded-2xl hover:bg-red-700 active:scale-95 transition-all shadow-md flex items-center justify-center gap-2">
+                                <i class="fas fa-trash-alt"></i>
+                                <span>전체 학습진도 리셋 (초기화)</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="japan_travel" class="tab-content hidden h-full">
+                    <!-- Dynamic Content Area -->
+                    <div class="pt-16 pb-32 px-4 bg-gray-50 min-h-screen">
+
+                        <!-- Region Selection (Injected here) -->
+                        <div id="region-selection" class="grid grid-cols-2 gap-4">
+                            <!-- Japan Map / Cities will be loaded here -->
+                        </div>
+
+                        <!-- Region Detail (Hidden by default, shown when city selected) -->
+                        <div id="region-detail" class="hidden animate-fade-in">
+                            <!-- Specific City Guide (Fukuoka, etc.) loaded here -->
+                        </div>
+
+                        <!-- Initial Loading State -->
+                        <div id="travel-loading" class="hidden flex flex-col items-center justify-center py-20">
+                            <i class="fas fa-plane-departure text-4xl text-red-500 animate-bounce mb-4"></i>
+                            <p class="text-gray-500 font-bold">일본 여행 가이드를 불러오는 중...</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 🏫 초등학교 입학 탭 -->
+                <div id="elementary-school" class="tab-content hidden pb-24">
+                    <!-- 컨텐츠는 elementary_school.js에서 동적으로 주입됨 -->
+                </div>
+
+                <!-- 🕹️ Game Arcade Tab -->
+                <div id="arcade" class="tab-content hidden pb-24">
+                    <h2 class="text-2xl font-black text-gray-800 mb-6 flex items-center gap-2">
+                        <i class="fas fa-gamepad text-indigo-500"></i> 게임 아케이드
+                    </h2>
+
+                    <!-- Game Arcade Grid -->
+                    <div class="grid grid-cols-2 gap-4">
+                        <!-- Sushi Survival -->
+                        <button onclick="showGame('sushi')"
+                            class="user-card group bg-white p-4 rounded-2xl shadow-md hover:shadow-xl border-2 border-transparent hover:border-amber-400 flex flex-col items-center cursor-pointer transition-all duration-200 transform hover:-translate-y-1">
+                            <div
+                                class="w-14 h-14 mb-2 rounded-full overflow-hidden border-3 border-gray-100 group-hover:border-amber-100 transition-colors bg-amber-50 flex items-center justify-center relative">
+                                <i
+                                    class="fas fa-fish text-amber-500 text-2xl group-hover:scale-110 transition-transform duration-300"></i>
+                            </div>
+                            <h3 class="text-sm font-bold text-gray-800 group-hover:text-amber-600">Sushi Survival</h3>
+                            <p class="text-[10px] text-gray-400 font-medium">회전 초밥 낚시</p>
+                        </button>
+
+                        <!-- Neon Syntax -->
+                        <button onclick="showGame('neon')"
+                            class="user-card group bg-white p-4 rounded-2xl shadow-md hover:shadow-xl border-2 border-transparent hover:border-cyan-400 flex flex-col items-center cursor-pointer transition-all duration-200 transform hover:-translate-y-1">
+                            <div
+                                class="w-14 h-14 mb-2 rounded-full overflow-hidden border-3 border-gray-100 group-hover:border-cyan-100 transition-colors bg-cyan-50 flex items-center justify-center relative">
+                                <i
+                                    class="fas fa-bolt text-cyan-500 text-2xl group-hover:scale-110 transition-transform duration-300"></i>
+                            </div>
+                            <h3 class="text-sm font-bold text-gray-800 group-hover:text-cyan-600">Neon Syntax</h3>
+                            <p class="text-[10px] text-gray-400 font-medium">사이버펑크 단어</p>
+                        </button>
+
+                        <!-- Verbum Alchimia -->
+                        <button onclick="showGame('alchemy')"
+                            class="user-card group bg-white p-4 rounded-2xl shadow-md hover:shadow-xl border-2 border-transparent hover:border-purple-400 flex flex-col items-center cursor-pointer transition-all duration-200 transform hover:-translate-y-1">
+                            <div
+                                class="w-14 h-14 mb-2 rounded-full overflow-hidden border-3 border-gray-100 group-hover:border-purple-100 transition-colors bg-purple-50 flex items-center justify-center relative">
+                                <i
+                                    class="fas fa-flask text-purple-500 text-2xl group-hover:scale-110 transition-transform duration-300"></i>
+                            </div>
+                            <h3 class="text-sm font-bold text-gray-800 group-hover:text-purple-600">Verbum Alchimia</h3>
+                            <p class="text-[10px] text-gray-400 font-medium">단어 연금술</p>
+                        </button>
+
+                        <!-- Silent Archive -->
+                        <button onclick="showGame('archive')"
+                            class="user-card group bg-white p-4 rounded-2xl shadow-md hover:shadow-xl border-2 border-transparent hover:border-red-400 flex flex-col items-center cursor-pointer transition-all duration-200 transform hover:-translate-y-1">
+                            <div
+                                class="w-14 h-14 mb-2 rounded-full overflow-hidden border-3 border-gray-100 group-hover:border-red-100 transition-colors bg-red-50 flex items-center justify-center relative">
+                                <i
+                                    class="fas fa-book-dead text-red-500 text-2xl group-hover:scale-110 transition-transform duration-300"></i>
+                            </div>
+                            <h3 class="text-sm font-bold text-gray-800 group-hover:text-red-600">Silent Archive</h3>
+                            <p class="text-[10px] text-gray-400 font-medium">공포의 도서관</p>
+                        </button>
+
+                        <!-- Kana Fill (NEW) -->
+                        <button onclick="showGame('kanafill')"
+                            class="user-card group bg-white p-4 rounded-2xl shadow-md hover:shadow-xl border-2 border-transparent hover:border-indigo-400 flex flex-col items-center cursor-pointer transition-all duration-200 transform hover:-translate-y-1">
+                            <div
+                                class="w-14 h-14 mb-2 rounded-full overflow-hidden border-3 border-gray-100 group-hover:border-indigo-100 transition-colors bg-indigo-50 flex items-center justify-center relative">
+                                <i
+                                    class="fas fa-spell-check text-indigo-500 text-2xl group-hover:scale-110 transition-transform duration-300"></i>
+                            </div>
+                            <h3 class="text-sm font-bold text-gray-800 group-hover:text-indigo-600">빈칸 채우기</h3>
+                            <p class="text-[10px] text-gray-400 font-medium">히라가나 퀴즈</p>
+                            <div class="text-[10px] text-slate-400/50 font-mono tracking-widest uppercase">
+                                Build: 2026-01-12 12:46:00
+                            </div>
+                        </button>
+                    </div>
+                    <!-- Manual Button (New) -->
+                    <div class="mt-8 flex justify-center pb-6">
+                        <button onclick="openManual()"
+                            class="bg-gradient-to-r from-gray-800 to-gray-900 text-white px-8 py-4 rounded-full shadow-lg shadow-gray-400/50 font-black text-lg flex items-center gap-3 hover:scale-105 active:scale-95 transition-transform border-[3px] border-white/20 ring-4 ring-gray-100">
+                            <div class="bg-white/20 p-2 rounded-full">
+                                <i class="fas fa-book-open text-xl"></i>
+                            </div>
+                            <span>사용 설명서 보기</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div id="vocabulary" class="tab-content hidden">
+                    <div class="max-w-4xl mx-auto">
+                        <h2 class="text-2xl font-black text-gray-800 mb-6 text-center">📖 단어 학습</h2>
+
+                        <!-- Categories -->
+                        <div id="vocab-category-list" class="grid grid-cols-2 md:grid-cols-3 gap-4 mb-8"></div>
+
+                        <!-- Word List (Hidden by default) -->
+                        <div id="vocab-word-list" class="hidden">
+                            <div class="flex items-center justify-between mb-4">
+                                <button onclick="backToVocabularyCategories()"
+                                    class="flex items-center gap-2 text-gray-500 hover:text-gray-800 font-bold transition-colors">
+                                    <i class="fas fa-arrow-left mr-2"></i>목록으로
+                                </button>
+                                <h3 id="current-category-title" class="text-xl font-bold text-gray-800"></h3>
+                                <button id="vocab-autoplay-btn" onclick="startVocabularyAutoPlay()"
+                                    class="px-4 py-2 bg-green-500 text-white rounded-lg shadow-md hover:bg-green-600 transition-colors font-bold text-sm">
+                                    <i class="fas fa-play mr-2"></i>자동 재생
+                                </button>
+                            </div>
+
+                            <!-- Card Container -->
+                            <div id="vocab-card-container"
+                                class="bg-white rounded-2xl shadow-xl p-8 text-center border border-gray-100">
+                                <!-- Content injected by JS -->
+                            </div>
+
+                            <!-- Navigation -->
+                            <div class="flex justify-between items-center mt-6">
+                                <button id="vocab-prev-btn" onclick="previousVocabulary()"
+                                    class="text-gray-400 hover:text-green-500 transition-colors text-lg p-2">
+                                    <i class="fas fa-chevron-left"></i> 이전
+                                </button>
+                                <button id="vocab-next-btn" onclick="nextVocabulary()"
+                                    class="text-gray-400 hover:text-green-500 transition-colors text-lg p-2">
+                                    다음 <i class="fas fa-chevron-right"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="conversation" class="tab-content hidden pb-24 pt-2 px-4 max-w-3xl mx-auto">
+                <!-- Mode Toggle -->
+                <div class="flex gap-2 mb-6">
+                    <button id="mode-situational-btn" onclick="showConversationMode('situational')"
+                        class="flex-1 py-2 px-4 rounded-xl font-bold text-base transition-all duration-300 bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-lg">
+                        상황별 회화
+                    </button>
+                    <button id="mode-practical-btn" onclick="showConversationMode('practical')"
+                        class="flex-1 py-2 px-4 rounded-xl font-bold text-base transition-all duration-300 bg-white text-gray-600 border-2 border-gray-200">
+                        실용 회화
+                    </button>
+                </div>
+
+                <!-- Situational Container (Categories) -->
+                <div id="situational-conversation-container">
+                    <div id="conversation-categories" class="grid grid-cols-2 gap-4">
+                        <!-- Injected by JS -->
+                    </div>
+                </div>
+
+                <!-- Conversation List (Card View) -->
+                <div id="conversation-list" class="hidden">
+                    <button onclick="backToCategories()"
+                        class="mb-4 flex items-center gap-2 text-gray-500 hover:text-gray-800 font-bold transition-colors">
+                        <i class="fas fa-arrow-left"></i> 카테고리 목록으로
+                    </button>
+                    <div id="conversation-viewer">
+                        <!-- Cards injected by JS -->
+                    </div>
+                </div>
+
+                <!-- Practical Container -->
+                <div id="practical-conversation-container" class="hidden">
+                    <div id="practical-list" class="space-y-4">
+                        <!-- Practical items injected by JS -->
+                    </div>
+                </div>
+            </div>
+
+
+
+
+
+            <div id="characters" class="tab-content hidden">
+
+                <div id="character-grid-container" class="bg-white rounded-2xl shadow-sm p-4">
+                    <div id="character-grid" class="grid grid-cols-5 gap-2 sm:grid-cols-8"></div>
+                </div>
+                <div id="character-study-container" class="hidden fixed inset-0 z-50 bg-white flex flex-col"></div>
+            </div>
+
+
+
+            <!-- 학습현황 탭 -->
+            <div id="progress" class="tab-content hidden">
+                <h2 class="text-2xl font-bold text-gray-900 mb-4">📊 학습 현황</h2>
+
+                <!-- 아빠 전용: 사용자 선택 -->
+                <div id="admin-user-selector" style="display:none;"
+                    class="mb-4 p-4 bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl border-2 border-blue-200">
+                    <label class="block text-sm font-bold text-gray-700 mb-2">
+                        <i class="fas fa-users mr-2"></i>회원 선택
+                    </label>
+                    <select id="progress-user-select" onchange="changeProgressUser()"
+                        class="w-full px-4 py-2 border-2 border-gray-300 rounded-xl font-bold focus:border-blue-500 focus:outline-none">
+                        <option value="dad">아빠</option>
+                        <option value="mom">엄마</option>
+                        <option value="sieun">시으니</option>
+                        <option value="harong">하롱이</option>
+                    </select>
+                </div>
+
+                <!-- 요약 통계 -->
+                <div id="progress-summary" class="mb-6"></div>
+
+                <!-- 그래프 섹션 -->
+                <div class="space-y-6">
+                    <div class="bg-white rounded-xl shadow-sm p-4" style="height: 250px;">
+                        <canvas id="conversation-chart"></canvas>
+                    </div>
+                    <div class="bg-white rounded-xl shadow-sm p-4" style="height: 250px;">
+                        <canvas id="vocabulary-chart"></canvas>
+                    </div>
+                    <div class="bg-white rounded-xl shadow-sm p-4" style="height: 250px;">
+                        <canvas id="character-chart"></canvas>
+                    </div>
+                    <div class="bg-white rounded-xl shadow-sm p-4" style="height: 250px;">
+                        <canvas id="character-quiz-chart"></canvas>
+                    </div>
+                    <div class="bg-white rounded-xl shadow-sm p-4" style="height: 250px;">
+                        <canvas id="vocabulary-quiz-chart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Legacy Admin Reset User Removed -->
+            </div>
+
+    </div>
+    </main>
+
+
+    </div>
+
+
+    <!-- 도움말 모달 -->
+    <div id="help-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/60 backdrop-blur-sm"
+        onclick="closeHelpModal()">
+        <div class="bg-white w-full max-w-lg rounded-2xl shadow-2xl overflow-hidden m-4 animate-fade-in-up"
+            onclick="event.stopPropagation()">
+            <div class="bg-gradient-to-r from-blue-600 to-indigo-600 p-6 text-white flex justify-between items-center">
+                <h2 class="text-2xl font-bold flex items-center gap-2">
+                    <i class="fas fa-question-circle"></i> 앱 사용 가이드
+                </h2>
+                <button onclick="closeHelpModal()" class="text-white/80 hover:text-white transition">
+                    <i class="fas fa-times text-2xl"></i>
+                </button>
+            </div>
+            <div class="p-6 max-h-[70vh] overflow-y-auto custom-scrollbar space-y-5 text-sm">
+
+                <!-- 아빠의 마음 -->
+                <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded-r-xl">
+                    <h3 class="font-bold text-yellow-800 mb-2 flex items-center gap-2">
+                        <i class="fas fa-heart text-red-500"></i> 아빠의 마음
+                    </h3>
+                    <p class="text-gray-700 leading-relaxed italic">
+                        "우리 가족과 함께하는 첫 일본 여행! 설레는 마음으로 직접 만들었어요. ❤️"
+                    </p>
+                </div>
+
+                <!-- 1. 홈 탭 -->
+                <div class="border rounded-xl p-4">
+                    <h3 class="font-bold text-gray-800 mb-2">🏠 홈 탭</h3>
+                    <ul class="space-y-1 text-gray-600">
+                        <li>• 4가지 메인 메뉴 (글자, 회화, 단어, 여행) 바로가기</li>
+                        <li>• 앱 설치 버튼 (PWA 지원)</li>
+                        <li>• 도움말 버튼</li>
+                    </ul>
+                </div>
+
+                <!-- 2. 글자 탭 -->
+                <div class="border rounded-xl p-4">
+                    <h3 class="font-bold text-gray-800 mb-2">📝 글자 탭</h3>
+                    <ul class="space-y-1 text-gray-600">
+                        <li>• <strong>히라가나/가타카나</strong> 전체 글자 그리드</li>
+                        <li>• 글자 클릭 → <strong>쓰기 연습</strong> (획순 애니메이션)</li>
+                        <li>• <strong>퀴즈</strong>: 10문제 랜덤 출제, 90점 이상 2회 시 여행탭 잠금 해제</li>
+                        <li>• <strong>통계</strong>: 취약 글자, 정답률 확인</li>
+                    </ul>
+                </div>
+
+                <!-- 3. 회화 탭 -->
+                <div class="border rounded-xl p-4">
+                    <h3 class="font-bold text-gray-800 mb-2">💬 회화 탭</h3>
+                    <ul class="space-y-1 text-gray-600">
+                        <li>• <strong>상황별 회화</strong>: 공항, 식당, 쇼핑 등 상황별 예문</li>
+                        <li>• <strong>실전 회화</strong>: 카드 뒤집기로 일본어↔한국어 학습</li>
+                        <li>• 발음 듣기 버튼 (TTS)</li>
+                    </ul>
+                </div>
+
+                <!-- 4. 단어 탭 -->
+                <div class="border rounded-xl p-4">
+                    <h3 class="font-bold text-gray-800 mb-2">📚 단어 탭</h3>
+                    <ul class="space-y-1 text-gray-600">
+                        <li>• 카테고리별 단어장 (인사, 숫자, 음식 등)</li>
+                        <li>• 단어 카드 뒤집기 학습</li>
+                        <li>• 발음 듣기 및 예문 확인</li>
+                    </ul>
+                </div>
+
+                <!-- 5. 여행 탭 -->
+                <div class="border rounded-xl p-4">
+                    <h3 class="font-bold text-gray-800 mb-2">✈️ 여행 탭</h3>
+                    <ul class="space-y-1 text-gray-600">
+                        <li>• <strong>후쿠오카 4일 일정</strong>: 맛집, 관광지, 쇼핑 정보</li>
+                        <li>• 장소별 상세정보 (영업시간, 메뉴, 팁, 지도)</li>
+                        <li>• <strong>구글맵 사진 링크</strong>: 실제 장소 사진 검색</li>
+                        <li>• 일정 커스터마이징 (장소 추가/삭제)</li>
+                    </ul>
+                </div>
+
+                <!-- 6. 현황 탭 -->
+                <div class="border rounded-xl p-4">
+                    <h3 class="font-bold text-gray-800 mb-2">📊 현황 탭</h3>
+                    <ul class="space-y-1 text-gray-600">
+                        <li>• <strong>연속 학습(Streak)</strong>: 매일 학습 시 +1일</li>
+                        <li>• <strong>레벨 & XP</strong>: 학습 활동마다 경험치 획득</li>
+                        <li>• <strong>주간 차트</strong>: 7일간 학습량 그래프</li>
+                        <li>• <strong>퀴즈 성적</strong>: 최근 10회 성적 그래프</li>
+                        <li>• <strong>용돈 모으기</strong>: 1000XP+공부시간 180분+퀴즈 100점 3회 = 2만원!</li>
+                    </ul>
+                </div>
+
+                <!-- 잠금 해제 조건 -->
+                <div class="border rounded-xl p-4 bg-gray-50">
+                    <h3 class="font-bold text-gray-800 mb-2">🔓 여행지 잠금 해제 조건</h3>
+                    <ul class="space-y-1 text-gray-600">
+                        <li>✅ <strong>후쿠오카</strong>: 기본 제공</li>
+                        <li>🔒 <strong>오사카/교토</strong>: 글자 퀴즈 90점 2회 달성</li>
+                        <li>🔒 <strong>도쿄</strong>: 총 경험치 500XP 달성</li>
+                    </ul>
+                </div>
+
+                <!-- 특별 기능 -->
+                <div class="bg-gradient-to-r from-purple-50 to-pink-50 p-4 rounded-xl">
+                    <h3 class="font-bold text-purple-800 mb-2">🌟 특별 기능</h3>
+                    <ul class="space-y-1 text-gray-600">
+                        <li>💰 <strong>용돈 청구</strong>: 시은/하롱 전용, 조건 달성 시 아빠에게 청구!</li>
+                        <li>💃 <strong>춤추는 캐릭터</strong>: 퀴즈 100점 시 캐릭터 춤 애니메이션</li>
+                        <li>📱 <strong>앱 설치</strong>: 홈 화면에 추가하면 앱처럼 사용</li>
+                        <li>🔔 <strong>iOS 안내</strong>: Safari '공유' → '홈 화면에 추가'</li>
+                    </ul>
+                </div>
+
+                <div class="bg-blue-50 p-4 rounded-xl text-blue-800 text-center">
+                    <strong>💡 팁:</strong> 매일 조금씩 공부해서 연속 학습 기록을 쌓아보세요!
+                </div>
+
+            </div>
+            <div class="p-4 border-t bg-gray-50 text-center">
+                <button onclick="closeHelpModal()"
+                    class="px-8 py-3 bg-blue-600 text-white font-bold rounded-xl shadow-lg hover:bg-blue-700 transition active:scale-95">
+                    알겠습니다!
+                </button>
+            </div>
+        </div>
+    </div>
+    </div>
+
+
+
+    <!-- Grammar Tab Content -->
+    <div id="grammar" class="tab-content hidden pb-24 pt-2 px-4 max-w-3xl mx-auto">
+        <div class="bg-white rounded-3xl shadow-lg p-6 mb-6">
+            <div class="text-center mb-6">
+                <h2 class="text-2xl font-bold text-gray-800">🤖 AI 문장 연습</h2>
+                <p class="text-gray-500 text-sm mt-1">AI 선생님과 함께 문장을 만들어보세요!</p>
+            </div>
+            <div id="grammar-content">
+                <!-- Grammar UI injected here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- AI Conversation Modal (Word Context) -->
+    <div id="ai-conversation-modal"
+        class="fixed inset-0 z-[60] hidden flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
+        <div class="bg-white w-full max-w-lg rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[85vh]">
+            <!-- Header -->
+            <div
+                class="bg-gradient-to-r from-indigo-500 to-purple-600 p-4 text-white flex justify-between items-center shrink-0">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center">
+                        <i class="fas fa-comments text-xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-lg">AI 회화 생성</h3>
+                        <p class="text-xs text-indigo-100" id="ai-modal-word-target">단어: ...</p>
+                    </div>
+                </div>
+                <!-- 초등학교 입학 -->
+                <div class="bg-white rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow cursor-pointer border border-gray-100"
+                    onclick="showElementaryMenu()">
+                    <div class="flex flex-col items-center gap-3">
+                        <div class="w-12 h-12 rounded-full bg-yellow-100 flex items-center justify-center text-2xl">
+                            🏫
+                        </div>
+                        <div class="text-center">
+                            <h3 class="font-bold text-gray-800">초등학교 입학</h3>
+                            <p class="text-xs text-gray-500 mt-1">1~6학년 문법 과정</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Game Arcade (New Section) -->
+                <div class="col-span-2 mt-4">
+                    <h3 class="text-sm font-bold text-gray-400 mb-3 px-1">GAME ARCADE</h3>
+                    <div class="grid grid-cols-2 gap-3">
+                        <!-- Sushi Survival -->
+                        <div class="bg-white rounded-2xl p-4 shadow-sm border border-orange-100 cursor-pointer relative overflow-hidden group"
+                            onclick="GameLauncher.launch('sushi')">
+                            <div
+                                class="absolute top-0 right-0 p-2 opacity-10 group-hover:opacity-20 transition-opacity">
+                                <i class="fa-solid fa-fish text-4xl text-orange-500"></i>
+                            </div>
+                            <div class="flex flex-col gap-2">
+                                <div
+                                    class="w-10 h-10 rounded-full bg-orange-100 flex items-center justify-center text-xl">
+                                    🍣
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-gray-800 text-sm">초밥 서바이벌</h4>
+                                    <p class="text-[10px] text-gray-500">타이핑 방어 게임</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Neon Syntax -->
+                        <div class="bg-white rounded-2xl p-4 shadow-sm border border-purple-100 cursor-pointer relative overflow-hidden group"
+                            onclick="GameLauncher.launch('neon')">
+                            <div
+                                class="absolute top-0 right-0 p-2 opacity-10 group-hover:opacity-20 transition-opacity">
+                                <i class="fa-solid fa-bolt text-4xl text-purple-500"></i>
+                            </div>
+                            <div class="flex flex-col gap-2">
+                                <div
+                                    class="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center text-xl">
+                                    ⚡
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-gray-800 text-sm">네온 문법</h4>
+                                    <p class="text-[10px] text-gray-500">사이버펑크 구문 조합</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Verbum Alchimia -->
+                        <div class="bg-white rounded-2xl p-4 shadow-sm border border-emerald-100 cursor-pointer relative overflow-hidden group"
+                            onclick="GameLauncher.launch('alchemy')">
+                            <div
+                                class="absolute top-0 right-0 p-2 opacity-10 group-hover:opacity-20 transition-opacity">
+                                <i class="fa-solid fa-flask text-4xl text-emerald-500"></i>
+                            </div>
+                            <div class="flex flex-col gap-2">
+                                <div
+                                    class="w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center text-xl">
+                                    ⚗️
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-gray-800 text-sm">단어 연금술</h4>
+                                    <p class="text-[10px] text-gray-500">의미 결합 퍼즐</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Kana Fill -->
+                        <div class="bg-white rounded-2xl p-4 shadow-sm border border-pink-100 cursor-pointer relative overflow-hidden group"
+                            onclick="GameLauncher.launch('kana-fill')">
+                            <div
+                                class="absolute top-0 right-0 p-2 opacity-10 group-hover:opacity-20 transition-opacity">
+                                <i class="fa-solid fa-pen-to-square text-4xl text-pink-500"></i>
+                            </div>
+                            <div class="flex flex-col gap-2">
+                                <div
+                                    class="w-10 h-10 rounded-full bg-pink-100 flex items-center justify-center text-xl">
+                                    ✍️
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-gray-800 text-sm">빈칸 채우기</h4>
+                                    <p class="text-[10px] text-gray-500">히라가나 단어 완성</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button onclick="closeConversationModal()"
+                    class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20 transition">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <!-- Content Area -->
+            <div id="ai-conversation-content" class="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50 custom-scrollbar">
+                <!-- Chat bubbles will go here -->
+                <div class="text-center py-10" id="ai-loading-state">
+                    <i class="fas fa-spinner fa-spin text-4xl text-indigo-500 mb-4"></i>
+                    <p class="text-gray-500 font-medium">AI가 회화를 만들고 있어요...</p>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <div class="p-4 border-t border-gray-100 bg-white shrink-0">
+                <button onclick="closeConversationModal()"
+                    class="w-full py-3 bg-gray-100 text-gray-700 font-bold rounded-xl hover:bg-gray-200 transition">
+                    닫기
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- AI Sentence Modal (Word to Sentences) -->
+    <div id="ai-sentence-modal"
+        class="fixed inset-0 z-[60] hidden flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
+        <div class="bg-white w-full max-w-lg rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[85vh]">
+            <!-- Header -->
+            <div
+                class="bg-gradient-to-r from-emerald-500 to-teal-600 p-4 text-white flex justify-between items-center shrink-0">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center">
+                        <i class="fas fa-pen-fancy text-xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-lg">AI 문장 생성</h3>
+                        <p class="text-xs text-emerald-100" id="ai-sentence-word-target">단어: ...</p>
+                    </div>
+                </div>
+                <button onclick="closeSentenceModal()"
+                    class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20 transition">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <!-- Content Area -->
+            <div id="ai-sentence-content" class="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50 custom-scrollbar">
+                <div class="text-center py-10">
+                    <i class="fas fa-spinner fa-spin text-4xl text-emerald-500 mb-4"></i>
+                    <p class="text-gray-500 font-medium">AI가 예문을 만들고 있어요...</p>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <div class="p-4 border-t border-gray-100 bg-white shrink-0">
+                <button onclick="closeSentenceModal()"
+                    class="w-full py-3 bg-gray-100 text-gray-700 font-bold rounded-xl hover:bg-gray-200 transition">
+                    닫기
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <nav id="bottom-nav" class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 pb-safe z-50 hidden">
+        <div class="flex justify-around items-center h-12 max-w-3xl mx-auto px-2">
+            <button onclick="showTab('home')"
+                class="nav-tab active flex-1 flex flex-col items-center justify-center py-1 text-gray-400 hover:text-red-600 transition-colors group">
+                <div
+                    class="w-12 h-8 flex items-center justify-center rounded-full group-hover:bg-red-50 transition-colors mb-0.5">
+                    <i class="fas fa-home text-xl mb-0.5"></i>
+                </div>
+                <span class="text-[10px] font-bold">홈</span>
+            </button>
+            <button onclick="showTab('japan_travel')"
+                class="nav-tab flex-1 flex flex-col items-center justify-center py-1 text-gray-400 hover:text-blue-600 transition-colors group">
+                <div
+                    class="w-12 h-8 flex items-center justify-center rounded-full group-hover:bg-blue-50 transition-colors mb-0.5">
+                    <i class="fas fa-plane-departure text-xl mb-0.5"></i>
+                </div>
+                <span class="text-[10px] font-bold">여행</span>
+            </button>
+            <!-- [New] Settings tab for Dad -->
+            <button id="nav-settings-btn" onclick="showTab('admin-settings')"
+                class="nav-tab hidden flex-1 flex flex-col items-center justify-center py-1 text-gray-400 hover:text-slate-900 transition-colors group">
+                <div
+                    class="w-12 h-8 flex items-center justify-center rounded-full group-hover:bg-slate-100 transition-colors mb-0.5">
+                    <i class="fas fa-cog text-xl mb-0.5"></i>
+                </div>
+                <span class="text-[10px] font-bold">설정</span>
+            </button>
+            <button onclick="showTab('conversation')"
+                class="nav-tab flex-1 flex flex-col items-center justify-center py-1 text-gray-400 hover:text-purple-600 transition-colors group">
+                <div
+                    class="w-12 h-8 flex items-center justify-center rounded-full group-hover:bg-purple-50 transition-colors mb-0.5">
+                    <i class="fas fa-comments text-xl mb-0.5"></i>
+                </div>
+                <span class="text-[10px] font-bold">회화</span>
+            </button>
+
+            <button onclick="showTab('vocabulary')"
+                class="nav-tab flex-1 flex flex-col items-center justify-center py-1 text-gray-400 hover:text-green-600 transition-colors group">
+                <div
+                    class="w-12 h-8 flex items-center justify-center rounded-full group-hover:bg-green-50 transition-colors mb-0.5">
+                    <i class="fas fa-book text-xl mb-0.5"></i>
+                </div>
+                <span class="text-[10px] font-bold">단어</span>
+            </button>
+            <button onclick="showTab('characters')"
+                class="nav-tab flex-1 flex flex-col items-center justify-center py-1 text-gray-400 hover:text-yellow-600 transition-colors group">
+                <div
+                    class="w-12 h-8 flex items-center justify-center rounded-full group-hover:bg-yellow-50 transition-colors mb-0.5">
+                    <i class="fas fa-font text-xl mb-0.5"></i>
+                </div>
+                <span class="text-[10px] font-bold">글자</span>
+            </button>
+            <button onclick="showTab('progress')"
+                class="nav-tab flex-1 flex flex-col items-center justify-center py-1 text-gray-400 hover:text-indigo-600 transition-colors group">
+                <div
+                    class="w-12 h-8 flex items-center justify-center rounded-full group-hover:bg-indigo-50 transition-colors mb-0.5">
+                    <i class="fas fa-chart-line text-xl mb-0.5"></i>
+                </div>
+                <span class="text-[10px] font-bold">현황</span>
+            </button>
+            <button onclick="openSection('arcade')"
+                class="nav-tab flex-1 flex flex-col items-center justify-center py-1 text-gray-400 hover:text-indigo-600 transition-colors group">
+                <div
+                    class="w-12 h-8 flex items-center justify-center rounded-full group-hover:bg-indigo-50 transition-colors mb-0.5">
+                    <i class="fas fa-gamepad text-xl mb-0.5"></i>
+                </div>
+                <span class="text-[10px] font-bold">퀴즈</span>
+            </button>
+
+        </div>
+        <!-- DEV: Build Timestamp -->
+        <div id="def-build-time"
+            class="text-center text-[8px] text-gray-400 py-0.5 bg-gray-100 border-t border-gray-200">
+            Build: 2026-01-12 14:38:00
+        </div>
+    </nav>
+
+    <!-- Elementary School Section (Restored) -->
+    <div id="elementary-school" class="bg-gray-50 min-h-screen hidden pb-24">
+        <!-- Content will be injected by elementary_school.js -->
+    </div>
+
+    <!-- PWA 플로팅 설치 버튼 (항상 표시, 작은 사이즈) -->
+    <div id="pwa-floating-install" class="fixed bottom-20 right-4 z-40">
+        <button onclick="showInstallGuide()"
+            class="w-10 h-10 rounded-full bg-gradient-to-r from-blue-500 to-indigo-600 text-white shadow-lg flex items-center justify-center hover:scale-110 transition-transform active:scale-95"
+            title="앱 설치">
+            <i class="fas fa-download text-sm"></i>
+        </button>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Leaflet Map Library for Travel Module -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <!-- Three.js for 3D Games -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+    <!-- Section Loader (must load first) -->
+    <script src="js/section_loader.js?v=20260112_160000_NEW_REPO"></script>
+
+    <!-- Scripts moved to bottom -->
+
+    <!-- ★★★ 로그 수집용 숨겨진 Netlify Form (무서버 추적) ★★★ -->
+    <form name="learning-logs" method="POST" data-netlify="true" hidden>
+        <input type="text" name="user_id" />
+        <input type="text" name="action_type" /> <!-- login, study_start, quiz_complete -->
+        <input type="text" name="details" />
+        <input type="text" name="timestamp" />
+        <input type="text" name="duration" />
+        <input type="text" name="score" />
+    </form>
+
+    <script>
+        function showConversationMode(mode) {
+            console.log('showConversationMode called with:', mode);
+            // Hide all conversation mode containers
+            document.getElementById('situational-conversation-container').classList.add('hidden');
+            document.getElementById('practical-conversation-container').classList.add('hidden');
+
+            // Update button styles
+            const situationalBtn = document.getElementById('mode-situational-btn');
+            const practicalBtn = document.getElementById('mode-practical-btn');
+
+            situationalBtn.className = 'flex-1 py-2 px-4 rounded-xl font-bold text-base transition-all duration-300 bg-white text-gray-600 border-2 border-gray-200';
+            practicalBtn.className = 'flex-1 py-2 px-4 rounded-xl font-bold text-base transition-all duration-300 bg-white text-gray-600 border-2 border-gray-200';
+
+            if (mode === 'situational') {
+                document.getElementById('situational-conversation-container').classList.remove('hidden');
+                situationalBtn.className = 'flex-1 py-2 px-4 rounded-xl font-bold text-base transition-all duration-300 bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-lg';
+                // Initialize situational conversation
+                console.log('Initializing situational conversation...');
+                if (typeof window.initConversation === 'function') {
+                    window.initConversation();
+                } else if (typeof initConversation === 'function') {
+                    initConversation();
+                } else {
+                    console.error('initConversation function not found!');
+                }
+            } else if (mode === 'practical') {
+                document.getElementById('practical-conversation-container').classList.remove('hidden');
+                practicalBtn.className = 'flex-1 py-2 px-4 rounded-xl font-bold text-base transition-all duration-300 bg-gradient-to-r from-purple-500 to-purple-600 text-white shadow-lg';
+                // Initialize practical conversation
+                console.log('Initializing practical conversation (Day)...');
+                if (typeof window.initDayConversation === 'function') {
+                    window.initDayConversation();
+                } else if (typeof initDayConversation === 'function') {
+                    initDayConversation();
+                } else {
+                    console.error('initDayConversation function not found!');
+                }
+            }
+        }
+
+        function showPasswordPrompt() {
+            const password = prompt("비밀번호를 입력하세요:");
+            if (password === '1435') {
+                login('dad');
+                if (window.LoggingService) LoggingService.log('login', { userId: 'dad', method: 'password' });
+            } else if (password !== null) {
+                alert("비밀번호가 틀렸습니다.");
+            }
+        }
+
+        // Legacy inline scripts removed. Logic now in auth.js
+        document.getElementById('guest-name-input').value = '';
+        document.getElementById('guest-name-input').focus();
+
+        // Load avatars if not loaded
+        if (guestAvatars.length === 0) {
+            try {
+                const response = await fetch('data/guest_avatars.json');
+                guestAvatars = await response.json();
+            } catch (e) {
+                console.error('Failed to load avatars:', e);
+                // Fallback to basic avatars
+                guestAvatars = [
+                    { id: 1, name: "시바견", emoji: "🐕", color: "#D69E2E" },
+                    { id: 2, name: "고양이", emoji: "🐱", color: "#FFC0CB" },
+                    { id: 3, name: "토끼", emoji: "🐰", color: "#FEFCBF" }
+                ];
+            }
+        }
+        }
+
+        function closeGuestLoginModal() {
+            const modal = document.getElementById('guest-login-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        function guestNextStep() {
+            selectedGuestName = document.getElementById('guest-name-input').value.trim();
+            if (!selectedGuestName) {
+                alert('닉네임을 입력해주세요!');
+                return;
+            }
+            document.getElementById('guest-step-name').classList.add('hidden');
+            document.getElementById('guest-step-avatar').classList.remove('hidden');
+            renderAvatarGrid();
+        }
+
+        function guestPrevStep() {
+            document.getElementById('guest-step-name').classList.remove('hidden');
+            document.getElementById('guest-step-avatar').classList.add('hidden');
+        }
+
+        function renderAvatarGrid() {
+            const grid = document.getElementById('guest-avatar-grid');
+            grid.innerHTML = guestAvatars.map(avatar => `
+                <button onclick="selectGuestAvatar(${avatar.id})" 
+                    class="aspect-square rounded-xl flex flex-col items-center justify-center p-1 transition-all hover:scale-110 active:scale-95 border-2 border-transparent hover:border-amber-500"
+                    style="background-color: ${avatar.color}20;">
+                    <span class="text-3xl">${avatar.emoji}</span>
+                    <span class="text-[8px] text-gray-600 mt-0.5 truncate w-full text-center">${avatar.name}</span>
+                </button>
+            `).join('');
+        }
+
+        function selectGuestAvatar(avatarId) {
+            selectedAvatar = guestAvatars.find(a => a.id === avatarId);
+            if (!selectedAvatar) return;
+
+            // Perform guest login
+            window.currentUser = {
+                id: 'guest_' + Date.now(),
+                name: selectedGuestName,
+                avatarId: selectedAvatar.id,
+                avatarEmoji: selectedAvatar.emoji,
+                avatarColor: selectedAvatar.color,
+                isGuest: true
+            };
+
+            localStorage.setItem('currentUser', JSON.stringify(window.currentUser));
+            closeGuestLoginModal();
+
+            // Update UI
+            const loginScreen = document.getElementById('login-screen');
+            if (loginScreen) loginScreen.style.display = 'none';
+
+            const userProfile = document.getElementById('user-profile-icon');
+            if (userProfile) {
+                userProfile.classList.remove('hidden');
+                userProfile.classList.add('flex');
+                userProfile.innerHTML = `
+                    <span class="text-2xl">${selectedAvatar.emoji}</span>
+                    <span class="text-white font-bold text-sm">${selectedGuestName}</span>
+                `;
+            }
+
+            // Show guest ad
+            if (typeof showGuestAd === 'function') showGuestAd();
+
+            // Log the login
+            if (window.LoggingService) {
+                LoggingService.log('login', {
+                    userId: window.currentUser.id,
+                    userName: selectedGuestName,
+                    avatarId: selectedAvatar.id,
+                    avatarName: selectedAvatar.name,
+                    method: 'guest_avatar'
+                });
+            }
+
+            showTab('home');
+        }
+
+        // ========== 관리자 로그 대시보드 ==========
+        function showAdminLogDashboard() {
+            if (!window.currentUser || window.currentUser.id !== 'dad') {
+                alert('관리자 전용 기능입니다.');
+                return;
+            }
+
+            const logs = window.LoggingService ? LoggingService.getAllLogs() : [];
+
+            const modal = document.createElement('div');
+            modal.id = 'admin-log-modal';
+            modal.className = 'fixed inset-0 z-[300] bg-black/80 backdrop-blur-sm flex items-center justify-center p-4';
+            modal.innerHTML = `
+                <div class="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[85vh] overflow-hidden flex flex-col">
+                    <div class="bg-gradient-to-r from-red-600 to-red-500 p-4 text-white flex justify-between items-center">
+                        <h2 class="text-lg font-black"><i class="fas fa-chart-bar mr-2"></i>사용 로그 (${logs.length}건)</h2>
+                        <button onclick="this.closest('#admin-log-modal').remove()" class="text-white/80 hover:text-white">
+                            <i class="fas fa-times text-xl"></i>
+                        </button>
+                    </div>
+                    <div class="p-4 flex gap-2 border-b">
+                        <button onclick="filterAdminLogs('all')" class="px-3 py-1 bg-gray-200 rounded-lg text-sm font-bold hover:bg-gray-300">전체</button>
+                        <button onclick="filterAdminLogs('login')" class="px-3 py-1 bg-blue-100 text-blue-700 rounded-lg text-sm font-bold hover:bg-blue-200">로그인</button>
+                        <button onclick="filterAdminLogs('tab_view')" class="px-3 py-1 bg-green-100 text-green-700 rounded-lg text-sm font-bold hover:bg-green-200">탭 이동</button>
+                        <button onclick="filterAdminLogs('game')" class="px-3 py-1 bg-purple-100 text-purple-700 rounded-lg text-sm font-bold hover:bg-purple-200">게임</button>
+                    </div>
+                    <div id="admin-log-list" class="flex-1 overflow-y-auto p-4 space-y-2 bg-gray-50">
+                        ${renderAdminLogList(logs)}
+                    </div>
+                    <div class="p-3 border-t bg-gray-100 flex justify-between">
+                        <button onclick="clearAdminLogs()" class="px-4 py-2 bg-red-100 text-red-600 rounded-lg text-sm font-bold hover:bg-red-200">
+                            <i class="fas fa-trash mr-1"></i>전체 삭제
+                        </button>
+                        <button onclick="exportAdminLogs()" class="px-4 py-2 bg-blue-500 text-white rounded-lg text-sm font-bold hover:bg-blue-600">
+                            <i class="fas fa-download mr-1"></i>다운로드
+                        </button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+        }
+
+        function renderAdminLogList(logs) {
+            if (!logs.length) return '<p class="text-gray-500 text-center py-8">로그가 없습니다.</p>';
+
+            return logs.slice(0, 100).map(log => {
+                const time = new Date(log.timestamp).toLocaleString('ko-KR');
+                const actionColors = {
+                    login: 'bg-blue-100 text-blue-700',
+                    tab_view: 'bg-green-100 text-green-700',
+                    game_start: 'bg-purple-100 text-purple-700',
+                    quiz_complete: 'bg-amber-100 text-amber-700'
+                };
+                const color = actionColors[log.action] || 'bg-gray-100 text-gray-700';
+
+                return `
+                    <div class="bg-white rounded-xl p-3 shadow-sm border flex items-start gap-3">
+                        <span class="text-2xl">${log.avatarEmoji || '👤'}</span>
+                        <div class="flex-1 min-w-0">
+                            <div class="flex items-center gap-2 flex-wrap">
+                                <span class="font-bold text-gray-800">${log.userName || log.userId}</span>
+                                <span class="px-2 py-0.5 rounded-full text-xs font-bold ${color}">${log.action}</span>
+                            </div>
+                            <p class="text-xs text-gray-500 mt-0.5">${time}</p>
+                            <p class="text-xs text-gray-400 truncate">IP: ${log.ip || 'N/A'}</p>
+                            ${log.details && Object.keys(log.details).length ? `<p class="text-xs text-gray-600 mt-1">${JSON.stringify(log.details)}</p>` : ''}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function filterAdminLogs(type) {
+            const logs = window.LoggingService ? LoggingService.getAllLogs() : [];
+            const filtered = type === 'all' ? logs : logs.filter(l => l.action.includes(type));
+            document.getElementById('admin-log-list').innerHTML = renderAdminLogList(filtered);
+        }
+
+        function clearAdminLogs() {
+            if (confirm('정말 모든 로그를 삭제하시겠습니까?')) {
+                if (window.LoggingService) LoggingService.clearLogs();
+                document.getElementById('admin-log-list').innerHTML = '<p class="text-gray-500 text-center py-8">로그가 삭제되었습니다.</p>';
+            }
+        }
+
+        function exportAdminLogs() {
+            const logs = window.LoggingService ? LoggingService.getAllLogs() : [];
+            const blob = new Blob([JSON.stringify(logs, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `jap_bong_logs_${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        // Expose functions
+        window.showGuestLoginModal = showGuestLoginModal;
+        window.closeGuestLoginModal = closeGuestLoginModal;
+        window.guestNextStep = guestNextStep;
+        window.guestPrevStep = guestPrevStep;
+        window.selectGuestAvatar = selectGuestAvatar;
+        window.showAdminLogDashboard = showAdminLogDashboard;
+        window.filterAdminLogs = filterAdminLogs;
+        window.clearAdminLogs = clearAdminLogs;
+        window.exportAdminLogs = exportAdminLogs;
+
+
+        // handleGlobalBack is now defined in ui.js
+
+        window.addEventListener('DOMContentLoaded', () => {
+            // 5. 스플래시 화면 숨기기 (가장 먼저 등록하여 에러 발생 시에도 실행 보장)
+            setTimeout(() => {
+                const splash = document.getElementById('splash-screen');
+                if (splash) {
+                    splash.style.opacity = '0';
+                    setTimeout(() => splash.remove(), 500);
+                }
+            }, 800); // 0.8초 후 페이드아웃 시작
+
+            // 1. 로그인 상태 확인 (자동 로그인은 하지 않고 모달만 처리하는 용도로 유지)
+            try {
+                if (typeof checkAutoLogin === 'function') {
+                    checkAutoLogin();
+                }
+            } catch (e) { console.error('AutoLogin failed:', e); }
+
+            // 2. 기본 탭 활성화: Hash > LocalStorage > Home
+            try {
+                if (typeof showTab === 'function') {
+                    // Hash Check (e.g., #tab=travel)
+                    const hashParams = new URLSearchParams(window.location.hash.slice(1)); // Remove #
+                    const tabFromHash = hashParams.get('tab');
+                    const lastTab = localStorage.getItem('lastTab');
+
+                    if (tabFromHash) {
+                        showTab(tabFromHash);
+                    } else if (lastTab && lastTab !== 'home') {
+                        showTab(lastTab);
+                    } else {
+                        showTab('home');
+                    }
+                }
+            } catch (e) { console.error('Tab init failed:', e); }
+
+            // 3. 모듈 초기 준비 (필요한 것만 가볍게)
+            try {
+                if (typeof initVocabulary === 'function') initVocabulary();
+                if (typeof showCharacterGrid === 'function') showCharacterGrid('hiragana');
+                if (typeof showConversationMode === 'function') showConversationMode('situational');
+            } catch (e) { console.error('Module init failed:', e); }
+        });
+    </script>
+
+    <!-- Stroke Animation now handled in characters.js -->
+    <!-- <script src="js/learning/stroke_animation.js"></script> -->
+
+    <!-- Game Modal Container -->
+    <div id="game-modal" class="fixed inset-0 z-[100] hidden bg-black">
+        <div id="game-container" class="w-full h-full"></div>
+    </div>
+
+    <script>
+        function showGame(gameId) {
+            const modal = document.getElementById('game-modal');
+            const container = document.getElementById('game-container');
+            modal.classList.remove('hidden');
+
+            // Clear any previous game content
+            container.innerHTML = '';
+
+            // 로깅 서비스 호출
+            if (window.LoggingService) {
+                LoggingService.log('game_start', { gameId: gameId });
+            }
+
+            // ★ Pass container and close callback to all games
+            if (gameId === 'sushi') {
+                // 3D Sushi Conveyor Game (Three.js)
+                if (window.SushiConveyorGame) {
+                    window.currentSushiGame = new SushiConveyorGame(container, closeGameModal);
+                    window.currentSushiGame.init();
+                } else if (window.SushiSurvival) {
+                    // Fallback to old game if new one not loaded
+                    window.SushiSurvival.init(container, closeGameModal);
+                }
+            } else if (gameId === 'neon') {
+                // NeonSyntaxGame is a CLASS - instantiate with new, then call init()
+                if (window.NeonSyntaxGame) {
+                    window.currentNeonGame = new NeonSyntaxGame(container, closeGameModal);
+                    window.currentNeonGame.init();
+                }
+            } else if (gameId === 'alchemy') {
+                if (window.VerbumAlchimiaGame) window.VerbumAlchimiaGame.init(container, closeGameModal);
+            } else if (gameId === 'archive') {
+                if (window.SilentArchiveGame) window.SilentArchiveGame.init(container, closeGameModal);
+            } else if (gameId === 'kanafill') {
+                // Kana Fill - 히라가나 빈칸 채우기 게임
+                if (window.KanaFillGame) {
+                    window.currentKanaFillGame = new KanaFillGame(container, closeGameModal);
+                    window.currentKanaFillGame.init();
+                }
+            }
+        }
+
+        function closeGameModal() {
+            const modal = document.getElementById('game-modal');
+            const container = document.getElementById('game-container');
+
+            // Stop games if playing
+            if (window.SushiSurvival && window.SushiSurvival.isPlaying) {
+                window.SushiSurvival.isPlaying = false;
+                if (window.SushiSurvival.spawnInterval) clearInterval(window.SushiSurvival.spawnInterval);
+            }
+            // Stop NeonSyntaxGame instance - just null it out, exitGame already called this callback
+            if (window.currentNeonGame) {
+                // Cancel animation frame directly instead of calling exitGame (avoids recursion)
+                if (window.currentNeonGame.animationId) {
+                    cancelAnimationFrame(window.currentNeonGame.animationId);
+                }
+                window.currentNeonGame.gameState = null;
+                window.currentNeonGame = null;
+            }
+            if (window.VerbumAlchimiaGame && window.VerbumAlchimiaGame.isPlaying) {
+                window.VerbumAlchimiaGame.isPlaying = false;
+            }
+            if (window.SilentArchiveGame && window.SilentArchiveGame.isPlaying) {
+                window.SilentArchiveGame.isPlaying = false;
+                if (window.SilentArchiveGame.gameLoop) clearInterval(window.SilentArchiveGame.gameLoop);
+            }
+
+            modal.classList.add('hidden');
+            container.innerHTML = ''; // Clear game DOM
+        }
+    </script>
+    <!-- ★★★ 아빠 전용 관리자 설정 탭 (New implemented) ★★★ -->
+    <div id="admin-settings" class="tab-content hidden pb-24">
+        <header class="mb-6">
+            <h2 class="text-2xl font-black text-gray-900 flex items-center gap-2">
+                <i class="fas fa-cog text-slate-700"></i> 관리자 설정
+            </h2>
+            <p class="text-sm text-gray-500">가족들의 학습 현황을 관리하고 로그를 확인합니다.</p>
+        </header>
+
+        <!-- 1. 로그 대시보드 (Logs) -->
+        <section class="bg-white rounded-2xl shadow-sm p-5 border border-slate-100 mb-4">
+            <h3 class="font-bold text-lg text-slate-800 mb-3 border-b pb-2">📊 시스템 로그</h3>
+            <div class="flex gap-2">
+                <button onclick="showAdminLogDashboard()"
+                    class="flex-1 py-3 bg-slate-800 text-white rounded-xl font-bold hover:bg-slate-900 transition flex items-center justify-center gap-2">
+                    <i class="fas fa-list-alt"></i> 로그 대시보드 열기
+                </button>
+            </div>
+            <p class="text-xs text-gray-400 mt-2 text-center">
+                * 접속 IP, 위치, 활동 내역이 모두 기록됩니다.
+            </p>
+        </section>
+
+        <!-- 2. 사용자 데이터 관리 (User Data) -->
+        <section class="bg-white rounded-2xl shadow-sm p-5 border border-slate-100 mb-4">
+            <h3 class="font-bold text-lg text-slate-800 mb-3 border-b pb-2">👥 학습 데이터 관리</h3>
+
+            <label class="block text-sm font-bold text-gray-600 mb-2">대상 사용자 선택:</label>
+            <select id="admin-target-user"
+                class="w-full p-3 border-2 border-slate-200 rounded-xl font-bold mb-4 focus:border-red-500 outline-none">
+                <option value="dad">아빠 (Dad)</option>
+                <option value="mom">엄마 (Mom)</option>
+                <option value="sieun">시으니 (Sieun)</option>
+                <option value="harong">하롱이 (Harong)</option>
+                <option value="guest">손님 (Guest)</option>
+            </select>
+
+            <div class="grid grid-cols-2 gap-3">
+                <button
+                    onclick="if(confirm('선택한 사용자의 학습 데이터를 초기화하시겠습니까?')) { localStorage.removeItem('progress_' + document.getElementById('admin-target-user').value); alert('초기화 완료!'); }"
+                    class="py-3 bg-red-100 text-red-600 rounded-xl font-bold hover:bg-red-200 transition">
+                    <i class="fas fa-user-times mr-1"></i> 선택 초기화
+                </button>
+                <button onclick="resetAllProgress()"
+                    class="py-3 bg-red-600 text-white rounded-xl font-bold hover:bg-red-700 transition">
+                    <i class="fas fa-bomb mr-1"></i> 전체 초기화
+                </button>
+            </div>
+        </section>
+
+        <!-- 3. 시스템 상태 (System Status) -->
+        <section class="bg-white rounded-2xl shadow-sm p-5 border border-slate-100">
+            <h3 class="font-bold text-lg text-slate-800 mb-3 border-b pb-2">ℹ️ 시스템 상태</h3>
+            <ul class="space-y-2 text-sm text-gray-600">
+                <li class="flex justify-between">
+                    <span>App Version:</span>
+                    <span class="font-mono font-bold text-slate-800">2026.01.12</span>
+                </li>
+                <li class="flex justify-between">
+                    <span>Platform:</span>
+                    <span class="font-mono text-slate-800" id="admin-platform-info">Loading...</span>
+                </li>
+                <li class="flex justify-between">
+                    <span>Logging Status:</span>
+                    <span class="text-green-600 font-bold">Active (IP Tracking On)</span>
+                </li>
+            </ul>
+            <script>
+                document.getElementById('admin-platform-info').innerText = navigator.platform;
+            </script>
+        </section>
+    </div>
+
+    <!-- Learning Modules -->
+    <script src="js/learning/words_data.js"></script>
+    <script src="js/learning/elementary_data.js"></script>
+    <script src="elementary/grade_1.js"></script>
+    <script src="elementary/grade_1_enhanced.js"></script>
+    <script src="elementary/grade_2.js"></script>
+    <script src="elementary/grade_3.js"></script>
+    <script src="elementary/grade_4.js"></script>
+    <script src="elementary/grade_5.js"></script>
+    <script src="elementary/grade_6.js"></script>
+    <script src="js/learning/vocabulary.js"></script>
+    <script src="js/learning/elementary_school.js"></script>
+    <script src="js/api_client.js"></script>
+    <script src="js/learning/grammar.js"></script>
+    <script src="js/learning/conversation.js"></script>
+    <script src="js/learning/characters.js"></script>
+    <script src="js/learning/progress.js"></script>
+    <script src="js/ui.js?v=20260112_154115"></script>
+    <script src="js/learning/stroke_animation.js"></script>
+    <script src="js/learning/study.js"></script>
+    <script src="js/learning/word_study.js"></script>
+
+    <!-- Game Modules -->
+    <script src="js/game_launcher.js?v=20260112_154115"></script>
+
+    <script src="js/manual.js"></script>
+
+
+    <!-- Module Scripts with Cache Busting -->
+    <script type="module" src="js/learning/stroke_animation.js?v=20260112_154115"></script>
+    <script type="module" src="js/learning/characters.js?v=20260112_154115"></script>
+    <script type="module" src="js/learning/vocabulary.js?v=20260112_154115"></script>
+    <script type="module" src="js/learning/conversation.js?v=20260112_154115"></script>
+
+    <!-- Travel components (Order is critical) -->
+    <script src="js/travel/leaflet_map.js?v=20260112_154115"></script>
+    <script src="js/travel/TravelModule.js?v=20260112_154115"></script>
+    <script src="js/travel/japan_travel.js?v=20260112_154115"></script>
+
+    <script type="module" src="js/travel/fukuoka.js?v=20260112_154115"></script>
+    <script type="module" src="js/travel/osaka.js?v=20260112_154115"></script>
+
+    <script type="module" src="js/learning/elementary.js?v=20260112_154115"></script>
+    <script type="module" src="js/game_launcher.js?v=20260112_154115"></script>
+
+    <script src="js/auth.js?v=20260112_154115"></script>
+    <script src="js/secure_tokens.js?v=20260112_154115"></script>
+    <script src="js/gamification.js?v=20260112_154115"></script>
+    <script src="js/logging_service.js?v=20260112_154115"></script>
+
+    <!-- Guest Login Modal (Restored) -->
+    <div id="guest-login-modal"
+        class="fixed inset-0 bg-black/80 z-50 hidden flex-col items-center justify-center p-4 backdrop-blur-sm animate-fade-in">
+        <div class="bg-white rounded-2xl w-full max-w-sm overflow-hidden shadow-2xl scale-100 transition-transform">
+            <!-- Header -->
+            <div class="bg-gradient-to-r from-orange-400 to-amber-500 p-4 relative">
+                <button onclick="closeGuestLoginModal()"
+                    class="absolute top-4 right-4 text-white/80 hover:text-white transition">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+                <h3 class="text-white font-heavy text-lg flex items-center gap-2">
+                    <i class="fas fa-ticket-alt"></i> 손님으로 시작하기
+                </h3>
+            </div>
+
+            <!-- Content -->
+            <div class="p-6">
+                <!-- Step 1: Avatar Selection -->
+                <div id="guest-step-1" class="flex flex-col gap-4">
+                    <p class="text-gray-600 font-bold text-center text-sm">나를 나타낼 캐릭터를 선택하세요!</p>
+                    <div id="guest-avatar-grid" class="grid grid-cols-3 gap-3">
+                        <!-- Avatars injected by auth.js -->
+                    </div>
+                </div>
+
+                <!-- Step 2: Name Input -->
+                <div id="guest-step-2" class="hidden flex-col gap-4">
+                    <div class="flex items-center gap-4 bg-orange-50 p-4 rounded-xl border border-orange-100">
+                        <img id="selected-avatar-preview" src=""
+                            class="w-16 h-16 rounded-full border-2 border-white shadow-md bg-white">
+                        <div>
+                            <p class="text-[10px] text-orange-600 font-bold mb-1">선택한 캐릭터</p>
+                            <input type="text" id="guest-name-input"
+                                class="w-full bg-white border border-orange-200 rounded-lg px-3 py-1.5 text-sm font-bold text-gray-700 focus:outline-none focus:border-orange-500 transition"
+                                placeholder="닉네임 입력">
+                        </div>
+                    </div>
+                    <p class="text-[10px] text-gray-400 text-center">비워두면 캐릭터 이름으로 설정됩니다</p>
+
+                    <div class="flex gap-2 mt-2">
+                        <button onclick="guestBackToAvatars()"
+                            class="flex-1 py-3 bg-gray-100 text-gray-500 rounded-xl font-bold hover:bg-gray-200 transition">
+                            <i class="fas fa-arrow-left"></i> 뒤로
+                        </button>
+                        <button onclick="completeGuestLogin()"
+                            class="flex-[2] py-3 bg-gradient-to-r from-orange-500 to-amber-500 text-white rounded-xl font-bold shadow-lg hover:shadow-orange-200 hover:scale-[1.02] transition-all">
+                            시작하기 <i class="fas fa-arrow-right ml-1"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Tab Script -->
+    <script>
+        function showTab(tabId) {
+            // ... (rest of function)
+        }
+    </script>
+</body>
+
+</html>

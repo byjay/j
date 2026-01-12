@@ -1,0 +1,100 @@
+{
+  "metadata": {
+    "version": "1.0.0",
+    "last_updated": "2026-01-03T13:43:21.200186",
+    "total_kanji": 3
+  },
+  "kanji_list": [
+    {
+      "kanji": "日",
+      "onyomi": [
+        "ニチ",
+        "ジツ"
+      ],
+      "kunyomi": [
+        "ひ",
+        "び",
+        "-か"
+      ],
+      "meaning": "날, 해, 낮",
+      "strokes": 4,
+      "level": "N5",
+      "examples": [
+        {
+          "word": "日本",
+          "reading": "にほん",
+          "meaning": "일본"
+        },
+        {
+          "word": "今日",
+          "reading": "きょう",
+          "meaning": "오늘"
+        },
+        {
+          "word": "日曜日",
+          "reading": "にちようび",
+          "meaning": "일요일"
+        }
+      ]
+    },
+    {
+      "kanji": "本",
+      "onyomi": [
+        "ホン"
+      ],
+      "kunyomi": [
+        "もと"
+      ],
+      "meaning": "근본, 책, 자루",
+      "strokes": 5,
+      "level": "N5",
+      "examples": [
+        {
+          "word": "日本語",
+          "reading": "にほんご",
+          "meaning": "일본어"
+        },
+        {
+          "word": "本屋",
+          "reading": "ほんや",
+          "meaning": "책방/서점"
+        },
+        {
+          "word": "一本",
+          "reading": "いっぽん",
+          "meaning": "한 자루"
+        }
+      ]
+    },
+    {
+      "kanji": "人",
+      "onyomi": [
+        "ジン",
+        "ニン"
+      ],
+      "kunyomi": [
+        "ひと"
+      ],
+      "meaning": "사람",
+      "strokes": 2,
+      "level": "N5",
+      "examples": [
+        {
+          "word": "日本人",
+          "reading": "にほんじん",
+          "meaning": "일본인"
+        },
+        {
+          "word": "三人",
+          "reading": "さんにん",
+          "meaning": "세 사람"
+        },
+        {
+          "word": "大人",
+          "reading": "おとな",
+          "meaning": "어른"
+        }
+      ]
+    }
+  ]
+}

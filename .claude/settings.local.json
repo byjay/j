@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(dir /s /b *.bak *.old *backup* *copy* *.tmp)",
+      "Bash(findstr:*)"
+    ]
+  }
+}

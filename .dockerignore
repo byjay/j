@@ -1,0 +1,20 @@
+# Git
+.git
+.gitignore
+
+# Node modules (if any)
+node_modules/
+package-lock.json
+package.json
+
+# VS Code
+.vscode/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+.env
+
+# Do NOT ignore frontend assets now, as we serve them from FastAPI

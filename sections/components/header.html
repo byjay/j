@@ -1,0 +1,47 @@
+<header id="app-header"
+    class="fixed top-0 left-0 right-0 z-[999] bg-gradient-to-r from-red-600 to-red-500 shadow-lg h-14 transition-all duration-300">
+    <div class="h-full px-2 md:px-4 flex justify-between items-center">
+        <!-- 로고 및 뒤로가기 영역 -->
+        <div class="flex items-center gap-3">
+            <!-- Global Back Button (Controlled by JS) -->
+            <button title="Button" aria-label="Button" id="global-back-btn" onclick="handleGlobalBack()"
+                class="hidden bg-white/10 hover:bg-white/20 text-white w-10 h-10 rounded-full transition flex items-center justify-center backdrop-blur-md border border-white/10 active:scale-95">
+                <i class="fas fa-chevron-left text-lg"></i>
+            </button>
+
+            <!-- 로고 영역 - 아이콘 클릭 = 홈 -->
+            <div class="flex items-center gap-1 cursor-pointer" onclick="showTab('home')" title="홈으로">
+                <img src="images/app_icon.png" alt="홈"
+                    class="w-9 h-9 rounded-xl shadow-lg bg-white p-0.5 flex-shrink-0 hover:scale-105 active:scale-95 transition-transform">
+                <span
+                    class="text-white/70 font-bold text-[7px] tracking-tight whitespace-nowrap hidden sm:inline">JAP-BONG</span>
+            </div>
+        </div>
+
+        <!-- 사용자 영역 -->
+        <div id="user-profile-icon" class="hidden items-center gap-2">
+            <!-- Manual Button -->
+            <button title="Button" aria-label="Button" onclick="openManual()"
+                class="bg-yellow-400 text-red-900 px-3 py-1.5 rounded-full text-xs font-bold shadow-md hover:bg-yellow-300 active:scale-95 transition flex items-center gap-1 animate-pulse-slow ml-1">
+                <i class="fas fa-book-open"></i> <span class="hidden sm:inline">매뉴얼</span>
+            </button>
+
+            <button title="Button" aria-label="Button" id="header-install-btn" onclick="triggerInstallPrompt()"
+                class="hidden bg-white/20 hover:bg-white/30 text-white p-2 rounded-lg transition">
+                <i class="fas fa-download text-sm"></i>
+            </button>
+            <div class="flex items-center bg-white/20 backdrop-blur-sm rounded-full px-3 py-1.5 gap-2">
+                <span id="current-user-avatar" class="flex-shrink-0"></span>
+                <span id="current-user-name" class="text-white text-xs font-bold truncate max-w-[60px]"></span>
+            </div>
+            <button onclick="logout()" class="bg-white/20 hover:bg-red-800 text-white p-3 rounded-lg transition"
+                title="로그아웃">
+                <i class="fas fa-sign-out-alt text-lg"></i>
+            </button>
+            <button onclick="if(confirm('앱을 종료하시겠습니까?')) window.close()"
+                class="bg-white/20 hover:bg-gray-800 text-white p-3 rounded-lg transition ml-1" title="앱 종료">
+                <i class="fas fa-times text-lg"></i>
+            </button>
+        </div>
+    </div>
+</header>

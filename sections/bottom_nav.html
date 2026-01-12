@@ -1,0 +1,79 @@
+<!-- Bottom Navigation -->
+<nav id="bottom-nav" class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 pb-safe z-50 hidden">
+    <div class="flex justify-around items-center h-12 max-w-3xl mx-auto px-2">
+        <button onclick="showTab('home')"
+            class="nav-tab active flex-1 flex flex-col items-center justify-center py-1 text-gray-400 hover:text-red-600 transition-colors group">
+            <div
+                class="w-12 h-8 flex items-center justify-center rounded-full group-hover:bg-red-50 transition-colors mb-0.5">
+                <i class="fas fa-home text-xl mb-0.5"></i>
+            </div>
+            <span class="text-[10px] font-bold">홈</span>
+        </button>
+        <button onclick="showTab('fukuoka')"
+            class="nav-tab flex-1 flex flex-col items-center justify-center py-1 text-gray-400 hover:text-blue-600 transition-colors group">
+            <div
+                class="w-12 h-8 flex items-center justify-center rounded-full group-hover:bg-blue-50 transition-colors mb-0.5">
+                <i class="fas fa-plane-departure text-xl mb-0.5"></i>
+            </div>
+            <span class="text-[10px] font-bold">여행</span>
+        </button>
+        <button onclick="showTab('conversation')"
+            class="nav-tab flex-1 flex flex-col items-center justify-center py-1 text-gray-400 hover:text-purple-600 transition-colors group">
+            <div
+                class="w-12 h-8 flex items-center justify-center rounded-full group-hover:bg-purple-50 transition-colors mb-0.5">
+                <i class="fas fa-comments text-xl mb-0.5"></i>
+            </div>
+            <span class="text-[10px] font-bold">회화</span>
+        </button>
+
+        <button onclick="showTab('vocabulary')"
+            class="nav-tab flex-1 flex flex-col items-center justify-center py-1 text-gray-400 hover:text-green-600 transition-colors group">
+            <div
+                class="w-12 h-8 flex items-center justify-center rounded-full group-hover:bg-green-50 transition-colors mb-0.5">
+                <i class="fas fa-book text-xl mb-0.5"></i>
+            </div>
+            <span class="text-[10px] font-bold">단어</span>
+        </button>
+        <button onclick="showTab('characters')"
+            class="nav-tab flex-1 flex flex-col items-center justify-center py-1 text-gray-400 hover:text-yellow-600 transition-colors group">
+            <div
+                class="w-12 h-8 flex items-center justify-center rounded-full group-hover:bg-yellow-50 transition-colors mb-0.5">
+                <i class="fas fa-font text-xl mb-0.5"></i>
+            </div>
+            <span class="text-[10px] font-bold">글자</span>
+        </button>
+        <button onclick="showTab('elementary')"
+            class="nav-tab flex-1 flex flex-col items-center justify-center py-1 text-gray-400 hover:text-yellow-600 transition-colors group">
+            <div
+                class="w-12 h-8 flex items-center justify-center rounded-full group-hover:bg-yellow-50 transition-colors mb-0.5">
+                <i class="fas fa-school text-xl mb-0.5"></i>
+            </div>
+            <span class="text-[10px] font-bold">학교</span>
+        </button>
+        <button onclick="checkFukuokaAccess()"
+            class="nav-tab flex-1 flex flex-col items-center justify-center py-1 text-gray-400 hover:text-red-600 transition-colors group">
+            <div
+                class="w-12 h-8 flex items-center justify-center rounded-full group-hover:bg-red-50 transition-colors mb-0.5">
+                <i class="fas fa-plane-departure text-xl mb-0.5"></i>
+            </div>
+            <span class="text-[10px] font-bold">여행</span>
+        </button>
+        <button onclick="showTab('arcade')"
+            class="nav-tab flex-1 flex flex-col items-center justify-center py-1 text-gray-400 hover:text-indigo-600 transition-colors group">
+            <div
+                class="w-12 h-8 flex items-center justify-center rounded-full group-hover:bg-indigo-50 transition-colors mb-0.5">
+                <i class="fas fa-gamepad text-xl mb-0.5"></i>
+            </div>
+            <span class="text-[10px] font-bold">게임</span>
+        </button>
+        <button onclick="showTab('progress')"
+            class="nav-tab flex-1 flex flex-col items-center justify-center py-1 text-gray-400 hover:text-green-600 transition-colors group">
+            <div
+                class="w-12 h-8 flex items-center justify-center rounded-full group-hover:bg-green-50 transition-colors mb-0.5">
+                <i class="fas fa-chart-line text-xl mb-0.5"></i>
+            </div>
+            <span class="text-[10px] font-bold">현황</span>
+        </button>
+
+    </div>
+</nav>

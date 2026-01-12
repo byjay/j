@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JAP-BONG 배포 및 도메인 연결 가이드</title>
+    <style>
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            color: #333;
+        }
+
+        h1 {
+            border-bottom: 2px solid #333;
+            padding-bottom: 10px;
+        }
+
+        h2 {
+            color: #0056b3;
+            margin-top: 30px;
+        }
+
+        .step {
+            background: #f9f9f9;
+            border: 1px solid #ddd;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            display: inline-block;
+            background: #007bff;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+
+        .btn:hover {
+            background: #0056b3;
+        }
+
+        .warning {
+            background: #fff3cd;
+            color: #856404;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ffeeba;
+            margin-top: 10px;
+        }
+
+        code {
+            background: #eee;
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-family: monospace;
+            font-weight: bold;
+            color: #d63384;
+        }
+
+        img {
+            max-width: 100%;
+            border: 1px solid #ddd;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>🚀 JAP-BONG 배포 & 도메인 연결 가이드</h1>
+    <p>이 가이드는 <strong>GitHub 비공개 전환</strong>, <strong>Netlify 배포</strong>, 그리고 <strong>jap.blogreet.com 도메인
+            연결</strong>까지의 과정을 안내합니다.</p>
+
+    <div class="step">
+        <h2>1단계: GitHub 리포지토리 비공개(Private) 전환</h2>
+        <p>소스코드를 남들이 볼 수 없게 비공개로 설정합니다.</p>
+        <ol>
+            <li>아래 버튼을 눌러 GitHub 리포지토리 설정으로 이동합니다.</li>
+            <a href="https://github.com/byjay/JAP_BONG/settings" target="_blank" class="btn">GitHub 설정 바로가기</a>
+            <li>화면 맨 아래 <strong>Danger Zone</strong>으로 스크롤을 내립니다.</li>
+            <li><strong>Change repository visibility</strong> 버튼을 클릭합니다.</li>
+            <li><strong>Make private</strong>을 선택하고 안내에 따라 확인 문구를 입력하여 완료합니다.</li>
+        </ol>
+        <div class="warning">⚠️ 주의: 비공개로 전환하면 기존 GitHub Pages(byjay.github.io/JAP_BONG) 접속은 끊깁니다. Netlify로 새로 연결하면
+            해결됩니다.</div>
+    </div>
+
+    <div class="step">
+        <h2>2단계: Netlify에 배포하기</h2>
+        <p>비공개된 코드를 Netlify 서버에 올려서 웹사이트를 다시 엽니다.</p>
+        <ol>
+            <li>아래 버튼을 눌러 Netlify 새 프로젝트 페이지로 이동합니다.</li>
+            <a href="https://app.netlify.com/start" target="_blank" class="btn">Netlify 새 프로젝트 시작</a>
+            <li><strong>Import an existing project</strong>에서 <strong>GitHub</strong>를 선택합니다.</li>
+            <li>GitHub 권한 요청이 나오면 승인하고, 목록에서 <strong>JAP_BONG</strong>을 찾아 선택합니다.</li>
+            <li>설정 건드릴 것 없이 맨 아래 <strong>Deploy JAP_BONG</strong> 버튼을 클릭합니다.</li>
+            <li>잠시 후 <code>random-name-12345.netlify.app</code> 같은 주소가 생기면 배포 성공!</li>
+        </ol>
+    </div>
+
+    <div class="step">
+        <h2>3단계: 도메인 설정 (Netlify)</h2>
+        <p>임시 주소 대신 <code>jap.blogreet.com</code>을 사용하도록 설정합니다.</p>
+        <ol>
+            <li>Netlify 대시보드에서 방금 만든 프로젝트를 클릭합니다.</li>
+            <li><strong>Domain management</strong> (또는 Site configuration > Domain management) 메뉴로 들어갑니다.</li>
+            <li><strong>Add a domain</strong> 버튼을 누릅니다.</li>
+            <li><code>jap.blogreet.com</code>을 입력하고 <strong>Verify</strong>를 누릅니다.</li>
+            <li><strong>Add domain</strong>을 누르면 경고가 뜰 수 있는데 무시하고 진행합니다.</li>
+            <li><strong>중요:</strong> Netlify가 발급해준 기본 주소(예: <code>happy-kimchi-123456.netlify.app</code>)를 복사해두세요.</li>
+        </ol>
+    </div>
+
+    <div class="step">
+        <h2>4단계: 도메인 연결 (Namecheap)</h2>
+        <p>마지막으로 Namecheap에서 <code>jap</code> 주소를 Netlify로 연결해줍니다.</p>
+        <ol>
+            <li>아래 버튼을 눌러 Namecheap DNS 설정 페이지로 이동합니다.</li>
+            <a href="https://ap.www.namecheap.com/Domains/DomainControlPanel/blogreet.com/advancedns" target="_blank"
+                class="btn">Namecheap DNS 설정 바로가기</a>
+            <li><strong>ADD NEW RECORD</strong> 빨간 버튼을 클릭합니다.</li>
+            <li>아래와 같이 입력하고 체크(✅) 버튼을 눌러 저장합니다.</li>
+        </ol>
+
+        <div style="background: #e9ecef; padding: 15px; border-radius: 5px; border-left: 5px solid #007bff;">
+            <p><strong>Type:</strong> <code>CNAME Record</code></p>
+            <p><strong>Host:</strong> <code>jap</code></p>
+            <p><strong>Value:</strong> <code>[아까 복사한 Netlify 주소]</code> <br><span
+                    style="font-size: 0.8em; color: #666;">(예: happy-kimchi-123456.netlify.app)</span></p>
+            <p><strong>TTL:</strong> <code>Automatic</code></p>
+        </div>
+
+        <p style="margin-top: 15px;">🎉 <strong>설정 끝!</strong> 이제 약 10분~1시간 뒤부터 <code>jap.blogreet.com</code>으로 접속할 수
+            있습니다.</p>
+        <div class="step">
+            <h2>5단계: 백엔드 배포 (Render - 무료 추천)</h2>
+            <p>이제 데이터 저장을 위한 <strong>백엔드 서버</strong>를 배포합니다. <strong>Render</strong>는 무료로 사용하기 가장 좋습니다.</p>
+            <ol>
+                <li><a href="https://render.com/" target="_blank">Render.com</a>에 접속하여 GitHub 아이디로 가입/로그인합니다.</li>
+                <li>우측 상단 <strong>New +</strong> 버튼을 누르고 <strong>Web Service</strong>를 선택합니다.</li>
+                <li><strong>Build and deploy from a Git repository</strong>를 선택하고 <strong>Next</strong>를 누릅니다.</li>
+                <li><strong>JAP_BONG</strong> 저장소를 찾아 <strong>Connect</strong> 버튼을 누릅니다.</li>
+                <li>설정 화면에서 다음 내용을 정확히 입력합니다:
+                    <ul>
+                        <li><strong>Name:</strong> <code>japbong-backend</code> (원하는 이름)</li>
+                        <li><strong>Root Directory:</strong> <code>fam/backend</code> <span
+                                style="color:red; font-weight:bold;">(매우 중요!)</span></li>
+                        <li><strong>Runtime:</strong> <code>Docker</code></li>
+                        <li><strong>Instance Type:</strong> <code>Free</code></li>
+                    </ul>
+                </li>
+                <li>아래로 내려서 <strong>Environment Variables</strong> 섹션의 <strong>Add Environment Variable</strong>을 누릅니다.
+                    <ul>
+                        <li><strong>Key:</strong> <code>PORT</code></li>
+                        <li><strong>Value:</strong> <code>8000</code></li>
+                    </ul>
+                </li>
+                <li>맨 아래 <strong>Create Web Service</strong> 버튼을 누릅니다.</li>
+                <li>배포가 완료되면(약 5분 소요), 좌측 상단에 있는 주소(예: <code>https://japbong-backend.onrender.com</code>)를 복사합니다.</li>
+            </ol>
+        </div>
+
+        <div class="step">
+            <h2>6단계: 프론트엔드와 백엔드 연결</h2>
+            <p>마지막으로, 웹사이트(프론트엔드)가 방금 만든 서버(백엔드)를 바라보도록 설정합니다.</p>
+            <ol>
+                <li>내 컴퓨터에서 <code>fam/js/api_client.js</code> 파일을 엽니다.</li>
+                <li>맨 윗부분의 <code>API_BASE_URL</code>을 수정합니다.
+                    <pre><code>const API_BASE_URL = "https://[복사한 Render 주소]/api";</code></pre>
+                    (예: <code>const API_BASE_URL = "https://japbong-backend.onrender.com/api";</code>)
+                </li>
+                <li>저장 후 터미널에서 다음 명령어로 GitHub에 올립니다.
+                    <pre><code>git add .
+git commit -m "Fix: Connect to Render Backend"
+git push</code></pre>
+                </li>
+                <li>이제 <code>jap.blogreet.com</code>에서 로그인을 시도해보세요!</li>
+            </ol>
+        </div>
+
+        <div class="step">
+            <h2>(대안) Railway 배포</h2>
+            <p>Render가 느리거나 마음에 안 들면 Railway를 쓸 수도 있습니다. (초기 무료, 이후 유료 가능성 있음)</p>
+            <ol>
+                <li><a href="https://railway.app/" target="_blank">Railway.app</a>에 로그인합니다.</li>
+                <li><strong>New Project</strong> -> <strong>Deploy from GitHub repo</strong> ->
+                    <strong>JAP_BONG</strong> 선택.</li>
+                <li>프로젝트 설정(Settings)에서 <strong>Root Directory</strong>를 <code>/fam/backend</code>로 수정합니다.</li>
+                <li>Variables 탭에서 <code>PORT</code> = <code>8000</code>을 추가합니다.</li>
+                <li>Settings -> Domains에서 도메인을 생성하고 주소를 복사합니다.</li>
+                <li>6단계와 동일하게 <code>api_client.js</code>에 주소를 넣고 git push 합니다.</li>
+            </ol>
+        </div>
+
+
+</body>
+
+</html>

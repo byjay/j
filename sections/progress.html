@@ -1,0 +1,46 @@
+<h2 class="text-2xl font-bold text-gray-900 mb-4">📊 학습 현황</h2>
+
+<!-- 아빠 전용: 사용자 선택 -->
+<div id="admin-user-selector" style="display:none;"
+    class="mb-4 p-4 bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl border-2 border-blue-200">
+    <label class="block text-sm font-bold text-gray-700 mb-2">
+        <i class="fas fa-users mr-2"></i>회원 선택
+    </label>
+    <select id="progress-user-select" onchange="changeProgressUser()"
+        class="w-full px-4 py-2 border-2 border-gray-300 rounded-xl font-bold focus:border-blue-500 focus:outline-none">
+        <option value="dad">아빠</option>
+        <option value="mom">엄마</option>
+        <option value="sieun">시으니</option>
+        <option value="harong">하롱이</option>
+    </select>
+</div>
+
+<!-- 요약 통계 -->
+<div id="progress-summary" class="mb-6"></div>
+
+<!-- 그래프 섹션 -->
+<div class="space-y-6">
+    <div class="bg-white rounded-xl shadow-sm p-4" style="height: 250px;">
+        <canvas id="conversation-chart"></canvas>
+    </div>
+    <div class="bg-white rounded-xl shadow-sm p-4" style="height: 250px;">
+        <canvas id="vocabulary-chart"></canvas>
+    </div>
+    <div class="bg-white rounded-xl shadow-sm p-4" style="height: 250px;">
+        <canvas id="character-chart"></canvas>
+    </div>
+    <div class="bg-white rounded-xl shadow-sm p-4" style="height: 250px;">
+        <canvas id="character-quiz-chart"></canvas>
+    </div>
+    <div class="bg-white rounded-xl shadow-sm p-4" style="height: 250px;">
+        <canvas id="vocabulary-quiz-chart"></canvas>
+    </div>
+</div>
+
+<!-- 아빠 전용: 개별 리셋 -->
+<div id="admin-reset-user" style="display:none;" class="mt-6 p-4 bg-red-50 rounded-xl border-2 border-red-200">
+    <button onclick="if(confirm('모든 데이터를 초기화하시겠습니까?')){localStorage.clear();location.reload();}"
+        class="w-full py-3 bg-red-600 text-white font-bold rounded-xl hover:bg-red-700 active:scale-95 transition-all shadow-md">
+        <i class="fas fa-trash-alt mr-2"></i>선택한 사용자 진도 리셋
+    </button>
+</div>

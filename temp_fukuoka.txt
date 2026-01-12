@@ -1,0 +1,69 @@
+﻿/**
+ * fukuoka.js - ?꾩퓼?ㅼ뭅 ?ы뻾 濡쒖쭅 (Refactored)
+ * 
+ * [REFACTOR NOTE]
+ * 湲곗〈??1500?쇱씤 紐⑤?由ъ떇 肄붾뱶瑜??쒓굅?섍퀬, js/travel/TravelModule.js?? * RegionalTravelGuide ?대옒?ㅻ? ?ъ슜?섏뿬 50?쇱씤?쇰줈 異뺤냼?덉뒿?덈떎.
+ */
+
+// Configuration Data
+const fukuokaConfig = {
+    regionId: 'fukuoka',
+    poiDatabase: window.POI_DATABASE || [], // Loaded from fukuoka_poi_data.js
+    days: [
+        {
+            title: "Day 1: ?섏뭅? ?꾩갑 & 留덊듃 ?멸린",
+            schedule: ['fukuoka_airport', 'montan_hakata', 'hakata_issou', 'lopia_hakata', 'nakasu_yatai']
+        },
+        {
+            title: "Day 2: ?좏닾?대쾭???ъ뼱 (?ㅼ옄?댄썑/?좏썑??踰논뫖)",
+            schedule: ['dazaifu_tenmangu_shrine', 'yufumabushi_shin', 'yufuin_village', 'senke', 'kamado_jigoku']
+        },
+        {
+            title: "Day 3: ?꾩퓼?ㅼ뭅 ?듭떖 ?쒗떚?ъ뼱",
+            schedule: ['ohori_park', 'teamlab_forest', 'momochi_beach', 'fukuoka_tower', 'canal_city_hakata', 'kushida_shrine', 'shinshin_ramen']
+        },
+        {
+            title: "Day 4: ?쇳븨 & ?꾩돩??洹援?,
+            schedule: ['tenjin_area', 'tenjin_underground', 'lalaport_fukuoka', 'amu_plaza', 'hakata_bento', 'fukuoka_airport']
+        }
+    ],
+    theme: 'dark',  // Dark Theme
+    layout: 'grid'  // 2x2 Grid Layout
+};
+
+function initFukuokaTrip() {
+    console.log('?? Starting Fukuoka Trip initialization...');
+
+    // Dependency check
+    if (typeof RegionalTravelGuide === 'undefined') {
+        console.error('??CRITICAL: TravelModule.js (RegionalTravelGuide) is NOT loaded!');
+        alert('?ы뻾 媛?대뱶 紐⑤뱢??遺덈윭?ㅼ? 紐삵뻽?듬땲?? ?섏씠吏瑜??덈줈怨좎묠 ?댁＜?몄슂.');
+        return;
+    }
+
+    console.log('??RegionalTravelGuide found. Initializing...');
+
+    // Initialize Module
+    window.fukuokaGuide = new RegionalTravelGuide(fukuokaConfig);
+}
+
+// Safe Global Export & Error Handling
+window.initFukuokaTrip = initFukuokaTrip;
+
+// Safety Click Handler for Mobile
+document.addEventListener('touchstart', (e) => {
+    if (e.target.closest('button[onclick*="switchDay"]')) {
+        const btn = e.target.closest('button');
+        const dayIndex = parseInt(btn.getAttribute('onclick').match(/\d+/)[0]);
+        console.log('Safety Touch: Switch Day', dayIndex);
+        if (window.fukuokaGuide) window.fukuokaGuide.switchDay(dayIndex);
+    }
+}, { passive: true });
+
+// Global Error Handler for Button Clicks
+window.onerror = function (msg, url, line, col, error) {
+    if (msg.includes('fukuokaGuide') || msg.includes('switchDay')) {
+        alert('踰꾪듉 ?곌껐 ?ㅻ쪟! ?섏씠吏瑜??덈줈怨좎묠 ?댁＜?몄슂.\n' + msg);
+    }
+    return false;
+};

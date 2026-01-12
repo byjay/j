@@ -1,0 +1,38 @@
+[
+    {
+        "id": 1,
+        "name": "유이",
+        "avatar": "images/avatars/avatar_p_1.png",
+        "desc": "밝고 명랑한 어린이"
+    },
+    {
+        "id": 2,
+        "name": "켄지",
+        "avatar": "images/avatars/avatar_p_2.png",
+        "desc": "호기심 많은 소년"
+    },
+    {
+        "id": 3,
+        "name": "하루카",
+        "avatar": "images/avatars/avatar_p_3.png",
+        "desc": "여행을 꿈꾸는 학생"
+    },
+    {
+        "id": 4,
+        "name": "타쿠야",
+        "avatar": "images/avatars/avatar_p_4.png",
+        "desc": "성실하게 공부하는 청년"
+    },
+    {
+        "id": 5,
+        "name": "사토미",
+        "avatar": "images/avatars/avatar_p_5.png",
+        "desc": "상냥하고 지혜로운 엄마"
+    },
+    {
+        "id": 6,
+        "name": "다나카",
+        "avatar": "images/avatars/avatar_p_6.png",
+        "desc": "든든하고 자상한 아빠"
+    }
+]
