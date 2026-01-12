@@ -264,7 +264,7 @@ class RegionalTravelGuide {
                         <div class="h-full flex transition-transform duration-500 ease-out" id="slider-${poi.id}" style="width: ${Math.max(1, photos.length) * 100}%">
                             ${photos.length > 0 ? photos.map(photo => `
                                 <div class="w-full h-full relative" style="width: ${100 / Math.max(1, photos.length)}%">
-                                    <img src="${photo}" class="w-full h-full object-cover" onerror="this.onerror=null;this.src='images/placeholder.jpg';">
+                                    <img src="${photo}" class="w-full h-full object-cover" onerror="this.onerror=null;this.src='images/app_icon.png';">
                                 </div>
                             `).join('') : `<div class="w-full h-full bg-slate-100 flex items-center justify-center text-slate-300"><i class="fas fa-camera text-2xl"></i></div>`}
                         </div>
@@ -346,7 +346,7 @@ class RegionalTravelGuide {
                 <div class="flow-card group" onclick="window.fukuokaGuide.showDetail('${poi.id}')">
                     <div class="h-40 relative overflow-hidden rounded-t-xl">
                         ${photoUrl
-                    ? `<img src="${photoUrl}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" onerror="this.onerror=null;this.src='images/placeholder.jpg';">`
+                    ? `<img src="${photoUrl}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" onerror="this.onerror=null;this.src='images/app_icon.png';">`
                     : `<div class="w-full h-full bg-blue-100 flex items-center justify-center"><i class="fas fa-image text-blue-300 text-3xl"></i></div>`
                 }
                         <div class="absolute top-2 left-2 w-8 h-8 bg-cyan-500 text-white rounded-full flex items-center justify-center font-bold text-sm shadow-lg">
@@ -488,7 +488,7 @@ class RegionalTravelGuide {
                 <!-- Main Header Image -->
                 <div class="relative shrink-0 h-64 overflow-hidden group/img">
                     ${photoUrl
-                ? `<img id="main-modal-img" src="${photoUrl}" class="w-full h-full object-cover transition-transform duration-1000 group-hover/img:scale-110" onerror="this.onerror=null;this.src='images/placeholder.jpg';">`
+                ? `<img id="main-modal-img" src="${photoUrl}" class="w-full h-full object-cover transition-transform duration-1000 group-hover/img:scale-110" onerror="this.onerror=null;this.src='images/app_icon.png';">`
                 : `<div class="w-full h-full bg-slate-100 flex items-center justify-center text-slate-200"><i class="fas fa-map-marker-alt text-6xl"></i></div>`}
                     
                     <button onclick="document.getElementById('app-modal').classList.add('hidden')" 
