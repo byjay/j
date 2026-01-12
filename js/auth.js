@@ -456,14 +456,21 @@ function showGuestLoginModal() {
         grid.innerHTML = '';
         guestCharacters.forEach(char => {
             const btn = document.createElement('button');
+            btn.type = 'button';
             btn.className = "guest-avatar-option flex flex-col items-center gap-2 p-2 rounded-xl hover:bg-orange-50 transition border border-transparent hover:border-orange-200 active:scale-95";
-            btn.onclick = () => selectGuestAvatar(char);
+            btn.style.minHeight = "80px";
+            btn.onclick = (e) => {
+                e.preventDefault();
+                selectGuestAvatar(char);
+            };
             btn.innerHTML = `
-                <div class="relative group">
-                    <img src="${char.img}" class="w-14 h-14 rounded-full bg-white shadow-sm object-cover border-2 border-transparent group-hover:border-orange-300" onerror="this.src='images/app_icon.png'">
+                <div class="relative group" style="width: 56px; height: 56px;">
+                    <img src="${char.img}" class="w-14 h-14 rounded-full bg-white shadow-sm object-cover border-2 border-transparent group-hover:border-orange-300 block" 
+                         style="width: 56px; height: 56px;"
+                         onerror="this.src='images/app_icon.png'">
                     <div class="absolute inset-0 bg-orange-500/0 group-hover:bg-orange-500/10 rounded-full transition-colors"></div>
                 </div>
-                <span class="text-[10px] font-black text-gray-700">${char.name}</span>
+                <span class="text-[10px] font-black text-gray-700" style="display: block; width: 100%; text-align: center;">${char.name}</span>
             `;
             grid.appendChild(btn);
         });
