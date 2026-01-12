@@ -1,6 +1,6 @@
 // JAP-BONG PWA Service Worker - v2.1.0 (Banana Pro 8K & WebP Config)
 // 자동 새로고침을 위한 강제 버전업 - 2026-01-12 12:51:00
-const APP_VERSION = '1.0.20260112_232624';
+const APP_VERSION = '1.0.20260112_234216';
 const CACHE_NAME = 'jap-bong-fam-v20260112_180900';
 
 // 핵심 자원만 캐시 (JS/CSS는 항상 네트워크 우선)

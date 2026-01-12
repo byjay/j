@@ -70,7 +70,7 @@
 
     <script>
         // ★★★ 강력한 버전 기반 강제 새로고침 시스템 ★★★
-        const APP_VERSION = '1.0.20260112_232624'; // YYYYMMDDHHMM updated
+        const APP_VERSION = '1.0.20260112_234216'; // YYYYMMDDHHMM updated
 
         // ★ 실시간 타임스탬프 반영 로직
         document.addEventListener('DOMContentLoaded', () => {
@@ -128,7 +128,7 @@
             // Service Worker Registration for PWA with auto-update
             if ('serviceWorker' in navigator) {
                 window.addEventListener('load', () => {
-                    navigator.serviceWorker.register('./sw.js?v=20260112_232624' + APP_VERSION)
+                    navigator.serviceWorker.register('./sw.js?v=20260112_234216' + APP_VERSION)
                         .then(registration => {
                             console.log('ServiceWorker registration successful');
                             // 업데이트 확인
@@ -1157,7 +1157,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 
     <!-- Section Loader (must load first) -->
-    <script src="js/section_loader.js?v=20260112_232624"></script>
+    <script src="js/section_loader.js?v=20260112_234216"></script>
 
     <!-- Scripts moved to bottom -->
 
