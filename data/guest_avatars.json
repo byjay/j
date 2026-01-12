@@ -34,5 +34,23 @@
         "name": "다나카",
         "avatar": "images/avatars/avatar_p_6.png",
         "desc": "든든하고 자상한 아빠"
+    },
+    {
+        "id": 7,
+        "name": "고양이",
+        "avatar": "images/avatars/avatar_1.png",
+        "desc": "상큼한 고양이"
+    },
+    {
+        "id": 8,
+        "name": "강아지",
+        "avatar": "images/avatars/avatar_2.png",
+        "desc": "귀여운 강아지"
+    },
+    {
+        "id": 9,
+        "name": "팬더",
+        "avatar": "images/avatars/avatar_3.png",
+        "desc": "듬직한 팬더"
     }
 ]

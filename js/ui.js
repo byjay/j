@@ -13,7 +13,7 @@ function closeGuestAd() {
 }
 
 // 탭 전환 함수
-async function showTab(tabName, addToHistory = true) {
+window.showTab = async function (tabName, addToHistory = true) {
     console.log('[UI] Switching to tab:', tabName);
 
     // 섹션 맵핑

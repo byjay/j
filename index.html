@@ -252,7 +252,7 @@
                 <!-- Step 1: Avatar Selection -->
                 <div id="guest-step-1" class="flex flex-col gap-4">
                     <p class="text-gray-600 font-bold text-center text-sm">나를 나타낼 캐릭터를 선택하세요!</p>
-                    <div id="guest-avatar-grid" class="grid grid-cols-3 gap-3">
+                    <div id="guest-avatar-grid" class="grid grid-cols-3 gap-3" title="캐릭터 선택 그리드">
                         <!-- Avatars injected by auth.js -->
                     </div>
                 </div>
@@ -261,7 +261,8 @@
                 <div id="guest-step-2" class="hidden flex-col gap-4">
                     <div class="flex items-center gap-4 bg-orange-50 p-4 rounded-xl border border-orange-100">
                         <img id="selected-avatar-preview" src=""
-                            class="w-16 h-16 rounded-full border-2 border-white shadow-md bg-white">
+                            class="w-16 h-16 rounded-full border-2 border-white shadow-md bg-white" alt="선택된 캐릭터 미리보기"
+                            title="선택된 캐릭터">
                         <div class="flex-1">
                             <p class="text-[10px] text-orange-600 font-bold mb-1">선택한 캐릭터</p>
                             <input type="text" id="guest-name-input"
@@ -1117,7 +1118,7 @@
                 </div>
                 <span class="text-[10px] font-bold">현황</span>
             </button>
-            <button onclick="openSection('arcade')"
+            <button onclick="showTab('arcade')"
                 class="nav-tab flex-1 flex flex-col items-center justify-center py-1 text-gray-400 hover:text-indigo-600 transition-colors group">
                 <div
                     class="w-12 h-8 flex items-center justify-center rounded-full group-hover:bg-indigo-50 transition-colors mb-0.5">
@@ -1130,7 +1131,7 @@
         <!-- DEV: Build Timestamp -->
         <div id="def-build-time"
             class="text-center text-[8px] text-gray-400 py-0.5 bg-gray-100 border-t border-gray-200">
-            Build: 2026-01-12 14:38:00
+            Build: 2026-01-12 22:50:00
         </div>
     </nav>
 
@@ -1382,7 +1383,8 @@
 
             <label class="block text-sm font-bold text-gray-600 mb-2">대상 사용자 선택:</label>
             <select id="admin-target-user"
-                class="w-full p-3 border-2 border-slate-200 rounded-xl font-bold mb-4 focus:border-red-500 outline-none">
+                class="w-full p-3 border-2 border-slate-200 rounded-xl font-bold mb-4 focus:border-red-500 outline-none"
+                title="사용자 선택">
                 <option value="dad">아빠 (Dad)</option>
                 <option value="mom">엄마 (Mom)</option>
                 <option value="sieun">시으니 (Sieun)</option>
@@ -1467,52 +1469,54 @@
     <script src="elementary/grade_6.js"></script>
 
     <script>
-        // UI & Tab Logic Initializer
-        window.addEventListener('DOMContentLoaded', () => {
-            // 1. Splash Screen Control (Failsafe)
-            setTimeout(() => {
-                const splash = document.getElementById('splash-screen');
-                if (splash) {
-                    splash.style.opacity = '0';
-                    setTimeout(() => splash.remove(), 500);
+            // UI & Tab Logic Initializer
+            window.addEventListener('DOMContentLoaded', () => {
+                // 1. Splash Screen Control (Failsafe)
+                setTimeout(() => {
+                    const splash = document.getElementById('splash-screen');
+                    if (splash) {
+                        splash.style.opacity = '0';
+                        setTimeout(() => splash.remove(), 500);
+                    }
+                }, 800);
+
+                // 2. Auth & Session Restoration
+                if (typeof window.checkAutoLogin === 'function') {
+                    window.checkAutoLogin();
                 }
-            }, 800);
 
-            // 2. Auth & Session Restoration
-            if (typeof window.checkAutoLogin === 'function') {
-                window.checkAutoLogin();
-            }
+                // 3. Global Navigation State
+                const lastTab = localStorage.getItem('lastTab') || 'home';
+                if (typeof window.showTab === 'function') {
+                    window.showTab(lastTab, false);
+                }
+            });
 
-            // 3. Global Navigation State
-            const lastTab = localStorage.getItem('lastTab') || 'home';
-            if (typeof window.showTab === 'function') {
-                window.showTab(lastTab, false);
-            }
-        });
+            // Bridge function for showConversationMode if it's used inline
+            window.showConversationMode = function (mode) {
+                console.log('[Bridge] showConversationMode:', mode);
+                const containers = {
+                    'situational': 'situational-conversation-container',
+                    'practical': 'practical-conversation-container'
+                };
+                Object.entries(containers).forEach(([m, id]) => {
+                    const el = document.getElementById(id);
+                    if (el) el.classList.toggle('hidden', m !== mode);
+                });
 
-        // Bridge function for showConversationMode if it's used inline
-        function showConversationMode(mode) {
-             console.log('[Bridge] showConversationMode:', mode);
-             const containers = {
-                 'situational': 'situational-conversation-container',
-                 'practical': 'practical-conversation-container'
-             };
-             Object.entries(containers).forEach(([m, id]) => {
-                 const el = document.getElementById(id);
-                 if (el) el.classList.toggle('hidden', m !== mode);
-             });
-             
-             const situationalBtn = document.getElementById('mode-situational-btn');
-             const practicalBtn = document.getElementById('mode-practical-btn');
-             
-             if (situationalBtn && practicalBtn) {
-                 const activeClass = 'bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-lg';
-                 const inactiveClass = 'bg-white text-gray-600 border-2 border-gray-200';
-                 
-                 situationalBtn.className = `flex-1 py-2 px-4 rounded-xl font-bold text-base transition-all duration-300 ${mode === 'situational' ? activeClass : inactiveClass}`;
-                 practicalBtn.className = `flex-1 py-2 px-4 rounded-xl font-bold text-base transition-all duration-300 ${mode === 'practical' ? activeClass : inactiveClass}`;
-             }
-        }
+                const situationalBtn = document.getElementById('mode-situational-btn');
+                const practicalBtn = document.getElementById('mode-practical-btn');
+
+                if (situationalBtn && practicalBtn) {
+                    const activeClass = 'bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-lg';
+                    const inactiveClass = 'bg-white text-gray-600 border-2 border-gray-200';
+
+                    situationalBtn.className = `flex-1 py-2 px-4 rounded-xl font-bold text-base transition-all duration-300 ${mode === 'situational' ? activeClass : inactiveClass}`;
+                    practicalBtn.className = `flex-1 py-2 px-4 rounded-xl font-bold text-base transition-all duration-300 ${mode === 'practical' ? activeClass : inactiveClass}`;
+                }
+            };
+        })();
     </script>
 </body>
+
 </html>
