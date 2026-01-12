@@ -421,12 +421,15 @@ function resetAllProgress() {
 
 // Guest Login Logic (Consolidated)
 const guestCharacters = [
-    { id: 'char_1', name: '시공간 탐험가', img: 'images/avatars/avatar_1.png' },
-    { id: 'char_2', name: '일본어 마스터', img: 'images/avatars/avatar_2.png' },
-    { id: 'char_3', name: '초밥 장인', img: 'images/avatars/avatar_3.png' },
-    { id: 'char_4', name: '사무라이 캣', img: 'images/avatars/avatar_4.png' },
-    { id: 'char_5', name: '온천 원숭이', img: 'images/avatars/avatar_5.png' },
-    { id: 'char_6', name: '닌자 독수리', img: 'images/avatars/avatar_6.png' }
+    { id: '1', name: '유이', img: 'images/avatars/avatar_p_1.png' },
+    { id: '2', name: '켄지', img: 'images/avatars/avatar_p_2.png' },
+    { id: '3', name: '하루카', img: 'images/avatars/avatar_p_3.png' },
+    { id: '4', name: '타쿠야', img: 'images/avatars/avatar_p_4.png' },
+    { id: '5', name: '사토미', img: 'images/avatars/avatar_p_5.png' },
+    { id: '6', name: '다나카', img: 'images/avatars/avatar_p_6.png' },
+    { id: '7', name: '고양이', img: 'images/avatars/avatar_1.png' },
+    { id: '8', name: '강아지', img: 'images/avatars/avatar_2.png' },
+    { id: '9', name: '팬더', img: 'images/avatars/avatar_3.png' }
 ];
 
 let selectedGuestAvatar = null;

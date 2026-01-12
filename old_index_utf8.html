@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="ko">
 
 <head>
@@ -230,7 +230,7 @@
             </div>
 
             <div class="mt-4 text-center">
-                <p class="text-[10px] text-gray-400 mt-4 font-mono">Build: 2026-01-12 18:09:00</p>
+                <p class="text-[10px] text-gray-400 mt-4 font-mono">Build: 2026-01-12 05:56:20</p>
             </div>
         </div>
     </div>
@@ -248,42 +248,7 @@
                 <p class="text-sm text-amber-100">캐릭터를 선택하세요!</p>
             </div>
 
-            <!-- Content -->
-            <div class="p-6">
-                <!-- Step 1: Avatar Selection -->
-                <div id="guest-step-1" class="flex flex-col gap-4">
-                    <p class="text-gray-600 font-bold text-center text-sm">나를 나타낼 캐릭터를 선택하세요!</p>
-                    <div id="guest-avatar-grid" class="grid grid-cols-3 gap-3">
-                        <!-- Avatars injected by auth.js -->
-                    </div>
-                </div>
-
-                <!-- Step 2: Name Input -->
-                <div id="guest-step-2" class="hidden flex-col gap-4">
-                    <div class="flex items-center gap-4 bg-orange-50 p-4 rounded-xl border border-orange-100">
-                        <img id="selected-avatar-preview" src=""
-                            class="w-16 h-16 rounded-full border-2 border-white shadow-md bg-white">
-                        <div class="flex-1">
-                            <p class="text-[10px] text-orange-600 font-bold mb-1">선택한 캐릭터</p>
-                            <input type="text" id="guest-name-input"
-                                class="w-full bg-white border border-orange-200 rounded-lg px-3 py-1.5 text-sm font-bold text-gray-700 focus:outline-none focus:border-orange-500 transition"
-                                placeholder="닉네임 입력">
-                        </div>
-                    </div>
-                    <p class="text-[10px] text-gray-400 text-center">비워두면 캐릭터 이름으로 설정됩니다</p>
-
-                    <div class="flex gap-2 mt-2">
-                        <button onclick="guestBackToAvatars()"
-                            class="flex-1 py-3 bg-gray-100 text-gray-500 rounded-xl font-bold hover:bg-gray-200 transition">
-                            <i class="fas fa-arrow-left"></i> 뒤로
-                        </button>
-                        <button onclick="completeGuestLogin()"
-                            class="flex-[2] py-3 bg-gradient-to-r from-orange-500 to-amber-500 text-white rounded-xl font-bold shadow-lg hover:shadow-orange-200 hover:scale-[1.02] transition-all">
-                            시작하기 <i class="fas fa-arrow-right ml-1"></i>
-                        </button>
-                    </div>
-                </div>
-            </div>
+            <!-- Duplicate Guest Modal Code Removed -->
 
 
 
@@ -1661,11 +1626,11 @@
     <script src="js/manual.js"></script>
 
 
-    <!-- Module Scripts with Cache Busting (Legacy Scripts loaded as standard) -->
-    <script src="js/learning/stroke_animation.js?v=20260112_154115"></script>
-    <script src="js/learning/characters.js?v=20260112_154115"></script>
-    <script src="js/learning/vocabulary.js?v=20260112_154115"></script>
-    <script src="js/learning/conversation.js?v=20260112_154115"></script>
+    <!-- Module Scripts with Cache Busting -->
+    <script type="module" src="js/learning/stroke_animation.js?v=20260112_154115"></script>
+    <script type="module" src="js/learning/characters.js?v=20260112_154115"></script>
+    <script type="module" src="js/learning/vocabulary.js?v=20260112_154115"></script>
+    <script type="module" src="js/learning/conversation.js?v=20260112_154115"></script>
 
     <!-- Travel components (Order is critical) -->
     <script src="js/travel/leaflet_map.js?v=20260112_154115"></script>
