@@ -481,7 +481,7 @@ function openManual() {
         <!-- Body -->
         <div class="flex-1 flex overflow-hidden">
             <!-- Sidebar (Tabs) -->
-            <div class="w-20 bg-gray-50 border-r border-gray-200 flex flex-col py-3 gap-1 overflow-y-auto shrink-0">
+            <div class="w-24 bg-gray-50 border-r border-gray-200 flex flex-col py-3 gap-1 overflow-y-auto shrink-0 transition-all duration-300">
                 ${Object.keys(ManualContent).map(key => `
                     <button onclick="setManualTab('${key}')" id="manual-tab-${key}" 
                         class="flex flex-col items-center justify-center p-2 text-gray-400 hover:text-red-600 hover:bg-white transition relative">
